@@ -1,0 +1,147 @@
+-------------------------------------------------------------------
+Wed Oct 19 08:16:38 UTC 2016 - qantas94heavy@gmail.com
+
+- New upstream LTS version 4.6.1
+  * c-ares:
+    + CVE-2016-5180: fix for single-byte buffer overwrite
+
+-------------------------------------------------------------------
+Wed Sep 28 08:37:49 UTC 2016 - adam.majer@suse.de
+
+- enable usage of system certificate store on SLE11SP4 by 
+  requiring openssl1 (boo#1000036)
+- nodejs-libpath.patch:
+  * adapt patch from main nodejs project so it builds on SLE11
+- New upstream LTS version 4.6.0
+  * openssl update (not applicable for SLE12SP2, Leap 42.2 and later)
+    + upgrade to 1.0.2j (CVE-2016-6304, CVE-2016-2183, CVE-2016-2178,
+      CVE-2016-6306, CVE-2016-7052)
+    + remove support for dynamic 3rd party engine modules
+  * http: Properly validate for allowable characters in input
+      user data. This introduces a new case where throw may occur
+      when configuring HTTP responses, users should already
+      be adopting try/catch here. (CVE-2016-5325, bnc#985201)
+  * tls: properly validate wildcard certificates
+      (CVE-2016-7099, bnc#1001652)
+  * buffer: Zero-fill excess bytes in new Buffer objects created
+      with Buffer.concat()
+
+-------------------------------------------------------------------
+Fri Aug 26 10:37:38 UTC 2016 - adam.majer@suse.de
+
+- New upstream LTS version 4.5.0
+  * buffer:
+    + backport new buffer constructor APIs to v4.x
+    + backport --zero-fill-buffers cli option
+    + ignore negative allocation lengths
+  * build
+    + add Intel Vtune profiling support
+  * repl
+    + copying tabs shouldn't trigger completion
+  * src
+    + add node::FreeEnvironment public API
+  * test
+    + run v8 tests from node tree
+  * V8
+    + Add post mortem data to improve object inspection and
+      function's context variables inspection
+  * upgrade libuv to 1.9.1
+  * upgrade npm to 2.15.9
+- 8334.diff
+  * use system CA store instead of one provided by Node
+- Refresh patches
+
+-------------------------------------------------------------------
+Wed Aug 10 08:08:38 UTC 2016 - adam.majer@suse.de
+
+- use system OpenSSL with Leap 42.2 and SLE12:SP2
+- simplify source code integrity check
+  + use GPG service instead of explicit BR
+  + add empty checksum so GPG service is run - it's not detached signature
+    like it thinks it is.
+
+-------------------------------------------------------------------
+Mon Jul  4 08:02:22 UTC 2016 - adam.majer@suse.de
+
+- rename patches to have a .patch suffix, for consistancy
+- npm_search_paths.patch:
+  Change defaultPrefix to /usr/local if it is detected to be
+  /usr. This is in attempt to prevent globally installed npm-managed
+  packages from installing into the zypper managed prefix.
+- refreshed patches support-arm64-build.patch
+- use upstream .xz instead of .gz tarball
+
+-------------------------------------------------------------------
+Fri Jul  1 13:35:35 UTC 2016 - adam.majer@suse.de
+
+- New upstream version 4.4.7
+  * debugger:
+    + All properties of an array (aside from length) can now be printed
+      in the repl
+  * Upgrade npm to 2.15.8 (Rebecca Turner)
+  * Fix for a bug that became more prevalent with the stream changes
+    that landed in v4.4.5. (Anna Henningsen). 'reset awaitDrain after manual
+    .resume()'
+  * V8:
+    + Fix for a bug in crankshaft that was causing crashes on arm64
+      (Myles Borins)
+    +  Add missing classes to postmortem info such as JSMap and JSSet
+       (evan.lucas)
+- Add upstream release keyring
+- Verify upstream sources during %prep
+
+-------------------------------------------------------------------
+Mon Jun 27 10:36:14 UTC 2016 - adam.majer@suse.de
+
+- Use build flags to enable/disable gdb usage instead of 
+  configure script. Easier to find and change in future.
+- Fix paths, and have to fix lots of paths because they
+  are all more or less hardcoded relative paths.
+- Renumber patches allowing upstream patches to be inserted
+  before our own.
+
+-------------------------------------------------------------------
+Fri Jun 24 15:55:35 UTC 2016 - adam.majer@suse.de
+
+- New upstream version 4.4.6
+ + fix buffer overflow vulnerability discovered in v8
+   (CVE-2016-1669)
+
+-------------------------------------------------------------------
+Thu Jun 16 15:06:11 UTC 2016 - adam.majer@suse.de
+
+- Change detection of library paths from runtime to compile time.
+  nodejs-libpath.patch, nodejs-libpath64.patch
+
+-------------------------------------------------------------------
+Wed Jun 15 12:03:10 UTC 2016 - adam.majer@suse.de
+
+- This package is in response to FATE#320396 and ECO#317945
+  and references bnc#958943
+  It's to be part of Web and Scripting Module
+- Use build conditional for intree_openssl
+- Fix permissions of some supplies javascript files - they are
+  not executables
+- General cleanup of the package
+
+-------------------------------------------------------------------
+Wed Jun 15 11:18:13 UTC 2016 - adam.majer@suse.de
+
+- Tighten dependencies so we don't end up with mixed versions
+  installed.
+
+-------------------------------------------------------------------
+Tue Jun 14 16:53:01 UTC 2016 - adam.majer@suse.de
+
+- Dedup manpages
+- Conflict with other providers of NodeJS packages. This is
+  important if we want to provide NodeJS v6.x branch along with
+  v4.x branch
+
+-------------------------------------------------------------------
+Mon Jun  6 08:44:43 UTC 2016 - adam.majer@suse.de
+
+- 'New' package of 4.x LTS branch of NodeJS, based on v6.2.1
+   from Tumbleweed
+-  Fix search paths to actually look where modules are installed
+

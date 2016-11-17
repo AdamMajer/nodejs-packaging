@@ -1,0 +1,81 @@
+Index: node-v4.4.7/deps/npm/lib/config/core.js
+===================================================================
+--- node-v4.4.7.orig/deps/npm/lib/config/core.js
++++ node-v4.4.7/deps/npm/lib/config/core.js
+@@ -148,20 +148,12 @@ function load_(builtin, rc, cli, cb) {
+ 
+   function afterUser () {
+     // globalconfig and globalignorefile defaults
+-    // need to respond to the 'prefix' setting up to this point.
+-    // Eg, `npm config get globalconfig --prefix ~/local` should
+-    // return `~/local/etc/npmrc`
+-    // annoying humans and their expectations!
+-    if (conf.get("prefix")) {
+-      var etc = path.resolve(conf.get("prefix"), "etc")
++      var etc = path.resolve("/etc/nodejs")
+       mkdirp(etc, function (err) {
+         defaults.globalconfig = path.resolve(etc, "npmrc")
+         defaults.globalignorefile = path.resolve(etc, "npmignore")
+         afterUserContinuation()
+       })
+-    } else {
+-      afterUserContinuation()
+-    }
+   }
+ 
+   function afterUserContinuation() {
+Index: node-v4.4.7/deps/npm/lib/help.js
+===================================================================
+--- node-v4.4.7.orig/deps/npm/lib/help.js
++++ node-v4.4.7/deps/npm/lib/help.js
+@@ -56,7 +56,7 @@ function help (args, cb) {
+     }))
+ 
+   // npm help <section>: Try to find the path
+-  var manroot = path.resolve(__dirname, "..", "man")
++  var manroot = "/usr/share/man"
+ 
+   // legacy
+   if (section === "global") section = "folders"
+@@ -106,8 +106,8 @@ function viewMan (man, cb) {
+   var section = path.basename(man, "." + num)
+ 
+   // at this point, we know that the specified man page exists
+-  var manpath = path.join(__dirname, "..", "man")
+-    , env = {}
++  var manpath = "/usr/share/man"
++  var env = {}
+   Object.keys(process.env).forEach(function (i) {
+     env[i] = process.env[i]
+   })
+Index: node-v4.4.7/deps/npm/lib/help-search.js
+===================================================================
+--- node-v4.4.7.orig/deps/npm/lib/help-search.js
++++ node-v4.4.7/deps/npm/lib/help-search.js
+@@ -14,8 +14,8 @@ function helpSearch (args, silent, cb) {
+   if (typeof cb !== "function") cb = silent, silent = false
+   if (!args.length) return cb(helpSearch.usage)
+ 
+-  var docPath = path.resolve(__dirname, "..", "doc")
+-  return glob(docPath + "/*/*.md", function (er, files) {
++  var docPath = "/usr/share/doc/packages/nodejs?"
++  return glob(docPath + "/*.md", function (er, files) {
+     if (er)
+       return cb(er)
+     readFiles(files, function (er, data) {
+Index: node-v4.4.7/deps/npm/lib/config/defaults.js
+===================================================================
+--- node-v4.4.7.orig/deps/npm/lib/config/defaults.js
++++ node-v4.4.7/deps/npm/lib/config/defaults.js
+@@ -103,6 +103,11 @@ Object.defineProperty(exports, "defaults
+     if (process.env.DESTDIR) {
+       globalPrefix = path.join(process.env.DESTDIR, globalPrefix)
+     }
++
++    // don't poop all over distro territory - use /usr/local instead
++    if (globalPrefix === '/usr') {
++      globalPrefix = path.join(globalPrefix, '/local');
++    }
+   }
+ 
+   defaults = {

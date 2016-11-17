@@ -1,0 +1,350 @@
+#
+# spec file for package nodejs
+#
+# Copyright (c) 2016 SUSE LINUX GmbH, Nuernberg, Germany.
+#
+# All modifications and additions to the file contributed by third parties
+# remain the property of their copyright owners, unless otherwise agreed
+# upon. The license for this file, and modifications and additions to the
+# file, is the same license as for the pristine package itself (unless the
+# license for the pristine package is not an Open Source License, in which
+# case the license is the MIT License). An "Open Source License" is a
+# license that conforms to the Open Source Definition (Version 1.9)
+# published by the Open Source Initiative.
+
+# Please submit bugfixes or comments via http://bugs.opensuse.org/
+#
+
+###########################################################
+#
+#   WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!
+#
+# This spec file is generated from a template hosted at
+# {github link here} OR home:adamm:nodejs/nodejs.in
+#
+###########################################################
+
+Name:           nodejs{{node_version_major}}
+Version:        {{node_version}}
+Release:        0
+
+%if 0%{?sles_version} == 11
+%define _libexecdir %{_exec_prefix}/lib
+%endif
+
+# Only Leap 42.2+, SLE 12 SP2+ and Tumbleweed have OpenSSL 1.0.2.
+%if 0%{?suse_version} > 1320 || 0%{?sle_version} >= 120200
+%bcond_with    intree_openssl
+%else
+%bcond_without intree_openssl
+%endif
+
+%if {{intree_libcares2}}
+%bcond_with    intree_cares
+%else
+%bcond_without intree_cares
+%endif
+
+%if {{intree_icu}}
+%bcond_with    intree_icu
+%else
+%bcond_without intree_icu
+%endif
+
+%ifarch aarch64 ppc ppc64 ppc64le s390 s390x
+%bcond_with    gdb
+%else
+%bcond_without gdb
+%endif
+
+# No binutils_gold on SLE12 (aarch64).
+%ifarch aarch64   
+
+%if 0%{?sle_version} >= 120100 || 0%{?is_opensuse}
+%bcond_without binutils_gold
+%else
+%bcond_with    binutils_gold
+%endif
+
+%else # aarch64
+
+# No binutils_gold on s390x.
+%ifarch s390x s390
+%bcond_with    binutils_gold
+%else
+%bcond_without binutils_gold
+%endif # s390x s390
+
+%endif # aarch64
+
+Summary:        Evented I/O for V8 JavaScript
+License:        MIT
+Group:          Development/Languages/NodeJS
+Url:            https://nodejs.org
+Source:         https://nodejs.org/dist/v%{version}/node-v%{version}.tar.xz
+Source1:        https://nodejs.org/dist/v%{version}/SHASUMS256.txt
+Source2:        https://nodejs.org/dist/v%{version}/SHASUMS256.txt.sig
+Source3:        nodejs.keyring
+
+## UPSTREAM PATCHES HERE, if any
+Patch1:         https://patch-diff.githubusercontent.com/raw/nodejs/node/pull/8334.diff
+## Our patches
+# PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
+Patch101:       nodejs-libpath.patch
+# PATCH-FIX-UPSTREAM -- use custom addon.gypi by default instead of
+# downloading node source
+Patch102:       node-gyp-addon-gypi.patch
+# PATCH-FIX-SLE -- configure script uses Python check_output method
+# which isn't included in Python 2.6 (used in SLE 11).
+Patch103:       nodejs-sle11-python26-check_output.patch
+# PATCH-FIX-OPENSUSE -- install user global npm packages to /usr/local
+# instead of /usr
+Patch104:       npm_search_paths.patch
+
+%if %{with binutils_gold}
+BuildRequires:  binutils-gold
+%endif
+
+%if 0%{?sles_version} == 11
+BuildRequires:  gcc48-c++
+%else
+BuildRequires:  gcc-c++
+%endif
+
+BuildRequires:  curl
+BuildRequires:  fdupes
+BuildRequires:  pkg-config
+BuildRequires:  procps
+BuildRequires:  python
+BuildRequires:  xz
+BuildRequires:  zlib-devel
+
+%if ! %{with intree_openssl}
+BuildRequires:  openssl-devel >= 1.0.2
+%endif
+
+%if ! %{with intree_cares}
+BuildRequires:  pkgconfig(libcares) >= min_libcares2_version
+%endif
+
+%if ! %{with intree_icu}
+BuildRequires:  pkgconfig(icu-i18n) >= min_icu_version
+%endif
+
+Recommends:     npm(npm) = {{npm_version}}
+
+#we need ABI virtual provides where SONAMEs aren't enough/not present so deps
+#break when binary compatibility is broken
+%global nodejs_abi {{node_version_major}}.0
+Provides:       nodejs(abi) = %{nodejs_abi}
+
+#this corresponds to the "engine" requirement in package.json
+Provides:       nodejs(engine) = %{version}
+
+# For SLE11, to be able to use the certificate store we need to have properly
+# symlinked certificates. The compatability symlinks are provided by the
+# openssl1 library in the Security Module
+%if 0%{?sles_version} == 11
+Requires:       openssl1
+%endif
+
+# Building Node.js only makes sense on V8 architectures.
+ExclusiveArch:  {{exclusive_arch}}
+BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+
+%description
+Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine.
+Node.js uses an event-driven, non-blocking I/O model that makes it 
+lightweight and efficient. Node.js' package ecosystem, npm, is the largest
+ecosystem of open source libraries in the world.
+
+%package devel
+Summary:        Files needed for development of NodeJS platforms
+Group:          Development/Languages/NodeJS
+Provides:       nodejs-devel = %{version}
+Requires:       %{name} = %{version}
+Conflicts:      otherproviders(nodejs-devel)
+
+%description devel
+This package provides development headers for Node.js.
+
+%package -n npm{{node_version_major}}
+Summary:        Package manager for Node.js
+Group:          Development/Languages/NodeJS
+Requires:       %{name}-devel = %{version}
+Provides:       nodejs-npm = %{version}
+Obsoletes:      nodejs-npm < 5.3.1
+Provides:       npm(npm) = {{npm_version}}
+Provides:       npm = %{version}
+Conflicts:      otherproviders(npm)
+
+%description -n npm{{node_version_major}}
+A package manager for Node.js that allows developers to install and
+publish packages to a package registry.
+
+%package docs
+Summary:        Node.js API documentation
+Group:          Documentation/Other
+%if 0%{?suse_version} >= 1200
+# using noarch subpackage seems to break debuginfo on older releases
+BuildArch:      noarch
+%endif
+
+%description docs
+The API documentation for the Node.js JavaScript runtime.
+
+%prep
+echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | sha256sum -c
+%setup -q -n node-v%{version}
+%patch1 -p1
+%patch101 -p1
+%patch102 -p1
+# Add check_output to configure script (not part of Python 2.6 in SLE11).
+%if 0%{?sles_version} == 11
+%patch103 -p1
+%endif
+%patch104 -p1
+# Make sure nothing gets included from bundled deps:
+# We only delete the source and header files, because
+# the remaining build scripts are still used.
+%if ! %{with intree_openssl}
+find deps/openssl -name *.[ch] -delete
+%endif
+
+%if ! %{with intree_icu}
+rm -rf deps/icu-small
+%endif
+
+%if ! %{with intree_cares}
+find deps/cares -name *.[ch] -delete
+%endif
+
+find deps/zlib -name *.[ch] -delete
+
+%build
+# percent-configure pulls in something that confuses node's configure
+# script, so we'll do it thus:
+export CFLAGS="%{optflags}"
+export CXXFLAGS="%{optflags}"
+# It seems that GCC 4.8 is needed to compile on SLE 11 SP4.
+%if 0%{?sles_version} == 11
+export CXX="g++-4.8"
+%endif
+
+./configure \
+    --prefix=%{_prefix} \
+%if ! %{with intree_openssl}
+    --shared-openssl \
+%endif
+    --shared-zlib \
+%if ! %{with intree_cares}
+    --shared-cares \
+%endif
+%if ! %{with intree_icu}
+    --with-intl=system-icu \
+%endif
+%if %{with gdb}
+    --gdb \
+%endif
+    --without-dtrace \
+    --use-system-ca-store
+
+make %{?_smp_mflags}
+
+%install
+make install DESTDIR=%{buildroot} %{?_smp_mflags}
+rm %{buildroot}%{_datadir}/doc/node/gdbinit
+
+# npm man page
+rm -rf %{buildroot}%{_libdir}/node_modules/npm/man
+mkdir -p %{buildroot}%{_mandir}/{man1,man5,man7}
+install -m 644 deps/npm/man/man1/* %{buildroot}%{_mandir}/man1
+install -m 644 deps/npm/man/man5/* %{buildroot}%{_mandir}/man5
+install -m 644 deps/npm/man/man7/* %{buildroot}%{_mandir}/man7
+
+#node-gyp needs common.gypi too
+install -D -m 644 common.gypi \
+       %{buildroot}%{_datadir}/node/common.gypi
+# install addon-rpm.gypi
+install -D -m 644 addon-rpm.gypi \
+       %{buildroot}%{_libdir}/node_modules/npm/node_modules/node-gyp/addon-rpm.gypi
+
+# Own nodejs_sitelib
+#mkdir -p %{buildroot}%{_libdir}/node_modules/npm
+
+# clean
+# hidden files and directories
+find %{buildroot}%{_libdir}/node_modules/npm -name ".*" -print0 | xargs -r0 -0 rm -rf --
+# windows stuff
+find %{buildroot}%{_libdir}/node_modules/npm -name "*.bat" -delete
+find %{buildroot}%{_libdir}/node_modules/npm -name "*.cmd" -delete
+# build stuff
+find %{buildroot}%{_libdir}/node_modules/npm -name "Makefile" -delete
+rm -rf %{buildroot}%{_libdir}/node_modules/npm/{test,scripts}
+find %{buildroot}%{_libdir}/node_modules/npm/node_modules -name "*.sh" -delete
+find %{buildroot}%{_libdir}/node_modules/npm -name "src" -print0 | xargs -0 rm -rf --
+# remove examples/tests/benchmark stuff
+find %{buildroot}%{_libdir}/node_modules/npm/node_modules -name "example*" -print0 | xargs -0 rm -rf --
+find %{buildroot}%{_libdir}/node_modules/npm/node_modules -name "test*" -print0 | xargs -0 rm -rf --
+find %{buildroot}%{_libdir}/node_modules/npm/node_modules -name "*_test.*" -delete
+find %{buildroot}%{_libdir}/node_modules/npm/node_modules -type d -name "benchmark" -print0 | xargs -0 rm -rf --
+# README.md LICENSE file permission
+find %{buildroot}%{_libdir}/node_modules/npm -name "README.md" -exec chmod -x {} +
+find %{buildroot}%{_libdir}/node_modules/npm -name "LICENSE" -exec chmod -x {} +
+# browser.js is useless for npm cli
+find %{buildroot}%{_libdir}/node_modules/npm -name "browser.js" -delete 
+# fix permissions
+chmod 0644 %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/node_modules/sntp/lib/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/qs/lib/parse.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/lib/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/config-chain/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/qs/lib/stringify.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/lib/client.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/lib/crypto.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/lib/utils.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/qs/lib/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/node_modules/boom/lib/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/lib/server.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/node_modules/cryptiles/lib/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/node_modules/sntp/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/qs/lib/utils.js \
+   %{buildroot}%{_libdir}/node_modules/npm/node_modules/uid-number/get-uid-gid.js \
+   %{buildroot}%{_libdir}/node_modules/npm/bin/read-package-json.js
+   
+# file duplicates
+%fdupes %{buildroot}%{_libdir}/node_modules/npm
+%fdupes %{buildroot}%{_includedir}/node
+%fdupes %{buildroot}%{_mandir}/man5
+
+%files
+%defattr(-, root, root)
+%doc AUTHORS LICENSE *.md
+%doc deps/v8/tools/gdbinit
+%dir %{_libdir}/node_modules
+%{_bindir}/node
+%{_libdir}/node_modules
+%{_mandir}/man1/node.1%{ext_man}
+%exclude %{_libdir}/node_modules/npm
+
+%files -n npm{{node_version_major}}
+%defattr(-, root, root)
+%{_bindir}/npm
+%{_libdir}/node_modules/npm
+%{_mandir}/man*/*npm*%{ext_man}
+%{_mandir}/man5/package.json.5%{ext_man}
+%{_mandir}/man7/semver.7%{ext_man}
+
+%files devel
+%defattr(-, root, root)
+%{_includedir}/node
+%{_datadir}/node
+%dir %{_datadir}/systemtap
+%dir %{_datadir}/systemtap/tapset
+%{_datadir}/systemtap/tapset/node.stp
+
+%files docs
+%defattr(-,root,root)
+%doc doc/api
+
+%changelog

@@ -1,0 +1,22 @@
+-------------------------------------------------------------------
+Mon Nov  7 13:15:21 UTC 2016 - adam.majer@suse.de
+
+- Add versioned dependencies for unbundling of c-ares and icu
+  libraries
+- SLE12 can have unbundled libicu
+
+-------------------------------------------------------------------
+Wed Nov  2 04:13:20 UTC 2016 - qantas94heavy@gmail.com
+
+- Fork package devel:languages:nodejs/nodejs
+- Remove support-arm64-build.patch (not necessary for aarch64 build)
+- Use system library versions of c-ares and ICU where supported
+- Remove /usr/{lib,lib64}/node_modules from global module paths
+  * This is deprecated behaviour that was caused by an incorrect patch
+    in devel:languages:nodejs/nodejs almost 6 months ago (boo#985350)
+- Modify nodejs-libpath.patch
+  * Move /usr/lib64/node_modules to %{_libexecpath} as npm isn't
+    architecture dependent (only npm itself is stored there)
+- Remove nodejs-libpath64.patch
+- Use separate .sig file instead of .asc file for source verification
+- Use exec instead of xargs to remove files in install script
