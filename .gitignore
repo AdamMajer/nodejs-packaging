@@ -1,0 +1,6 @@
+*.target
+*:*
+.osc
+*.tmp
+.swp
+.go.*

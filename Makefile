@@ -1,19 +1,19 @@
-#!/usr/bin/make --warn-undefined-variables
 
-ALL_TARGETS := 4.target 6.target 7.target
+ALL_TARGETS = $(shell ls -d ?)
+TARGET_STAMPS := $(addsuffix .target,${ALL_TARGETS})
 NODEJS_PROJECT ?= devel:languages:nodejs
 COMMON_CHANGELOG := common.changes.tmp
 
 all: status
 
-status: final.target ${COMMON_CHANGELOG}
+status: ${TARGET_STAMPS} ${COMMON_CHANGELOG}
 	(cd ${NODEJS_PROJECT}; osc status)
 
 commit:
 	(cd ${NODEJS_PROJECT}; osc commit)
 
 clean:
-	rm -f ${ALL_TARGETS} final.target ${COMMON_CHANGELOG}
+	rm -f ${TARGET_STAMPS} ${COMMON_CHANGELOG}
 
 distclean: clean
 	rm -rf ${NODEJS_PROJECT}
@@ -23,29 +23,30 @@ ${COMMON_CHANGELOG}: common.changes
 	rm -f common.changes
 	touch common.changes
 
-final.target: ${ALL_TARGETS}
-	touch final.target
+${TARGET_STAMPS}:
+	$(MAKE) ${@:.target=}
 
 ${ALL_TARGETS}: ${COMMON_CHANGELOG}
 	# Fetch target project and overwrite it with current stuff
-	test -x ${NODEJS_PROJECT}/nodejs${@:.target=} || osc co ${NODEJS_PROJECT} nodejs${@:.target=}
-	cp common/* ${NODEJS_PROJECT}/nodejs${@:.target=}/
-	cp ${@:.target=}/* ${NODEJS_PROJECT}/nodejs${@:.target=}/
+	test -x ${NODEJS_PROJECT}/nodejs$@ || osc co ${NODEJS_PROJECT} nodejs$@
+	cp common/* ${NODEJS_PROJECT}/nodejs$@/
+	cp $@/* ${NODEJS_PROJECT}/nodejs$@/
 	
 	# Parse spec file
-	sed -f nodejs${@:.target=}.sed nodejs.spec.in > ${NODEJS_PROJECT}/nodejs${@:.target=}/nodejs${@:.target=}.spec
+	sed -f nodejs$@.sed nodejs.spec.in > ${NODEJS_PROJECT}/nodejs$@/nodejs$@.spec
 	
 	# Prepend common changelog, if any
 	if [ $$(stat -c %s ${COMMON_CHANGELOG}) -gt 0 ]; then \
-		echo "Updating NodeJS${@:.target=} changes..."; \
-		cat ${COMMON_CHANGELOG} ${NODEJS_PROJECT}/nodejs${@:.target=}/nodejs${@:.target=}.changes > nodejs.changes; \
-		mv nodejs.changes ${NODEJS_PROJECT}/nodejs${@:.target=}/nodejs${@:.target=}.changes; \
+		echo "Updating NodeJS$@ changes..."; \
+		cat ${COMMON_CHANGELOG} ${NODEJS_PROJECT}/nodejs$@/nodejs$@.changes > nodejs.changes; \
+		mv nodejs.changes ${NODEJS_PROJECT}/nodejs$@/nodejs$@.changes; \
 	fi
 
 	# Verify that patches actually apply
-	cd ${NODEJS_PROJECT}/nodejs${@:.target=} && \
-	quilt setup --fast nodejs${@:.target=}.spec && \
-	cd node-v${@:.target=}.*.? && \
+	cd ${NODEJS_PROJECT}/nodejs$@ && \
+	quilt setup --fast nodejs$@.spec && \
+	cd node-v$@.*.? && \
 	quilt push -a --fuzz=0
 
-	touch $@
+	touch $@.target
+
