@@ -124,11 +124,11 @@ BuildRequires:  openssl-devel >= 1.0.2
 %endif
 
 %if ! %{with intree_cares}
-BuildRequires:  pkgconfig(libcares) >= min_libcares2_version
+BuildRequires:  pkgconfig(libcares) >= {{min_libcares2_version}}
 %endif
 
 %if ! %{with intree_icu}
-BuildRequires:  pkgconfig(icu-i18n) >= min_icu_version
+BuildRequires:  pkgconfig(icu-i18n) >= {{min_icu_version}}
 %endif
 
 Recommends:     npm(npm) = {{npm_version}}
