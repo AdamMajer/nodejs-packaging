@@ -1,8 +1,7 @@
 #!/usr/bin/make --warn-undefined-variables
 
 ALL_TARGETS := 4.target 6.target 7.target
-#NODEJS_PROJECT := devel:languages:nodejs
-NODEJS_PROJECT := home:adamm:nodejs
+NODEJS_PROJECT ?= devel:languages:nodejs
 COMMON_CHANGELOG := common.changes.tmp
 
 all: status
