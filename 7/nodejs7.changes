@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Nov 18 11:59:06 UTC 2016 - adam.majer@suse.de
+
+- Package unification across various branches of NodeJS. Package
+  for 4.x, 6.x and current (7.x) branches of NodeJS are now
+  handled via GitHub repository.
+
+-------------------------------------------------------------------
 Thu Oct 20 12:45:09 UTC 2016 - qantas94heavy@gmail.com
 
 - New upstream release 6.9.1
