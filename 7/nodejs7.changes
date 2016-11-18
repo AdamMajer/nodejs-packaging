@@ -4,6 +4,35 @@ Fri Nov 18 11:59:06 UTC 2016 - adam.majer@suse.de
 - Package unification across various branches of NodeJS. Package
   for 4.x, 6.x and current (7.x) branches of NodeJS are now
   handled via GitHub repository.
+- New upstream release 7.1.0 - branch as new nodejs7 package.
+  * buffer:
+    + Passing invalid input to Buffer.byteLength will now
+      throw an error
+    + Calling Buffer without new is now deprecated and will emit a
+      process warning
+    + Passing a negative number to allocUnsafe will now throw an
+      error
+    + add buffer.transcode to transcode a buffer's content from one
+      encoding to another primarily using ICU
+  * child process:
+    + The fork and execFile methods now have stronger argument
+      validation
+    + add public API for IPC channel
+  * cluster:
+    + The worker.suicide method is deprecated and will emit a process
+  * deps:
+    + V8 has been updated to 5.4.500.36
+    + NODE_MODULE_VERSION has been updated to 51
+  * File System:
+    + A process warning is emitted if a callback is not passed to
+      async file system methods
+  * Promises:
+    + Unhandled Promise rejections have been deprecated and will
+      emit a process warning
+  * The punycode module has been deprecated
+  * add NODE_PRESERVE_SYMLINKS environment variable that has the
+    same effect as the --preserve-symlinks flag
+  * url: An Experimental WHATWG URL Parser has been introduced
 
 -------------------------------------------------------------------
 Thu Oct 20 12:45:09 UTC 2016 - qantas94heavy@gmail.com
