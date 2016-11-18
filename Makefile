@@ -1,32 +1,41 @@
 
 ALL_TARGETS = $(shell ls -d ?)
-TARGET_STAMPS := $(addsuffix .target,${ALL_TARGETS})
+TARGET_STAMPS := $(addsuffix .target,${ALL_TARGETS}) changelog.target
 NODEJS_PROJECT ?= devel:languages:nodejs
-COMMON_CHANGELOG := common.changes.tmp
+CHANGELOG_TS := $(shell date)
+
+TARGET_CHANGELOGS := $(wildcard ?/*.changes)
 
 all: status
 
-status: ${TARGET_STAMPS} ${COMMON_CHANGELOG}
+status: ${TARGET_STAMPS} changelog.target
 	(cd ${NODEJS_PROJECT}; osc status)
 
 commit:
 	(cd ${NODEJS_PROJECT}; osc commit)
 
 clean:
-	rm -f ${TARGET_STAMPS} ${COMMON_CHANGELOG}
+	rm -f ${TARGET_STAMPS}
 
 distclean: clean
 	rm -rf ${NODEJS_PROJECT}
-
-${COMMON_CHANGELOG}: common.changes
-	cp common.changes ${COMMON_CHANGELOG}
-	rm -f common.changes
-	touch common.changes
+	truncate --size=0 common.changes
 
 ${TARGET_STAMPS}:
 	$(MAKE) ${@:.target=}
 
-${ALL_TARGETS}: ${COMMON_CHANGELOG}
+changelog.target: common.changes
+        # Prepend common changelog to the changelog files
+	if [ $$(stat -c %s common.changes) -gt 0 ]; then \
+		for changelog in ${TARGET_CHANGELOGS}; do \
+			echo "Updating $$changelog changes..."; \
+			cat common.changes $$changelog > $$changelog.tmp; \
+			mv $$changelog.tmp $$changelog; \
+		done; \
+	fi
+	touch changelog.target
+
+${ALL_TARGETS}: changelog.target
 	# Fetch target project and overwrite it with current stuff
 	test -x ${NODEJS_PROJECT}/nodejs$@ || osc co ${NODEJS_PROJECT} nodejs$@
 	cp common/* ${NODEJS_PROJECT}/nodejs$@/
@@ -35,13 +44,6 @@ ${ALL_TARGETS}: ${COMMON_CHANGELOG}
 	# Parse spec file
 	sed -f nodejs$@.sed nodejs.spec.in > ${NODEJS_PROJECT}/nodejs$@/nodejs$@.spec
 	
-	# Prepend common changelog, if any
-	if [ $$(stat -c %s ${COMMON_CHANGELOG}) -gt 0 ]; then \
-		echo "Updating NodeJS$@ changes..."; \
-		cat ${COMMON_CHANGELOG} ${NODEJS_PROJECT}/nodejs$@/nodejs$@.changes > nodejs.changes; \
-		mv nodejs.changes ${NODEJS_PROJECT}/nodejs$@/nodejs$@.changes; \
-	fi
-
 	# Verify that patches actually apply
 	cd ${NODEJS_PROJECT}/nodejs$@ && \
 	quilt setup --fast nodejs$@.spec && \
