@@ -141,6 +141,10 @@ Provides:       nodejs(abi) = %{nodejs_abi}
 #this corresponds to the "engine" requirement in package.json
 Provides:       nodejs(engine) = %{version}
 
+# Only one nodejs installed at a time
+Provides:       nodejs = %{version}
+Conflicts:      otherproviders(nodejs)
+
 # For SLE11, to be able to use the certificate store we need to have properly
 # symlinked certificates. The compatability symlinks are provided by the
 # openssl1 library in the Security Module

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 23 09:00:40 UTC 2016 - adam.majer@suse.de
+
+- Add missing conflicts to base package. It's not possible to have
+  concurrent nodejs installations.
+
+-------------------------------------------------------------------
 Fri Nov 18 11:59:06 UTC 2016 - adam.majer@suse.de
 
 - Package unification across various branches of NodeJS. Package
