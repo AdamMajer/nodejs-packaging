@@ -1,5 +1,5 @@
 #
-# spec file for package nodejs
+# spec file for package nodejs{{node_version_major}}
 #
 # Copyright (c) 2016 SUSE LINUX GmbH, Nuernberg, Germany.
 #
