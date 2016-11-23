@@ -1,4 +1,23 @@
 -------------------------------------------------------------------
+Wed Nov 23 10:43:33 UTC 2016 - adam.majer@suse.de
+
+- Update to upstream release 7.2.0
+  * crypto: The Decipher methods setAuthTag() and setAAD now return
+    this.
+  * dns: Implemented {ttl: true} for resolve4() and resolve6()
+  * libuv: Upgrade to v1.10.1
+  * process: Added a new external property to the data returned
+    by memoryUsage()
+  * tls: Fixed a memory leak when writes were queued on TLS
+    connection that was destroyed during handshake.
+  * V8 (dep): Upgrade to v5.4.500.43
+  * v8: The data returned by getHeapStatistics() now includes three
+    new fields: malloced_memory, peak_malloced_memory, and
+    does_zap_garbage.
+  * for complete changelog, see
+    https://nodejs.org/en/blog/release/v7.2.0/
+
+-------------------------------------------------------------------
 Wed Nov 23 09:00:40 UTC 2016 - adam.majer@suse.de
 
 - Add missing conflicts to base package. It's not possible to have
