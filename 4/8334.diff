@@ -10,7 +10,7 @@ Index: node-v6.9.0/configure
      dest='shared_openssl_libpath',
      help='a directory to search for the shared OpenSSL DLLs')
  
-+shared_optgroup.add_option('--use-system-ca-store',
++shared_optgroup.add_option('--use-def-ca-store',
 +    action='store_true',
 +    dest='use_system_ca_store',
 +    help='use system supplied Root CA store instead of bundled copy')

@@ -251,7 +251,7 @@ export CXX="g++-4.8"
     --gdb \
 %endif
     --without-dtrace \
-    --use-system-ca-store
+    --use-def-ca-store
 
 make %{?_smp_mflags}
 

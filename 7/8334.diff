@@ -1,0 +1,129 @@
+Index: node-v7.2.0/configure
+===================================================================
+--- node-v7.2.0.orig/configure
++++ node-v7.2.0/configure
+@@ -192,6 +192,11 @@ shared_optgroup.add_option('--shared-ope
+     dest='shared_openssl_libpath',
+     help='a directory to search for the shared OpenSSL DLLs')
+ 
++shared_optgroup.add_option('--use-def-ca-store',
++    action='store_true',
++    dest='use_def_ca_store',
++    help='use system supplied Root CA store instead of bundled copy')
++
+ shared_optgroup.add_option('--shared-zlib',
+     action='store_true',
+     dest='shared_zlib',
+@@ -916,6 +921,8 @@ def configure_openssl(o):
+   o['variables']['node_use_openssl'] = b(not options.without_ssl)
+   o['variables']['node_shared_openssl'] = b(options.shared_openssl)
+   o['variables']['openssl_no_asm'] = 1 if options.openssl_no_asm else 0
++  if options.use_def_ca_store:
++    o['defines'] += ['NODE_DEF_CERT_STORE']
+   if options.openssl_fips:
+     o['variables']['openssl_fips'] = options.openssl_fips
+     fips_dir = os.path.join(root_dir, 'deps', 'openssl', 'fips')
+Index: node-v7.2.0/src/node.cc
+===================================================================
+--- node-v7.2.0.orig/src/node.cc
++++ node-v7.2.0/src/node.cc
+@@ -171,6 +171,14 @@ static const char* icu_data_dir = nullpt
+ bool no_deprecation = false;
+ 
+ #if HAVE_OPENSSL
++// use default cert store
++bool ssl_def_cert_store =
++#if defined(NODE_DEF_CERT_STORE)
++        true;
++#else
++        false;
++#endif
++
+ # if NODE_FIPS_MODE
+ // used by crypto module
+ bool enable_fips_crypto = false;
+@@ -3557,6 +3565,8 @@ static void PrintHelp() {
+          "  --v8-pool-size=num    set v8's thread pool size\n"
+ #if HAVE_OPENSSL
+          "  --tls-cipher-list=val use an alternative default TLS cipher list\n"
++         "  --ssl-[no-]def-store  use only default certificate store\n"
++         "                        instead of bundled\n"
+ #if NODE_FIPS_MODE
+          "  --enable-fips         enable FIPS crypto at startup\n"
+          "  --force-fips          force FIPS crypto (cannot be disabled)\n"
+@@ -3717,6 +3727,10 @@ static void ParseArgs(int* argc,
+ #if HAVE_OPENSSL
+     } else if (strncmp(arg, "--tls-cipher-list=", 18) == 0) {
+       default_cipher_list = arg + 18;
++    } else if (strncmp(arg, "--ssl-def-store", 15) == 0) {
++      ssl_def_cert_store = true;
++    } else if (strncmp(arg, "--ssl-no-def-store", 18) == 0) {
++      ssl_def_cert_store = false;
+ #if NODE_FIPS_MODE
+     } else if (strcmp(arg, "--enable-fips") == 0) {
+       enable_fips_crypto = true;
+Index: node-v7.2.0/src/node.h
+===================================================================
+--- node-v7.2.0.orig/src/node.h
++++ node-v7.2.0/src/node.h
+@@ -179,9 +179,12 @@ typedef intptr_t ssize_t;
+ namespace node {
+ 
+ NODE_EXTERN extern bool no_deprecation;
+-#if HAVE_OPENSSL && NODE_FIPS_MODE
++#if HAVE_OPENSSL
++NODE_EXTERN extern bool ssl_def_cert_store;
++# if NODE_FIPS_MODE
+ NODE_EXTERN extern bool enable_fips_crypto;
+ NODE_EXTERN extern bool force_fips_crypto;
++# endif
+ #endif
+ 
+ NODE_EXTERN int Start(int argc, char *argv[]);
+Index: node-v7.2.0/src/node_crypto.cc
+===================================================================
+--- node-v7.2.0.orig/src/node_crypto.cc
++++ node-v7.2.0/src/node_crypto.cc
+@@ -121,7 +121,7 @@ const char* const root_certs[] = {
+ };
+ 
+ X509_STORE* root_cert_store;
+-std::vector<X509*>* root_certs_vector;
++std::vector<X509*> root_certs_vector;
+ 
+ // Just to generate static methods
+ template class SSLWrap<TLSWrap>;
+@@ -688,9 +688,7 @@ static int X509_up_ref(X509* cert) {
+ 
+ 
+ static X509_STORE* NewRootCertStore() {
+-  if (!root_certs_vector) {
+-    root_certs_vector = new std::vector<X509*>;
+-
++  if (root_certs_vector.empty()) {
+     for (size_t i = 0; i < arraysize(root_certs); i++) {
+       BIO* bp = NodeBIO::NewFixed(root_certs[i], strlen(root_certs[i]));
+       X509 *x509 = PEM_read_bio_X509(bp, nullptr, CryptoPemCallback, nullptr);
+@@ -702,14 +700,18 @@ static X509_STORE* NewRootCertStore() {
+         return nullptr;
+       }
+ 
+-      root_certs_vector->push_back(x509);
++      root_certs_vector.push_back(x509);
+     }
+   }
+ 
+   X509_STORE* store = X509_STORE_new();
+-  for (auto& cert : *root_certs_vector) {
+-    X509_up_ref(cert);
+-    X509_STORE_add_cert(store, cert);
++  if (ssl_def_cert_store) {
++    X509_STORE_set_default_paths(store);
++  } else {
++    for (X509 *cert : root_certs_vector) {
++      X509_up_ref(cert);
++      X509_STORE_add_cert(store, cert);
++    }
+   }
+ 
+   return store;

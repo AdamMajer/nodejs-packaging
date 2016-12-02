@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-Wed Nov 23 10:43:33 UTC 2016 - adam.majer@suse.de
+Fri Dec  2 16:30:59 UTC 2016 - adam.majer@suse.de
 
 - Update to upstream release 7.2.0
   * crypto: The Decipher methods setAuthTag() and setAAD now return
@@ -16,6 +16,8 @@ Wed Nov 23 10:43:33 UTC 2016 - adam.majer@suse.de
     does_zap_garbage.
   * for complete changelog, see
     https://nodejs.org/en/blog/release/v7.2.0/
+- 8334.diff: ported and updated system CA store for the new node
+  crypto code.
 
 -------------------------------------------------------------------
 Wed Nov 23 09:00:40 UTC 2016 - adam.majer@suse.de
