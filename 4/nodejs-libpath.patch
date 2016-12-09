@@ -1,7 +1,7 @@
-Index: node-v4.5.0/lib/module.js
+Index: node-v4.7.0/lib/module.js
 ===================================================================
---- node-v4.5.0.orig/lib/module.js
-+++ node-v4.5.0/lib/module.js
+--- node-v4.7.0.orig/lib/module.js
++++ node-v4.7.0/lib/module.js
 @@ -453,7 +453,7 @@ Module._initPaths = function() {
      homeDir = process.env.HOME;
    }
@@ -11,10 +11,10 @@ Index: node-v4.5.0/lib/module.js
  
    if (homeDir) {
      paths.unshift(path.resolve(homeDir, '.node_libraries'));
-Index: node-v4.5.0/tools/install.py
+Index: node-v4.7.0/tools/install.py
 ===================================================================
---- node-v4.5.0.orig/tools/install.py
-+++ node-v4.5.0/tools/install.py
+--- node-v4.7.0.orig/tools/install.py
++++ node-v4.7.0/tools/install.py
 @@ -6,6 +6,7 @@ import os
  import re
  import shutil
@@ -51,8 +51,8 @@ Index: node-v4.5.0/tools/install.py
    else:
      assert(0) # unhandled action type
  
-@@ -128,7 +119,7 @@ def files(action):
-   action(['out/Release/node' + exeext], 'bin/node' + exeext)
+@@ -142,7 +133,7 @@ def files(action):
+   action([output_prefix + output_file], 'bin/' + output_file)
  
    if 'true' == variables.get('node_use_dtrace'):
 -    action(['out/Release/node.d'], 'lib/dtrace/node.d')

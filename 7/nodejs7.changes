@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Fri Dec  9 04:30:52 UTC 2016 - qantas94heavy@gmail.com
+
+- New upstream release 7.2.1
+  * buffer: reverted the runtime deprecation of calling Buffer()
+            without new
+  * buffer: fixed buffer.transcode() for single-byte character
+            encodings to UCS2
+  * deps/npm: upgrade npm to 3.10.10
+  * deps/V8: fixed a significant instanceof performance regression
+  * promise: --trace-warnings now produces useful stacktraces for
+             Promise warnings
+  * repl: fixed a bug preventing correct parsing of generator
+          functions
+
+-------------------------------------------------------------------
 Fri Dec  2 16:30:59 UTC 2016 - adam.majer@suse.de
 
 - Update to upstream release 7.2.0
