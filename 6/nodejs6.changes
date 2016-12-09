@@ -1,4 +1,21 @@
 -------------------------------------------------------------------
+Fri Dec  9 04:22:27 UTC 2016 - qantas94heavy@gmail.com
+
+- New upstream LTS version 6.9.2
+  * buffer: coerce slice parameters consistently
+  * deps/npm: upgrade npm to 3.10.9
+  * deps/V8: Various fixes to destructuring edge cases
+    + cherry-pick 3c39bac from V8 upstream
+    + cherry pick 7166503 from upstream v8
+  * gtest: the test reporter now outputs tap comments as yamlish
+  * inspector: inspector now prompts user to use 127.0.0.1 rather
+               than localhost
+  * tls: fix memory leak when writing data to TLSWrap instance
+         during handshake
+- Modify 8334.diff:
+  * ported and updated system CA store for the new node crypto code
+
+-------------------------------------------------------------------
 Wed Nov 23 09:00:40 UTC 2016 - adam.majer@suse.de
 
 - Add missing conflicts to base package. It's not possible to have
