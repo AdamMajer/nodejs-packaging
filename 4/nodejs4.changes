@@ -1,4 +1,25 @@
 -------------------------------------------------------------------
+Fri Dec  9 04:00:08 UTC 2016 - qantas94heavy@gmail.com
+
+- New upstream LTS version 4.7.0
+  * build: introduce the configure --shared option for embedders
+  * debugger: make listen address configurable in debugger server
+  * dgram: generalized send queue to handle close, fixing a
+           potential throw when dgram socket is closed in the
+           listening event handler
+  * http: introduce the 451 status code "Unavailable For
+          Legal Reasons"
+  * gtest: the test reporter now outputs tap comments as yamlish
+  * tls: introduce secureContext for tls.connect (useful for
+         caching client certificates, key, and CA certificates)
+  * tls: fix memory leak when writing data to TLSWrap instance
+         during handshake
+  * src: node no longer aborts when c-ares initialization fails
+- Modify 8334.diff:
+  * ported and updated system CA store for the new node crypto code
+- Refresh nodejs-libpath.patch
+
+-------------------------------------------------------------------
 Thu Dec  1 02:48:44 UTC 2016 - qantas94heavy@gmail.com
 
 - New upstream LTS version 4.6.2
