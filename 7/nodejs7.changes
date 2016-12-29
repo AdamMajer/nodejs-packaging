@@ -1,4 +1,20 @@
 -------------------------------------------------------------------
+Thu Dec 29 10:00:17 UTC 2016 - adam.majer@suse.de
+
+- New upstream release 7.3.0
+  * buffer: buffer.fill() now works properly for the UCS2 encoding
+    on Big-Endian machines.
+  * cluster: disconnect() now returns a reference to the
+    disconnected worker.
+  * http: Remove stale timeout listeners in order to prevent a
+    memory leak when using keep alive.
+  * tls: Allow obvious key/passphrase combinations.
+  * url:
+    + Including base argument in URL.originFor() to meet
+      specification compliance.
+    + Improve URLSearchParams to meet specification compliance.
+
+-------------------------------------------------------------------
 Fri Dec  9 04:30:52 UTC 2016 - qantas94heavy@gmail.com
 
 - New upstream release 7.2.1
