@@ -1,8 +1,8 @@
-Index: node-v7.2.0/configure
+Index: node-v7.3.0/configure
 ===================================================================
---- node-v7.2.0.orig/configure
-+++ node-v7.2.0/configure
-@@ -192,6 +192,11 @@ shared_optgroup.add_option('--shared-ope
+--- node-v7.3.0.orig/configure
++++ node-v7.3.0/configure
+@@ -196,6 +196,11 @@ shared_optgroup.add_option('--shared-ope
      dest='shared_openssl_libpath',
      help='a directory to search for the shared OpenSSL DLLs')
  
@@ -14,7 +14,7 @@ Index: node-v7.2.0/configure
  shared_optgroup.add_option('--shared-zlib',
      action='store_true',
      dest='shared_zlib',
-@@ -916,6 +921,8 @@ def configure_openssl(o):
+@@ -927,6 +932,8 @@ def configure_openssl(o):
    o['variables']['node_use_openssl'] = b(not options.without_ssl)
    o['variables']['node_shared_openssl'] = b(options.shared_openssl)
    o['variables']['openssl_no_asm'] = 1 if options.openssl_no_asm else 0
@@ -23,10 +23,10 @@ Index: node-v7.2.0/configure
    if options.openssl_fips:
      o['variables']['openssl_fips'] = options.openssl_fips
      fips_dir = os.path.join(root_dir, 'deps', 'openssl', 'fips')
-Index: node-v7.2.0/src/node.cc
+Index: node-v7.3.0/src/node.cc
 ===================================================================
---- node-v7.2.0.orig/src/node.cc
-+++ node-v7.2.0/src/node.cc
+--- node-v7.3.0.orig/src/node.cc
++++ node-v7.3.0/src/node.cc
 @@ -171,6 +171,14 @@ static const char* icu_data_dir = nullpt
  bool no_deprecation = false;
  
@@ -42,7 +42,7 @@ Index: node-v7.2.0/src/node.cc
  # if NODE_FIPS_MODE
  // used by crypto module
  bool enable_fips_crypto = false;
-@@ -3557,6 +3565,8 @@ static void PrintHelp() {
+@@ -3584,6 +3592,8 @@ static void PrintHelp() {
           "  --v8-pool-size=num    set v8's thread pool size\n"
  #if HAVE_OPENSSL
           "  --tls-cipher-list=val use an alternative default TLS cipher list\n"
@@ -51,7 +51,7 @@ Index: node-v7.2.0/src/node.cc
  #if NODE_FIPS_MODE
           "  --enable-fips         enable FIPS crypto at startup\n"
           "  --force-fips          force FIPS crypto (cannot be disabled)\n"
-@@ -3717,6 +3727,10 @@ static void ParseArgs(int* argc,
+@@ -3744,6 +3754,10 @@ static void ParseArgs(int* argc,
  #if HAVE_OPENSSL
      } else if (strncmp(arg, "--tls-cipher-list=", 18) == 0) {
        default_cipher_list = arg + 18;
@@ -62,10 +62,10 @@ Index: node-v7.2.0/src/node.cc
  #if NODE_FIPS_MODE
      } else if (strcmp(arg, "--enable-fips") == 0) {
        enable_fips_crypto = true;
-Index: node-v7.2.0/src/node.h
+Index: node-v7.3.0/src/node.h
 ===================================================================
---- node-v7.2.0.orig/src/node.h
-+++ node-v7.2.0/src/node.h
+--- node-v7.3.0.orig/src/node.h
++++ node-v7.3.0/src/node.h
 @@ -179,9 +179,12 @@ typedef intptr_t ssize_t;
  namespace node {
  
@@ -80,12 +80,12 @@ Index: node-v7.2.0/src/node.h
  #endif
  
  NODE_EXTERN int Start(int argc, char *argv[]);
-Index: node-v7.2.0/src/node_crypto.cc
+Index: node-v7.3.0/src/node_crypto.cc
 ===================================================================
---- node-v7.2.0.orig/src/node_crypto.cc
-+++ node-v7.2.0/src/node_crypto.cc
-@@ -121,7 +121,7 @@ const char* const root_certs[] = {
- };
+--- node-v7.3.0.orig/src/node_crypto.cc
++++ node-v7.3.0/src/node_crypto.cc
+@@ -123,7 +123,7 @@ const char* const root_certs[] = {
+ std::string extra_root_certs_file;  // NOLINT(runtime/string)
  
  X509_STORE* root_cert_store;
 -std::vector<X509*>* root_certs_vector;
@@ -93,7 +93,7 @@ Index: node-v7.2.0/src/node_crypto.cc
  
  // Just to generate static methods
  template class SSLWrap<TLSWrap>;
-@@ -688,9 +688,7 @@ static int X509_up_ref(X509* cert) {
+@@ -693,9 +693,7 @@ static int X509_up_ref(X509* cert) {
  
  
  static X509_STORE* NewRootCertStore() {
@@ -104,7 +104,7 @@ Index: node-v7.2.0/src/node_crypto.cc
      for (size_t i = 0; i < arraysize(root_certs); i++) {
        BIO* bp = NodeBIO::NewFixed(root_certs[i], strlen(root_certs[i]));
        X509 *x509 = PEM_read_bio_X509(bp, nullptr, CryptoPemCallback, nullptr);
-@@ -702,14 +700,18 @@ static X509_STORE* NewRootCertStore() {
+@@ -707,14 +705,18 @@ static X509_STORE* NewRootCertStore() {
          return nullptr;
        }
  

@@ -13,6 +13,7 @@ Thu Dec 29 10:00:17 UTC 2016 - adam.majer@suse.de
     + Including base argument in URL.originFor() to meet
       specification compliance.
     + Improve URLSearchParams to meet specification compliance.
+- 8334.diff: refreshed.
 
 -------------------------------------------------------------------
 Fri Dec  9 04:30:52 UTC 2016 - qantas94heavy@gmail.com
