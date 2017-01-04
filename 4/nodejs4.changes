@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Jan  4 02:59:22 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream LTS release 4.7.1
+  * build: shared library support is now working for AIX builds
+  * repl: passing options to the repl will no longer overwrite
+          defaults
+  * timers: recanceling a cancelled timers will no longer throw
+
+-------------------------------------------------------------------
 Fri Dec  9 04:00:08 UTC 2016 - qantas94heavy@gmail.com
 
 - New upstream LTS version 4.7.0
