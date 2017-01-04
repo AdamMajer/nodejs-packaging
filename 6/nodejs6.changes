@@ -1,4 +1,22 @@
 -------------------------------------------------------------------
+Wed Jan  4 02:56:09 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream LTS release 6.9.3
+  * build: shared library support is now working for AIX builds
+  * deps/npm: upgrade npm to 3.10.10
+  * deps/V8: destructuring of arrow function arguments via computed
+             property no longer throws
+  * inspector: /json/version returns object, not an object wrapped
+               in an array
+  * module: using --debug-brk and --eval together now works
+            as expected
+  * process: improve performance of nextTick up to 20%
+  * repl: the division operator will no longer be accidentally
+          parsed as regex
+  * repl: improved support for generator functions
+  * timers: recanceling a cancelled timers will no longer throw
+
+-------------------------------------------------------------------
 Fri Dec  9 04:22:27 UTC 2016 - qantas94heavy@gmail.com
 
 - New upstream LTS version 6.9.2
