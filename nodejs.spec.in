@@ -323,7 +323,7 @@ chmod 0644 %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_mod
 
 # Check that Node.js isn't completely broken.
 %check
-%{_bindir}/node -e 'assert.strictEqual(process.versions.node, "%{version}");'
+%{buildroot}%{_bindir}/node -e 'require("assert").strictEqual(process.versions.node, "%{version}");'
 
 %files
 %defattr(-, root, root)
