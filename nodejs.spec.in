@@ -1,7 +1,7 @@
 #
 # spec file for package nodejs{{node_version_major}}
 #
-# Copyright (c) 2016 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2017 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -320,6 +320,10 @@ chmod 0644 %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_mod
 %fdupes %{buildroot}%{_libdir}/node_modules/npm
 %fdupes %{buildroot}%{_includedir}/node
 %fdupes %{buildroot}%{_mandir}/man5
+
+# Check that Node.js isn't completely broken.
+%check
+%{_bindir}/node -e 'assert.strictEqual(process.versions.node, "%{version}");'
 
 %files
 %defattr(-, root, root)
