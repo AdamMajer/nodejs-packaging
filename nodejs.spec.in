@@ -321,6 +321,10 @@ chmod 0644 %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_mod
 %fdupes %{buildroot}%{_includedir}/node
 %fdupes %{buildroot}%{_mandir}/man5
 
+# Check that Node.js isn't completely broken.
+%check
+%{_bindir}/node -e 'assert.strictEqual(process.versions.node, "%{version}");'
+
 %files
 %defattr(-, root, root)
 %doc AUTHORS LICENSE *.md
