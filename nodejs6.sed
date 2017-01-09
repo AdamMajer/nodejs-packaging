@@ -14,3 +14,4 @@ s/{{min_icu_version}}/52/
 s/{{intree_libcares2}}/0%{suse_version} >= 1330/
 s/{{min_libcares2_version}}/1.10.0/
 
+s|{{version_specific_patches}}||

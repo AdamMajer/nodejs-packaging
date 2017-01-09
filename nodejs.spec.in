@@ -58,7 +58,7 @@ Release:        0
 %endif
 
 # No binutils_gold on SLE12 (aarch64).
-%ifarch aarch64   
+%ifarch aarch64
 
 %if 0%{?sle_version} >= 120100 || 0%{?is_opensuse}
 %bcond_without binutils_gold
@@ -88,6 +88,10 @@ Source3:        nodejs.keyring
 
 ## UPSTREAM PATCHES HERE, if any
 Patch1:         https://patch-diff.githubusercontent.com/raw/nodejs/node/pull/8334.diff
+
+# Patches specifically for a Node.js version
+{{version_specific_patches}}
+
 ## Our patches
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
 Patch101:       nodejs-libpath.patch
@@ -158,7 +162,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %description
 Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine.
-Node.js uses an event-driven, non-blocking I/O model that makes it 
+Node.js uses an event-driven, non-blocking I/O model that makes it
 lightweight and efficient. Node.js' package ecosystem, npm, is the largest
 ecosystem of open source libraries in the world.
 
@@ -201,6 +205,9 @@ The API documentation for the Node.js JavaScript runtime.
 echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | sha256sum -c
 %setup -q -n node-v%{version}
 %patch1 -p1
+%if {{node_version_major}} == 7
+%patch70 -p1
+%endif
 %patch101 -p1
 %patch102 -p1
 # Add check_output to configure script (not part of Python 2.6 in SLE11).
@@ -296,7 +303,7 @@ find %{buildroot}%{_libdir}/node_modules/npm/node_modules -type d -name "benchma
 find %{buildroot}%{_libdir}/node_modules/npm -name "README.md" -exec chmod -x {} +
 find %{buildroot}%{_libdir}/node_modules/npm -name "LICENSE" -exec chmod -x {} +
 # browser.js is useless for npm cli
-find %{buildroot}%{_libdir}/node_modules/npm -name "browser.js" -delete 
+find %{buildroot}%{_libdir}/node_modules/npm -name "browser.js" -delete
 # fix permissions
 chmod 0644 %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/node_modules/sntp/lib/index.js \
    %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/qs/lib/parse.js \
@@ -315,7 +322,7 @@ chmod 0644 %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_mod
    %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/qs/lib/utils.js \
    %{buildroot}%{_libdir}/node_modules/npm/node_modules/uid-number/get-uid-gid.js \
    %{buildroot}%{_libdir}/node_modules/npm/bin/read-package-json.js
-   
+
 # file duplicates
 %fdupes %{buildroot}%{_libdir}/node_modules/npm
 %fdupes %{buildroot}%{_includedir}/node

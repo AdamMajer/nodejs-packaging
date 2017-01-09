@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Mon Jan  9 13:57:19 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream release 7.4.0
+  * buffer: improve performance of Buffer allocation by ~11%
+  * buffer: improve performance of Buffer.from() by ~50%
+  * deps/npm: upgrade to v4.0.5
+  * events: improve performance of EventEmitter.once() by ~27%
+  * fs: allow passing Uint8Array to fs methods where Buffers are
+        supported
+  * http: improve performance of http server by ~7%
+- New patch 10657.patch
+  * Fixes build error caused by attempt to use bundled zlib
+- Refresh 8334.diff
+
+-------------------------------------------------------------------
 Fri Jan  6 08:25:14 UTC 2017 - qantas94heavy@gmail.com
 
 - Add basic check that Node.js loads successfully to spec file
