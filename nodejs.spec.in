@@ -89,8 +89,9 @@ Source3:        nodejs.keyring
 ## UPSTREAM PATCHES HERE, if any
 Patch1:         https://patch-diff.githubusercontent.com/raw/nodejs/node/pull/8334.diff
 
-# Patches specifically for a Node.js version
-{{version_specific_patches}}
+%if {{node_version_major}} == 7
+Patch70:        https://patch-diff.githubusercontent.com/raw/nodejs/node/pull/10657.patch
+%endif
 
 ## Our patches
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built

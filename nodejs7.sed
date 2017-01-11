@@ -13,8 +13,4 @@ s/{{min_icu__version}}/57/
 # libcares2 version
 s/{{intree_libcares2}}/0%{suse_version} >= 1330/
 s/{{min_libcares2_version}}/1.10.0/
-#
-#
-# Node.js 7.x specific patches
-s|{{version_specific_patches}}|\
-Patch70: https://patch-diff.githubusercontent.com/raw/nodejs/node/pull/10657.patch|
+
