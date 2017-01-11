@@ -13,3 +13,5 @@ s/{{min_icu_version}}/52/
 # libcares2 version - option unavailable in Nodejs4
 s/{{intree_libcares2}}/0/
 s/{{min_libcares2_version}}/1.10.0/
+
+s|{{version_specific_patches}}||
