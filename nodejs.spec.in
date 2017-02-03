@@ -87,11 +87,7 @@ Source2:        https://nodejs.org/dist/v%{version}/SHASUMS256.txt.sig
 Source3:        nodejs.keyring
 
 ## UPSTREAM PATCHES HERE, if any
-Patch1:         https://patch-diff.githubusercontent.com/raw/nodejs/node/pull/8334.diff
-
-%if {{node_version_major}} == 7
-Patch70:        https://patch-diff.githubusercontent.com/raw/nodejs/node/pull/10657.patch
-%endif
+Patch1:         8334.diff
 
 ## Our patches
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
@@ -205,9 +201,8 @@ The API documentation for the Node.js JavaScript runtime.
 %prep
 echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | sha256sum -c
 %setup -q -n node-v%{version}
+%if {{node_version_major}} != 7
 %patch1 -p1
-%if {{node_version_major}} == 7
-%patch70 -p1
 %endif
 %patch101 -p1
 %patch102 -p1
@@ -259,7 +254,7 @@ export CXX="g++-4.8"
     --gdb \
 %endif
     --without-dtrace \
-    --use-def-ca-store
+    --openssl-use-def-ca-store
 
 make %{?_smp_mflags}
 
