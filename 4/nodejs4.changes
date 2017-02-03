@@ -7,6 +7,7 @@ Fri Feb  3 12:30:12 UTC 2017 - adam.majer@suse.de
      bnc#1022085, bnc#1022086, bnc#1009528)
 - No changes in LTS version 4.7.2
 - Adjusted 8334.diff to be inline with accepted changes
+- Merge nodejs4.changes from SLE and devel project
 
 -------------------------------------------------------------------
 Fri Jan  6 08:25:14 UTC 2017 - qantas94heavy@gmail.com
@@ -75,14 +76,27 @@ Fri Nov 18 11:59:06 UTC 2016 - adam.majer@suse.de
 - remove nodejs-libpath64.patch: obsolete
 
 -------------------------------------------------------------------
+Tue Nov  8 14:03:01 UTC 2016 - adam.majer@suse.de
+
+- npm4 should provide versioned nodejs-npm and npm allowing
+  nodejs-packaging to continue to function properly in Leap 42.2
+  (bnc #1009011)
+
+-------------------------------------------------------------------
 Wed Oct 19 08:16:38 UTC 2016 - qantas94heavy@gmail.com
 
 - New upstream LTS version 4.6.1
-  * c-ares:
-    + CVE-2016-5180: fix for single-byte buffer overwrite
+  * c-ares: fix for single-byte buffer overwrite, CVE-2016-5180
+    more information at https://c-ares.haxx.se/adv_20160929.html
+    (bnc #1007728)
 
 -------------------------------------------------------------------
-Wed Sep 28 08:37:49 UTC 2016 - adam.majer@suse.de
+Tue Oct  4 14:25:04 UTC 2016 - adam.majer@suse.de
+
+- npm4 now provides nodejs-npm to ease upgrades for Leap 
+
+-------------------------------------------------------------------
+Thu Sep 29 08:52:25 UTC 2016 - adam.majer@suse.de
 
 - enable usage of system certificate store on SLE11SP4 by 
   requiring openssl1 (boo#1000036)
@@ -105,7 +119,7 @@ Wed Sep 28 08:37:49 UTC 2016 - adam.majer@suse.de
 -------------------------------------------------------------------
 Fri Aug 26 10:37:38 UTC 2016 - adam.majer@suse.de
 
-- New upstream LTS version 4.5.0
+- New upstream LTS version 4.5.0 (bnc#997405)
   * buffer:
     + backport new buffer constructor APIs to v4.x
     + backport --zero-fill-buffers cli option
