@@ -2,40 +2,40 @@ Source: https://github.com/nodejs/node/pull/8334
 Author: Adam Majer <amajer@suse.de>
 Summary: add option to use system CA store
 
-Index: node-v6.9.0/configure
+Index: node-v4.8.0/configure
 ===================================================================
---- node-v6.9.0.orig/configure
-+++ node-v6.9.0/configure
-@@ -187,6 +187,11 @@ shared_optgroup.add_option('--shared-ope
-     dest='shared_openssl_libpath',
-     help='a directory to search for the shared OpenSSL DLLs')
+--- node-v4.8.0.orig/configure
++++ node-v4.8.0/configure
+@@ -139,6 +139,11 @@ parser.add_option("--openssl-no-asm",
+     dest="openssl_no_asm",
+     help="Do not build optimized assembly for OpenSSL")
  
-+shared_optgroup.add_option('--openssl-use-def-ca-store',
++parser.add_option('--openssl-use-def-ca-store',
 +    action='store_true',
-+    dest='use_system_ca_store',
-+    help='use system supplied Root CA store instead of bundled copy')
++    dest='use_openssl_ca_store',
++    help='Use OpenSSL supplied CA store instead of compiled-in Mozilla CA copy.')
 +
- shared_optgroup.add_option('--shared-zlib',
-     action='store_true',
-     dest='shared_zlib',
-@@ -905,6 +910,8 @@ def configure_openssl(o):
+ parser.add_option('--openssl-fips',
+     action='store',
+     dest='openssl_fips',
+@@ -890,6 +895,8 @@ def configure_openssl(o):
    o['variables']['node_use_openssl'] = b(not options.without_ssl)
    o['variables']['node_shared_openssl'] = b(options.shared_openssl)
    o['variables']['openssl_no_asm'] = 1 if options.openssl_no_asm else 0
-+  if options.use_system_ca_store:
-+    o['defines'] += ['NODE_SYSTEM_CERT_STORE']
++  if options.use_openssl_ca_store:
++    o['defines'] += ['NODE_OPENSSL_CERT_STORE']
    if options.openssl_fips:
      o['variables']['openssl_fips'] = options.openssl_fips
      fips_dir = os.path.join(root_dir, 'deps', 'openssl', 'fips')
-Index: node-v6.9.0/src/node_crypto.cc
+Index: node-v4.8.0/src/node_crypto.cc
 ===================================================================
---- node-v6.9.0.orig/src/node_crypto.cc
-+++ node-v6.9.0/src/node_crypto.cc
-@@ -751,6 +751,23 @@ void SecureContext::AddRootCerts(const F
+--- node-v4.8.0.orig/src/node_crypto.cc
++++ node-v4.8.0/src/node_crypto.cc
+@@ -797,6 +797,23 @@ void SecureContext::AddRootCerts(const F
    CHECK_EQ(sc->ca_store_, nullptr);
  
    if (!root_cert_store) {
-+#if defined(NODE_SYSTEM_CERT_STORE)
++#if defined(NODE_OPENSSL_CERT_STORE)
 +    // *Assume* OpenSSL is setup correctly, which is the case
 +    // for distribution supplied versions.
 +    //
@@ -55,34 +55,11 @@ Index: node-v6.9.0/src/node_crypto.cc
      root_cert_store = X509_STORE_new();
  
      for (size_t i = 0; i < arraysize(root_certs); i++) {
-@@ -770,9 +787,12 @@ void SecureContext::AddRootCerts(const F
+@@ -816,6 +833,7 @@ void SecureContext::AddRootCerts(const F
        BIO_free_all(bp);
        X509_free(x509);
      }
-+#endif  // defined(USE_SYSTEM_CERTIFICATE_STORE)
-   }
++#endif  // defined(NODE_OPENSSL_CERT_STORE)
  
-   sc->ca_store_ = root_cert_store;
-+  // increment reference count so global store is not deleted along with CTX
-+  CRYPTO_add(&root_cert_store->references, 1, CRYPTO_LOCK_X509_STORE);
-   SSL_CTX_set_cert_store(sc->ctx_, sc->ca_store_);
- }
- 
-Index: node-v6.9.0/src/node_crypto.h
-===================================================================
---- node-v6.9.0.orig/src/node_crypto.h
-+++ node-v6.9.0/src/node_crypto.h
-@@ -142,13 +142,6 @@ class SecureContext : public BaseObject
-   void FreeCTXMem() {
-     if (ctx_) {
-       env()->isolate()->AdjustAmountOfExternalAllocatedMemory(-kExternalSize);
--      if (ctx_->cert_store == root_cert_store) {
--        // SSL_CTX_free() will attempt to free the cert_store as well.
--        // Since we want our root_cert_store to stay around forever
--        // we just clear the field. Hopefully OpenSSL will not modify this
--        // struct in future versions.
--        ctx_->cert_store = nullptr;
--      }
-       SSL_CTX_free(ctx_);
-       if (cert_ != nullptr)
-         X509_free(cert_);
+     if (!extra_root_certs_file.empty()) {
+       unsigned long err = AddCertsFromFile(  // NOLINT(runtime/int)
