@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Sun Feb 26 03:01:09 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream LTS release 6.10.0
+ * crypto: allow adding extra certs to well-known CAs
+ * deps: upgrade INTL ICU to version 58
+ * fs: cache non-symlinks in realpathSync
+ * process: add process.memoryUsage().external
+ * repl: allow autocompletion for scoped packages
+ * src: add wrapper for process.emitWarning()
+- Modify 8334.diff:
+  * Remove merged reference counting code (#9409)
+  * Bring patch in line with upstream changes (#8334)
+
+-------------------------------------------------------------------
 Fri Feb  3 12:21:10 UTC 2017 - adam.majer@suse.de
 
 - New upstream LTS release 6.9.5

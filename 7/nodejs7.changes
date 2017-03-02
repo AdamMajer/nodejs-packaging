@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Sun Feb 26 03:01:36 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream release 7.6.0
+ * crypto: remove expired certs from CNNIC whitelist
+ * deps: update V8 to 5.5
+ * deps: upgrade libuv to 1.11.0
+ * deps: add node-inspect 1.10.4
+ * deps: upgrade zlib to 1.2.11
+ * fs: allow WHATWG URL objects as paths
+ * inspector: add --inspect-brk
+ * lib: build "node inspect" into node
+ * src: support UTF-8 in compiled-in JS source file
+ * url: extend url.format to support WHATWG URL
+
+-------------------------------------------------------------------
 Fri Feb  3 12:14:19 UTC 2017 - adam.majer@suse.de
 
 - New upstream release 7.5.0
