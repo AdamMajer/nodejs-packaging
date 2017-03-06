@@ -1,4 +1,21 @@
 -------------------------------------------------------------------
+Sat Mar  4 04:48:24 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream release 7.7.1
+  * Fixes bug that prevented all native modules from building
+- Changes in release 7.7.0
+  * child_process: spawnSync() exit code now is null when the child
+    is killed via signal
+  * crypto: adding support for OPENSSL_CONF again
+  * doc: items in the API documentation may now have changelogs
+  * http: new functions to access the headers for an outgoing HTTP
+    message
+  * lib: deprecate node --debug at runtime
+  * src: adding support for trace-event tracing
+  * tls: new tls.TLSSocket() supports sec ctx options
+  * url: adding URL.prototype.toJSON support
+
+-------------------------------------------------------------------
 Sun Feb 26 03:01:36 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream release 7.6.0
