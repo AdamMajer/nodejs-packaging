@@ -1,4 +1,33 @@
 -------------------------------------------------------------------
+Wed Mar 29 11:34:00 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream release 7.8.0
+  * buffer: do not segfault on out-of-range index (#11927)
+  * crypto: fix memory leak if certificate is revoked (#12089)
+  * deps/npm: upgrade npm to 4.2.0 (#11389)
+  * deps/V8: fix async await desugaring in V8 (#12004)
+  * readline: add option to stop duplicates in history (#2982)
+
+-------------------------------------------------------------------
+Wed Mar 22 10:22:01 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream release 7.7.4
+  * deps: upgraded internal node-inspect version to 1.10.6,
+    containing several fixes
+  * inspector: use proper WebSockets URLs when bound to 0.0.0.0
+  * tls: fixed a segfault when the handle was destroyed after a
+    partial read
+- Changes in release 7.7.3
+  * net: Socket.prototype.connect now once again functions without
+    a callback
+  * url: URL.prototype.origin now properly specified an opaque
+    return of 'null' for file:// URLs
+- Changes in release 7.7.2
+  * tty: add ref() so process.stdin.ref() etc. work
+  * util: fix inspecting symbol key in string
+- Rebased nodejs-libpath.patch for minor changes in new version
+
+-------------------------------------------------------------------
 Sat Mar  4 04:48:24 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream release 7.7.1
