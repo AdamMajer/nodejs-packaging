@@ -1,4 +1,39 @@
 -------------------------------------------------------------------
+Wed Apr  5 01:30:39 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream LTS release 6.10.2
+  * crypto: fix memory leak if certificate is revoked (#12089)
+  * deps: backport V8 fixes for spread syntax regression
+    causing segfaults (#12037)
+    
+- Changes not applicable to openSUSE in 6.10.2:
+  * deps: upgrade zlib to 1.2.11 (#10980)
+  * repl: revert commit that broke REPL display on Windows (#12123)
+  
+- Changes in LTS release 6.10.1
+  * performance: The performance of several APIs has been improved.
+    + Buffer.compare() is up to 35% faster on average.
+    + buffer.toJSON() is up to 2859% faster on average.
+    + fs.*statSync() functions are now up to 9% faster on average.
+    + os.loadavg is up to 151% faster.
+    + process.memoryUsage() is up to 34% faster.
+    + querystring.unescape() for Buffers is 15% faster on average.
+    + querystring.stringify() is up to 7.8% faster on average.
+    + querystring.parse() is up to 21% faster on average.
+  * IPC: Batched writes have been enabled for process IPC on
+    platforms that support Unix Domain Sockets. Performance gains
+    may be up to 40% for some workloads.
+  * child_process: spawnSync now returns a null status when child
+    is terminated by a signal. This fixes the behavior to act like
+    spawn() does.
+  * http: Control characters are now always rejected when using
+    http.request(). Debug messages have been added for cases when
+    headers contain invalid values.
+  * node: Heap statistics now support values larger than 4GB.
+  * timers: Timer callbacks now always maintain order when
+    interacting with domain error handling.
+
+-------------------------------------------------------------------
 Sun Feb 26 03:01:09 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream LTS release 6.10.0

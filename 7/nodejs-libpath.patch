@@ -1,20 +1,20 @@
-Index: node-v6.9.0/lib/module.js
+Index: node-v7.7.4/lib/module.js
 ===================================================================
---- node-v6.9.0.orig/lib/module.js
-+++ node-v6.9.0/lib/module.js
-@@ -616,7 +616,7 @@ Module._initPaths = function() {
-     homeDir = process.env.HOME;
+--- node-v7.7.4.orig/lib/module.js
++++ node-v7.7.4/lib/module.js
+@@ -626,7 +626,7 @@ Module._initPaths = function() {
+   } else {
+     prefixDir = path.resolve(process.execPath, '..', '..');
    }
- 
--  var paths = [path.resolve(process.execPath, '..', '..', 'lib', 'node')];
+-  var paths = [path.resolve(prefixDir, 'lib', 'node')];
 +  var paths = ['/usr/lib/node_modules', '/usr/lib/node'];
  
    if (homeDir) {
      paths.unshift(path.resolve(homeDir, '.node_libraries'));
-Index: node-v6.9.0/tools/install.py
+Index: node-v7.7.4/tools/install.py
 ===================================================================
---- node-v6.9.0.orig/tools/install.py
-+++ node-v6.9.0/tools/install.py
+--- node-v7.7.4.orig/tools/install.py
++++ node-v7.7.4/tools/install.py
 @@ -6,6 +6,7 @@ import os
  import re
  import shutil
