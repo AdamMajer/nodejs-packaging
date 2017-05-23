@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Tue May 23 09:45:04 UTC 2017 - adam.majer@suse.de
+
+- New upstream version 7.10.0
+  * crypto: add randomFill and randomFillSync
+  * meta: Added new collaborators
+  * process: fix crash when Promise rejection is a Symbol
+  * url: make WHATWG URL more spec compliant
+  * v8:
+    + fix stack overflow in recursive method
+    + fix build errors with g++ 7
+- New upstream version 7.9.0
+  * util: console is now closer to what is supported in all
+    major browsers
+
+-------------------------------------------------------------------
 Wed Mar 29 11:34:00 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream release 7.8.0
