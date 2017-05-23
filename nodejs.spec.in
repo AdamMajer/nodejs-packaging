@@ -261,6 +261,8 @@ make %{?_smp_mflags}
 %install
 make install DESTDIR=%{buildroot} %{?_smp_mflags}
 rm %{buildroot}%{_datadir}/doc/node/gdbinit
+rm -f %{buildroot}%{_datadir}/doc/node/lldbinit
+rm -f %{buildroot}%{_datadir}/doc/node/lldb_commands.py
 
 # npm man page
 rm -rf %{buildroot}%{_libdir}/node_modules/npm/man
