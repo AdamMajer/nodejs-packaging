@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Tue May 23 09:52:00 UTC 2017 - adam.majer@suse.de
+
+- New upstream LTS release 6.10.3
+  * b8:
+    + Trigger OOM crash on memory allcation errors
+    + Don't treat catch scopes as possibly-shadowing for sloppy eval
+  * lib: fix event race condition with -e
+  * src: fix base64 decoding in rare edgecase
+  * tls:
+    + fix segfault on destroy after partial read
+    + keep track of stream that is closed
+    + fix macro to check NPN feature
+- nodejs-libpath.patch: updated
+
+-------------------------------------------------------------------
 Wed Apr  5 01:30:39 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream LTS release 6.10.2
