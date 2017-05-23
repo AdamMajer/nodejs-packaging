@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Tue May 23 09:54:05 UTC 2017 - adam.majer@suse.de
+
+- New upstream LTS release 4.8.3
+  * v8: trigger OOM crash if memory allocation fails
+  * src: fix base64 decoding in rare edgecase
+  * tls:
+    + fix segfault on destroy after partial read
+    + keep track of stream that is closed
+    + TLSSocket emits 'error' on handshake failure
+- nodejs-libpath.patch: updated
+
+-------------------------------------------------------------------
 Wed Apr  5 01:37:06 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream maintenance release 4.8.2

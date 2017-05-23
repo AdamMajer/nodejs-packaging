@@ -1,20 +1,29 @@
-Index: node-v4.7.0/lib/module.js
+Index: node-v4.8.3/lib/module.js
 ===================================================================
---- node-v4.7.0.orig/lib/module.js
-+++ node-v4.7.0/lib/module.js
-@@ -453,7 +453,7 @@ Module._initPaths = function() {
+--- node-v4.8.3.orig/lib/module.js
++++ node-v4.8.3/lib/module.js
+@@ -453,16 +453,7 @@ Module._initPaths = function() {
      homeDir = process.env.HOME;
    }
  
--  var paths = [path.resolve(process.execPath, '..', '..', 'lib', 'node')];
+-  // $PREFIX/lib/node, where $PREFIX is the root of the Node.js installation.
+-  var prefixDir;
+-  // process.execPath is $PREFIX/bin/node except on Windows where it is
+-  // $PREFIX\node.exe.
+-  if (isWindows) {
+-    prefixDir = path.resolve(process.execPath, '..');
+-  } else {
+-    prefixDir = path.resolve(process.execPath, '..', '..');
+-  }
+-  var paths = [path.resolve(prefixDir, 'lib', 'node')];
 +  var paths = ['/usr/lib/node_modules', '/usr/lib/node'];
  
    if (homeDir) {
      paths.unshift(path.resolve(homeDir, '.node_libraries'));
-Index: node-v4.7.0/tools/install.py
+Index: node-v4.8.3/tools/install.py
 ===================================================================
---- node-v4.7.0.orig/tools/install.py
-+++ node-v4.7.0/tools/install.py
+--- node-v4.8.3.orig/tools/install.py
++++ node-v4.8.3/tools/install.py
 @@ -6,6 +6,7 @@ import os
  import re
  import shutil

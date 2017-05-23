@@ -1,5 +1,5 @@
 s/{{npm_version}}/2.15.11/
-s/{{node_version}}/4.8.2/
+s/{{node_version}}/4.8.3/
 s/{{node_version_major}}/4/
 s/{{arch_support}}/aarch64 ppc ppc64 ppc64le s390 s390x/
 s/{{exclusive_arch}}/%{ix86} x86_64 armv7hl aarch64 ppc ppc64 ppc64le/
