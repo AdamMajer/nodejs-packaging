@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May 30 12:45:42 UTC 2017 - adam.majer@suse.de
+
+- 0f3e69db.patch: backport GCC 7 compilation fixes for v8
+  (bnc#1041282)
+
+-------------------------------------------------------------------
 Tue May 23 09:52:00 UTC 2017 - adam.majer@suse.de
 
 - New upstream LTS release 6.10.3
