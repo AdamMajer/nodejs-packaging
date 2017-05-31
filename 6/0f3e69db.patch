@@ -12,11 +12,11 @@ Date:   Wed Apr 26 18:04:40 2017 +0200
     Reviewed-By: Ben Noordhuis <info@bnoordhuis.nl>
     Reviewed-By: Anna Henningsen <anna@addaleax.net>
 
-Index: node-v4.8.3/deps/v8/src/objects-inl.h
+Index: node-v6.10.3/deps/v8/src/objects-inl.h
 ===================================================================
---- node-v4.8.3.orig/deps/v8/src/objects-inl.h
-+++ node-v4.8.3/deps/v8/src/objects-inl.h
-@@ -37,6 +37,27 @@
+--- node-v6.10.3.orig/deps/v8/src/objects-inl.h
++++ node-v6.10.3/deps/v8/src/objects-inl.h
+@@ -36,6 +36,27 @@
  namespace v8 {
  namespace internal {
  
@@ -44,11 +44,11 @@ Index: node-v4.8.3/deps/v8/src/objects-inl.h
  PropertyDetails::PropertyDetails(Smi* smi) {
    value_ = smi->value();
  }
-Index: node-v4.8.3/deps/v8/src/objects.h
+Index: node-v6.10.3/deps/v8/src/objects.h
 ===================================================================
---- node-v4.8.3.orig/deps/v8/src/objects.h
-+++ node-v4.8.3/deps/v8/src/objects.h
-@@ -3045,22 +3045,10 @@ class HashTableBase : public FixedArray
+--- node-v6.10.3.orig/deps/v8/src/objects.h
++++ node-v6.10.3/deps/v8/src/objects.h
+@@ -3261,22 +3261,10 @@ class HashTableBase : public FixedArray
  template <typename Derived, typename Shape, typename Key>
  class HashTable : public HashTableBase {
   public:
@@ -75,3 +75,28 @@ Index: node-v4.8.3/deps/v8/src/objects.h
  
    // Returns a new HashTable object.
    MUST_USE_RESULT static Handle<Derived> New(
+Index: node-v6.10.3/deps/v8/src/runtime/runtime-i18n.cc
+===================================================================
+--- node-v6.10.3.orig/deps/v8/src/runtime/runtime-i18n.cc
++++ node-v6.10.3/deps/v8/src/runtime/runtime-i18n.cc
+@@ -24,6 +24,7 @@
+ #include "unicode/dtfmtsym.h"
+ #include "unicode/dtptngen.h"
+ #include "unicode/locid.h"
++#include "unicode/normlzr.h"
+ #include "unicode/numfmt.h"
+ #include "unicode/numsys.h"
+ #include "unicode/rbbi.h"
+Index: node-v6.10.3/deps/v8/src/objects-body-descriptors.h
+===================================================================
+--- node-v6.10.3.orig/deps/v8/src/objects-body-descriptors.h
++++ node-v6.10.3/deps/v8/src/objects-body-descriptors.h
+@@ -99,7 +99,7 @@ class FixedBodyDescriptor final : public
+ 
+   template <typename StaticVisitor>
+   static inline void IterateBody(HeapObject* obj, int object_size) {
+-    IterateBody(obj);
++    IterateBody<StaticVisitor>(obj);
+   }
+ };
+ 

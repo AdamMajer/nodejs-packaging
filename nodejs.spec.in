@@ -202,7 +202,7 @@ The API documentation for the Node.js JavaScript runtime.
 %prep
 echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | sha256sum -c
 %setup -q -n node-v%{version}
-%if {{node_version_major}} != 7
+%if {{node_version_major}} < 7
 %patch1 -p1
 %patch2 -p1
 %endif
@@ -347,7 +347,7 @@ chmod 0644 %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_mod
 %{_bindir}/npm
 %{_libdir}/node_modules/npm
 %{_mandir}/man*/*npm*%{ext_man}
-%{_mandir}/man5/package.json.5%{ext_man}
+%{_mandir}/man5/package*.json.5%{ext_man}
 %{_mandir}/man7/semver.7%{ext_man}
 
 %files devel

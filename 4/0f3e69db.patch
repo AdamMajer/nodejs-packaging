@@ -1,0 +1,90 @@
+commit 0f3e69db41c2b6a1863f2454b028f3b3b28a9613
+Author: Zuzana Svetlikova <zsvetlik@redhat.com>
+Date:   Wed Apr 26 18:04:40 2017 +0200
+
+    v8: fix gcc 7 build errors
+    
+    Porting https://github.com/nodejs/node/pull/12392 to master
+    
+    Ref: https://github.com/nodejs/node/pull/12392
+    Fixes: https://github.com/nodejs/node/issues/10388
+    PR-URL: https://github.com/nodejs/node/pull/12676
+    Reviewed-By: Ben Noordhuis <info@bnoordhuis.nl>
+    Reviewed-By: Anna Henningsen <anna@addaleax.net>
+
+Index: node-v4.8.3/deps/v8/src/objects-inl.h
+===================================================================
+--- node-v4.8.3.orig/deps/v8/src/objects-inl.h
++++ node-v4.8.3/deps/v8/src/objects-inl.h
+@@ -37,6 +37,27 @@
+ namespace v8 {
+ namespace internal {
+ 
++template <typename Derived, typename Shape, typename Key>
++uint32_t HashTable<Derived, Shape, Key>::Hash(Key key) {
++  if (Shape::UsesSeed) {
++    return Shape::SeededHash(key, GetHeap()->HashSeed());
++  } else {
++    return Shape::Hash(key);
++  }
++}
++
++
++template <typename Derived, typename Shape, typename Key>
++uint32_t HashTable<Derived, Shape, Key>::HashForObject(Key key,
++                                                       Object* object) {
++  if (Shape::UsesSeed) {
++    return Shape::SeededHashForObject(key, GetHeap()->HashSeed(), object);
++  } else {
++    return Shape::HashForObject(key, object);
++  }
++}
++
++
+ PropertyDetails::PropertyDetails(Smi* smi) {
+   value_ = smi->value();
+ }
+Index: node-v4.8.3/deps/v8/src/objects.h
+===================================================================
+--- node-v4.8.3.orig/deps/v8/src/objects.h
++++ node-v4.8.3/deps/v8/src/objects.h
+@@ -3045,22 +3045,10 @@ class HashTableBase : public FixedArray
+ template <typename Derived, typename Shape, typename Key>
+ class HashTable : public HashTableBase {
+  public:
+-  // Wrapper methods
+-  inline uint32_t Hash(Key key) {
+-    if (Shape::UsesSeed) {
+-      return Shape::SeededHash(key, GetHeap()->HashSeed());
+-    } else {
+-      return Shape::Hash(key);
+-    }
+-  }
+-
+-  inline uint32_t HashForObject(Key key, Object* object) {
+-    if (Shape::UsesSeed) {
+-      return Shape::SeededHashForObject(key, GetHeap()->HashSeed(), object);
+-    } else {
+-      return Shape::HashForObject(key, object);
+-    }
+-  }
++  // Wrapper methods.  Defined in src/objects-inl.h
++  // to break a cycle with src/heap/heap.h.
++  inline uint32_t Hash(Key key);
++  inline uint32_t HashForObject(Key key, Object* object);
+ 
+   // Returns a new HashTable object.
+   MUST_USE_RESULT static Handle<Derived> New(
+Index: node-v4.8.3/deps/v8/src/runtime/runtime-i18n.cc
+===================================================================
+--- node-v4.8.3.orig/deps/v8/src/runtime/runtime-i18n.cc
++++ node-v4.8.3/deps/v8/src/runtime/runtime-i18n.cc
+@@ -22,6 +22,7 @@
+ #include "unicode/dtfmtsym.h"
+ #include "unicode/dtptngen.h"
+ #include "unicode/locid.h"
++#include "unicode/normlzr.h"
+ #include "unicode/numfmt.h"
+ #include "unicode/numsys.h"
+ #include "unicode/rbbi.h"
+
