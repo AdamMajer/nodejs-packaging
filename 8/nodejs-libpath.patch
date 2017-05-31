@@ -7,7 +7,7 @@ Index: node-v7.7.4/lib/module.js
      prefixDir = path.resolve(process.execPath, '..', '..');
    }
 -  var paths = [path.resolve(prefixDir, 'lib', 'node')];
-+  var paths = ['/usr/lib/node_modules', '/usr/lib/node'];
++  var paths = ['/usr/lib/node'];
  
    if (homeDir) {
      paths.unshift(path.resolve(homeDir, '.node_libraries'));
