@@ -80,6 +80,7 @@ Wed May 31 08:38:21 UTC 2017 - adam.majer@suse.de
     + Support Uint8Array in Zlib convenience methods
     + Zlib errors now use RangeError and TypeError consistently
 - node-gyp-addon-gypi.patch: refresh
+- placeholders from other NodeJS version: 0f3e69db.patch, icu59.patch.
 
 -------------------------------------------------------------------
 Tue May 30 12:45:42 UTC 2017 - adam.majer@suse.de

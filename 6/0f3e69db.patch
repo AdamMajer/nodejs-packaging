@@ -75,18 +75,6 @@ Index: node-v6.10.3/deps/v8/src/objects.h
  
    // Returns a new HashTable object.
    MUST_USE_RESULT static Handle<Derived> New(
-Index: node-v6.10.3/deps/v8/src/runtime/runtime-i18n.cc
-===================================================================
---- node-v6.10.3.orig/deps/v8/src/runtime/runtime-i18n.cc
-+++ node-v6.10.3/deps/v8/src/runtime/runtime-i18n.cc
-@@ -24,6 +24,7 @@
- #include "unicode/dtfmtsym.h"
- #include "unicode/dtptngen.h"
- #include "unicode/locid.h"
-+#include "unicode/normlzr.h"
- #include "unicode/numfmt.h"
- #include "unicode/numsys.h"
- #include "unicode/rbbi.h"
 Index: node-v6.10.3/deps/v8/src/objects-body-descriptors.h
 ===================================================================
 --- node-v6.10.3.orig/deps/v8/src/objects-body-descriptors.h
