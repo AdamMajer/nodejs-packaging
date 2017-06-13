@@ -1,7 +1,7 @@
-Index: node-v8.0.0/addon-rpm.gypi
+Index: node-v8.1.0/addon-rpm.gypi
 ===================================================================
 --- /dev/null
-+++ node-v8.0.0/addon-rpm.gypi
++++ node-v8.1.0/addon-rpm.gypi
 @@ -0,0 +1,35 @@
 +{
 +  'target_defaults': {
@@ -38,10 +38,10 @@ Index: node-v8.0.0/addon-rpm.gypi
 +    ]
 +  }
 +}
-Index: node-v8.0.0/deps/npm/node_modules/node-gyp/lib/configure.js
+Index: node-v8.1.0/deps/npm/node_modules/node-gyp/lib/configure.js
 ===================================================================
---- node-v8.0.0.orig/deps/npm/node_modules/node-gyp/lib/configure.js
-+++ node-v8.0.0/deps/npm/node_modules/node-gyp/lib/configure.js
+--- node-v8.1.0.orig/deps/npm/node_modules/node-gyp/lib/configure.js
++++ node-v8.1.0/deps/npm/node_modules/node-gyp/lib/configure.js
 @@ -62,10 +62,6 @@ function configure (gyp, argv, callback)
        if ('v' + release.version !== process.version) {
          // if --target was given, then determine a target version to compile for
@@ -66,7 +66,7 @@ Index: node-v8.0.0/deps/npm/node_modules/node-gyp/lib/configure.js
      }
    }
  
-@@ -274,7 +276,8 @@ function configure (gyp, argv, callback)
+@@ -271,7 +273,8 @@ function configure (gyp, argv, callback)
  
      // this logic ported from the old `gyp_addon` python file
      var gyp_script = path.resolve(__dirname, '..', 'gyp', 'gyp_main.py')
