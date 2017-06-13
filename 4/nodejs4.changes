@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Tue Jun 13 11:34:35 UTC 2017 - adam.majer@suse.de
 
-- Fix typo in addon-rpm.gypi patch
+- Fix typo in node-gyp-addon-gypi.patch patch
 
 -------------------------------------------------------------------
 Tue May 30 12:45:42 UTC 2017 - adam.majer@suse.de
