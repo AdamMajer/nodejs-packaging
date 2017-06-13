@@ -1,4 +1,34 @@
 -------------------------------------------------------------------
+Tue Jun 13 09:13:23 UTC 2017 - adam.majer@suse.de
+
+- New upstream LTS release 6.11.0
+  * added support for building mips64el
+  * cluster:
+    + disconnect() now returns a reference to the disconnected
+      worker.
+  * crypto:
+    + ability to select cert store at runtime
+    + Use system CAs instead of using bundled ones
+      (obsoletes 8334.diff)
+    + The Decipher methods setAuthTag() and setAAD now return this
+    + adding support for OPENSSL_CONF again
+    + make LazyTransform compabile with Streams1
+  * deps:
+    + upgrade libuv to 1.11.0
+  * dns:
+    + Implemented {ttl: true} for resolve4() and resolve6().
+  * process:
+    + add NODE_NO_WARNINGS environment variable
+  * readline:
+    + add option to stop duplicates in history
+  * src:
+    + support "--" after "-e" as end-of-options
+  * tls:
+    + new tls.TLSSocket() supports sec ctx options
+    + Allow obvious key/passphrase combinations.
+- Fix typo in addon-rpm.gypi patch
+
+-------------------------------------------------------------------
 Tue May 30 12:45:42 UTC 2017 - adam.majer@suse.de
 
 - 0f3e69db.patch, icu59.patch: backported GCC 7 compilation fixes

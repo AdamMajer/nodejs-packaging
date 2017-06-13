@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jun 13 11:36:29 UTC 2017 - adam.majer@suse.de
+
+- Fix typo in addon-rpm.gypi patch
+
+-------------------------------------------------------------------
 Tue May 30 12:45:42 UTC 2017 - adam.majer@suse.de
 
 - 0f3e69db.patch: GCC 7 compilation fixes, already upstreamed.

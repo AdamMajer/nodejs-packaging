@@ -203,8 +203,10 @@ The API documentation for the Node.js JavaScript runtime.
 %prep
 echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | sha256sum -c
 %setup -q -n node-v%{version}
-%if {{node_version_major}} < 7
+%if {{node_version_major}} < 6
 %patch1 -p1
+%endif
+%if {{node_version_major}} < 7
 %patch2 -p1
 %endif
 %if {{node_version_major}} < 8
@@ -297,7 +299,7 @@ find %{buildroot}%{_libdir}/node_modules/npm -name "*.cmd" -delete
 find %{buildroot}%{_libdir}/node_modules/npm -name "Makefile" -delete
 rm -rf %{buildroot}%{_libdir}/node_modules/npm/{test,scripts}
 find %{buildroot}%{_libdir}/node_modules/npm/node_modules -name "*.sh" -delete
-find %{buildroot}%{_libdir}/node_modules/npm -name "src" -print0 | xargs -0 rm -rf --
+rm -rf %{buildroot}%{_libdir}/node_modules/npm/node_modules/node-gyp/src
 # remove examples/tests/benchmark stuff
 find %{buildroot}%{_libdir}/node_modules/npm/node_modules -name "example*" -print0 | xargs -0 rm -rf --
 find %{buildroot}%{_libdir}/node_modules/npm/node_modules -name "test*" -print0 | xargs -0 rm -rf --
