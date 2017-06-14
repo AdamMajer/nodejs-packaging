@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Wed Jun 14 09:33:33 UTC 2017 - adam.majer@suse.de
+
+- New upstream version 8.1.1
+  * Child processes - stdout and stderr are now available on the
+    error output of a failed call to the util.promisify()ed version
+    of child_process.exec.
+  * HTTP - A regression that broke certain scenarios in which HTTP
+    is used together with the cluster module has been fixed.
+  * HTTPS - The rejectUnauthorized option now works properly for
+    unix sockets.
+  * Readline - A change that broke npm init and other code which
+    uses readline multiple times on the same input stream is
+    reverted.
+
+-------------------------------------------------------------------
 Tue Jun 13 09:08:47 UTC 2017 - adam.majer@suse.de
 
 - Don't remove all src/ directories, as that breaks npm.
