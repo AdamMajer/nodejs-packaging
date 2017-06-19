@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jun 19 09:15:34 UTC 2017 - adam.majer@suse.de
+
+- New upstream version 8.1.2
+  * Release to fix broken process.release properties
+
+-------------------------------------------------------------------
 Wed Jun 14 09:33:33 UTC 2017 - adam.majer@suse.de
 
 - New upstream version 8.1.1
