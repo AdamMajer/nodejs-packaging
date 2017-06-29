@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Thu Jun 29 15:28:41 UTC 2017 - adam.majer@suse.de
+
+- New upstream version 8.1.3
+  * Stream regression fixed - The finish event will now always be
+    emitted after the error event if one is emitted
+  * Stream regression fixed - In object mode, readable streams can
+    now use undefined again.
+
+-------------------------------------------------------------------
 Mon Jun 19 09:15:34 UTC 2017 - adam.majer@suse.de
 
 - New upstream version 8.1.2
