@@ -365,7 +365,6 @@ ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/ma
 %doc deps/v8/tools/gdbinit
 %dir %{_libdir}/node_modules
 %{_bindir}/node{{node_version_major}}
-%{_libdir}/node_modules
 %{_mandir}/man1/node{{node_version_major}}.1%{ext_man}
 %ghost %{_bindir}/node
 %ghost %{_mandir}/man1/node.1%{ext_man}
@@ -386,7 +385,6 @@ ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/ma
 %files devel
 %defattr(-, root, root)
 %{_includedir}/node{{node_version_major}}
-%{_datadir}/node
 %dir %{_datadir}/systemtap
 %dir %{_datadir}/systemtap/tapset
 %{_datadir}/systemtap/tapset/node{{node_version_major}}.stp
