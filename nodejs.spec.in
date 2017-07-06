@@ -312,7 +312,7 @@ find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules 
 rm -rf %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/node-gyp/src
 # remove examples/tests/benchmark stuff
 find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules -name "example*" -print0 | xargs -0 rm -rf --
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/NODE_MODULES -NAME "TEST*" -PRINT0 | XARGS -0 RM -RF --
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/NODE_MODULES -name "test*" -print0 | xargs -0 rm -rf --
 find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules -name "*_test.*" -delete
 find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules -type d -name "benchmark" -print0 | xargs -0 rm -rf --
 # README.md LICENSE file permission
