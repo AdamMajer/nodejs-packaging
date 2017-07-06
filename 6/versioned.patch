@@ -21,6 +21,28 @@ Index: node-v6.11.0/node.gyp
      'library_files': [
        'lib/internal/bootstrap_node.js',
        'lib/_debug_agent.js',
+@@ -762,10 +762,10 @@
+             {
+               'action_name': 'node_dtrace_provider_o',
+               'inputs': [
+-                '<(OBJ_DIR)/node/src/node_dtrace.o',
++                '<(OBJ_DIR)/node6/src/node_dtrace.o',
+               ],
+               'outputs': [
+-                '<(OBJ_DIR)/node/src/node_dtrace_provider.o'
++                '<(OBJ_DIR)/node6/src/node_dtrace_provider.o'
+               ],
+               'action': [ 'dtrace', '-G', '-xnolibs', '-s', 'src/node_provider.d',
+                 '<@(_inputs)', '-o', '<@(_outputs)' ]
+@@ -815,7 +815,7 @@
+                 '<(SHARED_INTERMEDIATE_DIR)/v8constants.h'
+               ],
+               'outputs': [
+-                '<(OBJ_DIR)/node/src/node_dtrace_ustack.o'
++                '<(OBJ_DIR)/node6/src/node_dtrace_ustack.o'
+               ],
+               'conditions': [
+                 [ 'target_arch=="ia32"', {
 @@ -927,7 +927,7 @@
      ['OS=="aix"', {
        'targets': [

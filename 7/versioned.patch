@@ -21,6 +21,41 @@ Index: node-v7.10.0/node.gyp
      'library_files': [
        'lib/internal/bootstrap_node.js',
        'lib/_debug_agent.js',
+@@ -457,10 +457,10 @@
+             {
+               'action_name': 'node_dtrace_provider_o',
+               'inputs': [
+-                '<(OBJ_DIR)/node/src/node_dtrace.o',
++                '<(OBJ_DIR)/node7/src/node_dtrace.o',
+               ],
+               'outputs': [
+-                '<(OBJ_DIR)/node/src/node_dtrace_provider.o'
++                '<(OBJ_DIR)/node7/src/node_dtrace_provider.o'
+               ],
+               'action': [ 'dtrace', '-G', '-xnolibs', '-s', 'src/node_provider.d',
+                 '<@(_inputs)', '-o', '<@(_outputs)' ]
+@@ -510,7 +510,7 @@
+                 '<(SHARED_INTERMEDIATE_DIR)/v8constants.h'
+               ],
+               'outputs': [
+-                '<(OBJ_DIR)/node/src/node_dtrace_ustack.o'
++                '<(OBJ_DIR)/node7/src/node_dtrace_ustack.o'
+               ],
+               'conditions': [
+                 [ 'target_arch=="ia32"', {
+@@ -571,9 +571,9 @@
+       ],
+ 
+       'variables': {
+-        'OBJ_PATH': '<(OBJ_DIR)/node/src',
+-        'OBJ_GEN_PATH': '<(OBJ_DIR)/node/gen',
+-        'OBJ_TRACING_PATH': '<(OBJ_DIR)/node/src/tracing',
++        'OBJ_PATH': '<(OBJ_DIR)/node7/src',
++        'OBJ_GEN_PATH': '<(OBJ_DIR)/node7/gen',
++        'OBJ_TRACING_PATH': '<(OBJ_DIR)/node7/src/tracing',
+         'OBJ_SUFFIX': 'o',
+         'conditions': [
+           ['OS=="win"', {
 @@ -698,7 +698,7 @@
      ['OS=="aix"', {
        'targets': [

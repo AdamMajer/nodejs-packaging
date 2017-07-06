@@ -8,28 +8,6 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-v8.1.3/node.gyp
-===================================================================
---- node-v8.1.3.orig/node.gyp
-+++ node-v8.1.3/node.gyp
-@@ -19,7 +19,7 @@
-     'node_shared_openssl%': 'false',
-     'node_v8_options%': '',
-     'node_enable_v8_vtunejit%': 'false',
--    'node_core_target_name%': 'node',
-+    'node_core_target_name%': 'node8',
-     'library_files': [
-       'lib/internal/bootstrap_node.js',
-       'lib/async_hooks.js',
-@@ -714,7 +714,7 @@
-     ['OS=="aix"', {
-       'targets': [
-         {
--          'target_name': 'node',
-+          'target_name': 'node8',
-           'conditions': [
-             ['node_shared=="true"', {
-               'type': 'shared_library',
 Index: node-v8.1.3/Makefile
 ===================================================================
 --- node-v8.1.3.orig/Makefile
@@ -331,3 +309,60 @@ Index: node-v8.1.3/deps/npm/man/man1/npm.1
  .P
  If you would like to contribute, but don't know what to work on, read
  the contributing guidelines and check the issues list\.
+Index: node-v8.1.3/node.gyp
+===================================================================
+--- node-v8.1.3.orig/node.gyp
++++ node-v8.1.3/node.gyp
+@@ -19,7 +19,7 @@
+     'node_shared_openssl%': 'false',
+     'node_v8_options%': '',
+     'node_enable_v8_vtunejit%': 'false',
+-    'node_core_target_name%': 'node',
++    'node_core_target_name%': 'node8',
+     'library_files': [
+       'lib/internal/bootstrap_node.js',
+       'lib/async_hooks.js',
+@@ -458,10 +458,10 @@
+             {
+               'action_name': 'node_dtrace_provider_o',
+               'inputs': [
+-                '<(OBJ_DIR)/node/src/node_dtrace.o',
++                '<(OBJ_DIR)/node8/src/node_dtrace.o',
+               ],
+               'outputs': [
+-                '<(OBJ_DIR)/node/src/node_dtrace_provider.o'
++                '<(OBJ_DIR)/node8/src/node_dtrace_provider.o'
+               ],
+               'action': [ 'dtrace', '-G', '-xnolibs', '-s', 'src/node_provider.d',
+                 '<@(_inputs)', '-o', '<@(_outputs)' ]
+@@ -511,7 +511,7 @@
+                 '<(SHARED_INTERMEDIATE_DIR)/v8constants.h'
+               ],
+               'outputs': [
+-                '<(OBJ_DIR)/node/src/node_dtrace_ustack.o'
++                '<(OBJ_DIR)/node8/src/node_dtrace_ustack.o'
+               ],
+               'conditions': [
+                 [ 'target_arch=="ia32" or target_arch=="arm"', {
+@@ -572,9 +572,9 @@
+       ],
+ 
+       'variables': {
+-        'OBJ_PATH': '<(OBJ_DIR)/node/src',
+-        'OBJ_GEN_PATH': '<(OBJ_DIR)/node/gen',
+-        'OBJ_TRACING_PATH': '<(OBJ_DIR)/node/src/tracing',
++        'OBJ_PATH': '<(OBJ_DIR)/node8/src',
++        'OBJ_GEN_PATH': '<(OBJ_DIR)/node8/gen',
++        'OBJ_TRACING_PATH': '<(OBJ_DIR)/node8/src/tracing',
+         'OBJ_SUFFIX': 'o',
+         'OBJ_SEPARATOR': '/',
+         'conditions': [
+@@ -714,7 +714,7 @@
+     ['OS=="aix"', {
+       'targets': [
+         {
+-          'target_name': 'node',
++          'target_name': 'node8',
+           'conditions': [
+             ['node_shared=="true"', {
+               'type': 'shared_library',

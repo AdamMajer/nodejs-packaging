@@ -21,6 +21,28 @@ Index: node-v4.8.3/node.gyp
      'node_module_version%': '',
      'library_files': [
        'src/node.js',
+@@ -690,10 +690,10 @@
+             {
+               'action_name': 'node_dtrace_provider_o',
+               'inputs': [
+-                '<(OBJ_DIR)/node/src/node_dtrace.o',
++                '<(OBJ_DIR)/node4/src/node_dtrace.o',
+               ],
+               'outputs': [
+-                '<(OBJ_DIR)/node/src/node_dtrace_provider.o'
++                '<(OBJ_DIR)/node4/src/node_dtrace_provider.o'
+               ],
+               'action': [ 'dtrace', '-G', '-xnolibs', '-s', 'src/node_provider.d',
+                 '<@(_inputs)', '-o', '<@(_outputs)' ]
+@@ -743,7 +743,7 @@
+                 '<(SHARED_INTERMEDIATE_DIR)/v8constants.h'
+               ],
+               'outputs': [
+-                '<(OBJ_DIR)/node/src/node_dtrace_ustack.o'
++                '<(OBJ_DIR)/node4/src/node_dtrace_ustack.o'
+               ],
+               'conditions': [
+                 [ 'target_arch=="ia32"', {
 Index: node-v4.8.3/Makefile
 ===================================================================
 --- node-v4.8.3.orig/Makefile
