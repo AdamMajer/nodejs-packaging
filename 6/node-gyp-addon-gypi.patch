@@ -8,7 +8,7 @@ Index: node-v6.9.0/addon-rpm.gypi
 +    'type': 'loadable_module',
 +    'product_prefix': '',
 +    'include_dirs': [
-+      '/usr/include/node8/',
++      '/usr/include/node6/',
 +      '/usr/include/'
 +    ],
 +
@@ -60,7 +60,7 @@ Index: node-v6.9.0/deps/npm/node_modules/node-gyp/lib/configure.js
 +      } else {
 +        // if no --target was specified then use RPM-installed headers
 +        log.verbose('get node dir', 'no --target version specified, falling back to RPM installed headers')
-+        nodeDir = '/usr/include/node8'
++        nodeDir = '/usr/include/node6'
 +        createBuildDir()
 +      }
      }
@@ -71,7 +71,7 @@ Index: node-v6.9.0/deps/npm/node_modules/node-gyp/lib/configure.js
      // this logic ported from the old `gyp_addon` python file
      var gyp_script = path.resolve(__dirname, '..', 'gyp', 'gyp_main.py')
 -    var addon_gypi = path.resolve(__dirname, '..', 'addon.gypi')
-+    var addon_gypi_file = gyp.opts.target || gyp.opts.nodeDir ? 'addon.gypi' : 'addon-rpm.gypi'
++    var addon_gypi_file = gyp.opts.target || gyp.opts.nodedir ? 'addon.gypi' : 'addon-rpm.gypi'
 +    var addon_gypi = path.resolve(__dirname, '..', addon_gypi_file)
      var common_gypi = path.resolve(nodeDir, 'include/node/common.gypi')
      fs.stat(common_gypi, function (err, stat) {

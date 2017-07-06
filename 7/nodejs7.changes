@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Thu Jul  6 12:08:26 UTC 2017 - adam.majer@suse.de
+
+- npm_search_paths.patch: Since concurrent installations are now
+  possible, node manual pages are moved once again back under npm
+  searcheable locations only.
+- versioned.patch: All files are now under versioned directoies
+  and names. node and npm symlinks are now managed by
+  update-alternatives
+- node-gyp-addon-gypi.patch: Reference versioned directories only
+
+-------------------------------------------------------------------
 Tue Jun 13 11:36:29 UTC 2017 - adam.majer@suse.de
 
 - Fix typo in node-gyp-addon-gypi.patch patch

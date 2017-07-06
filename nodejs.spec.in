@@ -104,6 +104,9 @@ Patch103:       nodejs-sle11-python26-check_output.patch
 # instead of /usr
 Patch104:       npm_search_paths.patch
 
+# Use versioned binaries and paths
+Patch200:       versioned.patch
+
 %if %{with binutils_gold}
 BuildRequires:  binutils-gold
 %endif
@@ -134,6 +137,8 @@ BuildRequires:  pkgconfig(libcares) >= {{min_libcares2_version}}
 BuildRequires:  pkgconfig(icu-i18n) >= {{min_icu_version}}
 %endif
 
+Requires(post): update-alternatives
+Requires(postun): update-alternatives
 Recommends:     npm(npm) = {{npm_version}}
 
 #we need ABI virtual provides where SONAMEs aren't enough/not present so deps
@@ -146,7 +151,10 @@ Provides:       nodejs(engine) = %{version}
 
 # Only one nodejs installed at a time
 Provides:       nodejs = %{version}
-Conflicts:      otherproviders(nodejs)
+Conflicts:      nodejs4 < 4.8.4
+Conflicts:      nodejs6 < 6.11.1
+Conflicts:      nodejs7 < 7.10.1
+Conflicts:      nodejs8 < 8.1.4
 
 # For SLE11, to be able to use the certificate store we need to have properly
 # symlinked certificates. The compatability symlinks are provided by the
@@ -170,7 +178,10 @@ Summary:        Files needed for development of NodeJS platforms
 Group:          Development/Languages/NodeJS
 Provides:       nodejs-devel = %{version}
 Requires:       %{name} = %{version}
-Conflicts:      otherproviders(nodejs-devel)
+Conflicts:      nodejs4-devel < 4.8.4
+Conflicts:      nodejs6-devel < 6.11.1
+Conflicts:      nodejs7-devel < 7.10.1
+Conflicts:      nodejs8-devel < 8.1.4
 
 %description devel
 This package provides development headers for Node.js.
@@ -180,10 +191,13 @@ Summary:        Package manager for Node.js
 Group:          Development/Languages/NodeJS
 Requires:       %{name}-devel = %{version}
 Provides:       nodejs-npm = %{version}
-Obsoletes:      nodejs-npm < 5.3.1
+Obsoletes:      nodejs-npm < 4.0.0
 Provides:       npm(npm) = {{npm_version}}
 Provides:       npm = %{version}
-Conflicts:      otherproviders(npm)
+Conflicts:      npm4 < 4.8.4
+Conflicts:      npm6 < 6.11.1
+Conflicts:      npm7 < 7.10.1
+Conflicts:      npm8 < 8.1.4
 
 %description -n npm{{node_version_major}}
 A package manager for Node.js that allows developers to install and
@@ -219,6 +233,8 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %patch103 -p1
 %endif
 %patch104 -p1
+%patch200 -p1
+
 # Make sure nothing gets included from bundled deps:
 # We only delete the source and header files, because
 # the remaining build scripts are still used.
@@ -273,99 +289,126 @@ rm -f %{buildroot}%{_datadir}/doc/node/lldbinit
 rm -f %{buildroot}%{_datadir}/doc/node/lldb_commands.py
 
 # npm man page
-rm -rf %{buildroot}%{_libdir}/node_modules/npm/man
-mkdir -p %{buildroot}%{_mandir}/{man1,man5,man7}
-install -m 644 deps/npm/man/man1/* %{buildroot}%{_mandir}/man1
-install -m 644 deps/npm/man/man5/* %{buildroot}%{_mandir}/man5
-install -m 644 deps/npm/man/man7/* %{buildroot}%{_mandir}/man7
+install -D -m 644 deps/npm/man/man1/npm.1 %{buildroot}%{_mandir}/man1/npm{{node_version_major}}.1
 
 #node-gyp needs common.gypi too
 install -D -m 644 common.gypi \
-       %{buildroot}%{_datadir}/node/common.gypi
+	%{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/node-gyp/common.gypi
+#       %%{buildroot}%%{_datadir}/node/common.gypi
 # install addon-rpm.gypi
 install -D -m 644 addon-rpm.gypi \
-       %{buildroot}%{_libdir}/node_modules/npm/node_modules/node-gyp/addon-rpm.gypi
-
-# Own nodejs_sitelib
-#mkdir -p %{buildroot}%{_libdir}/node_modules/npm
+       %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/node-gyp/addon-rpm.gypi
 
 # clean
 # hidden files and directories
-find %{buildroot}%{_libdir}/node_modules/npm -name ".*" -print0 | xargs -r0 -0 rm -rf --
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name ".*" -print0 | xargs -r0 -0 rm -rf --
 # windows stuff
-find %{buildroot}%{_libdir}/node_modules/npm -name "*.bat" -delete
-find %{buildroot}%{_libdir}/node_modules/npm -name "*.cmd" -delete
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name "*.bat" -delete
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name "*.cmd" -delete
 # build stuff
-find %{buildroot}%{_libdir}/node_modules/npm -name "Makefile" -delete
-rm -rf %{buildroot}%{_libdir}/node_modules/npm/{test,scripts}
-find %{buildroot}%{_libdir}/node_modules/npm/node_modules -name "*.sh" -delete
-rm -rf %{buildroot}%{_libdir}/node_modules/npm/node_modules/node-gyp/src
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name "Makefile" -delete
+rm -rf %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/{test,scripts}
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules -name "*.sh" -delete
+rm -rf %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/node-gyp/src
 # remove examples/tests/benchmark stuff
-find %{buildroot}%{_libdir}/node_modules/npm/node_modules -name "example*" -print0 | xargs -0 rm -rf --
-find %{buildroot}%{_libdir}/node_modules/npm/node_modules -name "test*" -print0 | xargs -0 rm -rf --
-find %{buildroot}%{_libdir}/node_modules/npm/node_modules -name "*_test.*" -delete
-find %{buildroot}%{_libdir}/node_modules/npm/node_modules -type d -name "benchmark" -print0 | xargs -0 rm -rf --
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules -name "example*" -print0 | xargs -0 rm -rf --
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/NODE_MODULES -NAME "TEST*" -PRINT0 | XARGS -0 RM -RF --
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules -name "*_test.*" -delete
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules -type d -name "benchmark" -print0 | xargs -0 rm -rf --
 # README.md LICENSE file permission
-find %{buildroot}%{_libdir}/node_modules/npm -name "README.md" -exec chmod -x {} +
-find %{buildroot}%{_libdir}/node_modules/npm -name "LICENSE" -exec chmod -x {} +
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name "README.md" -exec chmod -x {} +
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name "LICENSE" -exec chmod -x {} +
 # browser.js is useless for npm cli
-find %{buildroot}%{_libdir}/node_modules/npm -name "browser.js" -delete
+find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name "browser.js" -delete
 # fix permissions
-chmod 0644 %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/node_modules/sntp/lib/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/qs/lib/parse.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/lib/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/config-chain/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/qs/lib/stringify.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/lib/client.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/lib/crypto.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/lib/utils.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/qs/lib/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/node_modules/boom/lib/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/lib/server.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/node_modules/cryptiles/lib/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/hawk/node_modules/sntp/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/request/node_modules/qs/lib/utils.js \
-   %{buildroot}%{_libdir}/node_modules/npm/node_modules/uid-number/get-uid-gid.js \
-   %{buildroot}%{_libdir}/node_modules/npm/bin/read-package-json.js
+chmod 0644 %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/node_modules/sntp/lib/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/qs/lib/parse.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/lib/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/config-chain/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/qs/lib/stringify.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/lib/client.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/lib/crypto.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/lib/utils.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/qs/lib/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/node_modules/boom/lib/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/lib/server.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/node_modules/cryptiles/lib/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/node_modules/sntp/index.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/qs/lib/utils.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/uid-number/get-uid-gid.js \
+   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/bin/read-package-json.js
 
 # file duplicates
-%fdupes %{buildroot}%{_libdir}/node_modules/npm
-%fdupes %{buildroot}%{_includedir}/node
-%fdupes %{buildroot}%{_mandir}/man5
+%fdupes %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}
+%fdupes %{buildroot}%{_includedir}/node{{node_version_major}}
+
+# Update alternatives
+mkdir -p %{buildroot}%{_sysconfdir}/alternatives
+ln -s -f node             %{buildroot}%{_sysconfdir}/alternatives/node
+ln -s -f node.1%{ext_man} %{buildroot}%{_sysconfdir}/alternatives/node.1%{ext_man}
+ln -s -f npm              %{buildroot}%{_sysconfdir}/alternatives/npm
+ln -s -f npm.1%{ext_man}  %{buildroot}%{_sysconfdir}/alternatives/npm.1%{ext_man}
+ln -s %{_sysconfdir}/alternatives/node                 %{buildroot}%{_bindir}/node
+ln -s %{_sysconfdir}/alternatives/node.1%{ext_man}     %{buildroot}%{_mandir}/man1/node.1%{ext_man}
+ln -s %{_sysconfdir}/alternatives/npm                  %{buildroot}%{_bindir}/npm
+ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/man1/npm.1%{ext_man}
+
 
 # Check that Node.js isn't completely broken.
 %check
-%{buildroot}%{_bindir}/node -e 'require("assert").strictEqual(process.versions.node, "%{version}");'
+%{buildroot}%{_bindir}/node{{node_version_major}} -e 'require("assert").strictEqual(process.versions.node, "%{version}");'
 
 %files
 %defattr(-, root, root)
 %doc AUTHORS LICENSE *.md
 %doc deps/v8/tools/gdbinit
 %dir %{_libdir}/node_modules
-%{_bindir}/node
+%{_bindir}/node{{node_version_major}}
 %{_libdir}/node_modules
-%{_mandir}/man1/node.1%{ext_man}
-%exclude %{_libdir}/node_modules/npm
+%{_mandir}/man1/node{{node_version_major}}.1%{ext_man}
+%ghost %{_bindir}/node
+%ghost %{_mandir}/man1/node.1%{ext_man}
+%ghost %{_sysconfdir}/alternatives/node
+%ghost %{_sysconfdir}/alternatives/node.1%{ext_man}
+%exclude %{_libdir}/node_modules/npm{{node_version_major}}
 
 %files -n npm{{node_version_major}}
 %defattr(-, root, root)
-%{_bindir}/npm
-%{_libdir}/node_modules/npm
-%{_mandir}/man*/*npm*%{ext_man}
-%{_mandir}/man5/package*.json.5%{ext_man}
-%{_mandir}/man7/semver.7%{ext_man}
+%{_bindir}/npm{{node_version_major}}
+%{_libdir}/node_modules/npm{{node_version_major}}
+%{_mandir}/man1/npm{{node_version_major}}.1%{ext_man}
+%ghost %{_bindir}/npm
+%ghost %{_mandir}/man1/npm.1%{ext_man}
+%ghost %{_sysconfdir}/alternatives/npm
+%ghost %{_sysconfdir}/alternatives/npm.1%{ext_man}
 
 %files devel
 %defattr(-, root, root)
-%{_includedir}/node
+%{_includedir}/node{{node_version_major}}
 %{_datadir}/node
 %dir %{_datadir}/systemtap
 %dir %{_datadir}/systemtap/tapset
-%{_datadir}/systemtap/tapset/node.stp
+%{_datadir}/systemtap/tapset/node{{node_version_major}}.stp
 
 %files docs
 %defattr(-,root,root)
 %doc doc/api
+
+%post
+update-alternatives \
+        --install %{_bindir}/node node %{_bindir}/node{{node_version_major}} {{node_version_major}} \
+        --slave %{_mandir}/man1/node.1%{ext_man} node.1%{ext_man} %{_mandir}/man1/node{{node_version_major}}.1%{ext_man}
+
+%postun
+update-alternatives --remove node %{_bindir}/node{{node_version_major}}
+
+%post -n npm{{node_version_major}}
+update-alternatives \
+        --install %{_bindir}/npm npm %{_bindir}/npm{{node_version_major}} {{node_version_major}} \
+        --slave %{_mandir}/man1/npm.1%{ext_man} npm.1%{ext_man} %{_mandir}/man1/npm{{node_version_major}}.1%{ext_man}
+
+%postun -n npm{{node_version_major}}
+update-alternatives --remove npm %{_bindir}/npm{{node_version_major}}
 
 %changelog

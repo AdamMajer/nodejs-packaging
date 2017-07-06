@@ -20,28 +20,6 @@ Index: node-v6.3.0/deps/npm/lib/config/core.js
    }
  
    function afterUserContinuation () {
-Index: node-v6.3.0/deps/npm/lib/help.js
-===================================================================
---- node-v6.3.0.orig/deps/npm/lib/help.js
-+++ node-v6.3.0/deps/npm/lib/help.js
-@@ -58,7 +58,7 @@ function help (args, cb) {
-   }
- 
-   // npm help <section>: Try to find the path
--  var manroot = path.resolve(__dirname, '..', 'man')
-+  var manroot = "/usr/share/man"
- 
-   // legacy
-   if (section === 'global') section = 'folders'
-@@ -108,7 +108,7 @@ function viewMan (man, cb) {
-   var section = path.basename(man, '.' + num)
- 
-   // at this point, we know that the specified man page exists
--  var manpath = path.join(__dirname, '..', 'man')
-+  var manpath = "/usr/share/man"
-   var env = {}
-   Object.keys(process.env).forEach(function (i) {
-     env[i] = process.env[i]
 Index: node-v6.3.0/deps/npm/lib/help-search.js
 ===================================================================
 --- node-v6.3.0.orig/deps/npm/lib/help-search.js
