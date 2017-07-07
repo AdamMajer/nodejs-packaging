@@ -1,6 +1,6 @@
 
 ALL_TARGETS = $(shell ls -d ?)
-TARGET_STAMPS := $(addsuffix .target,${ALL_TARGETS}) changelog.target
+TARGET_STAMPS := $(addsuffix .target,${ALL_TARGETS}) changelog.target common.target
 NODEJS_PROJECT ?= devel:languages:nodejs
 CHANGELOG_TS := $(shell date)
 
@@ -24,6 +24,12 @@ distclean: clean
 ${TARGET_STAMPS}:
 	$(MAKE) ${@:.target=}
 
+common.target: nodejs-common/*
+	# Checkout nodejs-common, and simply copy the files over
+	test -x ${NODEJS_PROJECT}/nodejs-common || osc co ${NODEJS_PROJECT} nodejs-common
+	cp nodejs-common/* ${NODEJS_PROJECT}/nodejs-common
+	touch common.target
+
 changelog.target: common.changes
         # Prepend common changelog to the changelog files
 	if [ $$(stat -c %s common.changes) -gt 0 ]; then \
@@ -35,7 +41,7 @@ changelog.target: common.changes
 	fi
 	touch changelog.target
 
-${ALL_TARGETS}: changelog.target
+${ALL_TARGETS}: changelog.target common.target
 	# Fetch target project and overwrite it with current stuff
 	test -x ${NODEJS_PROJECT}/nodejs$@ || osc co ${NODEJS_PROJECT} nodejs$@
 	cp common/* ${NODEJS_PROJECT}/nodejs$@/

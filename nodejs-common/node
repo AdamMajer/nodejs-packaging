@@ -1,0 +1,7 @@
+#!/bin/sh
+
+PROG=$(basename $0)
+PROG_VERSION=${NODE_VERSION:--default}
+
+exec ${PROG}${PROG_VERSION} "$@"
+
