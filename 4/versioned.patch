@@ -396,3 +396,25 @@ Index: node-v4.8.3/deps/npm/man/man1/npm.1
  .IP \(bu 2
  npm apihelp npm
  
+Index: node-v4.8.3/deps/npm/bin/npm-cli.js
+===================================================================
+--- node-v4.8.3.orig/deps/npm/bin/npm-cli.js
++++ node-v4.8.3/deps/npm/bin/npm-cli.js
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env node
++#!/usr/bin/env node4
+ ;(function () { // wrapper in case we're in module_context mode
+ 
+ // windows: running "npm blah" in this folder will invoke WSH, not node.
+Index: node-v4.8.3/src/node_main.cc
+===================================================================
+--- node-v4.8.3.orig/src/node_main.cc
++++ node-v4.8.3/src/node_main.cc
+@@ -44,6 +44,7 @@ int wmain(int argc, wchar_t *wargv[]) {
+ int main(int argc, char *argv[]) {
+   // Disable stdio buffering, it interacts poorly with printf()
+   // calls elsewhere in the program (e.g., any logging from V8.)
++  setenv("NODE_VERSION", "4", 0);
+   setvbuf(stdout, nullptr, _IONBF, 0);
+   setvbuf(stderr, nullptr, _IONBF, 0);
+   return node::Start(argc, argv);

@@ -366,3 +366,25 @@ Index: node-v8.1.3/node.gyp
            'conditions': [
              ['node_shared=="true"', {
                'type': 'shared_library',
+Index: node-v8.1.3/deps/npm/bin/npm-cli.js
+===================================================================
+--- node-v8.1.3.orig/deps/npm/bin/npm-cli.js
++++ node-v8.1.3/deps/npm/bin/npm-cli.js
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env node
++#!/usr/bin/env node8
+ ;(function () { // wrapper in case we're in module_context mode
+   // windows: running "npm blah" in this folder will invoke WSH, not node.
+   /*global WScript*/
+Index: node-v8.1.3/src/node_main.cc
+===================================================================
+--- node-v8.1.3.orig/src/node_main.cc
++++ node-v8.1.3/src/node_main.cc
+@@ -99,6 +99,7 @@ int main(int argc, char *argv[]) {
+ #endif
+   // Disable stdio buffering, it interacts poorly with printf()
+   // calls elsewhere in the program (e.g., any logging from V8.)
++  setenv("NODE_VERSION", "8", 0);
+   setvbuf(stdout, nullptr, _IONBF, 0);
+   setvbuf(stderr, nullptr, _IONBF, 0);
+   return node::Start(argc, argv);

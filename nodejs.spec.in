@@ -149,12 +149,12 @@ Provides:       nodejs(abi) = %{nodejs_abi}
 #this corresponds to the "engine" requirement in package.json
 Provides:       nodejs(engine) = %{version}
 
-# Only one nodejs installed at a time
+# Multiple versions of NodeJS can be installed at a time, but
+# to properly allow correct version execution from 3rd party
+# npm software, `env node` requires further help than only
+# update-alternatives can provide.
 Provides:       nodejs = %{version}
-Conflicts:      nodejs4 < 4.8.4
-Conflicts:      nodejs6 < 6.11.1
-Conflicts:      nodejs7 < 7.10.1
-Conflicts:      nodejs8 < 8.1.4
+Requires:       nodejs-common
 
 # For SLE11, to be able to use the certificate store we need to have properly
 # symlinked certificates. The compatability symlinks are provided by the
@@ -178,10 +178,6 @@ Summary:        Files needed for development of NodeJS platforms
 Group:          Development/Languages/NodeJS
 Provides:       nodejs-devel = %{version}
 Requires:       %{name} = %{version}
-Conflicts:      nodejs4-devel < 4.8.4
-Conflicts:      nodejs6-devel < 6.11.1
-Conflicts:      nodejs7-devel < 7.10.1
-Conflicts:      nodejs8-devel < 8.1.4
 
 %description devel
 This package provides development headers for Node.js.
@@ -194,10 +190,6 @@ Provides:       nodejs-npm = %{version}
 Obsoletes:      nodejs-npm < 4.0.0
 Provides:       npm(npm) = {{npm_version}}
 Provides:       npm = %{version}
-Conflicts:      npm4 < 4.8.4
-Conflicts:      npm6 < 6.11.1
-Conflicts:      npm7 < 7.10.1
-Conflicts:      npm8 < 8.1.4
 
 %description -n npm{{node_version_major}}
 A package manager for Node.js that allows developers to install and
@@ -395,7 +387,7 @@ ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/ma
 
 %post
 update-alternatives \
-        --install %{_bindir}/node node %{_bindir}/node{{node_version_major}} {{node_version_major}} \
+        --install %{_bindir}/node-default node %{_bindir}/node{{node_version_major}} {{node_version_major}} \
         --slave %{_mandir}/man1/node.1%{ext_man} node.1%{ext_man} %{_mandir}/man1/node{{node_version_major}}.1%{ext_man}
 
 %postun
@@ -403,7 +395,7 @@ update-alternatives --remove node %{_bindir}/node{{node_version_major}}
 
 %post -n npm{{node_version_major}}
 update-alternatives \
-        --install %{_bindir}/npm npm %{_bindir}/npm{{node_version_major}} {{node_version_major}} \
+        --install %{_bindir}/npm-default npm %{_bindir}/npm{{node_version_major}} {{node_version_major}} \
         --slave %{_mandir}/man1/npm.1%{ext_man} npm.1%{ext_man} %{_mandir}/man1/npm{{node_version_major}}.1%{ext_man}
 
 %postun -n npm{{node_version_major}}

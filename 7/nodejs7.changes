@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Fri Jul  7 14:05:05 UTC 2017 - adam.majer@suse.de
+
+- Depend on nodejs-common that is then used to pick correctly
+  versioned node or npm binary. This is required since 3rd party
+  modules use `/usr/bin/env node` which breaks if multiple versions
+  of NodeJS are installed at the same time and non-default version
+  is used (for example, to compile a native module)
+ 
+-------------------------------------------------------------------
 Thu Jul  6 12:08:26 UTC 2017 - adam.majer@suse.de
 
 - npm_search_paths.patch: Since concurrent installations are now

@@ -407,3 +407,25 @@ Index: node-v6.11.0/deps/npm/man/man1/npm.1
  
  .RE
  
+Index: node-v6.11.0/deps/npm/bin/npm-cli.js
+===================================================================
+--- node-v6.11.0.orig/deps/npm/bin/npm-cli.js
++++ node-v6.11.0/deps/npm/bin/npm-cli.js
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env node
++#!/usr/bin/env node6
+ ;(function () { // wrapper in case we're in module_context mode
+   // windows: running "npm blah" in this folder will invoke WSH, not node.
+   /*global WScript*/
+Index: node-v6.11.0/src/node_main.cc
+===================================================================
+--- node-v6.11.0.orig/src/node_main.cc
++++ node-v6.11.0/src/node_main.cc
+@@ -52,6 +52,7 @@ int wmain(int argc, wchar_t *wargv[]) {
+ int main(int argc, char *argv[]) {
+   // Disable stdio buffering, it interacts poorly with printf()
+   // calls elsewhere in the program (e.g., any logging from V8.)
++  setenv("NODE_VERSION", "6", 0);
+   setvbuf(stdout, nullptr, _IONBF, 0);
+   setvbuf(stderr, nullptr, _IONBF, 0);
+   return node::Start(argc, argv);
