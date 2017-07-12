@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Wed Jul 12 08:24:32 UTC 2017 - adam.majer@suse.de
+
+- New upstream release 7.10.1
+  * v8: disable V8 snapshots. The hashseed embedded in the snapshot
+    is currently the same for all runs of the binary. This opens
+    node up to collision attacks which could result in a Denial
+    of Service. We have temporarily disabled snapshots until a more
+    robust solution is found. (bnc#1048299)
+  * The c-ares function ares_parse_naptr_reply(), which is used for
+    parsing NAPTR responses, could be triggered to read memory
+    outside of the given input buffer if the passed in DNS response
+    packet was crafted in a particular way.
+    (CVE-2017-1000381, bnc#1044946)
+
+-------------------------------------------------------------------
 Fri Jul  7 14:05:05 UTC 2017 - adam.majer@suse.de
 
 - Depend on nodejs-common that is then used to pick correctly
