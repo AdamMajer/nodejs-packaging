@@ -337,13 +337,13 @@ chmod 0644 %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_mo
 
 # Update alternatives
 mkdir -p %{buildroot}%{_sysconfdir}/alternatives
-ln -s -f node             %{buildroot}%{_sysconfdir}/alternatives/node
+ln -s -f node-default     %{buildroot}%{_sysconfdir}/alternatives/node-default
 ln -s -f node.1%{ext_man} %{buildroot}%{_sysconfdir}/alternatives/node.1%{ext_man}
-ln -s -f npm              %{buildroot}%{_sysconfdir}/alternatives/npm
+ln -s -f npm-default      %{buildroot}%{_sysconfdir}/alternatives/npm-default
 ln -s -f npm.1%{ext_man}  %{buildroot}%{_sysconfdir}/alternatives/npm.1%{ext_man}
-ln -s %{_sysconfdir}/alternatives/node                 %{buildroot}%{_bindir}/node
+ln -s %{_sysconfdir}/alternatives/node-default         %{buildroot}%{_bindir}/node-default
 ln -s %{_sysconfdir}/alternatives/node.1%{ext_man}     %{buildroot}%{_mandir}/man1/node.1%{ext_man}
-ln -s %{_sysconfdir}/alternatives/npm                  %{buildroot}%{_bindir}/npm
+ln -s %{_sysconfdir}/alternatives/npm-default          %{buildroot}%{_bindir}/npm-default
 ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/man1/npm.1%{ext_man}
 
 
@@ -358,9 +358,9 @@ ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/ma
 %dir %{_libdir}/node_modules
 %{_bindir}/node{{node_version_major}}
 %{_mandir}/man1/node{{node_version_major}}.1%{ext_man}
-%ghost %{_bindir}/node
+%ghost %{_bindir}/node-default
 %ghost %{_mandir}/man1/node.1%{ext_man}
-%ghost %{_sysconfdir}/alternatives/node
+%ghost %{_sysconfdir}/alternatives/node-default
 %ghost %{_sysconfdir}/alternatives/node.1%{ext_man}
 %exclude %{_libdir}/node_modules/npm{{node_version_major}}
 
@@ -369,9 +369,9 @@ ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/ma
 %{_bindir}/npm{{node_version_major}}
 %{_libdir}/node_modules/npm{{node_version_major}}
 %{_mandir}/man1/npm{{node_version_major}}.1%{ext_man}
-%ghost %{_bindir}/npm
+%ghost %{_bindir}/npm-default
 %ghost %{_mandir}/man1/npm.1%{ext_man}
-%ghost %{_sysconfdir}/alternatives/npm
+%ghost %{_sysconfdir}/alternatives/npm-default
 %ghost %{_sysconfdir}/alternatives/npm.1%{ext_man}
 
 %files devel
@@ -387,18 +387,18 @@ ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/ma
 
 %post
 update-alternatives \
-        --install %{_bindir}/node-default node %{_bindir}/node{{node_version_major}} {{node_version_major}} \
+        --install %{_bindir}/node-default node-default %{_bindir}/node{{node_version_major}} {{node_version_major}} \
         --slave %{_mandir}/man1/node.1%{ext_man} node.1%{ext_man} %{_mandir}/man1/node{{node_version_major}}.1%{ext_man}
 
 %postun
-update-alternatives --remove node %{_bindir}/node{{node_version_major}}
+update-alternatives --remove node-default %{_bindir}/node{{node_version_major}}
 
 %post -n npm{{node_version_major}}
 update-alternatives \
-        --install %{_bindir}/npm-default npm %{_bindir}/npm{{node_version_major}} {{node_version_major}} \
+        --install %{_bindir}/npm-default npm-default %{_bindir}/npm{{node_version_major}} {{node_version_major}} \
         --slave %{_mandir}/man1/npm.1%{ext_man} npm.1%{ext_man} %{_mandir}/man1/npm{{node_version_major}}.1%{ext_man}
 
 %postun -n npm{{node_version_major}}
-update-alternatives --remove npm %{_bindir}/npm{{node_version_major}}
+update-alternatives --remove npm-default %{_bindir}/npm{{node_version_major}}
 
 %changelog
