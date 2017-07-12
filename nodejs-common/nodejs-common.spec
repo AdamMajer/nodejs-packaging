@@ -15,11 +15,20 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+###########################################################
+#
+#   WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!
+#
+# This spec file is generated from a template hosted at
+# https://github.com/AdamMajer/nodejs-packaging
+#
+###########################################################
+
 Name:           nodejs-common
 Version:        1.0
 Release:        0
 License:        GPL-3.0+
-Summary:        Common files for NodeJS ecosystem
+Summary:        Common files for the NodeJS ecosystem
 Url:            https://github.com/AdamMajer/nodejs-packaging
 Group:          Development/Languages/NodeJS
 Source1:        node
