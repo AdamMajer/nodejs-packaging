@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jul 18 10:20:06 UTC 2017 - adam.majer@suse.de
+
+- Use MIT license so we don't have to ship the license text.
+
+-------------------------------------------------------------------
 Fri Jul  7 13:09:29 UTC 2017 - adam.majer@suse.de
 
 - Initial release. 

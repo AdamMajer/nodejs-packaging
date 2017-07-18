@@ -27,7 +27,7 @@
 Name:           nodejs-common
 Version:        1.0
 Release:        0
-License:        GPL-3.0+
+License:        MIT
 Summary:        Common files for the NodeJS ecosystem
 Url:            https://github.com/AdamMajer/nodejs-packaging
 Group:          Development/Languages/NodeJS
