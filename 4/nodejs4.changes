@@ -6,7 +6,7 @@ Wed Jul 12 08:17:53 UTC 2017 - adam.majer@suse.de
     is currently the same for all runs of the binary. This opens
     node up to collision attacks which could result in a Denial
     of Service. We have temporarily disabled snapshots until a more
-    robust solution is found (bnc#1048299).
+    robust solution is found (bnc#1048299, CVE-2017-11499).
   * http: fixes http.get with numeric authorization options that
     created/used uninitialized buffers as the authentication string
   * The c-ares function ares_parse_naptr_reply(), which is used for
