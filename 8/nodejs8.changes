@@ -1,4 +1,24 @@
 -------------------------------------------------------------------
+Mon Jul 31 12:09:37 UTC 2017 - adam.majer@suse.de
+
+- New upstream release 8.2.1:
+  * http: Writes no longer abort if the Socket is missing.
+  * process, async_hooks: Avoid problems when triggerAsyncId is
+    undefined.
+  * zlib: Streams no longer attempt to process data when destroyed.
+- Changes in version 8.2.0:
+  * npm: Updated to version 5.3.0
+  * dns:
+    + The server used for DNS queries can now use a custom port.
+    + Support for dns.resolveAny() has been added.
+  * async_hooks: Multiple improvements to Promise support.
+  * build: update GCC requirements to 4.9.4
+  * cluster: Users now have more fine-grained control over the
+    inspector port used by individual cluster workers. Previously,
+    cluster workers were restricted to incrementing from the
+    master's debug port.
+
+-------------------------------------------------------------------
 Wed Jul 12 08:24:32 UTC 2017 - adam.majer@suse.de
 
 - New upstream release 8.1.4
