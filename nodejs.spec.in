@@ -111,11 +111,19 @@ Patch200:       versioned.patch
 BuildRequires:  binutils-gold
 %endif
 
+%if {{node_version_major}} >= 8
 %if 0%{?sles_version} == 11
-BuildRequires:  gcc48-c++
+BuildRequires:  gcc5-c++
 %else
-BuildRequires:  gcc-c++
+BuildRequires:  gcc6-c++
+%endif  # node8+ GCC requirements
+%else   # older than node8
+%if 0%{?sles_version} == 11
+BuildRequires:  gcc48-c++ >= 4.8.5
+%else
+BuildRequires:  gcc-c++ >= 4.8.5
 %endif
+%endif # node7,6,5
 
 BuildRequires:  curl
 BuildRequires:  fdupes
