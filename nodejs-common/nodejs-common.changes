@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Aug  2 14:29:04 UTC 2017 - adam.majer@suse.de
+
+- NodeJS 8.2.0 adds support for `npx` binary. Add conditional
+  support to our wrapper
+- Print a helpful message if wrapper cannot find target executable
+- Wrapper only executes from /usr/bin and not PATH
+
+-------------------------------------------------------------------
 Tue Jul 18 10:20:06 UTC 2017 - adam.majer@suse.de
 
 - Use MIT license so we don't have to ship the license text.
@@ -6,4 +14,4 @@ Tue Jul 18 10:20:06 UTC 2017 - adam.majer@suse.de
 -------------------------------------------------------------------
 Fri Jul  7 13:09:29 UTC 2017 - adam.majer@suse.de
 
-- Initial release. 
+- Initial release.

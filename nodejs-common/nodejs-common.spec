@@ -25,7 +25,7 @@
 ###########################################################
 
 Name:           nodejs-common
-Version:        1.0
+Version:        2.0
 Release:        0
 License:        MIT
 Summary:        Common files for the NodeJS ecosystem
@@ -50,11 +50,13 @@ while retaining the same codestream version.
 %install
 install -D -m 0755 %{S:1} %{buildroot}%{_bindir}/node
 ln -s node %{buildroot}%{_bindir}/npm
+ln -s node %{buildroot}%{_bindir}/npx
 
 %files
 %defattr(-,root,root)
 %{_bindir}/node
 %{_bindir}/npm
+%{_bindir}/npx
 
 %changelog
 

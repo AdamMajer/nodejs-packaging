@@ -3,5 +3,9 @@
 PROG=$(basename $0)
 PROG_VERSION=${NODE_VERSION:--default}
 
-exec ${PROG}${PROG_VERSION} "$@"
+if [ ! -x /usr/bin/${PROG}${PROG_VERSION} ]; then
+    echo "${PROG}${PROG_VERSION} is unavailable."
+    exit 127
+fi
+exec /usr/bin/${PROG}${PROG_VERSION} "$@"
 
