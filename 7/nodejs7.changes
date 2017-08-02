@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Aug  2 15:16:57 UTC 2017 - adam.majer@suse.de
+
+- Fix update-alternative handling in %postun - don't remove
+  links on upgrades.
+
+-------------------------------------------------------------------
 Wed Jul 12 08:24:32 UTC 2017 - adam.majer@suse.de
 
 - New upstream release 7.10.1
