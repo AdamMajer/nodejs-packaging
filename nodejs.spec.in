@@ -382,6 +382,10 @@ ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/ma
 %ghost %{_sysconfdir}/alternatives/npm-default
 %ghost %{_sysconfdir}/alternatives/npm.1%{ext_man}
 
+%if {{node_version_major}} >= 8
+%{_bindir}/npx{{node_version_major}}
+%endif
+
 %files devel
 %defattr(-, root, root)
 %{_includedir}/node{{node_version_major}}

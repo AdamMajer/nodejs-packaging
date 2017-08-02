@@ -8,10 +8,10 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-v8.1.3/Makefile
+Index: node-v8.2.1/Makefile
 ===================================================================
---- node-v8.1.3.orig/Makefile
-+++ node-v8.1.3/Makefile
+--- node-v8.2.1.orig/Makefile
++++ node-v8.2.1/Makefile
 @@ -40,10 +40,10 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
@@ -25,10 +25,10 @@ Index: node-v8.1.3/Makefile
  
  # Flags for packaging.
  BUILD_DOWNLOAD_FLAGS ?= --download=all
-Index: node-v8.1.3/tools/install.py
+Index: node-v8.2.1/tools/install.py
 ===================================================================
---- node-v8.1.3.orig/tools/install.py
-+++ node-v8.1.3/tools/install.py
+--- node-v8.2.1.orig/tools/install.py
++++ node-v8.2.1/tools/install.py
 @@ -77,7 +77,7 @@ def install(paths, dst): map(lambda path
  def uninstall(paths, dst): map(lambda path: try_remove(path, dst), paths)
  
@@ -38,7 +38,7 @@ Index: node-v8.1.3/tools/install.py
  
    # don't install npm if the target path is a symlink, it probably means
    # that a dev version of npm is installed there
-@@ -91,11 +91,11 @@ def npm_files(action):
+@@ -91,20 +91,20 @@ def npm_files(action):
      action(paths, target_path + dirname[9:] + '/')
  
    # create/remove symlink
@@ -53,7 +53,19 @@ Index: node-v8.1.3/tools/install.py
    else:
      assert(0) # unhandled action type
  
-@@ -109,7 +109,7 @@ def subdir_files(path, dest, action):
+   # create/remove symlink
+-  link_path = abspath(install_path, 'bin/npx')
++  link_path = abspath(install_path, 'bin/npx8')
+   if action == uninstall:
+-    action([link_path], 'bin/npx')
++    action([link_path], 'bin/npx8')
+   elif action == install:
+-    try_symlink('../lib/node_modules/npm/bin/npx-cli.js', link_path)
++    try_symlink("../" + sysconfig.get_config_var("LIB") + '/node_modules/npm8/bin/npx-cli.js', link_path)
+   else:
+     assert(0) # unhandled action type
+ 
+@@ -118,7 +118,7 @@ def subdir_files(path, dest, action):
  
  def files(action):
    is_windows = sys.platform == 'win32'
@@ -62,7 +74,7 @@ Index: node-v8.1.3/tools/install.py
    output_prefix = 'out/Release/'
  
    if 'false' == variables.get('node_shared'):
-@@ -131,7 +131,7 @@ def files(action):
+@@ -140,7 +140,7 @@ def files(action):
      action(['out/Release/node.d'], sysconfig.get_config_var("LIB") + '/dtrace/node.d')
  
    # behave similarly for systemtap
@@ -71,7 +83,7 @@ Index: node-v8.1.3/tools/install.py
  
    action(['deps/v8/tools/gdbinit'], 'share/doc/node/')
    action(['deps/v8/tools/lldbinit'], 'share/doc/node/')
-@@ -140,7 +140,7 @@ def files(action):
+@@ -149,7 +149,7 @@ def files(action):
    if 'freebsd' in sys.platform or 'openbsd' in sys.platform:
      action(['doc/node.1'], 'man/man1/')
    else:
@@ -80,7 +92,7 @@ Index: node-v8.1.3/tools/install.py
  
    if 'true' == variables.get('node_install_npm'): npm_files(action)
  
-@@ -156,28 +156,28 @@ def headers(action):
+@@ -165,28 +165,28 @@ def headers(action):
      'src/node_buffer.h',
      'src/node_object_wrap.h',
      'src/node_version.h',
@@ -117,10 +129,10 @@ Index: node-v8.1.3/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-v8.1.3/doc/node.1
+Index: node-v8.2.1/doc/node.1
 ===================================================================
---- node-v8.1.3.orig/doc/node.1
-+++ node-v8.1.3/doc/node.1
+--- node-v8.2.1.orig/doc/node.1
++++ node-v8.2.1/doc/node.1
 @@ -26,12 +26,12 @@
  
  .SH NAME
@@ -153,10 +165,10 @@ Index: node-v8.1.3/doc/node.1
  .RB [ \-\-v8-options ]
  
  Execute without arguments to start the REPL.
-Index: node-v8.1.3/src/node.stp
+Index: node-v8.2.1/src/node.stp
 ===================================================================
---- node-v8.1.3.orig/src/node.stp
-+++ node-v8.1.3/src/node.stp
+--- node-v8.2.1.orig/src/node.stp
++++ node-v8.2.1/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -229,12 +241,12 @@ Index: node-v8.1.3/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-v8.1.3/deps/npm/man/man1/npm.1
+Index: node-v8.2.1/deps/npm/man/man1/npm.1
 ===================================================================
---- node-v8.1.3.orig/deps/npm/man/man1/npm.1
-+++ node-v8.1.3/deps/npm/man/man1/npm.1
+--- node-v8.2.1.orig/deps/npm/man/man1/npm.1
++++ node-v8.2.1/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
- .TH "NPM" "1" "June 2017" "" ""
+ .TH "NPM" "1" "July 2017" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm8\fR \- javascript package manager
@@ -309,11 +321,11 @@ Index: node-v8.1.3/deps/npm/man/man1/npm.1
  .P
  If you would like to contribute, but don't know what to work on, read
  the contributing guidelines and check the issues list\.
-Index: node-v8.1.3/node.gyp
+Index: node-v8.2.1/node.gyp
 ===================================================================
---- node-v8.1.3.orig/node.gyp
-+++ node-v8.1.3/node.gyp
-@@ -19,7 +19,7 @@
+--- node-v8.2.1.orig/node.gyp
++++ node-v8.2.1/node.gyp
+@@ -20,7 +20,7 @@
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',
      'node_enable_v8_vtunejit%': 'false',
@@ -322,7 +334,7 @@ Index: node-v8.1.3/node.gyp
      'library_files': [
        'lib/internal/bootstrap_node.js',
        'lib/async_hooks.js',
-@@ -458,10 +458,10 @@
+@@ -459,10 +459,10 @@
              {
                'action_name': 'node_dtrace_provider_o',
                'inputs': [
@@ -335,7 +347,7 @@ Index: node-v8.1.3/node.gyp
                ],
                'action': [ 'dtrace', '-G', '-xnolibs', '-s', 'src/node_provider.d',
                  '<@(_inputs)', '-o', '<@(_outputs)' ]
-@@ -511,7 +511,7 @@
+@@ -512,7 +512,7 @@
                  '<(SHARED_INTERMEDIATE_DIR)/v8constants.h'
                ],
                'outputs': [
@@ -344,7 +356,7 @@ Index: node-v8.1.3/node.gyp
                ],
                'conditions': [
                  [ 'target_arch=="ia32" or target_arch=="arm"', {
-@@ -572,9 +572,9 @@
+@@ -573,9 +573,9 @@
        ],
  
        'variables': {
@@ -357,7 +369,7 @@ Index: node-v8.1.3/node.gyp
          'OBJ_SUFFIX': 'o',
          'OBJ_SEPARATOR': '/',
          'conditions': [
-@@ -714,7 +714,7 @@
+@@ -715,7 +715,7 @@
      ['OS=="aix"', {
        'targets': [
          {
@@ -366,20 +378,20 @@ Index: node-v8.1.3/node.gyp
            'conditions': [
              ['node_shared=="true"', {
                'type': 'shared_library',
-Index: node-v8.1.3/deps/npm/bin/npm-cli.js
+Index: node-v8.2.1/deps/npm/bin/npm-cli.js
 ===================================================================
---- node-v8.1.3.orig/deps/npm/bin/npm-cli.js
-+++ node-v8.1.3/deps/npm/bin/npm-cli.js
+--- node-v8.2.1.orig/deps/npm/bin/npm-cli.js
++++ node-v8.2.1/deps/npm/bin/npm-cli.js
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env node
 +#!/usr/bin/env node8
  ;(function () { // wrapper in case we're in module_context mode
    // windows: running "npm blah" in this folder will invoke WSH, not node.
    /*global WScript*/
-Index: node-v8.1.3/src/node_main.cc
+Index: node-v8.2.1/src/node_main.cc
 ===================================================================
---- node-v8.1.3.orig/src/node_main.cc
-+++ node-v8.1.3/src/node_main.cc
+--- node-v8.2.1.orig/src/node_main.cc
++++ node-v8.2.1/src/node_main.cc
 @@ -99,6 +99,7 @@ int main(int argc, char *argv[]) {
  #endif
    // Disable stdio buffering, it interacts poorly with printf()
