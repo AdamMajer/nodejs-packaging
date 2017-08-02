@@ -353,6 +353,12 @@ ln -s %{_sysconfdir}/alternatives/node-default         %{buildroot}%{_bindir}/no
 ln -s %{_sysconfdir}/alternatives/node.1%{ext_man}     %{buildroot}%{_mandir}/man1/node.1%{ext_man}
 ln -s %{_sysconfdir}/alternatives/npm-default          %{buildroot}%{_bindir}/npm-default
 ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/man1/npm.1%{ext_man}
+%if {{node_version_major}} >= 8
+ln -s -f npx-default      %{buildroot}%{_sysconfdir}/alternatives/npx-default
+ln -s -f npx.1%{ext_man}  %{buildroot}%{_sysconfdir}/alternatives/npx.1%{ext_man}
+ln -s %{_sysconfdir}/alternatives/npx-default          %{buildroot}%{_bindir}/npx-default
+ln -s %{_sysconfdir}/alternatives/npx.1%{ext_man}      %{buildroot}%{_mandir}/man1/npx.1%{ext_man}
+%endif
 
 
 # Check that Node.js isn't completely broken.
@@ -384,6 +390,10 @@ ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/ma
 
 %if {{node_version_major}} >= 8
 %{_bindir}/npx{{node_version_major}}
+%ghost %{_bindir}/npx-default
+%ghost %{_mandir}/man1/npx.1%{ext_man}
+%ghost %{_sysconfdir}/alternatives/npx-default
+%ghost %{_sysconfdir}/alternatives/npx.1%{ext_man}
 %endif
 
 %files devel
@@ -409,8 +419,16 @@ update-alternatives --remove node-default %{_bindir}/node{{node_version_major}}
 update-alternatives \
         --install %{_bindir}/npm-default npm-default %{_bindir}/npm{{node_version_major}} {{node_version_major}} \
         --slave %{_mandir}/man1/npm.1%{ext_man} npm.1%{ext_man} %{_mandir}/man1/npm{{node_version_major}}.1%{ext_man}
+%if {{node_version_major}} >= 8
+update-alternatives \
+        --install %{_bindir}/npx-default npx-default %{_bindir}/npx{{node_version_major}} {{node_version_major}} \
+        --slave %{_mandir}/man1/npx.1%{ext_man} npx.1%{ext_man} %{_mandir}/man1/npx{{node_version_major}}.1%{ext_man}
+%endif
 
 %postun -n npm{{node_version_major}}
 update-alternatives --remove npm-default %{_bindir}/npm{{node_version_major}}
+%if {{node_version_major}} >= 8
+update-alternatives --remove npx-default %{_bindir}/npx{{node_version_major}}
+%endif
 
 %changelog
