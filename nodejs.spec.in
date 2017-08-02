@@ -422,7 +422,9 @@ update-alternatives \
         --slave %{_mandir}/man1/node.1%{ext_man} node.1%{ext_man} %{_mandir}/man1/node{{node_version_major}}.1%{ext_man}
 
 %postun
-update-alternatives --remove node-default %{_bindir}/node{{node_version_major}}
+if [ ! -f %{_bindir}/node{{node_version_major}} ] ; then
+    update-alternatives --remove node-default %{_bindir}/node{{node_version_major}}
+fi
 
 %post -n npm{{node_version_major}}
 update-alternatives \
@@ -435,9 +437,13 @@ update-alternatives \
 %endif
 
 %postun -n npm{{node_version_major}}
-update-alternatives --remove npm-default %{_bindir}/npm{{node_version_major}}
+if [ ! -f %{_bindir}/npm{{node_version_major}} ] ; then
+    update-alternatives --remove npm-default %{_bindir}/npm{{node_version_major}}
+fi
 %if {{node_version_major}} >= 8
-update-alternatives --remove npx-default %{_bindir}/npx{{node_version_major}}
+if [ ! -f %{_bindir}/npx{{node_version_major}} ] ; then
+    update-alternatives --remove npx-default %{_bindir}/npx{{node_version_major}}
+fi
 %endif
 
 %changelog
