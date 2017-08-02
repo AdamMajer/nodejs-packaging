@@ -123,9 +123,9 @@ BuildRequires:  gcc6-c++
 %endif  # node8+ GCC requirements
 %else   # older than node8
 %if 0%{?sles_version} == 11
-BuildRequires:  gcc48-c++ >= 4.8.5
+BuildRequires:  gcc48-c++
 %else
-BuildRequires:  gcc-c++ >= 4.8.5
+BuildRequires:  gcc-c++
 %endif
 %endif # node7,6,5
 
