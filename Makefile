@@ -19,7 +19,6 @@ clean:
 
 distclean: clean
 	rm -rf ${NODEJS_PROJECT}
-	truncate --size=0 common.changes
 
 ${TARGET_STAMPS}:
 	$(MAKE) ${@:.target=}
@@ -39,6 +38,7 @@ changelog.target: common.changes
 			mv $$changelog.tmp $$changelog; \
 		done; \
 	fi
+	truncate --size=0 common.changes
 	touch changelog.target
 
 ${ALL_TARGETS}: changelog.target common.target
