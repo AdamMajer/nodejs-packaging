@@ -224,7 +224,7 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %if {{node_version_major}} < 6
 %patch1 -p1
 %endif
-%if {{node_version_major}} < 7
+%if {{node_version_major}} < 6
 %patch2 -p1
 %endif
 %if {{node_version_major}} < 8
