@@ -111,23 +111,18 @@ Patch200:       versioned.patch
 BuildRequires:  binutils-gold
 %endif
 
-%if {{node_version_major}} >= 8
-%if 0%{?sles_version} == 11
-BuildRequires:  gcc5-c++
-%define cc_exec  gcc-5
-%define cpp_exec g++-5
-%else
-BuildRequires:  gcc6-c++
-%define cc_exec  gcc-6
-%define cpp_exec g++-6
-%endif  # node8+ GCC requirements
-%else   # older than node8
+# Node.js 4/6/7 requires GCC 4.8.5+.
+# Upstream asks for GCC 4.9.4+ with 8.x, but that is more for
+# maintenance reasons and potential C++11 issues rather than
+# a failure to compile with GCC 4.8. (GH: nodejs/node, d13a65ad)
+# Only SLE 11 has a default compiler version older than necessary.
 %if 0%{?sles_version} == 11
 BuildRequires:  gcc48-c++
+%define cc_exec  gcc-4.8
+%define cpp_exec g++-4.8
 %else
 BuildRequires:  gcc-c++
 %endif
-%endif # node7,6,5
 
 BuildRequires:  curl
 BuildRequires:  fdupes
@@ -261,10 +256,6 @@ find deps/zlib -name *.[ch] -delete
 # script, so we'll do it thus:
 export CFLAGS="%{optflags}"
 export CXXFLAGS="%{optflags}"
-# It seems that GCC 4.8 is needed to compile on SLE 11 SP4.
-%if 0%{?sles_version} == 11
-export CXX="g++-4.8"
-%endif
 
 %if 0%{?cc_exec:1}
 export CC=%{?cc_exec}
