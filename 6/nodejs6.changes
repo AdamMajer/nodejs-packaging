@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Mon Sep 11 13:58:26 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream LTS release 6.11.3:
+  * deps: Snapshots are turned back on!!! (#14385)
+  * path: win32 volume-relative paths are working again! (#14440)
+  * tools: v6.x can now build with ICU 59 (#12078)
+- Drop icu59.patch: merged upstream.
+- Refresh versioned.patch
+
+-------------------------------------------------------------------
 Thu Aug 17 08:57:20 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream LTS release 6.11.2

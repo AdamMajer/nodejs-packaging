@@ -8,10 +8,10 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-v6.11.2/node.gyp
+Index: node-v6.11.3/node.gyp
 ===================================================================
---- node-v6.11.2.orig/node.gyp
-+++ node-v6.11.2/node.gyp
+--- node-v6.11.3.orig/node.gyp
++++ node-v6.11.3/node.gyp
 @@ -19,7 +19,7 @@
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',
@@ -42,7 +42,7 @@ Index: node-v6.11.2/node.gyp
 +                '<(OBJ_DIR)/node6/src/node_dtrace_ustack.o'
                ],
                'conditions': [
-                 [ 'target_arch=="ia32"', {
+                 [ 'target_arch=="ia32" or target_arch=="arm"', {
 @@ -546,8 +546,8 @@
        ],
  
@@ -63,10 +63,10 @@ Index: node-v6.11.2/node.gyp
            'conditions': [
              ['node_shared=="true"', {
                'type': 'shared_library',
-Index: node-v6.11.2/Makefile
+Index: node-v6.11.3/Makefile
 ===================================================================
---- node-v6.11.2.orig/Makefile
-+++ node-v6.11.2/Makefile
+--- node-v6.11.3.orig/Makefile
++++ node-v6.11.3/Makefile
 @@ -37,10 +37,10 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
@@ -80,10 +80,10 @@ Index: node-v6.11.2/Makefile
  
  # Flags for packaging.
  BUILD_DOWNLOAD_FLAGS ?= --download=all
-Index: node-v6.11.2/tools/install.py
+Index: node-v6.11.3/tools/install.py
 ===================================================================
---- node-v6.11.2.orig/tools/install.py
-+++ node-v6.11.2/tools/install.py
+--- node-v6.11.3.orig/tools/install.py
++++ node-v6.11.3/tools/install.py
 @@ -77,7 +77,7 @@ def install(paths, dst): map(lambda path
  def uninstall(paths, dst): map(lambda path: try_remove(path, dst), paths)
  
@@ -176,10 +176,10 @@ Index: node-v6.11.2/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-v6.11.2/doc/node.1
+Index: node-v6.11.3/doc/node.1
 ===================================================================
---- node-v6.11.2.orig/doc/node.1
-+++ node-v6.11.2/doc/node.1
+--- node-v6.11.3.orig/doc/node.1
++++ node-v6.11.3/doc/node.1
 @@ -26,12 +26,12 @@
  
  .SH NAME
@@ -212,10 +212,10 @@ Index: node-v6.11.2/doc/node.1
  .RB [ \-\-v8-options ]
  
  Execute without arguments to start the REPL.
-Index: node-v6.11.2/src/node.stp
+Index: node-v6.11.3/src/node.stp
 ===================================================================
---- node-v6.11.2.orig/src/node.stp
-+++ node-v6.11.2/src/node.stp
+--- node-v6.11.3.orig/src/node.stp
++++ node-v6.11.3/src/node.stp
 @@ -1,4 +1,4 @@
 -probe node_net_server_connection = process("node").mark("net__server__connection")
 +probe node_net_server_connection = process("node6").mark("net__server__connection")
@@ -285,10 +285,10 @@ Index: node-v6.11.2/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-v6.11.2/deps/npm/man/man1/npm.1
+Index: node-v6.11.3/deps/npm/man/man1/npm.1
 ===================================================================
---- node-v6.11.2.orig/deps/npm/man/man1/npm.1
-+++ node-v6.11.2/deps/npm/man/man1/npm.1
+--- node-v6.11.3.orig/deps/npm/man/man1/npm.1
++++ node-v6.11.3/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
  .TH "NPM" "1" "November 2016" "" ""
  .SH "NAME"
@@ -418,20 +418,20 @@ Index: node-v6.11.2/deps/npm/man/man1/npm.1
  
  .RE
  
-Index: node-v6.11.2/deps/npm/bin/npm-cli.js
+Index: node-v6.11.3/deps/npm/bin/npm-cli.js
 ===================================================================
---- node-v6.11.2.orig/deps/npm/bin/npm-cli.js
-+++ node-v6.11.2/deps/npm/bin/npm-cli.js
+--- node-v6.11.3.orig/deps/npm/bin/npm-cli.js
++++ node-v6.11.3/deps/npm/bin/npm-cli.js
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env node
 +#!/usr/bin/env node6
  ;(function () { // wrapper in case we're in module_context mode
    // windows: running "npm blah" in this folder will invoke WSH, not node.
    /*global WScript*/
-Index: node-v6.11.2/src/node_main.cc
+Index: node-v6.11.3/src/node_main.cc
 ===================================================================
---- node-v6.11.2.orig/src/node_main.cc
-+++ node-v6.11.2/src/node_main.cc
+--- node-v6.11.3.orig/src/node_main.cc
++++ node-v6.11.3/src/node_main.cc
 @@ -52,6 +52,7 @@ int wmain(int argc, wchar_t *wargv[]) {
  int main(int argc, char *argv[]) {
    // Disable stdio buffering, it interacts poorly with printf()
