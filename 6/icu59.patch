@@ -1,12 +1,2 @@
-Index: node-v6.11.0/deps/v8/src/runtime/runtime-i18n.cc
-===================================================================
---- node-v6.11.0.orig/deps/v8/src/runtime/runtime-i18n.cc
-+++ node-v6.11.0/deps/v8/src/runtime/runtime-i18n.cc
-@@ -35,6 +35,7 @@
- #include "unicode/ucurr.h"
- #include "unicode/uloc.h"
- #include "unicode/unum.h"
-+#include "unicode/ustring.h"
- #include "unicode/uversion.h"
- 
- 
+Empty patch. Placeholder must exist as long as same patch
+for older Node codestreams exist.

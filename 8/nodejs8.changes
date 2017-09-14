@@ -1,13 +1,38 @@
 -------------------------------------------------------------------
+Sat Aug 19 05:58:32 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream release 8.4.0
+  * HTTP2: Experimental support for the built-in http2 module has
+    been added via the --expose-http2 flag. (#14239)
+  * Inspector:
+    + require() is available in the inspector console now. (#8837)
+    + Multiple contexts, as created by the vm module, are supported
+      now. (#14465)
+  * N-API: New APIs for creating number values have been
+    introduced. (#14573)
+  * Stream: For Duplex streams, the high water mark option can now
+    be set independently for the readable and the writable side.
+    (#14636)
+  * Util: util.format now supports the %o and %O specifiers for
+    printing objects. (#14558)
+- Changes in release 8.3.0
+  * V8: The V8 engine has been upgraded to version 6.0, which has a
+    significantly changed performance profile. (#14574)
+  * DNS: Independent DNS resolver instances are supported now, with
+    support for  cancelling the corresponding requests. (#14518)
+  * N-API: Multiple N-API functions for error handling have been
+    changed to support assigning error codes. (#13988)
+  * REPL: Autocompletion support for require() has been improved.
+    (#14409)
+  * Utilities: The WHATWG Encoding Standard (TextDecoder and
+    TextEncoder) has been implemented as an experimental feature.
+    (#13644)
+
+-------------------------------------------------------------------
 Wed Aug  2 15:16:57 UTC 2017 - adam.majer@suse.de
 
 - Fix update-alternative handling in %postun - don't remove
   links on upgrades.
-
--------------------------------------------------------------------
-Wed Aug  2 10:03:42 UTC 2017 - adam.majer@suse.de
-
-- Update gcc requiremnts for NodeJS 8.x
 
 -------------------------------------------------------------------
 Thu Jul 27 10:12:36 UTC 2017 - qantas94heavy@gmail.com

@@ -1,4 +1,29 @@
 -------------------------------------------------------------------
+Mon Sep 11 13:58:26 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream LTS release 6.11.3:
+  * deps: Snapshots are turned back on!!! (#14385)
+  * path: win32 volume-relative paths are working again! (#14440)
+  * tools: v6.x can now build with ICU 59 (#12078)
+- Drop icu59.patch: merged upstream.
+- Refresh versioned.patch
+
+-------------------------------------------------------------------
+Thu Aug 17 08:57:20 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream LTS release 6.11.2
+  * configure: add mips64el to valid_arch (#13620)
+  * crypto: updated root certificates based on NSS 3.30
+    (#13279, #12402)
+  * deps: upgrade OpenSSL to version 1.0.2.l (#12913)
+  * http:
+    + parse errors are now reported when NODE_DEBUG=http (#13206)
+    + Agent constructor can now be invoked without new (#12927)
+  * zlib: node will now throw an Error when zlib rejects the value
+    of windowBits, instead of crashing (#13098)
+- Drop 0f3e69db.patch: fixed upstream
+
+-------------------------------------------------------------------
 Wed Aug  2 15:16:57 UTC 2017 - adam.majer@suse.de
 
 - Fix update-alternative handling in %postun - don't remove
