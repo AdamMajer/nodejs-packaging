@@ -120,7 +120,7 @@ BuildRequires:  binutils-gold
 # version available.
 %if 0%{?sles_version} == 11
 # GCC 5 is only available in the SUSE:SLE-11:SP4:Update repository (SDK).
-%if {{node_major_version}} >= 8
+%if {{node_version_major}} >= 8
 BuildRequires:   gcc5-c++
 %define cc_exec  gcc-5
 %define cpp_exec g++-5
@@ -133,7 +133,7 @@ BuildRequires:   gcc48-c++
 
 # SLE 12 and Leap 42
 %if 0%{?suse_version} == 1315
-%if {{node_major_version}} >= 8
+%if {{node_version_major}} >= 8
 BuildRequires:   gcc6-c++
 %define cc_exec  gcc-6
 %define cpp_exec g++-6
