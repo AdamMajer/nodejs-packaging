@@ -112,15 +112,36 @@ BuildRequires:  binutils-gold
 %endif
 
 # Node.js 4/6/7 requires GCC 4.8.5+.
-# Upstream asks for GCC 4.9.4+ with 8.x, but that is more for
-# maintenance reasons and potential C++11 issues rather than
-# a failure to compile with GCC 4.8. (GH: nodejs/node, d13a65ad)
-# Only SLE 11 has a default compiler version older than necessary.
+#
+# For Node.js 8.x, upstream requires GCC 4.9.4+, as GCC 4.8 may have
+# slightly buggy C++11 support: https://github.com/nodejs/node/pull/13466
+#
+# If the default compiler is not supported, use the most recent compiler
+# version available.
 %if 0%{?sles_version} == 11
-BuildRequires:  gcc48-c++
+# GCC 5 is only available in the SUSE:SLE-11:SP4:Update repository (SDK).
+%if {{node_major_version}} >= 8
+BuildRequires:   gcc5-c++
+%define cc_exec  gcc-5
+%define cpp_exec g++-5
+%else
+BuildRequires:   gcc48-c++
 %define cc_exec  gcc-4.8
 %define cpp_exec g++-4.8
-%else
+%endif # node >= 8
+%endif # sles == 11
+
+# SLE 12 and Leap 42
+%if 0%{?suse_version} == 1315
+%if {{node_major_version}} >= 8
+BuildRequires:   gcc6-c++
+%define cc_exec  gcc-6
+%define cpp_exec g++-6
+%endif
+%endif
+
+# No special version defined, use default.
+%if ! 0%{?cc_exec:1}
 BuildRequires:  gcc-c++
 %endif
 
