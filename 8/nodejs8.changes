@@ -1,4 +1,36 @@
 -------------------------------------------------------------------
+Wed Sep 13 04:43:23 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream version 8.5.0:
+  * build: Snapshots are now re-enabled in V8 (#14875)
+  * console: Implement minimal console.group(). (#14910)
+  * deps/libuv: upgraded to 1.14.1 (#14866)
+  * deps/nghttp2: upgraded to 1.25.0 (#14955)
+  * dns: Add "verbatim" option to dns.lookup(). When true, results
+    from the DNS resolver are passed on as-is, without the
+    reshuffling that Node.js otherwise does that puts IPv4
+    addresses before IPv6 addresses. (#14731)
+  * fs: add fs.copyFile and fs.copyFileSync which allows for more
+    efficient copying of files. (#15034)
+  * inspector: Enable async stack traces (#13870)
+  * module: Add support for ESM. This is currently behind the
+    --experimental-modules flag and requires the .mjs extension.
+    (#14369)
+  * napi: implement promise (#14365)
+  * os: Add support for CIDR notation to the output of the
+    networkInterfaces() method. (#14307)
+  * perf_hooks: An initial implementation of the Performance
+    Timing API for Node.js. This is the same Performance Timing
+    API implemented by modern browsers with a number of Node.js
+    specific properties. The User Timing mark() and measure() APIs
+    have also been implemented. (#14680)
+  * tls: multiple PFX in createSecureContext (#14793)
+- Change compiler version used:
+  * SLE 11 SP4: GCC 5
+  * SLE 12 and Leap 42: GCC 6
+  * Factory and SLE/Leap 15: default
+
+-------------------------------------------------------------------
 Sat Aug 19 05:58:32 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream release 8.4.0
