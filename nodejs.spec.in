@@ -281,6 +281,9 @@ export CC=%{?cc_exec}
 export CXX=%{?cpp_exec}
 %endif
 
+# Node.js 4.x does not include the ICU database in the source tarball.
+%define has_small_icu %(test -d "deps/icu-small" && echo 1 || echo 0)
+
 ./configure \
     --prefix=%{_prefix} \
 %if ! %{with intree_openssl}
@@ -292,6 +295,11 @@ export CXX=%{?cpp_exec}
 %endif
 %if ! %{with intree_icu}
     --with-intl=system-icu \
+%else
+%if %{has_small_icu}
+    --with-intl=small-icu \
+    --with-icu-source=deps/icu-small \
+%endif
 %endif
 %if %{with gdb}
     --gdb \
