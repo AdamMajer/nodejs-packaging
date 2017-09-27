@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Wed Sep 27 15:02:48 UTC 2017 - adam.majer@suse.de
+
+- New upstream version 8.6.0:
+  * crypto: Support for multiple ECDH curves.
+  * dgram:
+    + Added setMulticastInterface() API
+    + Custom lookup functions are now supported.
+  * n-api: The command-line flag is no longer required to use N-API
+  * tls: Docs-only deprecation of parseCertString().
+  * path: fix normalize paths ending with two dots
+  * see https://nodejs.org/en/blog/release/v8.6.0/ for full
+    changelog
+
+-------------------------------------------------------------------
 Wed Sep 13 04:43:23 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream version 8.5.0:
