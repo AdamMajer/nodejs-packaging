@@ -8,7 +8,7 @@ Wed Sep 27 15:02:48 UTC 2017 - adam.majer@suse.de
     + Custom lookup functions are now supported.
   * n-api: The command-line flag is no longer required to use N-API
   * tls: Docs-only deprecation of parseCertString().
-  * path: fix normalize paths ending with two dots
+  * path: fix normalize paths ending with two dots (CVE-2017-14849)
   * see https://nodejs.org/en/blog/release/v8.6.0/ for full
     changelog
 
