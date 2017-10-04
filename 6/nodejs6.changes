@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Oct  4 16:38:26 UTC 2017 - adam.majer@suse.de
+
+- New upstream LTS release 6.11.4:
+  * net: support passing undefined to listen() to match behavior in
+  v4.x and v8.x
+
+-------------------------------------------------------------------
 Mon Sep 11 13:58:26 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream LTS release 6.11.3:
