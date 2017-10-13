@@ -28,6 +28,8 @@ Name:           nodejs{{node_version_major}}
 Version:        {{node_version}}
 Release:        0
 
+%define node_version_number {{node_version_major}}
+
 %if 0%{?sles_version} == 11
 %define _libexecdir %{_exec_prefix}/lib
 %endif
@@ -120,7 +122,7 @@ BuildRequires:  binutils-gold
 # version available.
 %if 0%{?sles_version} == 11
 # GCC 5 is only available in the SUSE:SLE-11:SP4:Update repository (SDK).
-%if {{node_version_major}} >= 8
+%if %node_version_number >= 8
 BuildRequires:   gcc5-c++
 %define cc_exec  gcc-5
 %define cpp_exec g++-5
@@ -133,7 +135,7 @@ BuildRequires:   gcc48-c++
 
 # SLE 12 and Leap 42
 %if 0%{?suse_version} == 1315
-%if {{node_version_major}} >= 8
+%if %node_version_number >= 8
 BuildRequires:   gcc6-c++
 %define cc_exec  gcc-6
 %define cpp_exec g++-6
@@ -237,13 +239,13 @@ The API documentation for the Node.js JavaScript runtime.
 %prep
 echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | sha256sum -c
 %setup -q -n node-v%{version}
-%if {{node_version_major}} < 6
+%if %node_version_number < 6
 %patch1 -p1
 %endif
-%if {{node_version_major}} < 6
+%if %node_version_number < 6
 %patch2 -p1
 %endif
-%if {{node_version_major}} < 6
+%if %node_version_number < 6
 %patch3 -p1
 %endif
 %patch101 -p1
@@ -310,59 +312,41 @@ rm -f %{buildroot}%{_datadir}/doc/node/lldbinit
 rm -f %{buildroot}%{_datadir}/doc/node/lldb_commands.py
 
 # npm man page
-install -D -m 644 deps/npm/man/man1/npm.1 %{buildroot}%{_mandir}/man1/npm{{node_version_major}}.1
+install -D -m 644 deps/npm/man/man1/npm.1 %{buildroot}%{_mandir}/man1/npm%{node_version_number}.1
 
 #node-gyp needs common.gypi too
 install -D -m 644 common.gypi \
-	%{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/node-gyp/common.gypi
+	%{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules/node-gyp/common.gypi
 #       %%{buildroot}%%{_datadir}/node/common.gypi
 # install addon-rpm.gypi
 install -D -m 644 addon-rpm.gypi \
-       %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/node-gyp/addon-rpm.gypi
+       %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules/node-gyp/addon-rpm.gypi
 
 # clean
 # hidden files and directories
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name ".*" -print0 | xargs -r0 -0 rm -rf --
+find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number} -name ".*" -print0 | xargs -r0 -0 rm -rf --
 # windows stuff
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name "*.bat" -delete
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name "*.cmd" -delete
+find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number} -name "*.bat" -delete
+find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number} -name "*.cmd" -delete
 # build stuff
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name "Makefile" -delete
-rm -rf %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/{test,scripts}
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules -name "*.sh" -delete
-rm -rf %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/node-gyp/src
+find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number} -name "Makefile" -delete
+rm -rf %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/{test,scripts}
+find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules -name "*.sh" -delete
+rm -rf %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules/node-gyp/src
 # remove examples/tests/benchmark stuff
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules -name "example*" -print0 | xargs -0 rm -rf --
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/NODE_MODULES -name "test*" -print0 | xargs -0 rm -rf --
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules -name "*_test.*" -delete
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules -type d -name "benchmark" -print0 | xargs -0 rm -rf --
-# README.md LICENSE file permission
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name "README.md" -exec chmod -x {} +
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name "LICENSE" -exec chmod -x {} +
-# browser.js is useless for npm cli
-find %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}} -name "browser.js" -delete
+find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules -name "example*" -print0 | xargs -0 rm -rf --
+find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/NODE_MODULES -name "test*" -print0 | xargs -0 rm -rf --
+find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules -name "*_test.*" -delete
+find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules -type d -name "benchmark" -print0 | xargs -0 rm -rf --
+
 # fix permissions
-chmod 0644 %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/node_modules/sntp/lib/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/qs/lib/parse.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/lib/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/config-chain/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/qs/lib/stringify.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/lib/client.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/lib/crypto.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/lib/utils.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/qs/lib/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/node_modules/boom/lib/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/lib/server.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/node_modules/cryptiles/lib/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/hawk/node_modules/sntp/index.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/request/node_modules/qs/lib/utils.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/node_modules/uid-number/get-uid-gid.js \
-   %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}/bin/read-package-json.js
+find %{buildroot}%{_libdir}/node_modules -type f -exec chmod -x {} +
+# browser.js is useless for npm cli
+find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number} -name "browser.js" -delete
 
 # file duplicates
-%fdupes %{buildroot}%{_libdir}/node_modules/npm{{node_version_major}}
-%fdupes %{buildroot}%{_includedir}/node{{node_version_major}}
+%fdupes %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}
+%fdupes %{buildroot}%{_includedir}/node%{node_version_number}
 
 # Update alternatives
 mkdir -p %{buildroot}%{_sysconfdir}/alternatives
@@ -374,7 +358,7 @@ ln -s %{_sysconfdir}/alternatives/node-default         %{buildroot}%{_bindir}/no
 ln -s %{_sysconfdir}/alternatives/node.1%{ext_man}     %{buildroot}%{_mandir}/man1/node.1%{ext_man}
 ln -s %{_sysconfdir}/alternatives/npm-default          %{buildroot}%{_bindir}/npm-default
 ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/man1/npm.1%{ext_man}
-%if {{node_version_major}} >= 8
+%if %{node_version_number} >= 8
 ln -s -f npx-default      %{buildroot}%{_sysconfdir}/alternatives/npx-default
 ln -s -f npx.1%{ext_man}  %{buildroot}%{_sysconfdir}/alternatives/npx.1%{ext_man}
 ln -s %{_sysconfdir}/alternatives/npx-default          %{buildroot}%{_bindir}/npx-default
@@ -384,33 +368,33 @@ ln -s %{_sysconfdir}/alternatives/npx.1%{ext_man}      %{buildroot}%{_mandir}/ma
 
 # Check that Node.js isn't completely broken.
 %check
-%{buildroot}%{_bindir}/node{{node_version_major}} -e 'require("assert").strictEqual(process.versions.node, "%{version}");'
+%{buildroot}%{_bindir}/node%{node_version_number} -e 'require("assert").strictEqual(process.versions.node, "%{version}");'
 
 %files
 %defattr(-, root, root)
 %doc AUTHORS LICENSE *.md
 %doc deps/v8/tools/gdbinit
 %dir %{_libdir}/node_modules
-%{_bindir}/node{{node_version_major}}
-%{_mandir}/man1/node{{node_version_major}}.1%{ext_man}
+%{_bindir}/node%{node_version_number}
+%{_mandir}/man1/node%{node_version_number}.1%{ext_man}
 %ghost %{_bindir}/node-default
 %ghost %{_mandir}/man1/node.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/node-default
 %ghost %{_sysconfdir}/alternatives/node.1%{ext_man}
-%exclude %{_libdir}/node_modules/npm{{node_version_major}}
+%exclude %{_libdir}/node_modules/npm%{node_version_number}
 
-%files -n npm{{node_version_major}}
+%files -n npm%{node_version_number}
 %defattr(-, root, root)
-%{_bindir}/npm{{node_version_major}}
-%{_libdir}/node_modules/npm{{node_version_major}}
-%{_mandir}/man1/npm{{node_version_major}}.1%{ext_man}
+%{_bindir}/npm%{node_version_number}
+%{_libdir}/node_modules/npm%{node_version_number}
+%{_mandir}/man1/npm%{node_version_number}.1%{ext_man}
 %ghost %{_bindir}/npm-default
 %ghost %{_mandir}/man1/npm.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/npm-default
 %ghost %{_sysconfdir}/alternatives/npm.1%{ext_man}
 
-%if {{node_version_major}} >= 8
-%{_bindir}/npx{{node_version_major}}
+%if %{node_version_number} >= 8
+%{_bindir}/npx%{node_version_number}
 %ghost %{_bindir}/npx-default
 %ghost %{_mandir}/man1/npx.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/npx-default
@@ -419,10 +403,10 @@ ln -s %{_sysconfdir}/alternatives/npx.1%{ext_man}      %{buildroot}%{_mandir}/ma
 
 %files devel
 %defattr(-, root, root)
-%{_includedir}/node{{node_version_major}}
+%{_includedir}/node%{node_version_number}
 %dir %{_datadir}/systemtap
 %dir %{_datadir}/systemtap/tapset
-%{_datadir}/systemtap/tapset/node{{node_version_major}}.stp
+%{_datadir}/systemtap/tapset/node%{node_version_number}.stp
 
 %files docs
 %defattr(-,root,root)
@@ -430,31 +414,31 @@ ln -s %{_sysconfdir}/alternatives/npx.1%{ext_man}      %{buildroot}%{_mandir}/ma
 
 %post
 update-alternatives \
-        --install %{_bindir}/node-default node-default %{_bindir}/node{{node_version_major}} {{node_version_major}} \
-        --slave %{_mandir}/man1/node.1%{ext_man} node.1%{ext_man} %{_mandir}/man1/node{{node_version_major}}.1%{ext_man}
+        --install %{_bindir}/node-default node-default %{_bindir}/node%{node_version_number} %{node_version_number} \
+        --slave %{_mandir}/man1/node.1%{ext_man} node.1%{ext_man} %{_mandir}/man1/node%{node_version_number}.1%{ext_man}
 
 %postun
-if [ ! -f %{_bindir}/node{{node_version_major}} ] ; then
-    update-alternatives --remove node-default %{_bindir}/node{{node_version_major}}
+if [ ! -f %{_bindir}/node%{node_version_number} ] ; then
+    update-alternatives --remove node-default %{_bindir}/node%{node_version_number}
 fi
 
-%post -n npm{{node_version_major}}
+%post -n npm%{node_version_number}
 update-alternatives \
-        --install %{_bindir}/npm-default npm-default %{_bindir}/npm{{node_version_major}} {{node_version_major}} \
-        --slave %{_mandir}/man1/npm.1%{ext_man} npm.1%{ext_man} %{_mandir}/man1/npm{{node_version_major}}.1%{ext_man}
-%if {{node_version_major}} >= 8
+        --install %{_bindir}/npm-default npm-default %{_bindir}/npm%{node_version_number} %{node_version_number} \
+        --slave %{_mandir}/man1/npm.1%{ext_man} npm.1%{ext_man} %{_mandir}/man1/npm%{node_version_number}.1%{ext_man}
+%if %{node_version_number} >= 8
 update-alternatives \
-        --install %{_bindir}/npx-default npx-default %{_bindir}/npx{{node_version_major}} {{node_version_major}} \
-        --slave %{_mandir}/man1/npx.1%{ext_man} npx.1%{ext_man} %{_mandir}/man1/npx{{node_version_major}}.1%{ext_man}
+        --install %{_bindir}/npx-default npx-default %{_bindir}/npx%{node_version_number} %{node_version_number} \
+        --slave %{_mandir}/man1/npx.1%{ext_man} npx.1%{ext_man} %{_mandir}/man1/npx%{node_version_number}.1%{ext_man}
 %endif
 
-%postun -n npm{{node_version_major}}
-if [ ! -f %{_bindir}/npm{{node_version_major}} ] ; then
-    update-alternatives --remove npm-default %{_bindir}/npm{{node_version_major}}
+%postun -n npm%{node_version_number}
+if [ ! -f %{_bindir}/npm%{node_version_number} ] ; then
+    update-alternatives --remove npm-default %{_bindir}/npm%{node_version_number}
 fi
-%if {{node_version_major}} >= 8
-if [ ! -f %{_bindir}/npx{{node_version_major}} ] ; then
-    update-alternatives --remove npx-default %{_bindir}/npx{{node_version_major}}
+%if %{node_version_number} >= 8
+if [ ! -f %{_bindir}/npx%{node_version_number} ] ; then
+    update-alternatives --remove npx-default %{_bindir}/npx%{node_version_number}
 fi
 %endif
 

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Oct 13 11:04:51 UTC 2017 - adam.majer@suse.de
+
+- Replace {{node_version_major}} with RPM define %node_version_number
+  for simpler spec file review.
+-------------------------------------------------------------------
 Fri Oct 13 10:06:23 UTC 2017 - adam.majer@suse.de
 
 - New upstream version 8.7.0:

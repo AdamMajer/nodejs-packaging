@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Oct 13 11:04:51 UTC 2017 - adam.majer@suse.de
+
+- Replace {{node_version_major}} with RPM define %node_version_number
+  for simpler spec file review.
+-------------------------------------------------------------------
 Wed Oct  4 16:38:26 UTC 2017 - adam.majer@suse.de
 
 - New upstream LTS release 6.11.4:
