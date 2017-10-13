@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Fri Oct 13 10:06:23 UTC 2017 - adam.majer@suse.de
+
+- New upstream version 8.7.0:
+  * deps:
+    + update npm to 5.4.2
+    + update libuv 1.15.0
+    + update V8 to 6.1.534.42
+  * dgram: support for setting dgram socket buffer size
+  * fs: add support O_DSYNC file open constant
+  * util: deprecate obj.inspect for custom inspection
+- nodejs-libpath.patch
+  versioned.patch: refreshed patches
+
+-------------------------------------------------------------------
 Wed Sep 27 15:02:48 UTC 2017 - adam.majer@suse.de
 
 - New upstream version 8.6.0:

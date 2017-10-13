@@ -1,8 +1,8 @@
-Index: node-v7.7.4/lib/module.js
+Index: node-v8.7.0/lib/module.js
 ===================================================================
---- node-v7.7.4.orig/lib/module.js
-+++ node-v7.7.4/lib/module.js
-@@ -626,7 +626,7 @@ Module._initPaths = function() {
+--- node-v8.7.0.orig/lib/module.js
++++ node-v8.7.0/lib/module.js
+@@ -686,7 +686,7 @@ Module._initPaths = function() {
    } else {
      prefixDir = path.resolve(process.execPath, '..', '..');
    }
@@ -11,10 +11,10 @@ Index: node-v7.7.4/lib/module.js
  
    if (homeDir) {
      paths.unshift(path.resolve(homeDir, '.node_libraries'));
-Index: node-v7.7.4/tools/install.py
+Index: node-v8.7.0/tools/install.py
 ===================================================================
---- node-v7.7.4.orig/tools/install.py
-+++ node-v7.7.4/tools/install.py
+--- node-v8.7.0.orig/tools/install.py
++++ node-v8.7.0/tools/install.py
 @@ -6,6 +6,7 @@ import os
  import re
  import shutil
@@ -41,8 +41,8 @@ Index: node-v7.7.4/tools/install.py
    else:
      assert(0) # unhandled action type
  
-@@ -127,7 +128,7 @@ def files(action):
-   action([output_prefix + output_file], 'bin/' + output_file)
+@@ -139,7 +140,7 @@ def files(action):
+     action([output_prefix + output_file], 'lib/' + output_file)
  
    if 'true' == variables.get('node_use_dtrace'):
 -    action(['out/Release/node.d'], 'lib/dtrace/node.d')
