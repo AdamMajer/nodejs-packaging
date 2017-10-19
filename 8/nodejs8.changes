@@ -1,8 +1,14 @@
 -------------------------------------------------------------------
+Thu Oct 19 08:07:05 UTC 2017 - adam.majer@suse.de
+
+- Make sure npm and npx programs remain executable
+
+-------------------------------------------------------------------
 Fri Oct 13 11:04:51 UTC 2017 - adam.majer@suse.de
 
 - Replace {{node_version_major}} with RPM define %node_version_number
   for simpler spec file review.
+
 -------------------------------------------------------------------
 Fri Oct 13 10:06:23 UTC 2017 - adam.majer@suse.de
 
