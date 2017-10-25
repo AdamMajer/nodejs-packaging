@@ -1,4 +1,22 @@
 -------------------------------------------------------------------
+Wed Oct 25 05:18:51 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream release 8.8.0:
+  * crypto: expose ECDH class (gh#nodejs/node#8188)
+  * http2: (gh#nodejs/node#{15685,16269})
+    + http2 is now exposed by default without the need for a flag
+    + a new environment variable NODE_NO_HTTP2 has been added to
+      allow userland http2 to be required
+    + support has been added for generic Duplex streams
+  * module: resolve and instantiate loader pipeline hooks have been
+    added to the ESM lifecycle (gh#nodejs/node#15445)
+  * zlib: (CVE-2017-14919: only affects TW) In zlib v1.2.9, a
+    change was made that causes an exception to be thrown when a
+    raw deflate stream is initialized with windowBits set to 8.
+    Node.js will now gracefully set windowBits to 9 (replicating
+    the legacy behavior) to avoid a DOS vector.
+
+-------------------------------------------------------------------
 Thu Oct 19 08:07:05 UTC 2017 - adam.majer@suse.de
 
 - Make sure npm and npx programs remain executable
