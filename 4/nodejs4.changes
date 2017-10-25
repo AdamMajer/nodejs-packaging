@@ -1,9 +1,19 @@
 -------------------------------------------------------------------
+Wed Oct 25 07:02:20 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream maintenance release 4.8.5:
+  * zlib: (CVE-2017-14919: only affects TW) In zlib v1.2.9, a
+    change was made that causes an exception to be thrown when a
+    raw deflate stream is initialized with windowBits set to 8.
+    Node.js will now gracefully set windowBits to 9 (replicating
+    the legacy behavior) to avoid a DOS vector.
+
+-------------------------------------------------------------------
 Thu Oct 19 08:07:05 UTC 2017 - adam.majer@suse.de
 
 - Replace {{node_version_major}} with RPM define %node_version_number
   for simpler spec file review.
-- Make sure npm and npx programs remain executable
+- Make sure npm program remains executable
 
 -------------------------------------------------------------------
 Wed Aug  2 15:16:57 UTC 2017 - adam.majer@suse.de
