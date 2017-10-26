@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Oct 26 14:54:45 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream release 8.8.1:
+  * net: Fix timeout with null handle issue. This is a regression
+    in Node 8.8.0. (gh#nodejs/node#16489)
+
+-------------------------------------------------------------------
 Wed Oct 25 05:18:51 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream release 8.8.0:
