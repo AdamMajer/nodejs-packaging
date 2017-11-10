@@ -311,6 +311,9 @@ rm %{buildroot}%{_datadir}/doc/node/gdbinit
 rm -f %{buildroot}%{_datadir}/doc/node/lldbinit
 rm -f %{buildroot}%{_datadir}/doc/node/lldb_commands.py
 
+# remove .bak files, if any
+find %{buildroot} -name \*.bak -print -delete
+
 # npm man page
 install -D -m 644 deps/npm/man/man1/npm.1 %{buildroot}%{_mandir}/man1/npm%{node_version_number}.1
 
