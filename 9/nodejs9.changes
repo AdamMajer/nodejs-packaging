@@ -1,0 +1,32 @@
+-------------------------------------------------------------------
+Fri Nov 10 13:10:42 UTC 2017 - adam.majer@suse.de
+
+- New upstream version 9.1.0
+  * cli: NODE_OPTIONS now supports the --stack-trace-limit option.
+  * http:
+    + A 'connect' event handler leak has been fixed.
+    + The 103 Early Hints status code is now supported.
+
+- Changes in upstream version 9.0.0
+  * async: Older experimental APIs have been removed.
+  * errors: The assignment of static error codes to Node.js errors
+  * child_processes: Errors are emitted on process nextTick.
+  * domains: The long-deprecated .dispose() method has been removed
+  * fs:
+    + fs.ReadStream and fs.WriteStream classes now use destroy().
+    + module callbacks are now invoked with an undefined context.
+  * HTTP/1:
+    + 400 Bad Request response will now be sent when parsing fails.
+    + Socket timeout will be set when the socket connects.
+    + A bug causing the request 'error' event to fire twice is fixed.
+    + HTTP clients may now use generic Duplex streams in addition
+      to net.Socket.
+  * intl: The deprecated Intl.v8BreakIterator has been removed.
+  * os: The os.EOL property is now read-only
+  * timers: setTimeout() will emit a warning if the timeout is
+    larger that the maximum 32-bit unsigned integer.
+
+- .changes file trimmed to only include changes relative to 9.x
+  line. If you would like to see older changes, please see
+  nodejs8 package.
+
