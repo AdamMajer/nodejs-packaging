@@ -3,6 +3,8 @@ Mon Nov 13 10:05:10 UTC 2017 - adam.majer@suse.de
 
 - New upstream LTS version 8.9.1:
   * openssl: upgrade openssl sources to 1.0.2m
+    [OpenSSL Security Advisory (bsc#1066242, bsc#1056058)
+     CVE-2017-3735 CVE-2017-3736]
   * https: revert refactor to use http internals
 
 - Changes since 8.9.0 LTS version:

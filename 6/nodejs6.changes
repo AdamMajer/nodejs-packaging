@@ -6,6 +6,8 @@ Mon Nov 13 10:08:04 UTC 2017 - adam.majer@suse.de
   * crypto: add sign/verify support for RSASSA-PSS
   * deps:
     + upgrade openssl sources to 1.0.2m
+      [OpenSSL Security Advisory (bsc#1066242, bsc#1056058)
+       CVE-2017-3735 CVE-2017-3736]
     + upgrade libuv to 1.15.0
   * fs: Add support for fs.write/fs.writeSync(fd, buffer, cb) and
     fs.write/fs.writeSync(fd, buffer, offset, cb) as documented

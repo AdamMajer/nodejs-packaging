@@ -3,6 +3,8 @@ Mon Nov 13 10:12:07 UTC 2017 - adam.majer@suse.de
 
 - New upstream maintenance release 4.8.6:
   * crypto: upgrade openssl sources to 1.0.2m
+    [OpenSSL Security Advisory (bsc#1066242, bsc#1056058)
+     CVE-2017-3735 CVE-2017-3736]
   * deps: add support for more modern versions of INTL
 - 0f3e69db.patch: removed, upstreamed
 - icu59.patch: removed, upstreamed
