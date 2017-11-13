@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Nov 13 14:29:47 UTC 2017 - adam.majer@suse.de
+
+- Fix permissions of node-gyp. This should be executable to allow
+  building of binary node modules.
+-------------------------------------------------------------------
 Mon Nov 13 10:12:07 UTC 2017 - adam.majer@suse.de
 
 - New upstream maintenance release 4.8.6:

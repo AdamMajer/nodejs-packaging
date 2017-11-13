@@ -337,6 +337,7 @@ find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules 
 # fix permissions
 find %{buildroot}%{_libdir}/node_modules -type f -exec chmod -x {} +
 chmod 0755 %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/bin/np*-cli.js
+chmod 0755 %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/bin/node-gyp-bin/node-gyp
 # browser.js is useless for npm cli
 find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number} -name "browser.js" -delete
 
