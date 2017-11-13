@@ -1,4 +1,26 @@
 -------------------------------------------------------------------
+Mon Nov 13 10:08:04 UTC 2017 - adam.majer@suse.de
+
+- New upstream LTS release 6.12.0:
+  * assert: assert.fail() can now take one or two arguments
+  * crypto: add sign/verify support for RSASSA-PSS
+  * deps:
+    + upgrade openssl sources to 1.0.2m
+    + upgrade libuv to 1.15.0
+  * fs: Add support for fs.write/fs.writeSync(fd, buffer, cb) and
+    fs.write/fs.writeSync(fd, buffer, offset, cb) as documented
+  * inspector: enable --inspect-brk
+  * process: add --redirect-warnings command line argument
+  * src:
+    + allow CLI args in env with NODE_OPTIONS
+    + --abort-on-uncaught-exception in NODE_OPTIONS
+    + allow --tls-cipher-list in NODE_OPTIONS
+    + use SafeGetenv() for NODE_REDIRECT_WARNINGS
+  * test: remove common.fail()
+- 0f3e69db.patch, icu59.patch: removed empty patches
+- nodejs-libpath.patch: refreshed
+
+-------------------------------------------------------------------
 Wed Oct 25 05:19:03 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream LTS release 6.11.5:

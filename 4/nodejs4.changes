@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Nov 13 10:12:07 UTC 2017 - adam.majer@suse.de
+
+- New upstream maintenance release 4.8.6:
+  * crypto: upgrade openssl sources to 1.0.2m
+  * deps: add support for more modern versions of INTL
+- 0f3e69db.patch: removed, upstreamed
+- icu59.patch: removed, upstreamed
+
+-------------------------------------------------------------------
 Wed Oct 25 07:02:20 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream maintenance release 4.8.5:

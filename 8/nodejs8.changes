@@ -1,4 +1,21 @@
 -------------------------------------------------------------------
+Mon Nov 13 10:05:10 UTC 2017 - adam.majer@suse.de
+
+- New upstream LTS version 8.9.1:
+  * openssl: upgrade openssl sources to 1.0.2m
+  * https: revert refactor to use http internals
+
+- Changes since 8.9.0 LTS version:
+  * deps: update to npm 5.5.1
+  * http2: The exposed http2 socket is no longer manipulatable
+  * module: support custom paths to require.resolve()
+  * util: util.TextEncoder and util.TextDecoder are no longer
+    experimental. No longer produces a warning when using them.
+
+- versioned.patch: refreshed
+- 0f3e69db.patch icu59.patch: removed empty patches
+
+-------------------------------------------------------------------
 Thu Oct 26 14:54:45 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream release 8.8.1:

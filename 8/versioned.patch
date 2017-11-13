@@ -8,11 +8,11 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-v8.7.0/Makefile
+Index: node-v8.9.1/Makefile
 ===================================================================
---- node-v8.7.0.orig/Makefile
-+++ node-v8.7.0/Makefile
-@@ -40,10 +40,10 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
+--- node-v8.9.1.orig/Makefile
++++ node-v8.9.1/Makefile
+@@ -45,10 +45,10 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
  
@@ -25,11 +25,11 @@ Index: node-v8.7.0/Makefile
  
  # Flags for packaging.
  BUILD_DOWNLOAD_FLAGS ?= --download=all
-Index: node-v8.7.0/tools/install.py
+Index: node-v8.9.1/tools/install.py
 ===================================================================
---- node-v8.7.0.orig/tools/install.py
-+++ node-v8.7.0/tools/install.py
-@@ -77,7 +77,7 @@ def install(paths, dst): map(lambda path
+--- node-v8.9.1.orig/tools/install.py
++++ node-v8.9.1/tools/install.py
+@@ -78,7 +78,7 @@ def install(paths, dst): map(lambda path
  def uninstall(paths, dst): map(lambda path: try_remove(path, dst), paths)
  
  def npm_files(action):
@@ -38,7 +38,7 @@ Index: node-v8.7.0/tools/install.py
  
    # don't install npm if the target path is a symlink, it probably means
    # that a dev version of npm is installed there
-@@ -91,20 +91,20 @@ def npm_files(action):
+@@ -92,20 +92,20 @@ def npm_files(action):
      action(paths, target_path + dirname[9:] + '/')
  
    # create/remove symlink
@@ -65,7 +65,7 @@ Index: node-v8.7.0/tools/install.py
    else:
      assert(0) # unhandled action type
  
-@@ -118,7 +118,7 @@ def subdir_files(path, dest, action):
+@@ -119,7 +119,7 @@ def subdir_files(path, dest, action):
  
  def files(action):
    is_windows = sys.platform == 'win32'
@@ -74,7 +74,7 @@ Index: node-v8.7.0/tools/install.py
    output_prefix = 'out/Release/'
  
    if 'false' == variables.get('node_shared'):
-@@ -143,7 +143,7 @@ def files(action):
+@@ -144,7 +144,7 @@ def files(action):
      action(['out/Release/node.d'], sysconfig.get_config_var("LIB") + '/dtrace/node.d')
  
    # behave similarly for systemtap
@@ -83,7 +83,7 @@ Index: node-v8.7.0/tools/install.py
  
    action(['deps/v8/tools/gdbinit'], 'share/doc/node/')
    action(['deps/v8/tools/lldbinit'], 'share/doc/node/')
-@@ -152,7 +152,7 @@ def files(action):
+@@ -153,7 +153,7 @@ def files(action):
    if 'freebsd' in sys.platform or 'openbsd' in sys.platform:
      action(['doc/node.1'], 'man/man1/')
    else:
@@ -92,7 +92,7 @@ Index: node-v8.7.0/tools/install.py
  
    if 'true' == variables.get('node_install_npm'): npm_files(action)
  
-@@ -168,28 +168,28 @@ def headers(action):
+@@ -169,28 +169,28 @@ def headers(action):
      'src/node_buffer.h',
      'src/node_object_wrap.h',
      'src/node_version.h',
@@ -129,10 +129,10 @@ Index: node-v8.7.0/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-v8.7.0/doc/node.1
+Index: node-v8.9.1/doc/node.1
 ===================================================================
---- node-v8.7.0.orig/doc/node.1
-+++ node-v8.7.0/doc/node.1
+--- node-v8.9.1.orig/doc/node.1
++++ node-v8.9.1/doc/node.1
 @@ -26,12 +26,12 @@
  
  .SH NAME
@@ -165,10 +165,10 @@ Index: node-v8.7.0/doc/node.1
  .RB [ \-\-v8-options ]
  
  Execute without arguments to start the REPL.
-Index: node-v8.7.0/src/node.stp
+Index: node-v8.9.1/src/node.stp
 ===================================================================
---- node-v8.7.0.orig/src/node.stp
-+++ node-v8.7.0/src/node.stp
+--- node-v8.9.1.orig/src/node.stp
++++ node-v8.9.1/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -241,12 +241,12 @@ Index: node-v8.7.0/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-v8.7.0/deps/npm/man/man1/npm.1
+Index: node-v8.9.1/deps/npm/man/man1/npm.1
 ===================================================================
---- node-v8.7.0.orig/deps/npm/man/man1/npm.1
-+++ node-v8.7.0/deps/npm/man/man1/npm.1
+--- node-v8.9.1.orig/deps/npm/man/man1/npm.1
++++ node-v8.9.1/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
- .TH "NPM" "1" "September 2017" "" ""
+ .TH "NPM" "1" "October 2017" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm8\fR \- javascript package manager
@@ -270,8 +270,9 @@ Index: node-v8.7.0/deps/npm/man/man1/npm.1
  You probably got npm because you want to install stuff\.
  .P
 -Use \fBnpm install blerg\fP to install the latest version of "blerg"\.  Check out
+-npm help \fBnpm\-install\fP for more info\.  It can do a lot of stuff\.
 +Use \fBnpm8 install blerg\fP to install the latest version of "blerg"\.  Check out
- npm help \fBnpm\-install\fP for more info\.  It can do a lot of stuff\.
++npm8 help \fBnpm\-install\fP for more info\.  It can do a lot of stuff\.
  .P
 -Use the \fBnpm search\fP command to show everything that's available\.
 -Use \fBnpm ls\fP to show everything you've installed\.
@@ -289,7 +290,13 @@ Index: node-v8.7.0/deps/npm/man/man1/npm.1
  .P
  In particular, npm has two modes of operation:
  .RS 0
-@@ -80,19 +80,19 @@ Make a package\.json file\.  See npm hel
+@@ -75,24 +75,24 @@ following help topics:
+ .RS 0
+ .IP \(bu 2
+ json:
+-Make a package\.json file\.  See npm help 5 \fBpackage\.json\fP\|\.
++Make a package\.json file\.  See npm8 help 5 \fBpackage\.json\fP\|\.
+ .IP \(bu 2
  link:
  For linking your current working code into Node's path, so that you
  don't have to reinstall every time you make a change\.  Use
@@ -312,6 +319,23 @@ Index: node-v8.7.0/deps/npm/man/man1/npm.1
  
  .RE
  .SH CONFIGURATION
+@@ -133,14 +133,14 @@ lib/utils/config\-defs\.js\.  These must
+ 
+ .RE
+ .P
+-See npm help 7 \fBnpm\-config\fP for much much more information\.
++See npm8 help 7 \fBnpm\-config\fP for much much more information\.
+ .SH CONTRIBUTIONS
+ .P
+ Patches welcome!
+ .RS 0
+ .IP \(bu 2
+ code:
+-Read through npm help 7 \fBnpm\-coding\-style\fP if you plan to submit code\.
++Read through npm8 help 7 \fBnpm\-coding\-style\fP if you plan to submit code\.
+ You don't have to agree with it, but you do have to follow it\.
+ .IP \(bu 2
+ docs:
 @@ -150,7 +150,7 @@ file in the "doc" folder\.  (Don't worry
  .RE
  .P
@@ -321,10 +345,39 @@ Index: node-v8.7.0/deps/npm/man/man1/npm.1
  .P
  If you would like to contribute, but don't know what to work on, read
  the contributing guidelines and check the issues list\.
-Index: node-v8.7.0/node.gyp
+@@ -185,21 +185,21 @@ i@izs\.me
+ .SH SEE ALSO
+ .RS 0
+ .IP \(bu 2
+-npm help help
++npm8 help help
+ .IP \(bu 2
+ README
+ .IP \(bu 2
+-npm help 5 package\.json
++npm8 help 5 package\.json
+ .IP \(bu 2
+-npm help install
++npm8 help install
+ .IP \(bu 2
+-npm help config
++npm8 help config
+ .IP \(bu 2
+-npm help 7 config
++npm8 help 7 config
+ .IP \(bu 2
+-npm help 5 npmrc
++npm8 help 5 npmrc
+ .IP \(bu 2
+-npm help 7 index
++npm8 help 7 index
+ 
+ .RE
+ 
+Index: node-v8.9.1/node.gyp
 ===================================================================
---- node-v8.7.0.orig/node.gyp
-+++ node-v8.7.0/node.gyp
+--- node-v8.9.1.orig/node.gyp
++++ node-v8.9.1/node.gyp
 @@ -20,7 +20,7 @@
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',
@@ -334,7 +387,7 @@ Index: node-v8.7.0/node.gyp
      'library_files': [
        'lib/internal/bootstrap_node.js',
        'lib/async_hooks.js',
-@@ -487,10 +487,10 @@
+@@ -488,10 +488,10 @@
              {
                'action_name': 'node_dtrace_provider_o',
                'inputs': [
@@ -347,7 +400,7 @@ Index: node-v8.7.0/node.gyp
                ],
                'action': [ 'dtrace', '-G', '-xnolibs', '-s', 'src/node_provider.d',
                  '<@(_inputs)', '-o', '<@(_outputs)' ]
-@@ -540,7 +540,7 @@
+@@ -541,7 +541,7 @@
                  '<(SHARED_INTERMEDIATE_DIR)/v8constants.h'
                ],
                'outputs': [
@@ -356,7 +409,7 @@ Index: node-v8.7.0/node.gyp
                ],
                'conditions': [
                  [ 'target_arch=="ia32" or target_arch=="arm"', {
-@@ -601,9 +601,9 @@
+@@ -602,9 +602,9 @@
        ],
  
        'variables': {
@@ -369,7 +422,7 @@ Index: node-v8.7.0/node.gyp
          'OBJ_SUFFIX': 'o',
          'OBJ_SEPARATOR': '/',
          'conditions': [
-@@ -739,7 +739,7 @@
+@@ -740,7 +740,7 @@
      ['OS=="aix"', {
        'targets': [
          {
@@ -378,20 +431,20 @@ Index: node-v8.7.0/node.gyp
            'conditions': [
              ['node_shared=="true"', {
                'type': 'shared_library',
-Index: node-v8.7.0/deps/npm/bin/npm-cli.js
+Index: node-v8.9.1/deps/npm/bin/npm-cli.js
 ===================================================================
---- node-v8.7.0.orig/deps/npm/bin/npm-cli.js
-+++ node-v8.7.0/deps/npm/bin/npm-cli.js
+--- node-v8.9.1.orig/deps/npm/bin/npm-cli.js
++++ node-v8.9.1/deps/npm/bin/npm-cli.js
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env node
 +#!/usr/bin/env node8
  ;(function () { // wrapper in case we're in module_context mode
    // windows: running "npm blah" in this folder will invoke WSH, not node.
    /*global WScript*/
-Index: node-v8.7.0/src/node_main.cc
+Index: node-v8.9.1/src/node_main.cc
 ===================================================================
---- node-v8.7.0.orig/src/node_main.cc
-+++ node-v8.7.0/src/node_main.cc
+--- node-v8.9.1.orig/src/node_main.cc
++++ node-v8.9.1/src/node_main.cc
 @@ -101,6 +101,7 @@ int main(int argc, char *argv[]) {
  #endif
    // Disable stdio buffering, it interacts poorly with printf()

@@ -90,8 +90,6 @@ Source3:        nodejs.keyring
 
 ## UPSTREAM PATCHES HERE, if any
 Patch1:         8334.diff
-Patch2:         0f3e69db.patch
-Patch3:         icu59.patch
 
 ## Our patches
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
@@ -241,12 +239,6 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %setup -q -n node-v%{version}
 %if %node_version_number < 6
 %patch1 -p1
-%endif
-%if %node_version_number < 6
-%patch2 -p1
-%endif
-%if %node_version_number < 6
-%patch3 -p1
 %endif
 %patch101 -p1
 %patch102 -p1
