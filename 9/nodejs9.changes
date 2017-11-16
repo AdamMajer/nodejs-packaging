@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov 16 13:16:25 UTC 2017 - adam.majer@suse.de
+
+- Update nodejs.keyring based on current Release Team as found on
+  https://github.com/nodejs/node#release-team
+
+-------------------------------------------------------------------
 Mon Nov 13 14:29:47 UTC 2017 - adam.majer@suse.de
 
 - Fix permissions of node-gyp. This should be executable to allow
