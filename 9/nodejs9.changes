@@ -3,6 +3,10 @@ Thu Nov 16 13:16:25 UTC 2017 - adam.majer@suse.de
 
 - Update nodejs.keyring based on current Release Team as found on
   https://github.com/nodejs/node#release-team
+- New upstream version 9.2.0
+  * crypto: Support building with both OpenSSL 1.1.0
+  * fs: fs.realpathSync.native and fs.realpath.native are now exposed
+  * process: expose process.ppid
 
 -------------------------------------------------------------------
 Mon Nov 13 14:29:47 UTC 2017 - adam.majer@suse.de
