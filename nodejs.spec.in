@@ -134,13 +134,18 @@ BuildRequires:   gcc48-c++
 %endif # sles == 11
 
 # SLE 12 and Leap 42
-%if 0%{?suse_version} == 1315
-%if %node_version_number >= 8
+# GCC 6 is only available with SLE 12 SP1 and Leap 42.2+ (ignore 42.1: EOL).
+%if {{node_version_major}} >= 8 && 0%{?suse_version} == 1315
+%if 0%{?sle_version} < 120100
+BuildRequires:   gcc5-c++
+%define cc_exec  gcc-5
+%define cpp_exec g++-5
+%else
 BuildRequires:   gcc6-c++
 %define cc_exec  gcc-6
 %define cpp_exec g++-6
-%endif
-%endif
+%endif # SLE 12 < SP1
+%endif # node >= 8 and sle == 12
 
 # No special version defined, use default.
 %if ! 0%{?cc_exec:1}
