@@ -152,7 +152,6 @@ BuildRequires:   gcc6-c++
 BuildRequires:  gcc-c++
 %endif
 
-BuildRequires:  curl
 BuildRequires:  fdupes
 BuildRequires:  pkg-config
 BuildRequires:  procps
