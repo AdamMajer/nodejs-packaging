@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 29 01:41:56 UTC 2017 - qantas94heavy@gmail.com
+
+- Change BuildRequires from openssl-devel to libopenssl-1_0_0-devel
+  due to Tumbleweed/Leap 15 change to OpenSSL 1.1.0 as default
+
+-------------------------------------------------------------------
 Thu Nov 16 13:16:25 UTC 2017 - adam.majer@suse.de
 
 - Update nodejs.keyring based on current Release Team as found on

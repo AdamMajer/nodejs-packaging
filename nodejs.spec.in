@@ -154,7 +154,11 @@ BuildRequires:  xz
 BuildRequires:  zlib-devel
 
 %if ! %{with intree_openssl}
+%if 0%{?suse_version} >= 1330
+BuildRequires:  libopenssl-1_0_0-devel
+%else
 BuildRequires:  openssl-devel >= 1.0.2
+%endif
 %endif
 
 %if ! %{with intree_cares}
