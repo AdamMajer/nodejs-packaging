@@ -1,4 +1,27 @@
 -------------------------------------------------------------------
+Sat Dec  9 03:22:01 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream LTS release 6.12.2:
+  * deps/openssl: updated to 1.0.2n (only applies to SLE 12 SP1
+    and lower)
+    [ CVE-2017-3738 CVE-2017-15896 ]
+
+- Changes in 6.12.1:
+  * build: fix npm install with --shared
+    [ gh#nodejs/node#16438 ]
+  * build: building on systems with default Python 3 is now
+    supported
+    [ gh#nodejs/node#16058 ]
+  * src: v8 options can be specified with either '_' or '-' in
+    NODE_OPTIONS
+    [ gh#nodejs/node#14093 ]
+
+- Remove unnecessary curl BuildRequires
+- Enable gold linker on s390x (TW and SLE/Leap 15)
+- Build with bundled ICU if system ICU not available (only applies
+  to SLE 11)
+
+-------------------------------------------------------------------
 Wed Nov 29 01:41:56 UTC 2017 - qantas94heavy@gmail.com
 
 - Change BuildRequires from openssl-devel to libopenssl-1_0_0-devel
