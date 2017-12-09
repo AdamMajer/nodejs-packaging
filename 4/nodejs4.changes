@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Sat Dec  9 03:22:01 UTC 2017 - qantas94heavy@gmail.com
+
+- New upstream maintenance release 4.8.7:
+  * deps/openssl: updated to 1.0.2n (only applies to SLE 12 SP1
+    and lower)
+    [ CVE-2017-3738 CVE-2017-15896 ]
+- Remove unnecessary curl BuildRequires
+
+-------------------------------------------------------------------
 Wed Nov 29 01:41:56 UTC 2017 - qantas94heavy@gmail.com
 
 - Change BuildRequires from openssl-devel to libopenssl-1_0_0-devel
