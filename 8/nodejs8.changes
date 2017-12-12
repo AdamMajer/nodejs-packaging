@@ -4,16 +4,13 @@ Sat Dec  9 03:22:01 UTC 2017 - qantas94heavy@gmail.com
 - New upstream LTS release 8.9.3:
   * buffer: buffers allocated with an invalid content will now be
     zero filled
-    [ CVE-2017-15897, gh#nodejs/node#17428 ]
-  * deps/openssl: updated to 1.0.2n (only applies to SLE 12 SP1
-    and lower)
+    [ CVE-2017-15897, bnc#1072320 ]
+  * deps/openssl: updated to 1.0.2n
     [ CVE-2017-3738 CVE-2017-15896 ]
 
 - Changes in 8.9.2:
   * console: avoid adding infinite error listeners
-    [ gh#nodejs/node#16770 ]
   * http2: improve errors thrown in header validation
-    [ gh#nodejs/node#16718 ]
 
 - Remove unnecessary curl BuildRequires
 - Enable gold linker on s390x (TW and SLE/Leap 15)
