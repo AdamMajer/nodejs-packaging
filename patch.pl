@@ -22,7 +22,7 @@ while (<STDIN>) {
         }
 
         # rpmbuild file explodes on this, so remove this comment/markup
-        s/#\s*PATCH_FOR:.*$//;
+        s/\s+#\s*PATCH_FOR:.*$//;
     }
 
     if (@a = m/%patch([\d]+)\b/) {
