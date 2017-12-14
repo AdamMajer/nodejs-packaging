@@ -16,11 +16,13 @@ NEXT_LINE:
 while (<STDIN>) {
     my @a;
     if (@a = m/Patch([\d]+):.*PATCH_FOR:(.*)$/) {
-
         if (!($a[1] =~ "\\b$ARGV[0]\\b")) {
             push @removed_patches, $a[0];
             next;
         }
+
+        # rpmbuild file explodes on this, so remove this comment/markup
+        s/#\s*PATCH_FOR:.*$//;
     }
 
     if (@a = m/%patch([\d]+)\b/) {
