@@ -48,7 +48,7 @@ ${ALL_TARGETS}: changelog.target common.target
 	cp $@/* ${NODEJS_PROJECT}/nodejs$@/
 	
 	# Parse spec file
-	sed -f nodejs$@.sed nodejs.spec.in > ${NODEJS_PROJECT}/nodejs$@/nodejs$@.spec
+	sed -f nodejs$@.sed nodejs.spec.in | perl patch.pl $@ > ${NODEJS_PROJECT}/nodejs$@/nodejs$@.spec
 	
 	# Verify that patches actually apply
 	cd ${NODEJS_PROJECT}/nodejs$@ && \

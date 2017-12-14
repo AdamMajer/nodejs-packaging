@@ -91,7 +91,7 @@ Source2:        https://nodejs.org/dist/v%{version}/SHASUMS256.txt.sig
 Source3:        nodejs.keyring
 
 ## UPSTREAM PATCHES HERE, if any
-Patch1:         8334.diff
+Patch1:         8334.diff        # PATCH_FOR: 4
 
 ## Our patches
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
