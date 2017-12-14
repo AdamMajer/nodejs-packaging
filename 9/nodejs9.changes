@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Dec 14 09:46:43 UTC 2017 - adam.majer@suse.de
+
+- Dropped 8334.diff - no longer needed
+
+-------------------------------------------------------------------
 Sat Dec  9 03:22:01 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream release 9.2.1:
