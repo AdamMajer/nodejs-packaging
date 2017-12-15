@@ -1,6 +1,24 @@
 -------------------------------------------------------------------
-Thu Dec 14 09:46:43 UTC 2017 - adam.majer@suse.de
+Fri Dec 15 11:03:51 UTC 2017 - adam.majer@suse.de
 
+- New upstream release 9.3.0:
+  * async_hooks:
+    + add trace events to async_hooks
+    + add provider types for net server
+  * console: console.debug can now be used outside of the inspector
+  * deps:
+    + upgrade libuv to 1.18.0
+    + patch V8 to 6.2.414.46
+  * module.builtinModules will return a list of built in modules
+  * n-api: add helper for addons to get the event loop
+  * process:
+    + process.setUncaughtExceptionCaptureCallback can now be used
+      to customize behavior for --abort-on-uncaught-exception
+    + A signal handler is now able to receive the signal code that
+      triggered the handler.
+  * stream: writable.writableHighWaterMark and
+    readable.readableHighWaterMark will return the values the
+    stream object with which it was instantiated.
 - Dropped 8334.diff - no longer needed
 
 -------------------------------------------------------------------
