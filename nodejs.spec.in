@@ -92,6 +92,7 @@ Source3:        nodejs.keyring
 
 ## UPSTREAM PATCHES HERE, if any
 Patch1:         8334.diff        # PATCH_FOR: 4
+Patch2:         openssl11.patch  # PATCH_FOR: 8
 
 ## Our patches
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
@@ -159,13 +160,21 @@ BuildRequires:  python
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 
+
 %if ! %{with intree_openssl}
+
+%if %node_version_number >= 8
+BuildRequires:  openssl-devel >= 1.0.2
+%else # older node doesn't support OpenSSL 1.1
+
 %if 0%{?suse_version} >= 1330
 BuildRequires:  libopenssl-1_0_0-devel
 %else
 BuildRequires:  openssl-devel >= 1.0.2
 %endif
-%endif
+
+%endif # older node doesn't support OpenSSL 1.1
+%endif # ! {with intree_openssl}
 
 %if ! %{with intree_cares}
 BuildRequires:  pkgconfig(libcares) >= {{min_libcares2_version}}
@@ -247,9 +256,8 @@ The API documentation for the Node.js JavaScript runtime.
 %prep
 echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | sha256sum -c
 %setup -q -n node-v%{version}
-%if %node_version_number < 6
 %patch1 -p1
-%endif
+%patch2 -p1
 %patch101 -p1
 %patch102 -p1
 # Add check_output to configure script (not part of Python 2.6 in SLE11).

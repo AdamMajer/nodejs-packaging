@@ -1,6 +1,7 @@
 -------------------------------------------------------------------
 Thu Dec 14 09:46:31 UTC 2017 - adam.majer@suse.de
 
+- openssl11.patch: backport support for OpenSSL 1.1 (bnc#1066953)
 - Dropped 8334.diff - no longer needed
 
 -------------------------------------------------------------------

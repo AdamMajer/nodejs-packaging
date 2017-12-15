@@ -1,0 +1,2196 @@
+Ported by: Adam Majer <amajer@suse.de>
+Date: Fri Dec 15 11:40:48 CET 2017
+Summary: optional OpenSSL 1.1 support
+
+This is a backport of changes
+https://github.com/nodejs/node/pull/16130
+
+
+Index: node-v8.9.3/doc/api/deprecations.md
+===================================================================
+--- node-v8.9.3.orig/doc/api/deprecations.md
++++ node-v8.9.3/doc/api/deprecations.md
+@@ -663,6 +663,16 @@ function for [`util.inspect()`][] is dep
+ instead. For backwards compatibility with Node.js prior to version 6.4.0, both
+ may be specified.
+ 
++<a id="DEP0083"></a>
++### DEP0083: Disabling ECDH by setting ecdhCurve to false
++
++Type: Runtime
++
++The `ecdhCurve` option to `tls.createSecureContext()` and `tls.TLSSocket` could
++be set to `false` to disable ECDH entirely on the server only. This mode is
++deprecated in preparation for migrating to OpenSSL 1.1.0 and consistency with
++the client. Use the `ciphers` parameter instead.
++
+ [`Buffer.allocUnsafeSlow(size)`]: buffer.html#buffer_class_method_buffer_allocunsafeslow_size
+ [`Buffer.from(array)`]: buffer.html#buffer_class_method_buffer_from_array
+ [`Buffer.from(buffer)`]: buffer.html#buffer_class_method_buffer_from_buffer
+Index: node-v8.9.3/doc/api/tls.md
+===================================================================
+--- node-v8.9.3.orig/doc/api/tls.md
++++ node-v8.9.3/doc/api/tls.md
+@@ -558,12 +558,12 @@ Always returns `true`. This may be used
+ added: v0.11.4
+ -->
+ 
+-Returns an object representing the cipher name and the SSL/TLS protocol version
+-that first defined the cipher.
++Returns an object representing the cipher name. The `version` key is a legacy
++field which always contains the value `'TLSv1/SSLv3'`.
+ 
+ For example: `{ name: 'AES256-SHA', version: 'TLSv1/SSLv3' }`
+ 
+-See `SSL_CIPHER_get_name()` and `SSL_CIPHER_get_version()` in
++See `SSL_CIPHER_get_name()` in
+ https://www.openssl.org/docs/man1.0.2/ssl/SSL_CIPHER_get_name.html for more
+ information.
+ 
+Index: node-v8.9.3/lib/_tls_common.js
+===================================================================
+--- node-v8.9.3.orig/lib/_tls_common.js
++++ node-v8.9.3/lib/_tls_common.js
+@@ -54,6 +54,16 @@ function SecureContext(secureProtocol, s
+ exports.SecureContext = SecureContext;
+ 
+ 
++function ecdhCurveWarning() {
++  if (ecdhCurveWarning.emitted) return;
++  process.emitWarning('{ ecdhCurve: false } is deprecated.',
++                      'DeprecationWarning',
++                      'DEP0083');
++  ecdhCurveWarning.emitted = true;
++}
++ecdhCurveWarning.emitted = false;
++
++
+ exports.createSecureContext = function createSecureContext(options, context) {
+   if (!options) options = {};
+ 
+@@ -114,6 +124,8 @@ exports.createSecureContext = function c
+     c.context.setECDHCurve(tls.DEFAULT_ECDH_CURVE);
+   else if (options.ecdhCurve)
+     c.context.setECDHCurve(options.ecdhCurve);
++  else
++    ecdhCurveWarning();
+ 
+   if (options.dhparam) {
+     const warning = c.context.setDHParam(options.dhparam);
+Index: node-v8.9.3/src/node_constants.cc
+===================================================================
+--- node-v8.9.3.orig/src/node_constants.cc
++++ node-v8.9.3/src/node_constants.cc
+@@ -755,6 +755,10 @@ void DefineSignalConstants(Local<Object>
+ }
+ 
+ void DefineOpenSSLConstants(Local<Object> target) {
++#ifdef OPENSSL_VERSION_NUMBER
++    NODE_DEFINE_CONSTANT(target, OPENSSL_VERSION_NUMBER);
++#endif
++
+ #ifdef SSL_OP_ALL
+     NODE_DEFINE_CONSTANT(target, SSL_OP_ALL);
+ #endif
+Index: node-v8.9.3/src/node_crypto.cc
+===================================================================
+--- node-v8.9.3.orig/src/node_crypto.cc
++++ node-v8.9.3/src/node_crypto.cc
+@@ -114,6 +114,118 @@ using v8::String;
+ using v8::Value;
+ 
+ 
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
++static void RSA_get0_key(const RSA* r, const BIGNUM** n, const BIGNUM** e,
++                         const BIGNUM** d) {
++  if (n != nullptr) {
++    *n = r->n;
++  }
++  if (e != nullptr) {
++    *e = r->e;
++  }
++  if (d != nullptr) {
++    *d = r->d;
++  }
++}
++
++static void DH_get0_pqg(const DH* dh, const BIGNUM** p, const BIGNUM** q,
++                        const BIGNUM** g) {
++  if (p != nullptr) {
++    *p = dh->p;
++  }
++  if (q != nullptr) {
++    *q = dh->q;
++  }
++  if (g != nullptr) {
++    *g = dh->g;
++  }
++}
++
++static int DH_set0_pqg(DH* dh, BIGNUM* p, BIGNUM* q, BIGNUM* g) {
++  if ((dh->p == nullptr && p == nullptr) ||
++      (dh->g == nullptr && g == nullptr)) {
++    return 0;
++  }
++
++  if (p != nullptr) {
++    BN_free(dh->p);
++    dh->p = p;
++  }
++  if (q != nullptr) {
++    BN_free(dh->q);
++    dh->q = q;
++  }
++  if (g != nullptr) {
++    BN_free(dh->g);
++    dh->g = g;
++  }
++
++  return 1;
++}
++
++static void DH_get0_key(const DH* dh, const BIGNUM** pub_key,
++                        const BIGNUM** priv_key) {
++  if (pub_key != nullptr) {
++    *pub_key = dh->pub_key;
++  }
++  if (priv_key != nullptr) {
++    *priv_key = dh->priv_key;
++  }
++}
++
++static int DH_set0_key(DH* dh, BIGNUM* pub_key, BIGNUM* priv_key) {
++  if (pub_key != nullptr) {
++    BN_free(dh->pub_key);
++    dh->pub_key = pub_key;
++  }
++  if (priv_key != nullptr) {
++    BN_free(dh->priv_key);
++    dh->priv_key = priv_key;
++  }
++
++  return 1;
++}
++
++static const SSL_METHOD* TLS_method() { return SSLv23_method(); }
++
++static void SSL_SESSION_get0_ticket(const SSL_SESSION* s,
++                                    const unsigned char** tick, size_t* len) {
++  *len = s->tlsext_ticklen;
++  if (tick != nullptr) {
++    *tick = s->tlsext_tick;
++  }
++}
++
++#define SSL_get_tlsext_status_type(ssl) (ssl->tlsext_status_type)
++
++static int X509_STORE_up_ref(X509_STORE* store) {
++  CRYPTO_add(&store->references, 1, CRYPTO_LOCK_X509_STORE);
++  return 1;
++}
++
++static int X509_up_ref(X509* cert) {
++  CRYPTO_add(&cert->references, 1, CRYPTO_LOCK_X509);
++  return 1;
++}
++
++#define EVP_MD_CTX_new EVP_MD_CTX_create
++#define EVP_MD_CTX_free EVP_MD_CTX_destroy
++
++HMAC_CTX* HMAC_CTX_new() {
++  HMAC_CTX* ctx = Malloc<HMAC_CTX>(1);
++  HMAC_CTX_init(ctx);
++  return ctx;
++}
++
++void HMAC_CTX_free(HMAC_CTX* ctx) {
++  if (ctx == nullptr) {
++    return;
++  }
++  HMAC_CTX_cleanup(ctx);
++  free(ctx);
++}
++#endif  // OPENSSL_VERSION_NUMBER < 0x10100000L
++
+ // Subject DER of CNNIC ROOT CA and CNNIC EV ROOT CA are taken from
+ // https://hg.mozilla.org/mozilla-central/file/98820360ab66/security/
+ // certverifier/NSSCertDBTrustDomain.cpp#l672
+@@ -142,8 +254,6 @@ static X509_NAME *cnnic_ev_name =
+     d2i_X509_NAME(nullptr, &cnnic_ev_p,
+                   sizeof(CNNIC_EV_ROOT_CA_SUBJECT_DATA)-1);
+ 
+-static Mutex* mutexes;
+-
+ static const char* const root_certs[] = {
+ #include "node_root_certs.h"  // NOLINT(build/include_order)
+ };
+@@ -158,11 +268,19 @@ template void SSLWrap<TLSWrap>::AddMetho
+ template void SSLWrap<TLSWrap>::InitNPN(SecureContext* sc);
+ template void SSLWrap<TLSWrap>::SetSNIContext(SecureContext* sc);
+ template int SSLWrap<TLSWrap>::SetCACerts(SecureContext* sc);
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+ template SSL_SESSION* SSLWrap<TLSWrap>::GetSessionCallback(
+     SSL* s,
+     unsigned char* key,
+     int len,
+     int* copy);
++#else
++template SSL_SESSION* SSLWrap<TLSWrap>::GetSessionCallback(
++    SSL* s,
++    const unsigned char* key,
++    int len,
++    int* copy);
++#endif
+ template int SSLWrap<TLSWrap>::NewSessionCallback(SSL* s,
+                                                   SSL_SESSION* sess);
+ template void SSLWrap<TLSWrap>::OnClientHello(
+@@ -202,6 +320,9 @@ template int SSLWrap<TLSWrap>::SelectALP
+     void* arg);
+ #endif  // TLSEXT_TYPE_application_layer_protocol_negotiation
+ 
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
++static Mutex* mutexes;
++
+ static void crypto_threadid_cb(CRYPTO_THREADID* tid) {
+   static_assert(sizeof(uv_thread_t) <= sizeof(void*),
+                 "uv_thread_t does not fit in a pointer");
+@@ -224,6 +345,7 @@ static void crypto_lock_cb(int mode, int
+   else
+     mutex->Unlock();
+ }
++#endif
+ 
+ 
+ static int PasswordCallback(char *buf, int size, int rwflag, void *u) {
+@@ -427,12 +549,12 @@ void SecureContext::Init(const FunctionC
+   ASSIGN_OR_RETURN_UNWRAP(&sc, args.Holder());
+   Environment* env = sc->env();
+ 
+-  const SSL_METHOD* method = SSLv23_method();
++  const SSL_METHOD* method = TLS_method();
+ 
+   if (args.Length() == 1 && args[0]->IsString()) {
+     const node::Utf8Value sslmethod(env->isolate(), args[0]);
+ 
+-    // Note that SSLv2 and SSLv3 are disallowed but SSLv2_method and friends
++    // Note that SSLv2 and SSLv3 are disallowed but SSLv23_method and friends
+     // are still accepted.  They are OpenSSL's way of saying that all known
+     // protocols are supported unless explicitly disabled (which we do below
+     // for SSLv2 and SSLv3.)
+@@ -480,7 +602,7 @@ void SecureContext::Init(const FunctionC
+   sc->ctx_ = SSL_CTX_new(method);
+   SSL_CTX_set_app_data(sc->ctx_, sc);
+ 
+-  // Disable SSLv2 in the case when method == SSLv23_method() and the
++  // Disable SSLv2 in the case when method == TLS_method() and the
+   // cipher list contains SSLv2 ciphers (not the default, should be rare.)
+   // The bundled OpenSSL doesn't have SSLv2 support but the system OpenSSL may.
+   // SSLv3 is disabled because it's susceptible to downgrade attacks (POODLE.)
+@@ -494,6 +616,19 @@ void SecureContext::Init(const FunctionC
+                                  SSL_SESS_CACHE_NO_AUTO_CLEAR);
+   SSL_CTX_sess_set_get_cb(sc->ctx_, SSLWrap<Connection>::GetSessionCallback);
+   SSL_CTX_sess_set_new_cb(sc->ctx_, SSLWrap<Connection>::NewSessionCallback);
++
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++  // OpenSSL 1.1.0 changed the ticket key size, but the OpenSSL 1.0.x size was
++  // exposed in the public API. To retain compatibility, install a callback
++  // which restores the old algorithm.
++  if (RAND_bytes(sc->ticket_key_name_, sizeof(sc->ticket_key_name_)) <= 0 ||
++      RAND_bytes(sc->ticket_key_hmac_, sizeof(sc->ticket_key_hmac_)) <= 0 ||
++      RAND_bytes(sc->ticket_key_aes_, sizeof(sc->ticket_key_aes_)) <= 0) {
++    return env->ThrowError("Error generating ticket keys");
++  }
++  SSL_CTX_set_tlsext_ticket_key_cb(sc->ctx_,
++                                   SecureContext::TicketCompatibilityCallback);
++#endif
+ }
+ 
+ 
+@@ -574,16 +709,17 @@ int SSL_CTX_get_issuer(SSL_CTX* ctx, X50
+   int ret;
+ 
+   X509_STORE* store = SSL_CTX_get_cert_store(ctx);
+-  X509_STORE_CTX store_ctx;
++  X509_STORE_CTX* store_ctx = X509_STORE_CTX_new();
+ 
+-  ret = X509_STORE_CTX_init(&store_ctx, store, nullptr, nullptr);
++  ret = X509_STORE_CTX_init(store_ctx, store, nullptr, nullptr);
+   if (!ret)
+     goto end;
+ 
+-  ret = X509_STORE_CTX_get1_issuer(issuer, &store_ctx, cert);
+-  X509_STORE_CTX_cleanup(&store_ctx);
++  ret = X509_STORE_CTX_get1_issuer(issuer, store_ctx, cert);
++  X509_STORE_CTX_cleanup(store_ctx);
+ 
+  end:
++  X509_STORE_CTX_free(store_ctx);
+   return ret;
+ }
+ 
+@@ -674,7 +810,6 @@ int SSL_CTX_use_certificate_chain(SSL_CT
+   x = PEM_read_bio_X509_AUX(in, nullptr, NoPasswordCallback, nullptr);
+ 
+   if (x == nullptr) {
+-    SSLerr(SSL_F_SSL_CTX_USE_CERTIFICATE_CHAIN_FILE, ERR_R_PEM_LIB);
+     return 0;
+   }
+ 
+@@ -685,7 +820,6 @@ int SSL_CTX_use_certificate_chain(SSL_CT
+   // Read extra certs
+   STACK_OF(X509)* extra_certs = sk_X509_new_null();
+   if (extra_certs == nullptr) {
+-    SSLerr(SSL_F_SSL_CTX_USE_CERTIFICATE_CHAIN_FILE, ERR_R_MALLOC_FAILURE);
+     goto done;
+   }
+ 
+@@ -768,22 +902,6 @@ void SecureContext::SetCert(const Functi
+ }
+ 
+ 
+-#if OPENSSL_VERSION_NUMBER < 0x10100000L && !defined(OPENSSL_IS_BORINGSSL)
+-// This section contains OpenSSL 1.1.0 functions reimplemented for OpenSSL
+-// 1.0.2 so that the following code can be written without lots of #if lines.
+-
+-static int X509_STORE_up_ref(X509_STORE* store) {
+-  CRYPTO_add(&store->references, 1, CRYPTO_LOCK_X509_STORE);
+-  return 1;
+-}
+-
+-static int X509_up_ref(X509* cert) {
+-  CRYPTO_add(&cert->references, 1, CRYPTO_LOCK_X509);
+-  return 1;
+-}
+-#endif  // OPENSSL_VERSION_NUMBER < 0x10100000L && !OPENSSL_IS_BORINGSSL
+-
+-
+ static X509_STORE* NewRootCertStore() {
+   static std::vector<X509*> root_certs_vector;
+   if (root_certs_vector.empty()) {
+@@ -972,9 +1090,10 @@ void SecureContext::SetECDHCurve(const F
+   THROW_AND_RETURN_IF_NOT_STRING(args[0], "ECDH curve name");
+ 
+   node::Utf8Value curve(env->isolate(), args[0]);
+-
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+   SSL_CTX_set_options(sc->ctx_, SSL_OP_SINGLE_ECDH_USE);
+   SSL_CTX_set_ecdh_auto(sc->ctx_, 1);
++#endif
+ 
+   if (strcmp(*curve, "auto") == 0)
+     return;
+@@ -1006,7 +1125,9 @@ void SecureContext::SetDHParam(const Fun
+   if (dh == nullptr)
+     return;
+ 
+-  const int size = BN_num_bits(dh->p);
++  const BIGNUM* p;
++  DH_get0_pqg(dh, &p, nullptr, nullptr);
++  const int size = BN_num_bits(p);
+   if (size < 1024) {
+     return env->ThrowError("DH parameter is less than 1024 bits");
+   } else if (size < 2048) {
+@@ -1191,11 +1312,17 @@ void SecureContext::GetTicketKeys(const
+   ASSIGN_OR_RETURN_UNWRAP(&wrap, args.Holder());
+ 
+   Local<Object> buff = Buffer::New(wrap->env(), 48).ToLocalChecked();
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++  memcpy(Buffer::Data(buff), wrap->ticket_key_name_, 16);
++  memcpy(Buffer::Data(buff) + 16, wrap->ticket_key_hmac_, 16);
++  memcpy(Buffer::Data(buff) + 32, wrap->ticket_key_aes_, 16);
++#else
+   if (SSL_CTX_get_tlsext_ticket_keys(wrap->ctx_,
+                                      Buffer::Data(buff),
+                                      Buffer::Length(buff)) != 1) {
+     return wrap->env()->ThrowError("Failed to fetch tls ticket keys");
+   }
++#endif
+ 
+   args.GetReturnValue().Set(buff);
+ #endif  // !def(OPENSSL_NO_TLSEXT) && def(SSL_CTX_get_tlsext_ticket_keys)
+@@ -1218,11 +1345,17 @@ void SecureContext::SetTicketKeys(const
+     return env->ThrowTypeError("Ticket keys length must be 48 bytes");
+   }
+ 
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++  memcpy(wrap->ticket_key_name_, Buffer::Data(args[0]), 16);
++  memcpy(wrap->ticket_key_hmac_, Buffer::Data(args[0]) + 16, 16);
++  memcpy(wrap->ticket_key_aes_, Buffer::Data(args[0]) + 32, 16);
++#else
+   if (SSL_CTX_set_tlsext_ticket_keys(wrap->ctx_,
+                                      Buffer::Data(args[0]),
+                                      Buffer::Length(args[0])) != 1) {
+     return env->ThrowError("Failed to fetch tls ticket keys");
+   }
++#endif
+ 
+   args.GetReturnValue().Set(true);
+ #endif  // !def(OPENSSL_NO_TLSEXT) && def(SSL_CTX_get_tlsext_ticket_keys)
+@@ -1230,7 +1363,7 @@ void SecureContext::SetTicketKeys(const
+ 
+ 
+ void SecureContext::SetFreeListLength(const FunctionCallbackInfo<Value>& args) {
+-#if OPENSSL_VERSION_NUMBER < 0x10100000L && !defined(OPENSSL_IS_BORINGSSL)
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+   // |freelist_max_len| was removed in OpenSSL 1.1.0. In that version OpenSSL
+   // mallocs and frees buffers directly, without the use of a freelist.
+   SecureContext* wrap;
+@@ -1333,7 +1466,42 @@ int SecureContext::TicketKeyCallback(SSL
+ }
+ 
+ 
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++int SecureContext::TicketCompatibilityCallback(SSL* ssl,
++                                               unsigned char* name,
++                                               unsigned char* iv,
++                                               EVP_CIPHER_CTX* ectx,
++                                               HMAC_CTX* hctx,
++                                               int enc) {
++  SecureContext* sc = static_cast<SecureContext*>(
++      SSL_CTX_get_app_data(SSL_get_SSL_CTX(ssl)));
+ 
++  if (enc) {
++    memcpy(name, sc->ticket_key_name_, sizeof(sc->ticket_key_name_));
++    if (RAND_bytes(iv, 16) <= 0 ||
++        EVP_EncryptInit_ex(ectx, EVP_aes_128_cbc(), nullptr,
++                           sc->ticket_key_aes_, iv) <= 0 ||
++        HMAC_Init_ex(hctx, sc->ticket_key_hmac_, sizeof(sc->ticket_key_hmac_),
++                     EVP_sha256(), nullptr) <= 0) {
++      return -1;
++    }
++    return 1;
++  }
++
++  if (memcmp(name, sc->ticket_key_name_, sizeof(sc->ticket_key_name_)) != 0) {
++    // The ticket key name does not match. Discard the ticket.
++    return 0;
++  }
++
++  if (EVP_DecryptInit_ex(ectx, EVP_aes_128_cbc(), nullptr, sc->ticket_key_aes_,
++                         iv) <= 0 ||
++      HMAC_Init_ex(hctx, sc->ticket_key_hmac_, sizeof(sc->ticket_key_hmac_),
++                   EVP_sha256(), nullptr) <= 0) {
++    return -1;
++  }
++  return 1;
++}
++#endif
+ 
+ void SecureContext::CtxGetter(Local<String> property,
+                               const PropertyCallbackInfo<Value>& info) {
+@@ -1437,11 +1605,19 @@ void SSLWrap<Base>::InitNPN(SecureContex
+ }
+ 
+ 
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+ template <class Base>
+ SSL_SESSION* SSLWrap<Base>::GetSessionCallback(SSL* s,
+                                                unsigned char* key,
+                                                int len,
+                                                int* copy) {
++#else
++template <class Base>
++SSL_SESSION* SSLWrap<Base>::GetSessionCallback(SSL* s,
++                                               const unsigned char* key,
++                                               int len,
++                                               int* copy) {
++#endif
+   Base* w = static_cast<Base*>(SSL_get_app_data(s));
+ 
+   *copy = 0;
+@@ -1618,14 +1794,17 @@ static Local<Object> X509ToObject(Enviro
+     rsa = EVP_PKEY_get1_RSA(pkey);
+ 
+   if (rsa != nullptr) {
+-    BN_print(bio, rsa->n);
++    const BIGNUM* n;
++    const BIGNUM* e;
++    RSA_get0_key(rsa, &n, &e, nullptr);
++    BN_print(bio, n);
+     BIO_get_mem_ptr(bio, &mem);
+     info->Set(env->modulus_string(),
+               String::NewFromUtf8(env->isolate(), mem->data,
+                                   String::kNormalString, mem->length));
+     (void) BIO_reset(bio);
+ 
+-    uint64_t exponent_word = static_cast<uint64_t>(BN_get_word(rsa->e));
++    uint64_t exponent_word = static_cast<uint64_t>(BN_get_word(e));
+     uint32_t lo = static_cast<uint32_t>(exponent_word);
+     uint32_t hi = static_cast<uint32_t>(exponent_word >> 32);
+     if (hi == 0) {
+@@ -1951,13 +2130,18 @@ void SSLWrap<Base>::GetTLSTicket(const F
+   Environment* env = w->ssl_env();
+ 
+   SSL_SESSION* sess = SSL_get_session(w->ssl_);
+-  if (sess == nullptr || sess->tlsext_tick == nullptr)
++  if (sess == nullptr)
++    return;
++
++  const unsigned char *ticket;
++  size_t length;
++  SSL_SESSION_get0_ticket(sess, &ticket, &length);
++
++  if (ticket == nullptr)
+     return;
+ 
+   Local<Object> buff = Buffer::Copy(
+-      env,
+-      reinterpret_cast<char*>(sess->tlsext_tick),
+-      sess->tlsext_ticklen).ToLocalChecked();
++      env, reinterpret_cast<const char*>(ticket), length).ToLocalChecked();
+ 
+   args.GetReturnValue().Set(buff);
+ }
+@@ -2148,9 +2332,8 @@ void SSLWrap<Base>::GetCurrentCipher(con
+   Local<Object> info = Object::New(env->isolate());
+   const char* cipher_name = SSL_CIPHER_get_name(c);
+   info->Set(env->name_string(), OneByteString(args.GetIsolate(), cipher_name));
+-  const char* cipher_version = SSL_CIPHER_get_version(c);
+   info->Set(env->version_string(),
+-            OneByteString(args.GetIsolate(), cipher_version));
++            OneByteString(args.GetIsolate(), "TLSv1/SSLv3"));
+   args.GetReturnValue().Set(info);
+ }
+ 
+@@ -2331,19 +2514,12 @@ int SSLWrap<Base>::SelectALPNCallback(SS
+   int status = SSL_select_next_proto(const_cast<unsigned char**>(out), outlen,
+                                      alpn_protos, alpn_protos_len, in, inlen);
+ 
+-  switch (status) {
+-    case OPENSSL_NPN_NO_OVERLAP:
+-      // According to 3.2. Protocol Selection of RFC7301,
+-      // fatal no_application_protocol alert shall be sent
+-      // but current openssl does not support it yet. See
+-      // https://rt.openssl.org/Ticket/Display.html?id=3463&user=guest&pass=guest
+-      // Instead, we send a warning alert for now.
+-      return SSL_TLSEXT_ERR_ALERT_WARNING;
+-    case OPENSSL_NPN_NEGOTIATED:
+-      return SSL_TLSEXT_ERR_OK;
+-    default:
+-      return SSL_TLSEXT_ERR_ALERT_FATAL;
+-  }
++  // According to 3.2. Protocol Selection of RFC7301, fatal
++  // no_application_protocol alert shall be sent but OpenSSL 1.0.2 does not
++  // support it yet. See
++  // https://rt.openssl.org/Ticket/Display.html?id=3463&user=guest&pass=guest
++  return status == OPENSSL_NPN_NEGOTIATED ? SSL_TLSEXT_ERR_OK
++                                          : SSL_TLSEXT_ERR_NOACK;
+ }
+ #endif  // TLSEXT_TYPE_application_layer_protocol_negotiation
+ 
+@@ -2484,7 +2660,7 @@ int SSLWrap<Base>::SSLCertCallback(SSL*
+ 
+   bool ocsp = false;
+ #ifdef NODE__HAVE_TLSEXT_STATUS_CB
+-  ocsp = s->tlsext_status_type == TLSEXT_STATUSTYPE_ocsp;
++  ocsp = SSL_get_tlsext_status_type(s) == TLSEXT_STATUSTYPE_ocsp;
+ #endif
+ 
+   info->Set(env->ocsp_request_string(), Boolean::New(env->isolate(), ocsp));
+@@ -3361,7 +3537,7 @@ void CipherBase::Init(const char* cipher
+   }
+ #endif  // NODE_FIPS_MODE
+ 
+-  CHECK_EQ(initialised_, false);
++  CHECK_EQ(ctx_, nullptr);
+   const EVP_CIPHER* const cipher = EVP_get_cipherbyname(cipher_type);
+   if (cipher == nullptr) {
+     return env()->ThrowError("Unknown cipher");
+@@ -3379,11 +3555,11 @@ void CipherBase::Init(const char* cipher
+                                key,
+                                iv);
+ 
+-  EVP_CIPHER_CTX_init(&ctx_);
++  ctx_ = EVP_CIPHER_CTX_new();
+   const bool encrypt = (kind_ == kCipher);
+-  EVP_CipherInit_ex(&ctx_, cipher, nullptr, nullptr, nullptr, encrypt);
++  EVP_CipherInit_ex(ctx_, cipher, nullptr, nullptr, nullptr, encrypt);
+ 
+-  int mode = EVP_CIPHER_CTX_mode(&ctx_);
++  int mode = EVP_CIPHER_CTX_mode(ctx_);
+   if (encrypt && (mode == EVP_CIPH_CTR_MODE || mode == EVP_CIPH_GCM_MODE ||
+       mode == EVP_CIPH_CCM_MODE)) {
+     ProcessEmitWarning(env(), "Use Cipheriv for counter mode of %s",
+@@ -3391,17 +3567,16 @@ void CipherBase::Init(const char* cipher
+   }
+ 
+   if (mode == EVP_CIPH_WRAP_MODE)
+-    EVP_CIPHER_CTX_set_flags(&ctx_, EVP_CIPHER_CTX_FLAG_WRAP_ALLOW);
++    EVP_CIPHER_CTX_set_flags(ctx_, EVP_CIPHER_CTX_FLAG_WRAP_ALLOW);
+ 
+-  CHECK_EQ(1, EVP_CIPHER_CTX_set_key_length(&ctx_, key_len));
++  CHECK_EQ(1, EVP_CIPHER_CTX_set_key_length(ctx_, key_len));
+ 
+-  EVP_CipherInit_ex(&ctx_,
++  EVP_CipherInit_ex(ctx_,
+                     nullptr,
+                     nullptr,
+                     reinterpret_cast<unsigned char*>(key),
+                     reinterpret_cast<unsigned char*>(iv),
+                     kind_ == kCipher);
+-  initialised_ = true;
+ }
+ 
+ 
+@@ -3444,32 +3619,33 @@ void CipherBase::InitIv(const char* ciph
+     return env()->ThrowError("Invalid IV length");
+   }
+ 
+-  EVP_CIPHER_CTX_init(&ctx_);
++  ctx_ = EVP_CIPHER_CTX_new();
+ 
+   if (mode == EVP_CIPH_WRAP_MODE)
+-    EVP_CIPHER_CTX_set_flags(&ctx_, EVP_CIPHER_CTX_FLAG_WRAP_ALLOW);
++    EVP_CIPHER_CTX_set_flags(ctx_, EVP_CIPHER_CTX_FLAG_WRAP_ALLOW);
+ 
+   const bool encrypt = (kind_ == kCipher);
+-  EVP_CipherInit_ex(&ctx_, cipher, nullptr, nullptr, nullptr, encrypt);
++  EVP_CipherInit_ex(ctx_, cipher, nullptr, nullptr, nullptr, encrypt);
+ 
+   if (is_gcm_mode &&
+-      !EVP_CIPHER_CTX_ctrl(&ctx_, EVP_CTRL_GCM_SET_IVLEN, iv_len, nullptr)) {
+-    EVP_CIPHER_CTX_cleanup(&ctx_);
++      !EVP_CIPHER_CTX_ctrl(ctx_, EVP_CTRL_GCM_SET_IVLEN, iv_len, nullptr)) {
++    EVP_CIPHER_CTX_cleanup(ctx_);
++    ctx_ = nullptr;
+     return env()->ThrowError("Invalid IV length");
+   }
+ 
+-  if (!EVP_CIPHER_CTX_set_key_length(&ctx_, key_len)) {
+-    EVP_CIPHER_CTX_cleanup(&ctx_);
++  if (!EVP_CIPHER_CTX_set_key_length(ctx_, key_len)) {
++    EVP_CIPHER_CTX_cleanup(ctx_);
++    ctx_ = nullptr;
+     return env()->ThrowError("Invalid key length");
+   }
+ 
+-  EVP_CipherInit_ex(&ctx_,
++  EVP_CipherInit_ex(ctx_,
+                     nullptr,
+                     nullptr,
+                     reinterpret_cast<const unsigned char*>(key),
+                     reinterpret_cast<const unsigned char*>(iv),
+                     kind_ == kCipher);
+-  initialised_ = true;
+ }
+ 
+ 
+@@ -3497,8 +3673,8 @@ void CipherBase::InitIv(const FunctionCa
+ 
+ bool CipherBase::IsAuthenticatedMode() const {
+   // Check if this cipher operates in an AEAD mode that we support.
+-  CHECK_EQ(initialised_, true);
+-  const EVP_CIPHER* const cipher = EVP_CIPHER_CTX_cipher(&ctx_);
++  CHECK_NE(ctx_, nullptr);
++  const EVP_CIPHER* const cipher = EVP_CIPHER_CTX_cipher(ctx_);
+   int mode = EVP_CIPHER_mode(cipher);
+   return mode == EVP_CIPH_GCM_MODE;
+ }
+@@ -3510,7 +3686,7 @@ void CipherBase::GetAuthTag(const Functi
+   ASSIGN_OR_RETURN_UNWRAP(&cipher, args.Holder());
+ 
+   // Only callable after Final and if encrypting.
+-  if (cipher->initialised_ ||
++  if (cipher->ctx_ != nullptr ||
+       cipher->kind_ != kCipher ||
+       cipher->auth_tag_len_ == 0) {
+     return env->ThrowError("Attempting to get auth tag in unsupported state");
+@@ -3531,7 +3707,7 @@ void CipherBase::SetAuthTag(const Functi
+   CipherBase* cipher;
+   ASSIGN_OR_RETURN_UNWRAP(&cipher, args.Holder());
+ 
+-  if (!cipher->initialised_ ||
++  if (cipher->ctx_ == nullptr ||
+       !cipher->IsAuthenticatedMode() ||
+       cipher->kind_ != kDecipher) {
+     return env->ThrowError("Attempting to set auth tag in unsupported state");
+@@ -3549,10 +3725,10 @@ void CipherBase::SetAuthTag(const Functi
+ 
+ 
+ bool CipherBase::SetAAD(const char* data, unsigned int len) {
+-  if (!initialised_ || !IsAuthenticatedMode())
++  if (ctx_ == nullptr || !IsAuthenticatedMode())
+     return false;
+   int outlen;
+-  if (!EVP_CipherUpdate(&ctx_,
++  if (!EVP_CipherUpdate(ctx_,
+                         nullptr,
+                         &outlen,
+                         reinterpret_cast<const unsigned char*>(data),
+@@ -3580,21 +3756,21 @@ bool CipherBase::Update(const char* data
+                         int len,
+                         unsigned char** out,
+                         int* out_len) {
+-  if (!initialised_)
++  if (ctx_ == nullptr)
+     return 0;
+ 
+   // on first update:
+   if (kind_ == kDecipher && IsAuthenticatedMode() && auth_tag_len_ > 0) {
+-    EVP_CIPHER_CTX_ctrl(&ctx_,
++    EVP_CIPHER_CTX_ctrl(ctx_,
+                         EVP_CTRL_GCM_SET_TAG,
+                         auth_tag_len_,
+                         reinterpret_cast<unsigned char*>(auth_tag_));
+     auth_tag_len_ = 0;
+   }
+ 
+-  *out_len = len + EVP_CIPHER_CTX_block_size(&ctx_);
++  *out_len = len + EVP_CIPHER_CTX_block_size(ctx_);
+   *out = Malloc<unsigned char>(static_cast<size_t>(*out_len));
+-  return EVP_CipherUpdate(&ctx_,
++  return EVP_CipherUpdate(ctx_,
+                           *out,
+                           out_len,
+                           reinterpret_cast<const unsigned char*>(data),
+@@ -3642,9 +3818,9 @@ void CipherBase::Update(const FunctionCa
+ 
+ 
+ bool CipherBase::SetAutoPadding(bool auto_padding) {
+-  if (!initialised_)
++  if (ctx_ == nullptr)
+     return false;
+-  return EVP_CIPHER_CTX_set_padding(&ctx_, auto_padding);
++  return EVP_CIPHER_CTX_set_padding(ctx_, auto_padding);
+ }
+ 
+ 
+@@ -3660,22 +3836,22 @@ void CipherBase::SetAutoPadding(const Fu
+ 
+ 
+ bool CipherBase::Final(unsigned char** out, int *out_len) {
+-  if (!initialised_)
++  if (ctx_ == nullptr)
+     return false;
+ 
+   *out = Malloc<unsigned char>(
+-      static_cast<size_t>(EVP_CIPHER_CTX_block_size(&ctx_)));
+-  int r = EVP_CipherFinal_ex(&ctx_, *out, out_len);
++      static_cast<size_t>(EVP_CIPHER_CTX_block_size(ctx_)));
++  int r = EVP_CipherFinal_ex(ctx_, *out, out_len);
+ 
+   if (r == 1 && kind_ == kCipher && IsAuthenticatedMode()) {
+     auth_tag_len_ = sizeof(auth_tag_);
+-    r = EVP_CIPHER_CTX_ctrl(&ctx_, EVP_CTRL_GCM_GET_TAG, auth_tag_len_,
++    r = EVP_CIPHER_CTX_ctrl(ctx_, EVP_CTRL_GCM_GET_TAG, auth_tag_len_,
+                             reinterpret_cast<unsigned char*>(auth_tag_));
+     CHECK_EQ(r, 1);
+   }
+ 
+-  EVP_CIPHER_CTX_cleanup(&ctx_);
+-  initialised_ = false;
++  EVP_CIPHER_CTX_cleanup(ctx_);
++  ctx_ = nullptr;
+ 
+   return r == 1;
+ }
+@@ -3686,7 +3862,7 @@ void CipherBase::Final(const FunctionCal
+ 
+   CipherBase* cipher;
+   ASSIGN_OR_RETURN_UNWRAP(&cipher, args.Holder());
+-  if (!cipher->initialised_) return env->ThrowError("Unsupported state");
++  if (cipher->ctx_ == nullptr) return env->ThrowError("Unsupported state");
+ 
+   unsigned char* out_value = nullptr;
+   int out_len = -1;
+@@ -3717,6 +3893,10 @@ void CipherBase::Final(const FunctionCal
+   args.GetReturnValue().Set(buf);
+ }
+ 
++Hmac::~Hmac() {
++  HMAC_CTX_free(ctx_);
++}
++
+ 
+ void Hmac::Initialize(Environment* env, v8::Local<v8::Object> target) {
+   Local<FunctionTemplate> t = env->NewFunctionTemplate(New);
+@@ -3740,19 +3920,20 @@ void Hmac::New(const FunctionCallbackInf
+ void Hmac::HmacInit(const char* hash_type, const char* key, int key_len) {
+   HandleScope scope(env()->isolate());
+ 
+-  CHECK_EQ(initialised_, false);
+   const EVP_MD* md = EVP_get_digestbyname(hash_type);
+   if (md == nullptr) {
+     return env()->ThrowError("Unknown message digest");
+   }
+-  HMAC_CTX_init(&ctx_);
+   if (key_len == 0) {
+     key = "";
+   }
+-  if (!HMAC_Init_ex(&ctx_, key, key_len, md, nullptr)) {
++  ctx_ = HMAC_CTX_new();
++  if (ctx_ == nullptr ||
++      !HMAC_Init_ex(ctx_, key, key_len, md, nullptr)) {
++    HMAC_CTX_free(ctx_);
++    ctx_ = nullptr;
+     return ThrowCryptoError(env(), ERR_get_error());
+   }
+-  initialised_ = true;
+ }
+ 
+ 
+@@ -3776,9 +3957,9 @@ void Hmac::HmacInit(const FunctionCallba
+ 
+ 
+ bool Hmac::HmacUpdate(const char* data, int len) {
+-  if (!initialised_)
++  if (ctx_ == nullptr)
+     return false;
+-  int r = HMAC_Update(&ctx_, reinterpret_cast<const unsigned char*>(data), len);
++  int r = HMAC_Update(ctx_, reinterpret_cast<const unsigned char*>(data), len);
+   return r == 1;
+ }
+ 
+@@ -3829,10 +4010,10 @@ void Hmac::HmacDigest(const FunctionCall
+   unsigned char md_value[EVP_MAX_MD_SIZE];
+   unsigned int md_len = 0;
+ 
+-  if (hmac->initialised_) {
+-    HMAC_Final(&hmac->ctx_, md_value, &md_len);
+-    HMAC_CTX_cleanup(&hmac->ctx_);
+-    hmac->initialised_ = false;
++  if (hmac->ctx_ != nullptr) {
++    HMAC_Final(hmac->ctx_, md_value, &md_len);
++    HMAC_CTX_free(hmac->ctx_);
++    hmac->ctx_ = nullptr;
+   }
+ 
+   Local<Value> error;
+@@ -3850,6 +4031,10 @@ void Hmac::HmacDigest(const FunctionCall
+   args.GetReturnValue().Set(rc.ToLocalChecked());
+ }
+ 
++Hash::~Hash() {
++  EVP_MD_CTX_free(mdctx_);
++}
++
+ 
+ void Hash::Initialize(Environment* env, v8::Local<v8::Object> target) {
+   Local<FunctionTemplate> t = env->NewFunctionTemplate(New);
+@@ -3881,24 +4066,25 @@ void Hash::New(const FunctionCallbackInf
+ 
+ 
+ bool Hash::HashInit(const char* hash_type) {
+-  CHECK_EQ(initialised_, false);
+   const EVP_MD* md = EVP_get_digestbyname(hash_type);
+   if (md == nullptr)
+     return false;
+-  EVP_MD_CTX_init(&mdctx_);
+-  if (EVP_DigestInit_ex(&mdctx_, md, nullptr) <= 0) {
++  mdctx_ = EVP_MD_CTX_new();
++  if (mdctx_ == nullptr ||
++      EVP_DigestInit_ex(mdctx_, md, nullptr) <= 0) {
++    EVP_MD_CTX_free(mdctx_);
++    mdctx_ = nullptr;
+     return false;
+   }
+-  initialised_ = true;
+   finalized_ = false;
+   return true;
+ }
+ 
+ 
+ bool Hash::HashUpdate(const char* data, int len) {
+-  if (!initialised_)
++  if (mdctx_ == nullptr)
+     return false;
+-  EVP_DigestUpdate(&mdctx_, data, len);
++  EVP_DigestUpdate(mdctx_, data, len);
+   return true;
+ }
+ 
+@@ -3911,15 +4097,12 @@ void Hash::HashUpdate(const FunctionCall
+ 
+   THROW_AND_RETURN_IF_NOT_STRING_OR_BUFFER(args[0], "Data");
+ 
+-  if (!hash->initialised_) {
+-    return env->ThrowError("Not initialized");
+-  }
+   if (hash->finalized_) {
+     return env->ThrowError("Digest already called");
+   }
+ 
+   // Only copy the data if we have to, because it's a string
+-  bool r;
++  bool r = true;
+   if (args[0]->IsString()) {
+     StringBytes::InlineDecoder decoder;
+     if (!decoder.Decode(env, args[0].As<String>(), args[1], UTF8))
+@@ -3943,9 +4126,6 @@ void Hash::HashDigest(const FunctionCall
+   Hash* hash;
+   ASSIGN_OR_RETURN_UNWRAP(&hash, args.Holder());
+ 
+-  if (!hash->initialised_) {
+-    return env->ThrowError("Not initialized");
+-  }
+   if (hash->finalized_) {
+     return env->ThrowError("Digest already called");
+   }
+@@ -3963,8 +4143,7 @@ void Hash::HashDigest(const FunctionCall
+   unsigned char md_value[EVP_MAX_MD_SIZE];
+   unsigned int md_len;
+ 
+-  EVP_DigestFinal_ex(&hash->mdctx_, md_value, &md_len);
+-  EVP_MD_CTX_cleanup(&hash->mdctx_);
++  EVP_DigestFinal_ex(hash->mdctx_, md_value, &md_len);
+   hash->finalized_ = true;
+ 
+   Local<Value> error;
+@@ -3982,6 +4161,45 @@ void Hash::HashDigest(const FunctionCall
+   args.GetReturnValue().Set(rc.ToLocalChecked());
+ }
+ 
++SignBase::~SignBase() {
++  EVP_MD_CTX_free(mdctx_);
++}
++
++
++SignBase::Error SignBase::Init(const char* sign_type) {
++  CHECK_EQ(mdctx_, nullptr);
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++  // Historically, "dss1" and "DSS1" were DSA aliases for SHA-1
++  // exposed through the public API.
++  if (strcmp(sign_type, "dss1") == 0 ||
++      strcmp(sign_type, "DSS1") == 0) {
++    sign_type = "SHA1";
++  }
++#endif
++ const EVP_MD* md = EVP_get_digestbyname(sign_type);
++  if (md == nullptr)
++    return kSignUnknownDigest;
++
++  mdctx_ = EVP_MD_CTX_new();
++  if (mdctx_ == nullptr ||
++      !EVP_DigestInit_ex(mdctx_, md, nullptr)) {
++    EVP_MD_CTX_free(mdctx_);
++    mdctx_ = nullptr;
++    return kSignInit;
++  }
++
++  return kSignOk;
++}
++
++
++SignBase::Error SignBase::Update(const char* data, int len) {
++  if (mdctx_ == nullptr)
++    return kSignNotInitialised;
++  if (!EVP_DigestUpdate(mdctx_, data, len))
++    return kSignUpdate;
++  return kSignOk;
++}
++
+ 
+ void SignBase::CheckThrow(SignBase::Error error) {
+   HandleScope scope(env()->isolate());
+@@ -4056,21 +4274,6 @@ void Sign::New(const FunctionCallbackInf
+ }
+ 
+ 
+-SignBase::Error Sign::SignInit(const char* sign_type) {
+-  CHECK_EQ(initialised_, false);
+-  const EVP_MD* md = EVP_get_digestbyname(sign_type);
+-  if (md == nullptr)
+-    return kSignUnknownDigest;
+-
+-  EVP_MD_CTX_init(&mdctx_);
+-  if (!EVP_DigestInit_ex(&mdctx_, md, nullptr))
+-    return kSignInit;
+-  initialised_ = true;
+-
+-  return kSignOk;
+-}
+-
+-
+ void Sign::SignInit(const FunctionCallbackInfo<Value>& args) {
+   Sign* sign;
+   ASSIGN_OR_RETURN_UNWRAP(&sign, args.Holder());
+@@ -4083,16 +4286,7 @@ void Sign::SignInit(const FunctionCallba
+   THROW_AND_RETURN_IF_NOT_STRING(args[0], "Sign type");
+ 
+   const node::Utf8Value sign_type(args.GetIsolate(), args[0]);
+-  sign->CheckThrow(sign->SignInit(*sign_type));
+-}
+-
+-
+-SignBase::Error Sign::SignUpdate(const char* data, int len) {
+-  if (!initialised_)
+-    return kSignNotInitialised;
+-  if (!EVP_DigestUpdate(&mdctx_, data, len))
+-    return kSignUpdate;
+-  return kSignOk;
++  sign->CheckThrow(sign->Init(*sign_type));
+ }
+ 
+ 
+@@ -4106,16 +4300,9 @@ void Sign::SignUpdate(const FunctionCall
+ 
+   // Only copy the data if we have to, because it's a string
+   Error err;
+-  if (args[0]->IsString()) {
+-    StringBytes::InlineDecoder decoder;
+-    if (!decoder.Decode(env, args[0].As<String>(), args[1], UTF8))
+-      return;
+-    err = sign->SignUpdate(decoder.out(), decoder.size());
+-  } else {
+-    char* buf = Buffer::Data(args[0]);
+-    size_t buflen = Buffer::Length(args[0]);
+-    err = sign->SignUpdate(buf, buflen);
+-  }
++  char* buf = Buffer::Data(args[0]);
++  size_t buflen = Buffer::Length(args[0]);
++  err = sign->Update(buf, buflen);
+ 
+   sign->CheckThrow(err);
+ }
+@@ -4158,7 +4345,7 @@ SignBase::Error Sign::SignFinal(const ch
+                                 unsigned int* sig_len,
+                                 int padding,
+                                 int salt_len) {
+-  if (!initialised_)
++  if (!mdctx_)
+     return kSignNotInitialised;
+ 
+   BIO* bp = nullptr;
+@@ -4203,18 +4390,17 @@ SignBase::Error Sign::SignFinal(const ch
+   }
+ #endif  // NODE_FIPS_MODE
+ 
+-  if (Node_SignFinal(&mdctx_, sig, sig_len, pkey, padding, salt_len))
++  if (Node_SignFinal(mdctx_, sig, sig_len, pkey, padding, salt_len))
+     fatal = false;
+ 
+-  initialised_ = false;
+-
+  exit:
+   if (pkey != nullptr)
+     EVP_PKEY_free(pkey);
+   if (bp != nullptr)
+     BIO_free_all(bp);
+ 
+-  EVP_MD_CTX_cleanup(&mdctx_);
++  EVP_MD_CTX_free(mdctx_);
++  mdctx_ = nullptr;
+ 
+   if (fatal)
+     return kSignPrivateKey;
+@@ -4289,21 +4475,6 @@ void Verify::New(const FunctionCallbackI
+ }
+ 
+ 
+-SignBase::Error Verify::VerifyInit(const char* verify_type) {
+-  CHECK_EQ(initialised_, false);
+-  const EVP_MD* md = EVP_get_digestbyname(verify_type);
+-  if (md == nullptr)
+-    return kSignUnknownDigest;
+-
+-  EVP_MD_CTX_init(&mdctx_);
+-  if (!EVP_DigestInit_ex(&mdctx_, md, nullptr))
+-    return kSignInit;
+-  initialised_ = true;
+-
+-  return kSignOk;
+-}
+-
+-
+ void Verify::VerifyInit(const FunctionCallbackInfo<Value>& args) {
+   Verify* verify;
+   ASSIGN_OR_RETURN_UNWRAP(&verify, args.Holder());
+@@ -4316,18 +4487,7 @@ void Verify::VerifyInit(const FunctionCa
+   THROW_AND_RETURN_IF_NOT_STRING(args[0], "Verify type");
+ 
+   const node::Utf8Value verify_type(args.GetIsolate(), args[0]);
+-  verify->CheckThrow(verify->VerifyInit(*verify_type));
+-}
+-
+-
+-SignBase::Error Verify::VerifyUpdate(const char* data, int len) {
+-  if (!initialised_)
+-    return kSignNotInitialised;
+-
+-  if (!EVP_DigestUpdate(&mdctx_, data, len))
+-    return kSignUpdate;
+-
+-  return kSignOk;
++  verify->CheckThrow(verify->Init(*verify_type));
+ }
+ 
+ 
+@@ -4341,16 +4501,9 @@ void Verify::VerifyUpdate(const Function
+ 
+   // Only copy the data if we have to, because it's a string
+   Error err;
+-  if (args[0]->IsString()) {
+-    StringBytes::InlineDecoder decoder;
+-    if (!decoder.Decode(env, args[0].As<String>(), args[1], UTF8))
+-      return;
+-    err = verify->VerifyUpdate(decoder.out(), decoder.size());
+-  } else {
+-    char* buf = Buffer::Data(args[0]);
+-    size_t buflen = Buffer::Length(args[0]);
+-    err = verify->VerifyUpdate(buf, buflen);
+-  }
++  char* buf = Buffer::Data(args[0]);
++  size_t buflen = Buffer::Length(args[0]);
++  err = verify->Update(buf, buflen);
+ 
+   verify->CheckThrow(err);
+ }
+@@ -4363,7 +4516,7 @@ SignBase::Error Verify::VerifyFinal(cons
+                                     int padding,
+                                     int saltlen,
+                                     bool* verify_result) {
+-  if (!initialised_)
++  if (!mdctx_)
+     return kSignNotInitialised;
+ 
+   EVP_PKEY* pkey = nullptr;
+@@ -4408,7 +4561,7 @@ SignBase::Error Verify::VerifyFinal(cons
+       goto exit;
+   }
+ 
+-  if (!EVP_DigestFinal_ex(&mdctx_, m, &m_len)) {
++  if (!EVP_DigestFinal_ex(mdctx_, m, &m_len)) {
+     goto exit;
+   }
+ 
+@@ -4421,7 +4574,7 @@ SignBase::Error Verify::VerifyFinal(cons
+     goto err;
+   if (!ApplyRSAOptions(pkey, pkctx, padding, saltlen))
+     goto err;
+-  if (EVP_PKEY_CTX_set_signature_md(pkctx, mdctx_.digest) <= 0)
++  if (EVP_PKEY_CTX_set_signature_md(pkctx, EVP_MD_CTX_md(mdctx_)) <= 0)
+     goto err;
+   r = EVP_PKEY_verify(pkctx,
+                       reinterpret_cast<const unsigned char*>(sig),
+@@ -4440,8 +4593,8 @@ SignBase::Error Verify::VerifyFinal(cons
+   if (x509 != nullptr)
+     X509_free(x509);
+ 
+-  EVP_MD_CTX_cleanup(&mdctx_);
+-  initialised_ = false;
++  EVP_MD_CTX_free(mdctx_);
++  mdctx_ = nullptr;
+ 
+   if (fatal)
+     return kSignPublicKey;
+@@ -4693,10 +4846,15 @@ bool DiffieHellman::Init(int primeLength
+ 
+ bool DiffieHellman::Init(const char* p, int p_len, int g) {
+   dh = DH_new();
+-  dh->p = BN_bin2bn(reinterpret_cast<const unsigned char*>(p), p_len, 0);
+-  dh->g = BN_new();
+-  if (!BN_set_word(dh->g, g))
++  BIGNUM* bn_p =
++      BN_bin2bn(reinterpret_cast<const unsigned char*>(p), p_len, nullptr);
++  BIGNUM* bn_g = BN_new();
++  if (!BN_set_word(bn_g, g) ||
++      !DH_set0_pqg(dh, bn_p, nullptr, bn_g)) {
++    BN_free(bn_p);
++    BN_free(bn_g);
+     return false;
++  }
+   bool result = VerifyContext();
+   if (!result)
+     return false;
+@@ -4707,8 +4865,13 @@ bool DiffieHellman::Init(const char* p,
+ 
+ bool DiffieHellman::Init(const char* p, int p_len, const char* g, int g_len) {
+   dh = DH_new();
+-  dh->p = BN_bin2bn(reinterpret_cast<const unsigned char*>(p), p_len, 0);
+-  dh->g = BN_bin2bn(reinterpret_cast<const unsigned char*>(g), g_len, 0);
++  BIGNUM *bn_p = BN_bin2bn(reinterpret_cast<const unsigned char*>(p), p_len, 0);
++  BIGNUM *bn_g = BN_bin2bn(reinterpret_cast<const unsigned char*>(g), g_len, 0);
++  if (!DH_set0_pqg(dh, bn_p, nullptr, bn_g)) {
++    BN_free(bn_p);
++    BN_free(bn_g);
++    return false;
++  }
+   bool result = VerifyContext();
+   if (!result)
+     return false;
+@@ -4796,22 +4959,25 @@ void DiffieHellman::GenerateKeys(const F
+     return ThrowCryptoError(env, ERR_get_error(), "Key generation failed");
+   }
+ 
+-  size_t size = BN_num_bytes(diffieHellman->dh->pub_key);
++  const BIGNUM* pub_key;
++  DH_get0_key(diffieHellman->dh, &pub_key, nullptr);
++  size_t size = BN_num_bytes(pub_key);
+   char* data = Malloc(size);
+-  BN_bn2bin(diffieHellman->dh->pub_key, reinterpret_cast<unsigned char*>(data));
++  BN_bn2bin(pub_key, reinterpret_cast<unsigned char*>(data));
+   args.GetReturnValue().Set(Buffer::New(env, data, size).ToLocalChecked());
+ }
+ 
+ 
+ void DiffieHellman::GetField(const FunctionCallbackInfo<Value>& args,
+-                             BIGNUM* (DH::*field), const char* err_if_null) {
++                             const BIGNUM* (*get_field)(const DH*),
++                             const char* err_if_null) {
+   Environment* env = Environment::GetCurrent(args);
+ 
+   DiffieHellman* dh;
+   ASSIGN_OR_RETURN_UNWRAP(&dh, args.Holder());
+   if (!dh->initialised_) return env->ThrowError("Not initialized");
+ 
+-  const BIGNUM* num = (dh->dh)->*field;
++  const BIGNUM* num = get_field(dh->dh);
+   if (num == nullptr) return env->ThrowError(err_if_null);
+ 
+   size_t size = BN_num_bytes(num);
+@@ -4821,24 +4987,38 @@ void DiffieHellman::GetField(const Funct
+ }
+ 
+ void DiffieHellman::GetPrime(const FunctionCallbackInfo<Value>& args) {
+-  GetField(args, &DH::p, "p is null");
++  GetField(args, [](const DH* dh) -> const BIGNUM* {
++    const BIGNUM* p;
++    DH_get0_pqg(dh, &p, nullptr, nullptr);
++    return p;
++  }, "p is null");
+ }
+ 
+ 
+ void DiffieHellman::GetGenerator(const FunctionCallbackInfo<Value>& args) {
+-  GetField(args, &DH::g, "g is null");
++  GetField(args, [](const DH* dh) -> const BIGNUM* {
++    const BIGNUM* g;
++    DH_get0_pqg(dh, nullptr, nullptr, &g);
++    return g;
++  }, "g is null");
+ }
+ 
+ 
+ void DiffieHellman::GetPublicKey(const FunctionCallbackInfo<Value>& args) {
+-  GetField(args, &DH::pub_key,
+-           "No public key - did you forget to generate one?");
++  GetField(args, [](const DH* dh) -> const BIGNUM* {
++    const BIGNUM* pub_key;
++    DH_get0_key(dh, &pub_key, nullptr);
++    return pub_key;
++  }, "No public key - did you forget to generate one?");
+ }
+ 
+ 
+ void DiffieHellman::GetPrivateKey(const FunctionCallbackInfo<Value>& args) {
+-  GetField(args, &DH::priv_key,
+-           "No private key - did you forget to generate one?");
++  GetField(args, [](const DH* dh) -> const BIGNUM* {
++    const BIGNUM* priv_key;
++    DH_get0_key(dh, nullptr, &priv_key);
++    return priv_key;
++  }, "No private key - did you forget to generate one?");
+ }
+ 
+ 
+@@ -4916,14 +5096,13 @@ void DiffieHellman::ComputeSecret(const
+ 
+ 
+ void DiffieHellman::SetKey(const v8::FunctionCallbackInfo<v8::Value>& args,
+-                           BIGNUM* (DH::*field), const char* what) {
++                           void (*set_field)(DH*, BIGNUM*), const char* what) {
+   Environment* env = Environment::GetCurrent(args);
+ 
+   DiffieHellman* dh;
+   ASSIGN_OR_RETURN_UNWRAP(&dh, args.Holder());
+   if (!dh->initialised_) return env->ThrowError("Not initialized");
+ 
+-  BIGNUM** num = &((dh->dh)->*field);
+   char errmsg[64];
+ 
+   if (args.Length() == 0) {
+@@ -4936,19 +5115,29 @@ void DiffieHellman::SetKey(const v8::Fun
+     return env->ThrowTypeError(errmsg);
+   }
+ 
+-  *num = BN_bin2bn(reinterpret_cast<unsigned char*>(Buffer::Data(args[0])),
+-                   Buffer::Length(args[0]), *num);
+-  CHECK_NE(*num, nullptr);
++  BIGNUM* num =
++      BN_bin2bn(reinterpret_cast<unsigned char*>(Buffer::Data(args[0])),
++                Buffer::Length(args[0]), nullptr);
++  CHECK_NE(num, nullptr);
++  set_field(dh->dh, num);
+ }
+ 
+ 
+ void DiffieHellman::SetPublicKey(const FunctionCallbackInfo<Value>& args) {
+-  SetKey(args, &DH::pub_key, "Public key");
++  SetKey(args, [](DH* dh, BIGNUM* num) { DH_set0_key(dh, num, nullptr); },
++         "Public key");
+ }
+ 
+ 
+ void DiffieHellman::SetPrivateKey(const FunctionCallbackInfo<Value>& args) {
+-  SetKey(args, &DH::priv_key, "Private key");
++//#if OPENSSL_VERSION_NUMBER >= 0x10100000L && \
++//    OPENSSL_VERSION_NUMBER < 0x10100070L
++// Older versions of OpenSSL 1.1.0 have a DH_set0_key which does not work for
++// Node. See https://github.com/openssl/openssl/pull/4384.
++//#error "OpenSSL 1.1.0 revisions before 1.1.0g are not supported"
++//#endif
++  SetKey(args, [](DH* dh, BIGNUM* num) { DH_set0_key(dh, nullptr, num); },
++         "Private key");
+ }
+ 
+ 
+@@ -5736,7 +5925,7 @@ void RandomBytesBuffer(const FunctionCal
+ void GetSSLCiphers(const FunctionCallbackInfo<Value>& args) {
+   Environment* env = Environment::GetCurrent(args);
+ 
+-  SSL_CTX* ctx = SSL_CTX_new(TLSv1_server_method());
++  SSL_CTX* ctx = SSL_CTX_new(TLS_method());
+   if (ctx == nullptr) {
+     return env->ThrowError("SSL_CTX_new() failed.");
+   }
+@@ -6026,9 +6215,11 @@ void InitCryptoOnce() {
+   SSL_library_init();
+   OpenSSL_add_all_algorithms();
+ 
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+   crypto_lock_init();
+   CRYPTO_set_locking_callback(crypto_lock_cb);
+   CRYPTO_THREADID_set_callback(crypto_threadid_cb);
++#endif
+ 
+ #ifdef NODE_FIPS_MODE
+   /* Override FIPS settings in cnf file, if needed. */
+Index: node-v8.9.3/src/node_crypto.h
+===================================================================
+--- node-v8.9.3.orig/src/node_crypto.h
++++ node-v8.9.3/src/node_crypto.h
+@@ -51,8 +51,6 @@
+ #include <openssl/rand.h>
+ #include <openssl/pkcs12.h>
+ 
+-#define EVP_F_EVP_DECRYPTFINAL 101
+-
+ #if !defined(OPENSSL_NO_TLSEXT) && defined(SSL_CTX_set_tlsext_status_cb)
+ # define NODE__HAVE_TLSEXT_STATUS_CB
+ #endif  // !defined(OPENSSL_NO_TLSEXT) && defined(SSL_CTX_set_tlsext_status_cb)
+@@ -105,8 +103,20 @@ class SecureContext : public BaseObject
+   static const int kTicketKeyNameIndex = 3;
+   static const int kTicketKeyIVIndex = 4;
+ 
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++  unsigned char ticket_key_name_[16];
++  unsigned char ticket_key_aes_[16];
++  unsigned char ticket_key_hmac_[16];
++#endif
++
+  protected:
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+   static const int64_t kExternalSize = sizeof(SSL_CTX);
++#else
++  // OpenSSL 1.1.0 has opaque structures. This is an estimate based on the size
++  // as of OpenSSL 1.1.0f.
++  static const int64_t kExternalSize = 872;
++#endif
+ 
+   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+   static void Init(const v8::FunctionCallbackInfo<v8::Value>& args);
+@@ -144,6 +154,15 @@ class SecureContext : public BaseObject
+                                HMAC_CTX* hctx,
+                                int enc);
+ 
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++  static int TicketCompatibilityCallback(SSL* ssl,
++                                         unsigned char* name,
++                                         unsigned char* iv,
++                                         EVP_CIPHER_CTX* ectx,
++                                         HMAC_CTX* hctx,
++                                         int enc);
++#endif
++
+   SecureContext(Environment* env, v8::Local<v8::Object> wrap)
+       : BaseObject(env, wrap),
+         ctx_(nullptr),
+@@ -220,19 +239,31 @@ class SSLWrap {
+  protected:
+   typedef void (*CertCb)(void* arg);
+ 
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+   // Size allocated by OpenSSL: one for SSL structure, one for SSL3_STATE and
+   // some for buffers.
+   // NOTE: Actually it is much more than this
+   static const int64_t kExternalSize =
+       sizeof(SSL) + sizeof(SSL3_STATE) + 42 * 1024;
+-
++#else
++  // OpenSSL 1.1.0 has opaque structures. This is an estimate based on the size
++  // as of OpenSSL 1.1.0f.
++  static const int64_t kExternalSize = 4448 + 1024 + 42 * 1024;
++#endif
+   static void InitNPN(SecureContext* sc);
+   static void AddMethods(Environment* env, v8::Local<v8::FunctionTemplate> t);
+ 
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+   static SSL_SESSION* GetSessionCallback(SSL* s,
+                                          unsigned char* key,
+                                          int len,
+                                          int* copy);
++#else
++  static SSL_SESSION* GetSessionCallback(SSL* s,
++                                         const unsigned char* key,
++                                         int len,
++                                         int* copy);
++#endif
+   static int NewSessionCallback(SSL* s, SSL_SESSION* sess);
+   static void OnClientHello(void* arg,
+                             const ClientHelloParser::ClientHello& hello);
+@@ -423,9 +454,7 @@ class Connection : public AsyncWrap, pub
+ class CipherBase : public BaseObject {
+  public:
+   ~CipherBase() override {
+-    if (!initialised_)
+-      return;
+-    EVP_CIPHER_CTX_cleanup(&ctx_);
++    EVP_CIPHER_CTX_free(ctx_);
+   }
+ 
+   static void Initialize(Environment* env, v8::Local<v8::Object> target);
+@@ -464,15 +493,14 @@ class CipherBase : public BaseObject {
+              v8::Local<v8::Object> wrap,
+              CipherKind kind)
+       : BaseObject(env, wrap),
+-        initialised_(false),
++        ctx_(nullptr),
+         kind_(kind),
+         auth_tag_len_(0) {
+     MakeWeak<CipherBase>(this);
+   }
+ 
+  private:
+-  EVP_CIPHER_CTX ctx_; /* coverity[member_decl] */
+-  bool initialised_;
++  EVP_CIPHER_CTX* ctx_;
+   const CipherKind kind_;
+   unsigned int auth_tag_len_;
+   char auth_tag_[EVP_GCM_TLS_TAG_LEN];
+@@ -480,11 +508,7 @@ class CipherBase : public BaseObject {
+ 
+ class Hmac : public BaseObject {
+  public:
+-  ~Hmac() override {
+-    if (!initialised_)
+-      return;
+-    HMAC_CTX_cleanup(&ctx_);
+-  }
++  ~Hmac() override;
+ 
+   static void Initialize(Environment* env, v8::Local<v8::Object> target);
+ 
+@@ -499,22 +523,17 @@ class Hmac : public BaseObject {
+ 
+   Hmac(Environment* env, v8::Local<v8::Object> wrap)
+       : BaseObject(env, wrap),
+-        initialised_(false) {
++        ctx_(nullptr) {
+     MakeWeak<Hmac>(this);
+   }
+ 
+  private:
+-  HMAC_CTX ctx_; /* coverity[member_decl] */
+-  bool initialised_;
++  HMAC_CTX* ctx_;
+ };
+ 
+ class Hash : public BaseObject {
+  public:
+-  ~Hash() override {
+-    if (!initialised_)
+-      return;
+-    EVP_MD_CTX_cleanup(&mdctx_);
+-  }
++  ~Hash() override;
+ 
+   static void Initialize(Environment* env, v8::Local<v8::Object> target);
+ 
+@@ -528,13 +547,13 @@ class Hash : public BaseObject {
+ 
+   Hash(Environment* env, v8::Local<v8::Object> wrap)
+       : BaseObject(env, wrap),
+-        initialised_(false) {
++        mdctx_(nullptr),
++        finalized_(false) {
+     MakeWeak<Hash>(this);
+   }
+ 
+  private:
+-  EVP_MD_CTX mdctx_; /* coverity[member_decl] */
+-  bool initialised_;
++  EVP_MD_CTX* mdctx_;
+   bool finalized_;
+ };
+ 
+@@ -552,28 +571,24 @@ class SignBase : public BaseObject {
+ 
+   SignBase(Environment* env, v8::Local<v8::Object> wrap)
+       : BaseObject(env, wrap),
+-        initialised_(false) {
++        mdctx_(nullptr) {
+   }
+ 
+-  ~SignBase() override {
+-    if (!initialised_)
+-      return;
+-    EVP_MD_CTX_cleanup(&mdctx_);
+-  }
++  ~SignBase() override;
++
++  Error Init(const char* sign_type);
++  Error Update(const char* data, int len);
+ 
+  protected:
+   void CheckThrow(Error error);
+ 
+-  EVP_MD_CTX mdctx_; /* coverity[member_decl] */
+-  bool initialised_;
++  EVP_MD_CTX* mdctx_;
+ };
+ 
+ class Sign : public SignBase {
+  public:
+   static void Initialize(Environment* env, v8::Local<v8::Object> target);
+ 
+-  Error SignInit(const char* sign_type);
+-  Error SignUpdate(const char* data, int len);
+   Error SignFinal(const char* key_pem,
+                   int key_pem_len,
+                   const char* passphrase,
+@@ -597,8 +612,6 @@ class Verify : public SignBase {
+  public:
+   static void Initialize(Environment* env, v8::Local<v8::Object> target);
+ 
+-  Error VerifyInit(const char* verify_type);
+-  Error VerifyUpdate(const char* data, int len);
+   Error VerifyFinal(const char* key_pem,
+                     int key_pem_len,
+                     const char* sig,
+@@ -688,9 +701,10 @@ class DiffieHellman : public BaseObject
+ 
+  private:
+   static void GetField(const v8::FunctionCallbackInfo<v8::Value>& args,
+-                       BIGNUM* (DH::*field), const char* err_if_null);
++                       const BIGNUM* (*get_field)(const DH*),
++                       const char* err_if_null);
+   static void SetKey(const v8::FunctionCallbackInfo<v8::Value>& args,
+-                     BIGNUM* (DH::*field), const char* what);
++                     void (*set_field)(DH*, BIGNUM*), const char* what);
+   bool VerifyContext();
+ 
+   bool initialised_;
+Index: node-v8.9.3/src/node_crypto_bio.cc
+===================================================================
+--- node-v8.9.3.orig/src/node_crypto_bio.cc
++++ node-v8.9.3/src/node_crypto_bio.cc
+@@ -28,24 +28,19 @@
+ namespace node {
+ namespace crypto {
+ 
+-const BIO_METHOD NodeBIO::method = {
+-  BIO_TYPE_MEM,
+-  "node.js SSL buffer",
+-  NodeBIO::Write,
+-  NodeBIO::Read,
+-  NodeBIO::Puts,
+-  NodeBIO::Gets,
+-  NodeBIO::Ctrl,
+-  NodeBIO::New,
+-  NodeBIO::Free,
+-  nullptr
+-};
+-
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
++#define BIO_set_data(bio, data) bio->ptr = data
++#define BIO_get_data(bio) bio->ptr
++#define BIO_set_shutdown(bio, shutdown_) bio->shutdown = shutdown_
++#define BIO_get_shutdown(bio) bio->shutdown
++#define BIO_set_init(bio, init_) bio->init = init_
++#define BIO_get_init(bio) bio->init
++#endif
+ 
+ BIO* NodeBIO::New() {
+   // The const_cast doesn't violate const correctness.  OpenSSL's usage of
+   // BIO_METHOD is effectively const but BIO_new() takes a non-const argument.
+-  return BIO_new(const_cast<BIO_METHOD*>(&method));
++  return BIO_new(const_cast<BIO_METHOD*>(GetMethod()));
+ }
+ 
+ 
+@@ -70,12 +65,11 @@ void NodeBIO::AssignEnvironment(Environm
+ 
+ 
+ int NodeBIO::New(BIO* bio) {
+-  bio->ptr = new NodeBIO();
++  BIO_set_data(bio, new NodeBIO());
+ 
+   // XXX Why am I doing it?!
+-  bio->shutdown = 1;
+-  bio->init = 1;
+-  bio->num = -1;
++  BIO_set_shutdown(bio, 1);
++  BIO_set_init(bio, 1);
+ 
+   return 1;
+ }
+@@ -85,10 +79,10 @@ int NodeBIO::Free(BIO* bio) {
+   if (bio == nullptr)
+     return 0;
+ 
+-  if (bio->shutdown) {
+-    if (bio->init && bio->ptr != nullptr) {
++  if (BIO_get_shutdown(bio)) {
++    if (BIO_get_init(bio) && BIO_get_data(bio) != nullptr) {
+       delete FromBIO(bio);
+-      bio->ptr = nullptr;
++      BIO_set_data(bio, nullptr);
+     }
+   }
+ 
+@@ -97,13 +91,12 @@ int NodeBIO::Free(BIO* bio) {
+ 
+ 
+ int NodeBIO::Read(BIO* bio, char* out, int len) {
+-  int bytes;
+   BIO_clear_retry_flags(bio);
+ 
+-  bytes = FromBIO(bio)->Read(out, len);
+-
++  NodeBIO* nbio = FromBIO(bio);
++  int bytes = nbio->Read(out, len);
+   if (bytes == 0) {
+-    bytes = bio->num;
++    bytes = nbio->eof_return();
+     if (bytes != 0) {
+       BIO_set_retry_read(bio);
+     }
+@@ -201,7 +194,7 @@ long NodeBIO::Ctrl(BIO* bio, int cmd, lo
+       ret = nbio->Length() == 0;
+       break;
+     case BIO_C_SET_BUF_MEM_EOF_RETURN:
+-      bio->num = num;
++      nbio->set_eof_return(num);
+       break;
+     case BIO_CTRL_INFO:
+       ret = nbio->Length();
+@@ -216,10 +209,10 @@ long NodeBIO::Ctrl(BIO* bio, int cmd, lo
+       ret = 0;
+       break;
+     case BIO_CTRL_GET_CLOSE:
+-      ret = bio->shutdown;
++      ret = BIO_get_shutdown(bio);
+       break;
+     case BIO_CTRL_SET_CLOSE:
+-      bio->shutdown = num;
++      BIO_set_shutdown(bio, num);
+       break;
+     case BIO_CTRL_WPENDING:
+       ret = 0;
+@@ -240,6 +233,40 @@ long NodeBIO::Ctrl(BIO* bio, int cmd, lo
+   return ret;
+ }
+ 
++const BIO_METHOD* NodeBIO::GetMethod() {
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
++  static const BIO_METHOD method = {
++    BIO_TYPE_MEM,
++    "node.js SSL buffer",
++    Write,
++    Read,
++    Puts,
++    Gets,
++    Ctrl,
++    New,
++    Free,
++    nullptr
++  };
++
++  return &method;
++#else
++  static BIO_METHOD* method = nullptr;
++
++  if (method == nullptr) {
++    method = BIO_meth_new(BIO_TYPE_MEM, "node.js SSL buffer");
++    BIO_meth_set_write(method, Write);
++    BIO_meth_set_read(method, Read);
++    BIO_meth_set_puts(method, Puts);
++    BIO_meth_set_gets(method, Gets);
++    BIO_meth_set_ctrl(method, Ctrl);
++    BIO_meth_set_create(method, New);
++    BIO_meth_set_destroy(method, Free);
++  }
++
++  return method;
++#endif
++}
++
+ 
+ void NodeBIO::TryMoveReadHead() {
+   // `read_pos_` and `write_pos_` means the position of the reader and writer
+@@ -488,5 +515,10 @@ NodeBIO::~NodeBIO() {
+   write_head_ = nullptr;
+ }
+ 
++NodeBIO* NodeBIO::FromBIO(BIO* bio) {
++  CHECK_NE(BIO_get_data(bio), nullptr);
++  return static_cast<NodeBIO*>(BIO_get_data(bio));
++}
++
+ }  // namespace crypto
+ }  // namespace node
+Index: node-v8.9.3/src/node_crypto_bio.h
+===================================================================
+--- node-v8.9.3.orig/src/node_crypto_bio.h
++++ node-v8.9.3/src/node_crypto_bio.h
+@@ -37,6 +37,7 @@ class NodeBIO {
+   NodeBIO() : env_(nullptr),
+               initial_(kInitialBufferLength),
+               length_(0),
++              eof_return_(-1),
+               read_head_(nullptr),
+               write_head_(nullptr) {
+   }
+@@ -95,14 +96,19 @@ class NodeBIO {
+     return length_;
+   }
+ 
++  inline void set_eof_return(int num) {
++    eof_return_ = num;
++  }
++
++  inline int eof_return() {
++    return eof_return_;
++  }
++
+   inline void set_initial(size_t initial) {
+     initial_ = initial;
+   }
+ 
+-  static inline NodeBIO* FromBIO(BIO* bio) {
+-    CHECK_NE(bio->ptr, nullptr);
+-    return static_cast<NodeBIO*>(bio->ptr);
+-  }
++  static NodeBIO* FromBIO(BIO* bio);
+ 
+  private:
+   static int New(BIO* bio);
+@@ -114,12 +120,12 @@ class NodeBIO {
+   static long Ctrl(BIO* bio, int cmd, long num,  // NOLINT(runtime/int)
+                    void* ptr);
+ 
++  static const BIO_METHOD* GetMethod();
++
+   // Enough to handle the most of the client hellos
+   static const size_t kInitialBufferLength = 1024;
+   static const size_t kThroughputBufferLength = 16384;
+ 
+-  static const BIO_METHOD method;
+-
+   class Buffer {
+    public:
+     Buffer(Environment* env, size_t len) : env_(env),
+@@ -151,6 +157,7 @@ class NodeBIO {
+   Environment* env_;
+   size_t initial_;
+   size_t length_;
++  int eof_return_;
+   Buffer* read_head_;
+   Buffer* write_head_;
+ };
+Index: node-v8.9.3/test/parallel/test-crypto-dh.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-crypto-dh.js
++++ node-v8.9.3/test/parallel/test-crypto-dh.js
+@@ -58,6 +58,19 @@ const secret3 = dh3.computeSecret(key2,
+ 
+ assert.strictEqual(secret1, secret3);
+ 
++// computeSecret works without a public key set at all.
++const dh4 = crypto.createDiffieHellman(p1, 'buffer');
++dh4.setPrivateKey(privkey1);
++
++assert.deepStrictEqual(dh1.getPrime(), dh4.getPrime());
++assert.deepStrictEqual(dh1.getGenerator(), dh4.getGenerator());
++assert.deepStrictEqual(dh1.getPrivateKey(), dh4.getPrivateKey());
++assert.strictEqual(dh4.verifyError, 0);
++
++const secret4 = dh4.computeSecret(key2, 'hex', 'base64');
++
++assert.strictEqual(secret1, secret4);
++
+ const wrongBlockLength =
+   /^Error: error:0606506D:digital envelope routines:EVP_DecryptFinal_ex:wrong final block length$/;
+ 
+Index: node-v8.9.3/test/parallel/test-crypto.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-crypto.js
++++ node-v8.9.3/test/parallel/test-crypto.js
+@@ -129,12 +129,12 @@ const noCapitals = /^[^A-Z]+$/;
+ assert(tlsCiphers.every((value) => noCapitals.test(value)));
+ validateList(tlsCiphers);
+ 
+-// Assert that we have sha and sha1 but not SHA and SHA1.
++// Assert that we have sha1 and sha256 but not SHA and SHA1.
+ assert.notStrictEqual(0, crypto.getHashes().length);
+ assert(crypto.getHashes().includes('sha1'));
+-assert(crypto.getHashes().includes('sha'));
++assert(crypto.getHashes().includes('sha256'));
+ assert(!crypto.getHashes().includes('SHA1'));
+-assert(!crypto.getHashes().includes('SHA'));
++assert(!crypto.getHashes().includes('SHA256'));
+ assert(crypto.getHashes().includes('RSA-SHA1'));
+ assert(!crypto.getHashes().includes('rsa-sha1'));
+ validateList(crypto.getHashes());
+@@ -257,7 +257,7 @@ assert.throws(function() {
+   // Throws crypto error, so there is an opensslErrorStack property.
+   // The openSSL stack should have content.
+   if ((err instanceof Error) &&
+-      /asn1 encoding routines:ASN1_CHECK_TLEN:wrong tag/.test(err) &&
++      /asn1 encoding routines:[^:]*:wrong tag/.test(err) &&
+       err.opensslErrorStack !== undefined &&
+       Array.isArray(err.opensslErrorStack) &&
+       err.opensslErrorStack.length > 0) {
+Index: node-v8.9.3/test/parallel/test-https-agent-session-eviction.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-https-agent-session-eviction.js
++++ node-v8.9.3/test/parallel/test-https-agent-session-eviction.js
+@@ -8,7 +8,8 @@ if (!common.hasCrypto)
+ 
+ const assert = require('assert');
+ const https = require('https');
+-const SSL_OP_NO_TICKET = require('crypto').constants.SSL_OP_NO_TICKET;
++const { OPENSSL_VERSION_NUMBER, SSL_OP_NO_TICKET } =
++    require('crypto').constants;
+ 
+ const options = {
+   key: readKey('agent1-key.pem'),
+@@ -58,14 +59,25 @@ function second(server, session) {
+     res.resume();
+   });
+ 
+-  // Let it fail
+-  req.on('error', common.mustCall(function(err) {
+-    assert(/wrong version number/.test(err.message));
+-
+-    req.on('close', function() {
+-      third(server);
+-    });
+-  }));
++  if (OPENSSL_VERSION_NUMBER >= 0x10100000) {
++    // Although we have a TLS 1.2 session to offer to the TLS 1.0 server,
++    // connection to the TLS 1.0 server should work.
++    req.on('response', common.mustCall(function(res) {
++      // The test is now complete for OpenSSL 1.1.0.
++      server.close();
++    }));
++  } else {
++    // OpenSSL 1.0.x mistakenly locked versions based on the session it was
++    // offering. This causes this sequent request to fail. Let it fail, but
++    // test that this is mitigated on the next try by invalidating the session.
++    req.on('error', common.mustCall(function(err) {
++      assert(/wrong version number/.test(err.message));
++
++      req.on('close', function() {
++        third(server);
++      });
++    }));
++  }
+   req.end();
+ }
+ 
+Index: node-v8.9.3/test/parallel/test-https-connect-address-family.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-https-connect-address-family.js
++++ node-v8.9.3/test/parallel/test-https-connect-address-family.js
+@@ -7,12 +7,15 @@ if (!common.hasIPv6)
+   common.skip('no IPv6 support');
+ 
+ const assert = require('assert');
++const fixtures = require('../common/fixtures');
+ const https = require('https');
+ const dns = require('dns');
+ 
+ function runTest() {
+-  const ciphers = 'AECDH-NULL-SHA';
+-  https.createServer({ ciphers }, common.mustCall(function(req, res) {
++  https.createServer({
++    cert: fixtures.readKey('agent1-cert.pem'),
++    key: fixtures.readKey('agent1-key.pem'),
++  }, common.mustCall(function(req, res) {
+     this.close();
+     res.end();
+   })).listen(0, '::1', common.mustCall(function() {
+@@ -20,7 +23,6 @@ function runTest() {
+       host: 'localhost',
+       port: this.address().port,
+       family: 6,
+-      ciphers: ciphers,
+       rejectUnauthorized: false,
+     };
+     // Will fail with ECONNREFUSED if the address family is not honored.
+Index: node-v8.9.3/test/parallel/test-tls-cert-regression.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-tls-cert-regression.js
++++ node-v8.9.3/test/parallel/test-tls-cert-regression.js
+@@ -30,26 +30,41 @@ const tls = require('tls');
+ 
+ const cert =
+ `-----BEGIN CERTIFICATE-----
+-MIIBfjCCASgCCQDmmNjAojbDQjANBgkqhkiG9w0BAQUFADBFMQswCQYDVQQGEwJB
+-VTETMBEGA1UECBMKU29tZS1TdGF0ZTEhMB8GA1UEChMYSW50ZXJuZXQgV2lkZ2l0
+-cyBQdHkgTHRkMCAXDTE0MDExNjE3NTMxM1oYDzIyODcxMDMxMTc1MzEzWjBFMQsw
+-CQYDVQQGEwJBVTETMBEGA1UECBMKU29tZS1TdGF0ZTEhMB8GA1UEChMYSW50ZXJu
+-ZXQgV2lkZ2l0cyBQdHkgTHRkMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAPKwlfMX
+-6HGZIt1xm7fna72eWcOYfUfSxSugghvqYgJt2Oi3lH+wsU1O9FzRIVmpeIjDXhbp
+-Mjsa1HtzSiccPXsCAwEAATANBgkqhkiG9w0BAQUFAANBAHOoKy0NkyfiYH7Ne5ka
+-uvCyndyeB4d24FlfqEUlkfaWCZlNKRaV9YhLDiEg3BcIreFo4brtKQfZzTRs0GVm
+-KHg=
++MIIDNDCCAp2gAwIBAgIJAJvXLQpGPpm7MA0GCSqGSIb3DQEBBQUAMHAxCzAJBgNV
++BAYTAkdCMRAwDgYDVQQIEwdHd3luZWRkMREwDwYDVQQHEwhXYXVuZmF3cjEUMBIG
++A1UEChMLQWNrbmFjayBMdGQxEjAQBgNVBAsTCVRlc3QgQ2VydDESMBAGA1UEAxMJ
++bG9jYWxob3N0MB4XDTA5MTEwMjE5MzMwNVoXDTEwMTEwMjE5MzMwNVowcDELMAkG
++A1UEBhMCR0IxEDAOBgNVBAgTB0d3eW5lZGQxETAPBgNVBAcTCFdhdW5mYXdyMRQw
++EgYDVQQKEwtBY2tuYWNrIEx0ZDESMBAGA1UECxMJVGVzdCBDZXJ0MRIwEAYDVQQD
++Ewlsb2NhbGhvc3QwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBANdym7nGe2yw
++6LlJfJrQtC5TmKOGrSXiyolYCbGOy4xZI4KD31d3097jhlQFJyF+10gwkE62DuJe
++fLvBZDUsvLe1R8bzlVhZnBVn+3QJyUIWQAL+DsRj8P3KoD7k363QN5dIaA1GOAg2
++vZcPy1HCUsvOgvDXGRUCZqNLAyt+h/cpAgMBAAGjgdUwgdIwHQYDVR0OBBYEFK4s
++VBV4shKUj3UX/fvSJnFaaPBjMIGiBgNVHSMEgZowgZeAFK4sVBV4shKUj3UX/fvS
++JnFaaPBjoXSkcjBwMQswCQYDVQQGEwJHQjEQMA4GA1UECBMHR3d5bmVkZDERMA8G
++A1UEBxMIV2F1bmZhd3IxFDASBgNVBAoTC0Fja25hY2sgTHRkMRIwEAYDVQQLEwlU
++ZXN0IENlcnQxEjAQBgNVBAMTCWxvY2FsaG9zdIIJAJvXLQpGPpm7MAwGA1UdEwQF
++MAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAFxR7BA1mUlsYqPiogtxSIfLzHWh+s0bJ
++SBuhNrHes4U8QxS8+x/KWjd/81gzsf9J1C2VzTlFaydAgigz3SkQYgs+TMnFkT2o
++9jqoJrcdf4WpZ2DQXUALaZgwNzPumMUSx8Ac5gO+BY/RHyP6fCodYvdNwyKslnI3
++US7eCSHZsVo=
+ -----END CERTIFICATE-----`;
+ 
+ const key =
+ `-----BEGIN RSA PRIVATE KEY-----
+-MIIBPQIBAAJBAPKwlfMX6HGZIt1xm7fna72eWcOYfUfSxSugghvqYgJt2Oi3lH+w
+-sU1O9FzRIVmpeIjDXhbpMjsa1HtzSiccPXsCAwEAAQJBAM4uU9aJE0OfdE1p/X+K
+-LrCT3XMdFCJ24GgmHyOURtwDy18upQJecDVdcZp16fjtOPmaW95GoYRyifB3R4I5
+-RxECIQD7jRM9slCSVV8xp9kOJQNpHjhRQYVGBn+pyllS2sb+RQIhAPb7Y+BIccri
+-NWnuhwCW8hA7Fkj/kaBdAwyW7L3Tvui/AiEAiqLCovMecre4Yi6GcsQ1b/6mvSmm
+-IOS+AT6zIfXPTB0CIQCJKGR3ymN/Qw5crL1GQ41cHCQtF9ickOq/lBUW+j976wIh
+-AOaJnkQrmurlRdePX6LvN/LgGAQoxwovfjcOYNnZsIVY
++MIICXgIBAAKBgQDXcpu5xntssOi5SXya0LQuU5ijhq0l4sqJWAmxjsuMWSOCg99X
++d9Pe44ZUBSchftdIMJBOtg7iXny7wWQ1LLy3tUfG85VYWZwVZ/t0CclCFkAC/g7E
++Y/D9yqA+5N+t0DeXSGgNRjgINr2XD8tRwlLLzoLw1xkVAmajSwMrfof3KQIDAQAB
++AoGBAIBHR/tT93ce2mJAJAXV0AJpWc+7x2pwX2FpXtQujnlxNZhnRlrBCRCD7h4m
++t0bVS/86kyGaesBDvAbavfx/N5keYzzmmSp5Ht8IPqKPydGWdigk4x90yWvktai7
++dWuRKF94FXr0GUuBONb/dfHdp4KBtzN7oIF9WydYGGXA9ZmBAkEA8/k01bfwQZIu
++AgcdNEM94Zcug1gSspXtUu8exNQX4+PNVbadghZb1+OnUO4d3gvWfqvAnaXD3KV6
++N4OtUhQQ0QJBAOIRbKMfaymQ9yE3CQQxYfKmEhHXWARXVwuYqIFqjmhSjSXx0l/P
++7mSHz1I9uDvxkJev8sQgu1TKIyTOdqPH1tkCQQDPa6H1yYoj1Un0Q2Qa2Mg1kTjk
++Re6vkjPQ/KcmJEOjZjtekgFbZfLzmwLXFXqjG2FjFFaQMSxR3QYJSJQEYjbhAkEA
++sy7OZcjcXnjZeEkv61Pc57/7qIp/6Aj2JGnefZ1gvI1Z9Q5kCa88rA/9Iplq8pA4
++ZBKAoDW1ZbJGAsFmxc/6mQJAdPilhci0qFN86IGmf+ZBnwsDflIwHKDaVofti4wQ
++sPWhSOb9VQjMXekI4Y2l8fqAVTS2Fn6+8jkVKxXBywSVCw==
+ -----END RSA PRIVATE KEY-----`;
+ 
+ function test(cert, key, cb) {
+Index: node-v8.9.3/test/parallel/test-tls-connect-address-family.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-tls-connect-address-family.js
++++ node-v8.9.3/test/parallel/test-tls-connect-address-family.js
+@@ -7,19 +7,21 @@ if (!common.hasIPv6)
+   common.skip('no IPv6 support');
+ 
+ const assert = require('assert');
++const fixtures = require('../common/fixtures');
+ const tls = require('tls');
+ const dns = require('dns');
+ 
+ function runTest() {
+-  const ciphers = 'AECDH-NULL-SHA';
+-  tls.createServer({ ciphers }, common.mustCall(function() {
++  tls.createServer({
++    cert: fixtures.readKey('agent1-cert.pem'),
++    key: fixtures.readKey('agent1-key.pem'),
++  }, common.mustCall(function() {
+     this.close();
+   })).listen(0, '::1', common.mustCall(function() {
+     const options = {
+       host: 'localhost',
+       port: this.address().port,
+       family: 6,
+-      ciphers: ciphers,
+       rejectUnauthorized: false,
+     };
+     // Will fail with ECONNREFUSED if the address family is not honored.
+Index: node-v8.9.3/test/parallel/test-tls-ecdh-disable.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-tls-ecdh-disable.js
++++ node-v8.9.3/test/parallel/test-tls-ecdh-disable.js
+@@ -31,6 +31,11 @@ if (!common.hasCrypto)
+ if (!common.opensslCli)
+   common.skip('missing openssl-cli');
+ 
++const OPENSSL_VERSION_NUMBER =
++  require('crypto').constants.OPENSSL_VERSION_NUMBER;
++if (OPENSSL_VERSION_NUMBER >= 0x10100000)
++  common.skip('false ecdhCurve not supported in OpenSSL 1.1.0');
++
+ const assert = require('assert');
+ const tls = require('tls');
+ const exec = require('child_process').exec;
+@@ -42,6 +47,9 @@ const options = {
+   ecdhCurve: false
+ };
+ 
++common.expectWarning('DeprecationWarning',
++                     '{ ecdhCurve: false } is deprecated.');
++
+ const server = tls.createServer(options, common.mustNotCall());
+ 
+ server.listen(0, '127.0.0.1', common.mustCall(function() {
+Index: node-v8.9.3/test/parallel/test-tls-econnreset.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-tls-econnreset.js
++++ node-v8.9.3/test/parallel/test-tls-econnreset.js
+@@ -25,72 +25,26 @@ if (!common.hasCrypto)
+   common.skip('missing crypto');
+ 
+ const assert = require('assert');
++const fixtures = require('../common/fixtures');
++const net = require('net');
+ const tls = require('tls');
+ 
+-const cacert =
+-`-----BEGIN CERTIFICATE-----
+-MIIBxTCCAX8CAnXnMA0GCSqGSIb3DQEBBQUAMH0xCzAJBgNVBAYTAlVTMQswCQYD
+-VQQIEwJDQTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzEZMBcGA1UEChMQU3Ryb25n
+-TG9vcCwgSW5jLjESMBAGA1UECxMJU3Ryb25nT3BzMRowGAYDVQQDExFjYS5zdHJv
+-bmdsb29wLmNvbTAeFw0xNDAxMTcyMjE1MDdaFw00MTA2MDMyMjE1MDdaMH0xCzAJ
+-BgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzEZ
+-MBcGA1UEChMQU3Ryb25nTG9vcCwgSW5jLjESMBAGA1UECxMJU3Ryb25nT3BzMRow
+-GAYDVQQDExFjYS5zdHJvbmdsb29wLmNvbTBMMA0GCSqGSIb3DQEBAQUAAzsAMDgC
+-MQDKbQ6rIR5t1q1v4Ha36jrq0IkyUohy9EYNvLnXUly1PGqxby0ILlAVJ8JawpY9
+-AVkCAwEAATANBgkqhkiG9w0BAQUFAAMxALA1uS4CqQXRSAyYTfio5oyLGz71a+NM
+-+0AFLBwh5AQjhGd0FcenU4OfHxyDEOJT/Q==
+------END CERTIFICATE-----`;
+-
+-const cert =
+-`-----BEGIN CERTIFICATE-----
+-MIIBfDCCATYCAgQaMA0GCSqGSIb3DQEBBQUAMH0xCzAJBgNVBAYTAlVTMQswCQYD
+-VQQIEwJDQTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzEZMBcGA1UEChMQU3Ryb25n
+-TG9vcCwgSW5jLjESMBAGA1UECxMJU3Ryb25nT3BzMRowGAYDVQQDExFjYS5zdHJv
+-bmdsb29wLmNvbTAeFw0xNDAxMTcyMjE1MDdaFw00MTA2MDMyMjE1MDdaMBkxFzAV
+-BgNVBAMTDnN0cm9uZ2xvb3AuY29tMEwwDQYJKoZIhvcNAQEBBQADOwAwOAIxAMfk
+-I0LWU15pPUwIQNMnRVhhOibi0TQmAau8FBtgwEfGK01WpfGUaJr1a41K8Uq7xwID
+-AQABoxkwFzAVBgNVHREEDjAMhwQAAAAAhwR/AAABMA0GCSqGSIb3DQEBBQUAAzEA
+-cGpYrhkrb7mIh9DNhV0qp7pGjqBzlHqB7KQXw2luLDp//6dyHBMexDCQznkhZKRU
+------END CERTIFICATE-----`;
+-
+-const key =
+-`-----BEGIN RSA PRIVATE KEY-----
+-MIH0AgEAAjEAx+QjQtZTXmk9TAhA0ydFWGE6JuLRNCYBq7wUG2DAR8YrTVal8ZRo
+-mvVrjUrxSrvHAgMBAAECMBCGccvSwC2r8Z9Zh1JtirQVxaL1WWpAQfmVwLe0bAgg
+-/JWMU/6hS36TsYyZMxwswQIZAPTAfht/zDLb7Hwgu2twsS1Ra9w/yyvtlwIZANET
+-26votwJAHK1yUrZGA5nnp5qcmQ/JUQIZAII5YV/UUZvF9D/fUplJ7puENPWNY9bN
+-pQIZAMMwxuS3XiO7two2sQF6W+JTYyX1DPCwAQIZAOYg1TvEGT38k8e8jygv8E8w
+-YqrWTeQFNQ==
+------END RSA PRIVATE KEY-----`;
+-
+-const ca = [ cert, cacert ];
+-
+-let clientError = null;
+-let connectError = null;
+-
+-const server = tls.createServer({ ca: ca, cert: cert, key: key }, () => {
+-  assert.fail('should be unreachable');
+-}).on('tlsClientError', function(err, conn) {
++const server = tls.createServer({
++  cert: fixtures.readKey('agent1-cert.pem'),
++  key: fixtures.readKey('agent1-key.pem'),
++}, common.mustNotCall()).on('tlsClientError', function(err, conn) {
+   assert(!clientError && conn);
+   clientError = err;
++  server.close();
+ }).listen(0, function() {
+-  const options = {
+-    ciphers: 'AES128-GCM-SHA256',
+-    port: this.address().port,
+-    ca: ca
+-  };
+-  tls.connect(options).on('error', function(err) {
+-    assert(!connectError);
+-
+-    connectError = err;
++  net.connect(this.address().port, function() {
++    // Destroy the socket once it is connected, so the server sees ECONNRESET.
+     this.destroy();
+-    server.close();
+-  }).write('123');
++  }).on('error', common.mustNotCall());
+ });
+ 
+ process.on('exit', function() {
+   assert(clientError);
+-  assert(connectError);
+   assert(/socket hang up/.test(clientError.message));
+   assert(/ECONNRESET/.test(clientError.code));
+ });
+Index: node-v8.9.3/test/parallel/test-tls-junk-server.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-tls-junk-server.js
++++ node-v8.9.3/test/parallel/test-tls-junk-server.js
+@@ -21,7 +21,9 @@ server.listen(0, function() {
+   req.end();
+ 
+   req.once('error', common.mustCall(function(err) {
+-    assert(/unknown protocol/.test(err.message));
++    // OpenSSL 1.0.x and 1.1.x use different error messages for junk inputs.
++    assert(/unknown protocol/.test(err.message) ||
++           /wrong version number/.test(err.message));
+     server.close();
+   }));
+ });
+Index: node-v8.9.3/test/parallel/test-tls-no-sslv3.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-tls-no-sslv3.js
++++ node-v8.9.3/test/parallel/test-tls-no-sslv3.js
+@@ -46,6 +46,8 @@ process.on('exit', function() {
+     common.printSkipMessage('`openssl s_client -ssl3` not supported.');
+   } else {
+     assert.strictEqual(errors.length, 1);
+-    assert(/:wrong version number/.test(errors[0].message));
++    // OpenSSL 1.0.x and 1.1.x report invalid client versions differently.
++    assert(/:wrong version number/.test(errors[0].message) ||
++           /:version too low/.test(errors[0].message));
+   }
+ });
+Index: node-v8.9.3/test/parallel/test-tls-server-failed-handshake-emits-clienterror.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-tls-server-failed-handshake-emits-clienterror.js
++++ node-v8.9.3/test/parallel/test-tls-server-failed-handshake-emits-clienterror.js
+@@ -20,8 +20,10 @@ const server = tls.createServer({})
+   }).on('tlsClientError', common.mustCall(function(e) {
+     assert.ok(e instanceof Error,
+               'Instance of Error should be passed to error handler');
++    // OpenSSL 1.0.x and 1.1.x use different error codes for junk inputs.
+     assert.ok(
+-      /SSL routines:SSL23_GET_CLIENT_HELLO:unknown protocol/.test(e.message),
++      /SSL routines:[^:]*:(unknown protocol|wrong version number)/.test(
++        e.message),
+       'Expecting SSL unknown protocol');
+ 
+     server.close();
+Index: node-v8.9.3/test/parallel/test-tls-socket-failed-handshake-emits-error.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-tls-socket-failed-handshake-emits-error.js
++++ node-v8.9.3/test/parallel/test-tls-socket-failed-handshake-emits-error.js
+@@ -20,8 +20,10 @@ const server = net.createServer(function
+     s.on('error', common.mustCall(function(e) {
+       assert.ok(e instanceof Error,
+                 'Instance of Error should be passed to error handler');
++      // OpenSSL 1.0.x and 1.1.x use different error codes for junk inputs.
+       assert.ok(
+-        /SSL routines:SSL23_GET_CLIENT_HELLO:unknown protocol/.test(e.message),
++        /SSL routines:[^:]*:(unknown protocol|wrong version number)/.test(
++          e.message),
+         'Expecting SSL unknown protocol');
+     }));
+ 
