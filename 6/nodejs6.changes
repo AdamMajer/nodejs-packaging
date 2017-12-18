@@ -8,7 +8,7 @@ Sat Dec  9 03:22:01 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream LTS release 6.12.2:
   * deps/openssl: updated to 1.0.2n (only applies to SLE 12 SP1
-    and lower)
+    and lower) (bsc#1072322)
     [ CVE-2017-3738 CVE-2017-15896 ]
 
 - Changes in 6.12.1:

@@ -27,9 +27,9 @@ Sat Dec  9 03:22:01 UTC 2017 - qantas94heavy@gmail.com
 - New upstream release 9.2.1:
   * buffer: buffers allocated with an invalid content will now be
     zero filled
-    [ CVE-2017-15897, gh#nodejs/node#17428 ]
+    [ CVE-2017-15897 ]
   * deps/openssl: updated to 1.0.2n (only applies to SLE 12 SP1
-    and lower)
+    and lower) (bsc#1072322)
     [ CVE-2017-3738 CVE-2017-15896 ]
 
 - Remove unnecessary curl BuildRequires

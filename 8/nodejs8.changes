@@ -11,7 +11,7 @@ Sat Dec  9 03:22:01 UTC 2017 - qantas94heavy@gmail.com
   * buffer: buffers allocated with an invalid content will now be
     zero filled
     [ CVE-2017-15897, bnc#1072320 ]
-  * deps/openssl: updated to 1.0.2n
+  * deps/openssl: updated to 1.0.2n (bsc#1072322)
     [ CVE-2017-3738 CVE-2017-15896 ]
 
 - Changes in 8.9.2:
