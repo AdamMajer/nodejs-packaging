@@ -8,10 +8,10 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-v4.8.3/node.gyp
+Index: node-v4.8.7/node.gyp
 ===================================================================
---- node-v4.8.3.orig/node.gyp
-+++ node-v4.8.3/node.gyp
+--- node-v4.8.7.orig/node.gyp
++++ node-v4.8.7/node.gyp
 @@ -19,7 +19,7 @@
      'node_v8_options%': '',
      'node_enable_v8_vtunejit%': 'false',
@@ -43,10 +43,10 @@ Index: node-v4.8.3/node.gyp
                ],
                'conditions': [
                  [ 'target_arch=="ia32"', {
-Index: node-v4.8.3/Makefile
+Index: node-v4.8.7/Makefile
 ===================================================================
---- node-v4.8.3.orig/Makefile
-+++ node-v4.8.3/Makefile
+--- node-v4.8.7.orig/Makefile
++++ node-v4.8.7/Makefile
 @@ -33,10 +33,10 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
@@ -60,10 +60,10 @@ Index: node-v4.8.3/Makefile
  
  # Flags for packaging.
  BUILD_DOWNLOAD_FLAGS ?= --download=all
-Index: node-v4.8.3/tools/install.py
+Index: node-v4.8.7/tools/install.py
 ===================================================================
---- node-v4.8.3.orig/tools/install.py
-+++ node-v4.8.3/tools/install.py
+--- node-v4.8.7.orig/tools/install.py
++++ node-v4.8.7/tools/install.py
 @@ -82,7 +82,7 @@ def update_shebang(path, shebang):
    open(path, 'w').write(s)
  
@@ -151,10 +151,10 @@ Index: node-v4.8.3/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-v4.8.3/doc/node.1
+Index: node-v4.8.7/doc/node.1
 ===================================================================
---- node-v4.8.3.orig/doc/node.1
-+++ node-v4.8.3/doc/node.1
+--- node-v4.8.7.orig/doc/node.1
++++ node-v4.8.7/doc/node.1
 @@ -26,12 +26,12 @@
  
  .SH NAME
@@ -187,10 +187,10 @@ Index: node-v4.8.3/doc/node.1
  .RB [ \-\-v8-options ]
  
  Execute without arguments to start the REPL.
-Index: node-v4.8.3/src/node.stp
+Index: node-v4.8.7/src/node.stp
 ===================================================================
---- node-v4.8.3.orig/src/node.stp
-+++ node-v4.8.3/src/node.stp
+--- node-v4.8.7.orig/src/node.stp
++++ node-v4.8.7/src/node.stp
 @@ -1,4 +1,4 @@
 -probe node_net_server_connection = process("node").mark("net__server__connection")
 +probe node_net_server_connection = process("node4").mark("net__server__connection")
@@ -260,10 +260,10 @@ Index: node-v4.8.3/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-v4.8.3/deps/npm/man/man1/npm.1
+Index: node-v4.8.7/deps/npm/man/man1/npm.1
 ===================================================================
---- node-v4.8.3.orig/deps/npm/man/man1/npm.1
-+++ node-v4.8.3/deps/npm/man/man1/npm.1
+--- node-v4.8.7.orig/deps/npm/man/man1/npm.1
++++ node-v4.8.7/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
  .TH "NPM" "1" "October 2016" "" ""
  .SH "NAME"
@@ -396,20 +396,20 @@ Index: node-v4.8.3/deps/npm/man/man1/npm.1
  .IP \(bu 2
  npm apihelp npm
  
-Index: node-v4.8.3/deps/npm/bin/npm-cli.js
+Index: node-v4.8.7/deps/npm/bin/npm-cli.js
 ===================================================================
---- node-v4.8.3.orig/deps/npm/bin/npm-cli.js
-+++ node-v4.8.3/deps/npm/bin/npm-cli.js
+--- node-v4.8.7.orig/deps/npm/bin/npm-cli.js
++++ node-v4.8.7/deps/npm/bin/npm-cli.js
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env node
 +#!/usr/bin/env node4
  ;(function () { // wrapper in case we're in module_context mode
  
  // windows: running "npm blah" in this folder will invoke WSH, not node.
-Index: node-v4.8.3/src/node_main.cc
+Index: node-v4.8.7/src/node_main.cc
 ===================================================================
---- node-v4.8.3.orig/src/node_main.cc
-+++ node-v4.8.3/src/node_main.cc
+--- node-v4.8.7.orig/src/node_main.cc
++++ node-v4.8.7/src/node_main.cc
 @@ -44,6 +44,7 @@ int wmain(int argc, wchar_t *wargv[]) {
  int main(int argc, char *argv[]) {
    // Disable stdio buffering, it interacts poorly with printf()
@@ -418,3 +418,16 @@ Index: node-v4.8.3/src/node_main.cc
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
+Index: node-v4.8.7/tools/test.py
+===================================================================
+--- node-v4.8.7.orig/tools/test.py
++++ node-v4.8.7/tools/test.py
+@@ -881,7 +881,7 @@ class Context(object):
+ 
+   def GetVm(self, arch, mode):
+     if arch == 'none':
+-      name = 'out/Debug/node' if mode == 'debug' else 'out/Release/node'
++      name = 'out/Debug/node' if mode == 'debug' else 'out/Release/node4'
+     else:
+       name = 'out/%s.%s/node' % (arch, mode)
+ 

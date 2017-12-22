@@ -1,0 +1,18 @@
+Author: Adam Majer <amajer@suse.de>
+Date: Dec 20 09:18:49 UTC 2017
+Summary: Fix CI unit tests framework for OBS building
+
+Index: node-v6.12.2/test/parallel/test-module-loading-globalpaths.js
+===================================================================
+--- node-v6.12.2.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-v6.12.2/test/parallel/test-module-loading-globalpaths.js
+@@ -7,6 +7,9 @@ const fs = require('fs');
+ const child_process = require('child_process');
+ const pkgName = 'foo';
+ 
++common.skip('hardcoded global paths');
++return;
++
+ if (process.argv[2] === 'child') {
+   console.log(require(pkgName).string);
+ } else {

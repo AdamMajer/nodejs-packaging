@@ -8,11 +8,11 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-v8.9.1/Makefile
+Index: node-v8.9.3/Makefile
 ===================================================================
---- node-v8.9.1.orig/Makefile
-+++ node-v8.9.1/Makefile
-@@ -45,10 +45,10 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
+--- node-v8.9.3.orig/Makefile
++++ node-v8.9.3/Makefile
+@@ -45,7 +45,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
  
@@ -20,15 +20,11 @@ Index: node-v8.9.1/Makefile
 +NODE_EXE = node8$(EXEEXT)
  NODE ?= ./$(NODE_EXE)
  NODE_G_EXE = node_g$(EXEEXT)
--NPM ?= ./deps/npm/bin/npm-cli.js
-+NPM ?= ./deps/npm8/bin/npm-cli.js
- 
- # Flags for packaging.
- BUILD_DOWNLOAD_FLAGS ?= --download=all
-Index: node-v8.9.1/tools/install.py
+ NPM ?= ./deps/npm/bin/npm-cli.js
+Index: node-v8.9.3/tools/install.py
 ===================================================================
---- node-v8.9.1.orig/tools/install.py
-+++ node-v8.9.1/tools/install.py
+--- node-v8.9.3.orig/tools/install.py
++++ node-v8.9.3/tools/install.py
 @@ -78,7 +78,7 @@ def install(paths, dst): map(lambda path
  def uninstall(paths, dst): map(lambda path: try_remove(path, dst), paths)
  
@@ -129,10 +125,10 @@ Index: node-v8.9.1/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-v8.9.1/doc/node.1
+Index: node-v8.9.3/doc/node.1
 ===================================================================
---- node-v8.9.1.orig/doc/node.1
-+++ node-v8.9.1/doc/node.1
+--- node-v8.9.3.orig/doc/node.1
++++ node-v8.9.3/doc/node.1
 @@ -26,12 +26,12 @@
  
  .SH NAME
@@ -165,10 +161,10 @@ Index: node-v8.9.1/doc/node.1
  .RB [ \-\-v8-options ]
  
  Execute without arguments to start the REPL.
-Index: node-v8.9.1/src/node.stp
+Index: node-v8.9.3/src/node.stp
 ===================================================================
---- node-v8.9.1.orig/src/node.stp
-+++ node-v8.9.1/src/node.stp
+--- node-v8.9.3.orig/src/node.stp
++++ node-v8.9.3/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -241,10 +237,10 @@ Index: node-v8.9.1/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-v8.9.1/deps/npm/man/man1/npm.1
+Index: node-v8.9.3/deps/npm/man/man1/npm.1
 ===================================================================
---- node-v8.9.1.orig/deps/npm/man/man1/npm.1
-+++ node-v8.9.1/deps/npm/man/man1/npm.1
+--- node-v8.9.3.orig/deps/npm/man/man1/npm.1
++++ node-v8.9.3/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
  .TH "NPM" "1" "October 2017" "" ""
  .SH "NAME"
@@ -374,10 +370,10 @@ Index: node-v8.9.1/deps/npm/man/man1/npm.1
  
  .RE
  
-Index: node-v8.9.1/node.gyp
+Index: node-v8.9.3/node.gyp
 ===================================================================
---- node-v8.9.1.orig/node.gyp
-+++ node-v8.9.1/node.gyp
+--- node-v8.9.3.orig/node.gyp
++++ node-v8.9.3/node.gyp
 @@ -20,7 +20,7 @@
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',
@@ -387,7 +383,7 @@ Index: node-v8.9.1/node.gyp
      'library_files': [
        'lib/internal/bootstrap_node.js',
        'lib/async_hooks.js',
-@@ -488,10 +488,10 @@
+@@ -486,10 +486,10 @@
              {
                'action_name': 'node_dtrace_provider_o',
                'inputs': [
@@ -400,7 +396,7 @@ Index: node-v8.9.1/node.gyp
                ],
                'action': [ 'dtrace', '-G', '-xnolibs', '-s', 'src/node_provider.d',
                  '<@(_inputs)', '-o', '<@(_outputs)' ]
-@@ -541,7 +541,7 @@
+@@ -539,7 +539,7 @@
                  '<(SHARED_INTERMEDIATE_DIR)/v8constants.h'
                ],
                'outputs': [
@@ -409,7 +405,7 @@ Index: node-v8.9.1/node.gyp
                ],
                'conditions': [
                  [ 'target_arch=="ia32" or target_arch=="arm"', {
-@@ -602,9 +602,9 @@
+@@ -600,9 +600,9 @@
        ],
  
        'variables': {
@@ -422,7 +418,7 @@ Index: node-v8.9.1/node.gyp
          'OBJ_SUFFIX': 'o',
          'OBJ_SEPARATOR': '/',
          'conditions': [
-@@ -740,7 +740,7 @@
+@@ -738,7 +738,7 @@
      ['OS=="aix"', {
        'targets': [
          {
@@ -431,20 +427,20 @@ Index: node-v8.9.1/node.gyp
            'conditions': [
              ['node_shared=="true"', {
                'type': 'shared_library',
-Index: node-v8.9.1/deps/npm/bin/npm-cli.js
+Index: node-v8.9.3/deps/npm/bin/npm-cli.js
 ===================================================================
---- node-v8.9.1.orig/deps/npm/bin/npm-cli.js
-+++ node-v8.9.1/deps/npm/bin/npm-cli.js
+--- node-v8.9.3.orig/deps/npm/bin/npm-cli.js
++++ node-v8.9.3/deps/npm/bin/npm-cli.js
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env node
 +#!/usr/bin/env node8
  ;(function () { // wrapper in case we're in module_context mode
    // windows: running "npm blah" in this folder will invoke WSH, not node.
    /*global WScript*/
-Index: node-v8.9.1/src/node_main.cc
+Index: node-v8.9.3/src/node_main.cc
 ===================================================================
---- node-v8.9.1.orig/src/node_main.cc
-+++ node-v8.9.1/src/node_main.cc
+--- node-v8.9.3.orig/src/node_main.cc
++++ node-v8.9.3/src/node_main.cc
 @@ -101,6 +101,7 @@ int main(int argc, char *argv[]) {
  #endif
    // Disable stdio buffering, it interacts poorly with printf()
@@ -453,3 +449,16 @@ Index: node-v8.9.1/src/node_main.cc
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
+Index: node-v8.9.3/tools/test.py
+===================================================================
+--- node-v8.9.3.orig/tools/test.py
++++ node-v8.9.3/tools/test.py
+@@ -906,7 +906,7 @@ class Context(object):
+ 
+   def GetVm(self, arch, mode):
+     if arch == 'none':
+-      name = 'out/Debug/node' if mode == 'debug' else 'out/Release/node'
++      name = 'out/Debug/node' if mode == 'debug' else 'out/Release/node8'
+     else:
+       name = 'out/%s.%s/node' % (arch, mode)
+ 

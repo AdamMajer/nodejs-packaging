@@ -1,4 +1,17 @@
 -------------------------------------------------------------------
+Fri Dec 22 14:01:07 UTC 2017 - adam.majer@suse.de
+
+- Enable CI tests in %check target
+  + fix_ci_tests.patch:
+    - DNS queries in buildroots are failing with EAI_AGAIN
+    - disable test-module-loading-globalpaths.js - we have
+      hardcoded global paths
+  + versioned.patch: call versioned node binary for tests
+  + openssl11.patch: fix OpenSSL 1.1 backport so all SSL tests pass
+    instead of crashing in some situations.
+- node-gyp-addon-gypi.patch: fix typo allowing unit tests to compile
+
+-------------------------------------------------------------------
 Thu Dec 14 09:46:31 UTC 2017 - adam.majer@suse.de
 
 - openssl11.patch: backport support for OpenSSL 1.1 (bnc#1066953)

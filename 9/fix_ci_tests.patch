@@ -1,0 +1,44 @@
+Author: Adam Majer <amajer@suse.de>
+Date: Dec 20 09:18:49 UTC 2017
+Summary: Fix CI unit tests framework for OBS building
+
+Index: node-v9.3.0/test/parallel/test-module-loading-globalpaths.js
+===================================================================
+--- node-v9.3.0.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-v9.3.0/test/parallel/test-module-loading-globalpaths.js
+@@ -7,6 +7,9 @@ const fs = require('fs');
+ const child_process = require('child_process');
+ const pkgName = 'foo';
+ 
++common.skip('hardcoded global paths');
++return;
++
+ if (process.argv[2] === 'child') {
+   console.log(require(pkgName).string);
+ } else {
+Index: node-v9.3.0/Makefile
+===================================================================
+--- node-v9.3.0.orig/Makefile
++++ node-v9.3.0/Makefile
+@@ -410,7 +410,7 @@ test-ci-js: | clear-stalled
+ 	fi
+ 
+ test-ci: LOGLEVEL := info
+-test-ci: | clear-stalled build-addons build-addons-napi doc-only
++test-ci: | clear-stalled build-addons build-addons-napi
+ 	out/Release/cctest --gtest_output=tap:cctest.tap
+ 	$(PYTHON) tools/test.py $(PARALLEL_ARGS) -p tap --logfile test.tap \
+ 		--mode=release --flaky-tests=$(FLAKY_TESTS) \
+Index: node-v9.3.0/test/parallel/test-tls-env-bad-extra-ca.js
+===================================================================
+--- node-v9.3.0.orig/test/parallel/test-tls-env-bad-extra-ca.js
++++ node-v9.3.0/test/parallel/test-tls-env-bad-extra-ca.js
+@@ -32,7 +32,7 @@ fork(__filename, opts)
+     assert.strictEqual(status, 0, 'client did not succeed in connecting');
+   }))
+   .on('close', common.mustCall(function() {
+-    const re = /Warning: Ignoring extra certs from.*no-such-file-exists.* load failed:.*No such file or directory/;
++    const re = /Warning: Ignoring extra certs from.*no-such-file-exists.* load failed:.*/;
+     assert(re.test(stderr), stderr);
+   }))
+   .stderr.setEncoding('utf8').on('data', function(str) {

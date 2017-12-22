@@ -93,6 +93,8 @@ Source3:        nodejs.keyring
 ## UPSTREAM PATCHES HERE, if any
 Patch1:         8334.diff        # PATCH_FOR: 4
 Patch2:         openssl11.patch  # PATCH_FOR: 8
+Patch3:         fix_ci_tests.patch
+Patch4:         fix_ci_ssl_tests.patch # PATCH_FOR: 4
 
 ## Our patches
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
@@ -258,6 +260,10 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %setup -q -n node-v%{version}
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%if ! %{with intree_openssl}
+%patch4 -p1
+%endif
 %patch101 -p1
 %patch102 -p1
 # Add check_output to configure script (not part of Python 2.6 in SLE11).
@@ -388,10 +394,17 @@ ln -s %{_sysconfdir}/alternatives/npx-default          %{buildroot}%{_bindir}/np
 ln -s %{_sysconfdir}/alternatives/npx.1%{ext_man}      %{buildroot}%{_mandir}/man1/npx.1%{ext_man}
 %endif
 
-
-# Check that Node.js isn't completely broken.
 %check
-%{buildroot}%{_bindir}/node%{node_version_number} -e 'require("assert").strictEqual(process.versions.node, "%{version}");'
+ln addon-rpm.gypi deps/npm/node_modules/node-gyp/addon-rpm.gypi
+# Tarball doesn't have eslint package distributed, so disable some tests
+find test -name \*-eslint-\* -print -delete
+# No documentation is generated, don't bother checking it
+rm -f test/doctool/test-make-doc.js
+# DNS lookup doesn't work in build root
+rm -f test/parallel/test-dns-cancel-reverse-lookup.js \
+      test/parallel/test-dns-resolveany.js
+# Run CI tests - 'advisory for now'
+make test-ci || echo "****** UNIT TESTS NOT ALL HAPPY *****"
 
 %files
 %defattr(-, root, root)

@@ -1,0 +1,44 @@
+Author: Adam Majer <amajer@suse.de>
+Date: Dec 20 09:18:49 UTC 2017
+Summary: Fix CI unit tests framework for OBS building
+
+Index: node-v8.9.3/test/parallel/test-module-loading-globalpaths.js
+===================================================================
+--- node-v8.9.3.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-v8.9.3/test/parallel/test-module-loading-globalpaths.js
+@@ -7,6 +7,9 @@ const fs = require('fs');
+ const child_process = require('child_process');
+ const pkgName = 'foo';
+ 
++common.skip('hardcoded global paths');
++return;
++
+ if (process.argv[2] === 'child') {
+   console.log(require(pkgName).string);
+ } else {
+Index: node-v8.9.3/Makefile
+===================================================================
+--- node-v8.9.3.orig/Makefile
++++ node-v8.9.3/Makefile
+@@ -409,7 +409,7 @@ test-ci-js: | clear-stalled
+ 	fi
+ 
+ test-ci: LOGLEVEL := info
+-test-ci: | clear-stalled build-addons build-addons-napi doc-only
++test-ci: | clear-stalled build-addons build-addons-napi
+ 	out/Release/cctest --gtest_output=tap:cctest.tap
+ 	$(PYTHON) tools/test.py $(PARALLEL_ARGS) -p tap --logfile test.tap \
+ 		--mode=release --flaky-tests=$(FLAKY_TESTS) \
+Index: node-v8.9.3/test/doctool/test-make-doc.js
+===================================================================
+--- node-v8.9.3.orig/test/doctool/test-make-doc.js
++++ node-v8.9.3/test/doctool/test-make-doc.js
+@@ -11,7 +11,7 @@ const assert = require('assert');
+ const fs = require('fs');
+ const path = require('path');
+ 
+-const apiPath = path.resolve(common.projectDir, 'out', 'doc', 'api');
++const apiPath = path.resolve(common.projectDir, 'doc', 'api');
+ const docs = fs.readdirSync(apiPath);
+ assert.ok(docs.includes('_toc.html'));
+ 

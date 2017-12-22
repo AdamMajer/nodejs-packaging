@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Thu Dec 21 12:53:36 UTC 2017 - adam.majer@suse.de
+
+- Enable CI tests in %check target
+  + fix_ci_ssl_tests.patch: Disable testing of obsolete curves
+    which are not enabled OpenSUSE's OpenSSL library
+  + fix_ci_tests.patch:
+    - DNS queries in buildroots are failing with EAI_AGAIN
+    - disable test-module-loading-globalpaths.js - we have
+      hardcoded global paths
+  + versioned.patch: call versioned node binary for tests
+
+-------------------------------------------------------------------
 Sat Dec  9 03:22:01 UTC 2017 - qantas94heavy@gmail.com
 
 - New upstream maintenance release 4.8.7:

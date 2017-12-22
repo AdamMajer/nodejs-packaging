@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Fri Dec 22 14:05:23 UTC 2017 - adam.majer@suse.de
+
+- Enable CI tests in %check target
+  + fix_ci_tests.patch:
+    - DNS queries in buildroots are failing with EAI_AGAIN
+    - disable test-module-loading-globalpaths.js - we have
+      hardcoded global paths
+  + versioned.patch: call versioned node binary for tests
+- node-gyp-addon-gypi.patch: fix typo allowing unit tests to compile
+
+-------------------------------------------------------------------
 Fri Dec 15 11:03:51 UTC 2017 - adam.majer@suse.de
 
 - New upstream release 9.3.0:
