@@ -403,6 +403,8 @@ rm -f test/doctool/test-make-doc.js
 # DNS lookup doesn't work in build root
 rm -f test/parallel/test-dns-cancel-reverse-lookup.js \
       test/parallel/test-dns-resolveany.js
+# multicast test fail since no socket?
+rm -f test/parallel/test-dgram-membership.js
 # Run CI tests - 'advisory for now'
 make test-ci || echo "****** UNIT TESTS NOT ALL HAPPY *****"
 
