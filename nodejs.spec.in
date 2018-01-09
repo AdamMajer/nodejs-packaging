@@ -290,6 +290,10 @@ find deps/cares -name *.[ch] -delete
 
 find deps/zlib -name *.[ch] -delete
 
+# Annoying, over-repetitive patch updated just because lines in
+# documentation changes every version.
+find -name *.md.orig -delete
+
 %build
 # percent-configure pulls in something that confuses node's configure
 # script, so we'll do it thus:
