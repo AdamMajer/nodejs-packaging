@@ -4,6 +4,7 @@ Tue Jan  9 10:54:48 UTC 2018 - adam.majer@suse.de
 - New upstream LTS release 6.12.3:
   * v8: profiler-related fixes
   * mostly documentation and test related changes
+- nodejs-sle11-python26-check_output.patch: refreshed
 
 -------------------------------------------------------------------
 Fri Dec 22 14:28:07 UTC 2017 - adam.majer@suse.de

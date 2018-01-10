@@ -6,6 +6,7 @@ Tue Jan  9 11:03:58 UTC 2018 - adam.majer@suse.de
   * for complete changeset see
     https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V8.md#8.9.4
 - versioned.patch: refreshed
+- nodejs-sle11-python26-check_output.patch: refreshed
 
 -------------------------------------------------------------------
 Fri Dec 22 14:01:07 UTC 2017 - adam.majer@suse.de
