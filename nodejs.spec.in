@@ -30,7 +30,7 @@ Release:        0
 
 %define node_version_number {{node_version_major}}
 
-%if 0%{?sles_version} == 11
+%if 0%{?suse_version} == 1110
 %define _libexecdir %{_exec_prefix}/lib
 %endif
 
@@ -123,7 +123,7 @@ BuildRequires:  binutils-gold
 #
 # If the default compiler is not supported, use the most recent compiler
 # version available.
-%if 0%{?sles_version} == 11
+%if 0%{?suse_version} == 1110
 # GCC 5 is only available in the SUSE:SLE-11:SP4:Update repository (SDK).
 %if %node_version_number >= 8
 BuildRequires:   gcc5-c++
@@ -138,7 +138,7 @@ BuildRequires:   gcc48-c++
 
 # SLE 12 and Leap 42
 # GCC 6 is only available with SLE 12 SP1 and Leap 42.2+.
-%if {{node_version_major}} >= 8 && 0%{?suse_version} == 1315
+%if %node_version_number >= 8 && 0%{?suse_version} == 1315
 %if 0%{?sle_version} < 120100
 BuildRequires:   gcc5-c++
 %define cc_exec  gcc-5
@@ -208,7 +208,7 @@ Requires:       nodejs-common
 # For SLE11, to be able to use the certificate store we need to have properly
 # symlinked certificates. The compatability symlinks are provided by the
 # openssl1 library in the Security Module
-%if 0%{?sles_version} == 11
+%if 0%{?suse_version} == 1110
 Requires:       openssl1
 %endif
 
@@ -267,7 +267,7 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %patch101 -p1
 %patch102 -p1
 # Add check_output to configure script (not part of Python 2.6 in SLE11).
-%if 0%{?sles_version} == 11
+%if 0%{?suse_version} == 1110
 %patch103 -p1
 %endif
 %patch104 -p1
