@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan 30 18:10:06 CET 2018 - ro@suse.de
+
+- even on recent codestreams there is no binutils gold on s390
+  only on s390x
+
+-------------------------------------------------------------------
 Thu Dec 21 12:53:36 UTC 2017 - adam.majer@suse.de
 
 - Enable CI tests in %check target

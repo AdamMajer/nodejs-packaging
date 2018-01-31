@@ -69,13 +69,17 @@ Release:        0
 %endif # aarch64
 
 # No binutils_gold on all versions of SLE 12 and Leap 42 (s390x).
-%ifarch s390x s390
+%ifarch s390x
 %if 0%{?suse_version} > 1320
 %bcond_without binutils_gold
 %else
 %bcond_with    binutils_gold
 %endif
-%endif # s390x s390
+%endif # s390x
+
+%ifarch s390
+%bcond_with    binutils_gold
+%endif
 
 %ifnarch aarch64 s390x s390
 %bcond_without binutils_gold

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan 30 18:10:06 CET 2018 - ro@suse.de
+
+- even on recent codestreams there is no binutils gold on s390
+  only on s390x
+
+-------------------------------------------------------------------
 Tue Jan  9 10:54:48 UTC 2018 - adam.majer@suse.de
 
 - New upstream LTS release 6.12.3:
