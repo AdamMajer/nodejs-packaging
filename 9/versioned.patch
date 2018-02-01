@@ -8,11 +8,11 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-v9.3.0/Makefile
+Index: node-v9.5.0/Makefile
 ===================================================================
---- node-v9.3.0.orig/Makefile
-+++ node-v9.3.0/Makefile
-@@ -45,7 +45,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
+--- node-v9.5.0.orig/Makefile
++++ node-v9.5.0/Makefile
+@@ -46,7 +46,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
  
@@ -21,10 +21,10 @@ Index: node-v9.3.0/Makefile
  NODE ?= ./$(NODE_EXE)
  NODE_G_EXE = node_g$(EXEEXT)
  NPM ?= ./deps/npm/bin/npm-cli.js
-Index: node-v9.3.0/tools/install.py
+Index: node-v9.5.0/tools/install.py
 ===================================================================
---- node-v9.3.0.orig/tools/install.py
-+++ node-v9.3.0/tools/install.py
+--- node-v9.5.0.orig/tools/install.py
++++ node-v9.5.0/tools/install.py
 @@ -78,7 +78,7 @@ def install(paths, dst): map(lambda path
  def uninstall(paths, dst): map(lambda path: try_remove(path, dst), paths)
  
@@ -125,10 +125,10 @@ Index: node-v9.3.0/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-v9.3.0/doc/node.1
+Index: node-v9.5.0/doc/node.1
 ===================================================================
---- node-v9.3.0.orig/doc/node.1
-+++ node-v9.3.0/doc/node.1
+--- node-v9.5.0.orig/doc/node.1
++++ node-v9.5.0/doc/node.1
 @@ -26,12 +26,12 @@
  
  .SH NAME
@@ -161,10 +161,10 @@ Index: node-v9.3.0/doc/node.1
  .RB [ \-\-v8-options ]
  
  Execute without arguments to start the REPL.
-Index: node-v9.3.0/src/node.stp
+Index: node-v9.5.0/src/node.stp
 ===================================================================
---- node-v9.3.0.orig/src/node.stp
-+++ node-v9.3.0/src/node.stp
+--- node-v9.5.0.orig/src/node.stp
++++ node-v9.5.0/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -237,12 +237,12 @@ Index: node-v9.3.0/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-v9.3.0/deps/npm/man/man1/npm.1
+Index: node-v9.5.0/deps/npm/man/man1/npm.1
 ===================================================================
---- node-v9.3.0.orig/deps/npm/man/man1/npm.1
-+++ node-v9.3.0/deps/npm/man/man1/npm.1
+--- node-v9.5.0.orig/deps/npm/man/man1/npm.1
++++ node-v9.5.0/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
- .TH "NPM" "1" "October 2017" "" ""
+ .TH "NPM" "1" "December 2017" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm9\fR \- javascript package manager
@@ -364,77 +364,35 @@ Index: node-v9.3.0/deps/npm/man/man1/npm.1
  
  .RE
  
-Index: node-v9.3.0/node.gyp
+Index: node-v9.5.0/node.gyp
 ===================================================================
---- node-v9.3.0.orig/node.gyp
-+++ node-v9.3.0/node.gyp
-@@ -21,7 +21,7 @@
+--- node-v9.5.0.orig/node.gyp
++++ node-v9.5.0/node.gyp
+@@ -21,8 +21,8 @@
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',
      'node_enable_v8_vtunejit%': 'false',
 -    'node_core_target_name%': 'node',
+-    'node_lib_target_name%': 'node_lib',
 +    'node_core_target_name%': 'node9',
++    'node_lib_target_name%': 'node9_lib',
+     'node_intermediate_lib_type%': 'static_library',
      'library_files': [
        'lib/internal/bootstrap_node.js',
-       'lib/async_hooks.js',
-@@ -654,10 +654,10 @@
-             {
-               'action_name': 'node_dtrace_provider_o',
-               'inputs': [
--                '<(OBJ_DIR)/node/src/node_dtrace.o',
-+                '<(OBJ_DIR)/node9/src/node_dtrace.o',
-               ],
-               'outputs': [
--                '<(OBJ_DIR)/node/src/node_dtrace_provider.o'
-+                '<(OBJ_DIR)/node9/src/node_dtrace_provider.o'
-               ],
-               'action': [ 'dtrace', '-G', '-xnolibs', '-s', 'src/node_provider.d',
-                 '<@(_inputs)', '-o', '<@(_outputs)' ]
-@@ -707,7 +707,7 @@
-                 '<(SHARED_INTERMEDIATE_DIR)/v8constants.h'
-               ],
-               'outputs': [
--                '<(OBJ_DIR)/node/src/node_dtrace_ustack.o'
-+                '<(OBJ_DIR)/node9/src/node_dtrace_ustack.o'
-               ],
-               'conditions': [
-                 [ 'target_arch=="ia32" or target_arch=="arm"', {
-@@ -768,9 +768,9 @@
-       ],
- 
-       'variables': {
--        'OBJ_PATH': '<(OBJ_DIR)/node/src',
--        'OBJ_GEN_PATH': '<(OBJ_DIR)/node/gen',
--        'OBJ_TRACING_PATH': '<(OBJ_DIR)/node/src/tracing',
-+        'OBJ_PATH': '<(OBJ_DIR)/node9/src',
-+        'OBJ_GEN_PATH': '<(OBJ_DIR)/node9/gen',
-+        'OBJ_TRACING_PATH': '<(OBJ_DIR)/node9/src/tracing',
-         'OBJ_SUFFIX': 'o',
-         'OBJ_SEPARATOR': '/',
-         'conditions': [
-@@ -1017,7 +1017,7 @@
-     ['OS=="aix"', {
-       'targets': [
-         {
--          'target_name': 'node',
-+          'target_name': 'node9',
-           'conditions': [
-             ['node_shared=="true"', {
-               'type': 'shared_library',
-Index: node-v9.3.0/deps/npm/bin/npm-cli.js
+Index: node-v9.5.0/deps/npm/bin/npm-cli.js
 ===================================================================
---- node-v9.3.0.orig/deps/npm/bin/npm-cli.js
-+++ node-v9.3.0/deps/npm/bin/npm-cli.js
+--- node-v9.5.0.orig/deps/npm/bin/npm-cli.js
++++ node-v9.5.0/deps/npm/bin/npm-cli.js
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env node
 +#!/usr/bin/env node9
  ;(function () { // wrapper in case we're in module_context mode
    // windows: running "npm blah" in this folder will invoke WSH, not node.
    /*global WScript*/
-Index: node-v9.3.0/src/node_main.cc
+Index: node-v9.5.0/src/node_main.cc
 ===================================================================
---- node-v9.3.0.orig/src/node_main.cc
-+++ node-v9.3.0/src/node_main.cc
+--- node-v9.5.0.orig/src/node_main.cc
++++ node-v9.5.0/src/node_main.cc
 @@ -101,6 +101,7 @@ int main(int argc, char *argv[]) {
  #endif
    // Disable stdio buffering, it interacts poorly with printf()
@@ -443,12 +401,12 @@ Index: node-v9.3.0/src/node_main.cc
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
-Index: node-v9.3.0/deps/npm/man/man1/npx.1
+Index: node-v9.5.0/deps/npm/man/man1/npx.1
 ===================================================================
---- node-v9.3.0.orig/deps/npm/man/man1/npx.1
-+++ node-v9.3.0/deps/npm/man/man1/npx.1
+--- node-v9.5.0.orig/deps/npm/man/man1/npx.1
++++ node-v9.5.0/deps/npm/man/man1/npx.1
 @@ -1,32 +1,32 @@
- .TH "NPX" "1" "August 2017" "npx@9.5.0" "User Commands"
+ .TH "NPX" "1" "October 2017" "npx@9.7.0" "User Commands"
  .SH "NAME"
 -\fBnpx\fR \- execute npm package binaries
 +\fBnpx9\fR \- execute npm package binaries
@@ -530,10 +488,10 @@ Index: node-v9.3.0/deps/npm/man/man1/npx.1
 +\fBnpm9\-config(7)\fP
  
  .RE
-Index: node-v9.3.0/tools/test.py
+Index: node-v9.5.0/tools/test.py
 ===================================================================
---- node-v9.3.0.orig/tools/test.py
-+++ node-v9.3.0/tools/test.py
+--- node-v9.5.0.orig/tools/test.py
++++ node-v9.5.0/tools/test.py
 @@ -906,7 +906,7 @@ class Context(object):
  
    def GetVm(self, arch, mode):
