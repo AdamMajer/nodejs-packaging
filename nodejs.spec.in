@@ -148,7 +148,7 @@ BuildRequires:   gcc5-c++
 %define cc_exec  gcc-5
 %define cpp_exec g++-5
 %else
-if 0%{?sle_version} <= 120200
+%if 0%{?sle_version} <= 120200
 BuildRequires:   gcc6-c++
 %define cc_exec  gcc-6
 %define cpp_exec g++-6
