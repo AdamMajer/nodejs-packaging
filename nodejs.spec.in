@@ -148,9 +148,15 @@ BuildRequires:   gcc5-c++
 %define cc_exec  gcc-5
 %define cpp_exec g++-5
 %else
+if 0%{?sle_version} <= 120200
 BuildRequires:   gcc6-c++
 %define cc_exec  gcc-6
 %define cpp_exec g++-6
+%else
+BuildRequires:   gcc7-c++
+%define cc_exec  gcc-7
+%define cpp_exec g++-7
+%endif # SLE 12 <= SP2
 %endif # SLE 12 < SP1
 %endif # node >= 8 and sle == 12
 
