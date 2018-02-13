@@ -171,7 +171,7 @@ BuildRequires:  procps
 BuildRequires:  python
 BuildRequires:  xz
 BuildRequires:  zlib-devel
-
+BuildRequires:  python2
 
 %if ! %{with intree_openssl}
 
@@ -249,6 +249,7 @@ Provides:       nodejs-npm = %{version}
 Obsoletes:      nodejs-npm < 4.0.0
 Provides:       npm(npm) = {{npm_version}}
 Provides:       npm = %{version}
+Recommends:     python2
 
 %description -n npm{{node_version_major}}
 A package manager for Node.js that allows developers to install and

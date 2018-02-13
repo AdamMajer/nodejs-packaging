@@ -1,7 +1,15 @@
 -------------------------------------------------------------------
+Tue Feb 13 08:40:52 UTC 2018 - adam.majer@suse.de
+
+- Add Recommends and BuildRequire on python2 for npm. node-gyp
+  requires this old version of python for now. This is only needed
+  for binary modules.
+
+-------------------------------------------------------------------
 Wed Feb  7 11:12:11 UTC 2018 - adam.majer@suse.de
 
 - Fix specfile typo
+- Use gcc7 on Leap 42.3
 
 -------------------------------------------------------------------
 Tue Jan 30 18:10:06 CET 2018 - ro@suse.de
