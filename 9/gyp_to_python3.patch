@@ -1,0 +1,3432 @@
+READY OR NOT! HERE WE COME!
+Source: https://chromium-review.googlesource.com/c/external/gyp/+/479691
+Removed all tests, because why not. We are brave! (ok, maybe not,
+but this is just for building things and we need python3 *AND*
+node doesn't ship gyp tests)
+
+From 8cb17d0b478dad2caff678bc1d91101d6bc1de0b Mon Sep 17 00:00:00 2001
+From: Dirk Pranke <dpranke@chromium.org>
+Date: Mon, 24 Apr 2017 19:13:54 -0700
+Subject: [PATCH] Make GYP Python3-compatible.
+
+This patch is almost completely based off of
+https://codereview.chromium.org/1454433002/.
+
+NOT READY FOR LANDING!
+
+Change-Id: Iabee70148d26703653108403919a33a23fe6a400
+---
+
+Index: node-v8.9.4/tools/gyp/PRESUBMIT.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/PRESUBMIT.py
++++ node-v8.9.4/tools/gyp/PRESUBMIT.py
+@@ -76,8 +76,7 @@ PYLINT_DISABLED_WARNINGS = [
+ def _LicenseHeader(input_api):
+   # Accept any year number from 2009 to the current year.
+   current_year = int(input_api.time.strftime('%Y'))
+-  allowed_years = (str(s) for s in reversed(xrange(2009, current_year + 1)))
+-
++  allowed_years = (str(s) for s in reversed(range(2009, current_year + 1)))
+   years_re = '(' + '|'.join(allowed_years) + ')'
+ 
+   # The (c) is deprecated, but tolerate it until it's removed from all files.
+Index: node-v8.9.4/tools/gyp/README.md
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/README.md
++++ node-v8.9.4/tools/gyp/README.md
+@@ -1,4 +1,5 @@
+ GYP can Generate Your Projects.
+ ===================================
+ 
+-Documents are available at [gyp.gsrc.io](https://gyp.gsrc.io), or you can check out ```md-pages``` branch to read those documents offline.
++Documents are available at [gyp.gsrc.io](https://gyp.gsrc.io), or
++you can check out ```md-pages``` branch to read those documents offline.
+Index: node-v8.9.4/tools/gyp/buildbot/buildbot_run.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/buildbot/buildbot_run.py
++++ node-v8.9.4/tools/gyp/buildbot/buildbot_run.py
+@@ -5,6 +5,8 @@
+ 
+ """Argument-less script to select what to run on the buildbots."""
+ 
++from __future__ import print_function
++
+ import os
+ import shutil
+ import subprocess
+@@ -24,14 +26,14 @@ def CallSubProcess(*args, **kwargs):
+   with open(os.devnull) as devnull_fd:
+     retcode = subprocess.call(stdin=devnull_fd, *args, **kwargs)
+   if retcode != 0:
+-    print '@@@STEP_EXCEPTION@@@'
++    print('@@@STEP_EXCEPTION@@@')
+     sys.exit(1)
+ 
+ 
+ def PrepareCmake():
+   """Build CMake 2.8.8 since the version in Precise is 2.8.7."""
+   if os.environ['BUILDBOT_CLOBBER'] == '1':
+-    print '@@@BUILD_STEP Clobber CMake checkout@@@'
++    print('@@@BUILD_STEP Clobber CMake checkout@@@')
+     shutil.rmtree(CMAKE_DIR)
+ 
+   # We always build CMake 2.8.8, so no need to do anything
+@@ -39,10 +41,10 @@ def PrepareCmake():
+   if os.path.isdir(CMAKE_DIR):
+     return
+ 
+-  print '@@@BUILD_STEP Initialize CMake checkout@@@'
++  print('@@@BUILD_STEP Initialize CMake checkout@@@')
+   os.mkdir(CMAKE_DIR)
+ 
+-  print '@@@BUILD_STEP Sync CMake@@@'
++  print('@@@BUILD_STEP Sync CMake@@@')
+   CallSubProcess(
+       ['git', 'clone',
+        '--depth', '1',
+@@ -53,7 +55,7 @@ def PrepareCmake():
+        CMAKE_DIR],
+       cwd=CMAKE_DIR)
+ 
+-  print '@@@BUILD_STEP Build CMake@@@'
++  print('@@@BUILD_STEP Build CMake@@@')
+   CallSubProcess(
+       ['/bin/bash', 'bootstrap', '--prefix=%s' % CMAKE_DIR],
+       cwd=CMAKE_DIR)
+@@ -74,7 +76,7 @@ def GypTestFormat(title, format=None, ms
+   if not format:
+     format = title
+ 
+-  print '@@@BUILD_STEP ' + title + '@@@'
++  print('@@@BUILD_STEP ' + title + '@@@')
+   sys.stdout.flush()
+   env = os.environ.copy()
+   if msvs_version:
+@@ -89,17 +91,17 @@ def GypTestFormat(title, format=None, ms
+   retcode = subprocess.call(command, cwd=ROOT_DIR, env=env, shell=True)
+   if retcode:
+     # Emit failure tag, and keep going.
+-    print '@@@STEP_FAILURE@@@'
++    print('@@@STEP_FAILURE@@@')
+     return 1
+   return 0
+ 
+ 
+ def GypBuild():
+   # Dump out/ directory.
+-  print '@@@BUILD_STEP cleanup@@@'
+-  print 'Removing %s...' % OUT_DIR
++  print('@@@BUILD_STEP cleanup@@@')
++  print('Removing %s...' % OUT_DIR)
+   shutil.rmtree(OUT_DIR, ignore_errors=True)
+-  print 'Done.'
++  print('Done.')
+ 
+   retcode = 0
+   if sys.platform.startswith('linux'):
+@@ -128,7 +130,7 @@ def GypBuild():
+     #     after the build proper that could be used for cumulative failures),
+     #     use that instead of this. This isolates the final return value so
+     #     that it isn't misattributed to the last stage.
+-    print '@@@BUILD_STEP failures@@@'
++    print('@@@BUILD_STEP failures@@@')
+     sys.exit(retcode)
+ 
+ 
+Index: node-v8.9.4/tools/gyp/pylib/gyp/MSVSNew.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/MSVSNew.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/MSVSNew.py
+@@ -60,9 +60,24 @@ def MakeGuid(name, seed='msvs_new'):
+ 
+ 
+ class MSVSSolutionEntry(object):
+-  def __cmp__(self, other):
+-    # Sort by name then guid (so things are in order on vs2008).
+-    return cmp((self.name, self.get_guid()), (other.name, other.get_guid()))
++  # Sort by name then guid (so things are in order on vs2008).
++  def __lt__(self, other):
++    return (self.name, self.get_guid()) < (other.name, other.get_guid())
++
++  def __gt__(self, other):
++    return (self.name, self.get_guid()) > (other.name, other.get_guid())
++
++  def __eq__(self, other):
++    return (self.name, self.get_guid()) == (other.name, other.get_guid())
++
++  def __le__(self, other):
++    return (self.name, self.get_guid()) <= (other.name, other.get_guid())
++
++  def __ge__(self, other):
++    return (self.name, self.get_guid()) >= (other.name, other.get_guid())
++
++  def __ne__(self, other):
++    return (self.name, self.get_guid()) != (other.name, other.get_guid())
+ 
+ 
+ class MSVSFolder(MSVSSolutionEntry):
+Index: node-v8.9.4/tools/gyp/pylib/gyp/MSVSSettings.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/MSVSSettings.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/MSVSSettings.py
+@@ -14,9 +14,16 @@ The MSBuild schemas were also considered
+ MSBuild install directory, e.g. c:\Program Files (x86)\MSBuild
+ """
+ 
++from __future__ import print_function
++
+ import sys
+ import re
+ 
++try:
++  basestring = basestring
++except NameError:
++  basestring = str
++
+ # Dictionaries of settings validators. The key is the tool name, the value is
+ # a dictionary mapping setting names to validation functions.
+ _msvs_validators = {}
+@@ -400,7 +407,7 @@ def _ValidateExclusionSetting(setting, s
+ 
+   if unrecognized:
+     # We don't know this setting. Give a warning.
+-    print >> stderr, error_msg
++    print(error_msg, file=stderr)
+ 
+ 
+ def FixVCMacroSlashes(s):
+@@ -433,7 +440,7 @@ def ConvertVCMacrosToMSBuild(s):
+         '$(PlatformName)': '$(Platform)',
+         '$(SafeInputName)': '%(Filename)',
+     }
+-    for old, new in replace_map.iteritems():
++    for old, new in replace_map.items():
+       s = s.replace(old, new)
+     s = FixVCMacroSlashes(s)
+   return s
+@@ -453,17 +460,18 @@ def ConvertToMSBuildSettings(msvs_settin
+       dictionaries of settings and their values.
+   """
+   msbuild_settings = {}
+-  for msvs_tool_name, msvs_tool_settings in msvs_settings.iteritems():
++  for msvs_tool_name, msvs_tool_settings in msvs_settings.items():
+     if msvs_tool_name in _msvs_to_msbuild_converters:
+       msvs_tool = _msvs_to_msbuild_converters[msvs_tool_name]
+-      for msvs_setting, msvs_value in msvs_tool_settings.iteritems():
++      for msvs_setting, msvs_value in msvs_tool_settings.items():
+         if msvs_setting in msvs_tool:
+           # Invoke the translation function.
+           try:
+             msvs_tool[msvs_setting](msvs_value, msbuild_settings)
+-          except ValueError, e:
+-            print >> stderr, ('Warning: while converting %s/%s to MSBuild, '
+-                              '%s' % (msvs_tool_name, msvs_setting, e))
++          except ValueError as e:
++            print(('Warning: while converting %s/%s to MSBuild, '
++                              '%s' % (msvs_tool_name, msvs_setting, e)),
++                              file=stderr)
+         else:
+           _ValidateExclusionSetting(msvs_setting,
+                                     msvs_tool,
+@@ -472,8 +480,8 @@ def ConvertToMSBuildSettings(msvs_settin
+                                      (msvs_tool_name, msvs_setting)),
+                                     stderr)
+     else:
+-      print >> stderr, ('Warning: unrecognized tool %s while converting to '
+-                        'MSBuild.' % msvs_tool_name)
++      print(('Warning: unrecognized tool %s while converting to '
++                        'MSBuild.' % msvs_tool_name), file=stderr)
+   return msbuild_settings
+ 
+ 
+@@ -513,13 +521,13 @@ def _ValidateSettings(validators, settin
+   for tool_name in settings:
+     if tool_name in validators:
+       tool_validators = validators[tool_name]
+-      for setting, value in settings[tool_name].iteritems():
++      for setting, value in settings[tool_name].items():
+         if setting in tool_validators:
+           try:
+             tool_validators[setting](value)
+-          except ValueError, e:
+-            print >> stderr, ('Warning: for %s/%s, %s' %
+-                              (tool_name, setting, e))
++          except ValueError as e:
++            print(('Warning: for %s/%s, %s' %
++                              (tool_name, setting, e)), file=stderr)
+         else:
+           _ValidateExclusionSetting(setting,
+                                     tool_validators,
+@@ -528,7 +536,7 @@ def _ValidateSettings(validators, settin
+                                     stderr)
+ 
+     else:
+-      print >> stderr, ('Warning: unrecognized tool %s' % tool_name)
++      print(('Warning: unrecognized tool %s' % tool_name), file=stderr)
+ 
+ 
+ # MSVS and MBuild names of the tools.
+Index: node-v8.9.4/tools/gyp/pylib/gyp/MSVSSettings_test.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/MSVSSettings_test.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/MSVSSettings_test.py
+@@ -6,7 +6,10 @@
+ 
+ """Unit tests for the MSVSSettings.py file."""
+ 
+-import StringIO
++try:
++  from StringIO import StringIO
++except ImportError:
++  from io import StringIO
+ import unittest
+ import gyp.MSVSSettings as MSVSSettings
+ 
+@@ -14,7 +17,7 @@ import gyp.MSVSSettings as MSVSSettings
+ class TestSequenceFunctions(unittest.TestCase):
+ 
+   def setUp(self):
+-    self.stderr = StringIO.StringIO()
++    self.stderr = StringIO()
+ 
+   def _ExpectedWarnings(self, expected):
+     """Compares recorded lines to expected warnings."""
+Index: node-v8.9.4/tools/gyp/pylib/gyp/MSVSUserFile.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/MSVSUserFile.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/MSVSUserFile.py
+@@ -91,7 +91,7 @@ class Writer(object):
+ 
+     if environment and isinstance(environment, dict):
+       env_list = ['%s="%s"' % (key, val)
+-                  for (key,val) in environment.iteritems()]
++                  for (key,val) in environment.items()]
+       environment = ' '.join(env_list)
+     else:
+       environment = ''
+@@ -135,7 +135,7 @@ class Writer(object):
+   def WriteIfChanged(self):
+     """Writes the user file."""
+     configs = ['Configurations']
+-    for config, spec in sorted(self.configurations.iteritems()):
++    for config, spec in sorted(self.configurations.items()):
+       configs.append(spec)
+ 
+     content = ['VisualStudioUserFile',
+Index: node-v8.9.4/tools/gyp/pylib/gyp/MSVSUtil.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/MSVSUtil.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/MSVSUtil.py
+@@ -236,7 +236,7 @@ def InsertLargePdbShims(target_list, tar
+ 
+     # Set up the shim to output its PDB to the same location as the final linker
+     # target.
+-    for config_name, config in shim_dict.get('configurations').iteritems():
++    for config_name, config in shim_dict.get('configurations').items():
+       pdb_path = _GetPdbPath(target_dict, config_name, vars)
+ 
+       # A few keys that we don't want to propagate.
+Index: node-v8.9.4/tools/gyp/pylib/gyp/MSVSVersion.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/MSVSVersion.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/MSVSVersion.py
+@@ -189,7 +189,7 @@ def _RegistryQuery(key, value=None):
+   text = None
+   try:
+     text = _RegistryQueryBase('Sysnative', key, value)
+-  except OSError, e:
++  except OSError as e:
+     if e.errno == errno.ENOENT:
+       text = _RegistryQueryBase('System32', key, value)
+     else:
+@@ -207,12 +207,15 @@ def _RegistryGetValueUsingWinReg(key, va
+     contents of the registry key's value, or None on failure.  Throws
+     ImportError if _winreg is unavailable.
+   """
+-  import _winreg
++  try:
++    import _winreg as winreg
++  except ImportError:
++    import winreg
+   try:
+     root, subkey = key.split('\\', 1)
+     assert root == 'HKLM'  # Only need HKLM for now.
+-    with _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, subkey) as hkey:
+-      return _winreg.QueryValueEx(hkey, value)[0]
++    with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, subkey) as hkey:
++      return winreg.QueryValueEx(hkey, value)[0]
+   except WindowsError:
+     return None
+ 
+Index: node-v8.9.4/tools/gyp/pylib/gyp/__init__.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/__init__.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/__init__.py
+@@ -4,6 +4,8 @@
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+ 
++from __future__ import print_function
++
+ import copy
+ import gyp.input
+ import optparse
+@@ -14,6 +16,11 @@ import sys
+ import traceback
+ from gyp.common import GypError
+ 
++try:
++  basestring = basestring
++except NameError:
++  basestring = str
++
+ # Default debug modes for GYP
+ debug = {}
+ 
+@@ -22,7 +29,6 @@ DEBUG_GENERAL = 'general'
+ DEBUG_VARIABLES = 'variables'
+ DEBUG_INCLUDES = 'includes'
+ 
+-
+ def DebugOutput(mode, message, *args):
+   if 'all' in gyp.debug or mode in gyp.debug:
+     ctx = ('unknown', 0, 'unknown')
+@@ -34,8 +40,8 @@ def DebugOutput(mode, message, *args):
+       pass
+     if args:
+       message %= args
+-    print '%s:%s:%d:%s %s' % (mode.upper(), os.path.basename(ctx[0]),
+-                              ctx[1], ctx[2], message)
++    print('%s:%s:%d:%s %s' % (mode.upper(), os.path.basename(ctx[0]),
++                              ctx[1], ctx[2], message))
+ 
+ def FindBuildFiles():
+   extension = '.gyp'
+@@ -207,7 +213,7 @@ def RegenerateFlags(options):
+   # We always want to ignore the environment when regenerating, to avoid
+   # duplicate or changed flags in the environment at the time of regeneration.
+   flags = ['--ignore-environment']
+-  for name, metadata in options._regeneration_metadata.iteritems():
++  for name, metadata in options._regeneration_metadata.items():
+     opt = metadata['opt']
+     value = getattr(options, name)
+     value_predicate = metadata['type'] == 'path' and FixPath or Noop
+@@ -226,12 +232,13 @@ def RegenerateFlags(options):
+           (action == 'store_false' and not value)):
+         flags.append(opt)
+       elif options.use_environment and env_name:
+-        print >>sys.stderr, ('Warning: environment regeneration unimplemented '
++        print(('Warning: environment regeneration unimplemented '
+                              'for %s flag %r env_name %r' % (action, opt,
+-                                                             env_name))
++                                                             env_name)),
++                                                             file=sys.stderr)
+     else:
+-      print >>sys.stderr, ('Warning: regeneration unimplemented for action %r '
+-                           'flag %r' % (action, opt))
++      print(('Warning: regeneration unimplemented for action %r '
++                           'flag %r' % (action, opt)), file=sys.stderr)
+ 
+   return flags
+ 
+@@ -431,12 +438,11 @@ def gyp_main(args):
+     for build_file in build_files:
+       build_file_dir = os.path.abspath(os.path.dirname(build_file))
+       build_file_dir_components = build_file_dir.split(os.path.sep)
+-      components_len = len(build_file_dir_components)
+-      for index in xrange(components_len - 1, -1, -1):
+-        if build_file_dir_components[index] == 'src':
++      for component in reversed(build_file_dir_components):
++        if component == 'src':
+           options.depth = os.path.sep.join(build_file_dir_components)
+           break
+-        del build_file_dir_components[index]
++        del build_file_dir_components[-1]
+ 
+       # If the inner loop found something, break without advancing to another
+       # build file.
+@@ -475,7 +481,7 @@ def gyp_main(args):
+   if home_dot_gyp != None:
+     default_include = os.path.join(home_dot_gyp, 'include.gypi')
+     if os.path.exists(default_include):
+-      print 'Using overrides found in ' + default_include
++      print('Using overrides found in ' + default_include)
+       includes.append(default_include)
+ 
+   # Command-line --include files come after the default include.
+@@ -490,7 +496,7 @@ def gyp_main(args):
+   if options.generator_flags:
+     gen_flags += options.generator_flags
+   generator_flags = NameValueListToDict(gen_flags)
+-  if DEBUG_GENERAL in gyp.debug.keys():
++  if DEBUG_GENERAL in gyp.debug:
+     DebugOutput(DEBUG_GENERAL, "generator_flags: %s", generator_flags)
+ 
+   # Generate all requested formats (use a set in case we got one format request
+@@ -523,7 +529,7 @@ def gyp_main(args):
+     generator.GenerateOutput(flat_list, targets, data, params)
+ 
+     if options.configs:
+-      valid_configs = targets[flat_list[0]]['configurations'].keys()
++      valid_configs = targets[flat_list[0]]['configurations']
+       for conf in options.configs:
+         if conf not in valid_configs:
+           raise GypError('Invalid config specified via --build: %s' % conf)
+@@ -536,7 +542,7 @@ def gyp_main(args):
+ def main(args):
+   try:
+     return gyp_main(args)
+-  except GypError, e:
++  except GypError as e:
+     sys.stderr.write("gyp: %s\n" % e)
+     return 1
+ 
+Index: node-v8.9.4/tools/gyp/pylib/gyp/common.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/common.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/common.py
+@@ -345,7 +345,7 @@ def WriteOnDiff(filename):
+           prefix=os.path.split(filename)[1] + '.gyp.',
+           dir=os.path.split(filename)[0])
+       try:
+-        self.tmp_file = os.fdopen(tmp_fd, 'wb')
++        self.tmp_file = os.fdopen(tmp_fd, 'w')
+       except Exception:
+         # Don't leave turds behind.
+         os.unlink(self.tmp_path)
+@@ -363,7 +363,7 @@ def WriteOnDiff(filename):
+         same = False
+         try:
+           same = filecmp.cmp(self.tmp_path, filename, False)
+-        except OSError, e:
++        except OSError as e:
+           if e.errno != errno.ENOENT:
+             raise
+ 
+@@ -382,9 +382,9 @@ def WriteOnDiff(filename):
+           #
+           # No way to get the umask without setting a new one?  Set a safe one
+           # and then set it back to the old value.
+-          umask = os.umask(077)
++          umask = os.umask(0o77)
+           os.umask(umask)
+-          os.chmod(self.tmp_path, 0666 & ~umask)
++          os.chmod(self.tmp_path, 0o666 & ~umask)
+           if sys.platform == 'win32' and os.path.exists(filename):
+             # NOTE: on windows (but not cygwin) rename will not replace an
+             # existing file, so it must be preceded with a remove. Sadly there
+@@ -467,7 +467,7 @@ def CopyTool(flavor, out_path, generator
+         ''.join([source[0], header] + source[1:]))
+ 
+   # Make file executable.
+-  os.chmod(tool_path, 0755)
++  os.chmod(tool_path, 0o755)
+ 
+ 
+ # From Alex Martelli,
+Index: node-v8.9.4/tools/gyp/pylib/gyp/common_test.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/common_test.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/common_test.py
+@@ -63,6 +63,7 @@ class TestGetFlavor(unittest.TestCase):
+     self.assertFlavor('solaris', 'sunos'    , {});
+     self.assertFlavor('linux'  , 'linux2'   , {});
+     self.assertFlavor('linux'  , 'linux3'   , {});
++    self.assertFlavor('linux'  , 'linux'    , {});
+ 
+   def test_param(self):
+     self.assertFlavor('foobar', 'linux2' , {'flavor': 'foobar'})
+Index: node-v8.9.4/tools/gyp/pylib/gyp/easy_xml.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/easy_xml.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/easy_xml.py
+@@ -6,6 +6,10 @@ import re
+ import os
+ import locale
+ 
++try:
++  reduce
++except NameError:
++  from functools import reduce
+ 
+ def XmlToString(content, encoding='utf-8', pretty=False):
+   """ Writes the XML content to disk, touching the file only if it has changed.
+@@ -80,7 +84,7 @@ def _ConstructContentList(xml_parts, spe
+   # Optionally in second position is a dictionary of the attributes.
+   rest = specification[1:]
+   if rest and isinstance(rest[0], dict):
+-    for at, val in sorted(rest[0].iteritems()):
++    for at, val in sorted(rest[0].items()):
+       xml_parts.append(' %s="%s"' % (at, _XmlEscape(val, attr=True)))
+     rest = rest[1:]
+   if rest:
+Index: node-v8.9.4/tools/gyp/pylib/gyp/easy_xml_test.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/easy_xml_test.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/easy_xml_test.py
+@@ -8,13 +8,16 @@
+ 
+ import gyp.easy_xml as easy_xml
+ import unittest
+-import StringIO
++try:
++  from StringIO import StringIO
++except ImportError:
++  from io import StringIO
+ 
+ 
+ class TestSequenceFunctions(unittest.TestCase):
+ 
+   def setUp(self):
+-    self.stderr = StringIO.StringIO()
++    self.stderr = StringIO()
+ 
+   def test_EasyXml_simple(self):
+     self.assertEqual(
+Index: node-v8.9.4/tools/gyp/pylib/gyp/flock_tool.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/flock_tool.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/flock_tool.py
+@@ -39,7 +39,7 @@ class FlockTool(object):
+     # where fcntl.flock(fd, LOCK_EX) always fails
+     # with EBADF, that's why we use this F_SETLK
+     # hack instead.
+-    fd = os.open(lockfile, os.O_WRONLY|os.O_NOCTTY|os.O_CREAT, 0666)
++    fd = os.open(lockfile, os.O_WRONLY|os.O_NOCTTY|os.O_CREAT, 0o666)
+     if sys.platform.startswith('aix'):
+       # Python on AIX is compiled with LARGEFILE support, which changes the
+       # struct size.
+Index: node-v8.9.4/tools/gyp/pylib/gyp/generator/analyzer.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/generator/analyzer.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/generator/analyzer.py
+@@ -62,6 +62,8 @@ directly supplied to gyp. OTOH if both "
+ then the "all" target includes "b1" and "b2".
+ """
+ 
++from __future__ import print_function
++
+ import gyp.common
+ import gyp.ninja_syntax as ninja_syntax
+ import json
+@@ -155,7 +157,7 @@ def _AddSources(sources, base_path, base
+       continue
+     result.append(base_path + source)
+     if debug:
+-      print 'AddSource', org_source, result[len(result) - 1]
++      print('AddSource', org_source, result[len(result) - 1])
+ 
+ 
+ def _ExtractSourcesFromAction(action, base_path, base_path_components,
+@@ -185,7 +187,7 @@ def _ExtractSources(target, target_dict,
+     base_path += '/'
+ 
+   if debug:
+-    print 'ExtractSources', target, base_path
++    print('ExtractSources', target, base_path)
+ 
+   results = []
+   if 'sources' in target_dict:
+@@ -278,7 +280,7 @@ def _WasBuildFileModified(build_file, da
+   the root of the source tree."""
+   if _ToLocalPath(toplevel_dir, _ToGypPath(build_file)) in files:
+     if debug:
+-      print 'gyp file modified', build_file
++      print('gyp file modified', build_file)
+     return True
+ 
+   # First element of included_files is the file itself.
+@@ -291,8 +293,8 @@ def _WasBuildFileModified(build_file, da
+         _ToGypPath(gyp.common.UnrelativePath(include_file, build_file))
+     if _ToLocalPath(toplevel_dir, rel_include_file) in files:
+       if debug:
+-        print 'included gyp file modified, gyp_file=', build_file, \
+-            'included file=', rel_include_file
++        print('included gyp file modified, gyp_file=', build_file, \
++            'included file=', rel_include_file)
+       return True
+   return False
+ 
+@@ -373,7 +375,7 @@ def _GenerateTargets(data, target_list,
+     # If a build file (or any of its included files) is modified we assume all
+     # targets in the file are modified.
+     if build_file_in_files[build_file]:
+-      print 'matching target from modified build file', target_name
++      print('matching target from modified build file', target_name)
+       target.match_status = MATCH_STATUS_MATCHES
+       matching_targets.append(target)
+     else:
+@@ -381,7 +383,7 @@ def _GenerateTargets(data, target_list,
+                                 toplevel_dir)
+       for source in sources:
+         if _ToGypPath(os.path.normpath(source)) in files:
+-          print 'target', target_name, 'matches', source
++          print('target', target_name, 'matches', source)
+           target.match_status = MATCH_STATUS_MATCHES
+           matching_targets.append(target)
+           break
+@@ -433,7 +435,7 @@ def _DoesTargetDependOnMatchingTargets(t
+   for dep in target.deps:
+     if _DoesTargetDependOnMatchingTargets(dep):
+       target.match_status = MATCH_STATUS_MATCHES_BY_DEPENDENCY
+-      print '\t', target.name, 'matches by dep', dep.name
++      print('\t', target.name, 'matches by dep', dep.name)
+       return True
+   target.match_status = MATCH_STATUS_DOESNT_MATCH
+   return False
+@@ -445,7 +447,7 @@ def _GetTargetsDependingOnMatchingTarget
+   supplied as input to analyzer.
+   possible_targets: targets to search from."""
+   found = []
+-  print 'Targets that matched by dependency:'
++  print('Targets that matched by dependency:')
+   for target in possible_targets:
+     if _DoesTargetDependOnMatchingTargets(target):
+       found.append(target)
+@@ -484,12 +486,13 @@ def _AddCompileTargets(target, roots, ad
+           (add_if_no_ancestor or target.requires_build)) or
+          (target.is_static_library and add_if_no_ancestor and
+           not target.is_or_has_linked_ancestor)):
+-    print '\t\tadding to compile targets', target.name, 'executable', \
+-           target.is_executable, 'added_to_compile_targets', \
+-           target.added_to_compile_targets, 'add_if_no_ancestor', \
+-           add_if_no_ancestor, 'requires_build', target.requires_build, \
+-           'is_static_library', target.is_static_library, \
++    print('\t\tadding to compile targets', target.name, 'executable',
++           target.is_executable, 'added_to_compile_targets',
++           target.added_to_compile_targets, 'add_if_no_ancestor',
++           add_if_no_ancestor, 'requires_build', target.requires_build,
++           'is_static_library', target.is_static_library,
+            'is_or_has_linked_ancestor', target.is_or_has_linked_ancestor
++           )
+     result.add(target)
+     target.added_to_compile_targets = True
+ 
+@@ -500,7 +503,7 @@ def _GetCompileTargets(matching_targets,
+   supplied_targets: set of targets supplied to analyzer to search from."""
+   result = set()
+   for target in matching_targets:
+-    print 'finding compile targets for match', target.name
++    print('finding compile targets for match', target.name)
+     _AddCompileTargets(target, supplied_targets, True, result)
+   return result
+ 
+@@ -508,46 +511,46 @@ def _GetCompileTargets(matching_targets,
+ def _WriteOutput(params, **values):
+   """Writes the output, either to stdout or a file is specified."""
+   if 'error' in values:
+-    print 'Error:', values['error']
++    print('Error:', values['error'])
+   if 'status' in values:
+-    print values['status']
++    print(values['status'])
+   if 'targets' in values:
+     values['targets'].sort()
+-    print 'Supplied targets that depend on changed files:'
++    print('Supplied targets that depend on changed files:')
+     for target in values['targets']:
+-      print '\t', target
++      print('\t', target)
+   if 'invalid_targets' in values:
+     values['invalid_targets'].sort()
+-    print 'The following targets were not found:'
++    print('The following targets were not found:')
+     for target in values['invalid_targets']:
+-      print '\t', target
++      print('\t', target)
+   if 'build_targets' in values:
+     values['build_targets'].sort()
+-    print 'Targets that require a build:'
++    print('Targets that require a build:')
+     for target in values['build_targets']:
+-      print '\t', target
++      print('\t', target)
+   if 'compile_targets' in values:
+     values['compile_targets'].sort()
+-    print 'Targets that need to be built:'
++    print('Targets that need to be built:')
+     for target in values['compile_targets']:
+-      print '\t', target
++      print('\t', target)
+   if 'test_targets' in values:
+     values['test_targets'].sort()
+-    print 'Test targets:'
++    print('Test targets:')
+     for target in values['test_targets']:
+-      print '\t', target
++      print('\t', target)
+ 
+   output_path = params.get('generator_flags', {}).get(
+       'analyzer_output_path', None)
+   if not output_path:
+-    print json.dumps(values)
++    print(json.dumps(values))
+     return
+   try:
+     f = open(output_path, 'w')
+     f.write(json.dumps(values) + '\n')
+     f.close()
+   except IOError as e:
+-    print 'Error writing to output file', output_path, str(e)
++    print('Error writing to output file', output_path, str(e))
+ 
+ 
+ def _WasGypIncludeFileModified(params, files):
+@@ -556,7 +559,7 @@ def _WasGypIncludeFileModified(params, f
+   if params['options'].includes:
+     for include in params['options'].includes:
+       if _ToGypPath(os.path.normpath(include)) in files:
+-        print 'Include file modified, assuming all changed', include
++        print('Include file modified, assuming all changed', include)
+         return True
+   return False
+ 
+@@ -638,13 +641,13 @@ class TargetCalculator(object):
+                                   set(self._root_targets))]
+     else:
+       test_targets = [x for x in test_targets_no_all]
+-    print 'supplied test_targets'
++    print('supplied test_targets')
+     for target_name in self._test_target_names:
+-      print '\t', target_name
+-    print 'found test_targets'
++      print('\t', target_name)
++    print('found test_targets')
+     for target in test_targets:
+-      print '\t', target.name
+-    print 'searching for matching test targets'
++      print('\t', target.name)
++    print('searching for matching test targets')
+     matching_test_targets = _GetTargetsDependingOnMatchingTargets(test_targets)
+     matching_test_targets_contains_all = (test_target_names_contains_all and
+                                           set(matching_test_targets) &
+@@ -654,14 +657,14 @@ class TargetCalculator(object):
+       # 'all' is subsequentely added to the matching names below.
+       matching_test_targets = [x for x in (set(matching_test_targets) &
+                                            set(test_targets_no_all))]
+-    print 'matched test_targets'
++    print('matched test_targets')
+     for target in matching_test_targets:
+-      print '\t', target.name
++      print('\t', target.name)
+     matching_target_names = [gyp.common.ParseQualifiedTarget(target.name)[1]
+                              for target in matching_test_targets]
+     if matching_test_targets_contains_all:
+       matching_target_names.append('all')
+-      print '\tall'
++      print('\tall')
+     return matching_target_names
+ 
+   def find_matching_compile_target_names(self):
+@@ -669,7 +672,7 @@ class TargetCalculator(object):
+     assert self.is_build_impacted();
+     # Compile targets are found by searching up from changed targets.
+     # Reset the visited status for _GetBuildTargets.
+-    for target in self._name_to_target.itervalues():
++    for target in self._name_to_target.values():
+       target.visited = False
+ 
+     supplied_targets = _LookupTargets(self._supplied_target_names_no_all(),
+@@ -677,10 +680,10 @@ class TargetCalculator(object):
+     if 'all' in self._supplied_target_names():
+       supplied_targets = [x for x in (set(supplied_targets) |
+                                       set(self._root_targets))]
+-    print 'Supplied test_targets & compile_targets'
++    print('Supplied test_targets & compile_targets')
+     for target in supplied_targets:
+-      print '\t', target.name
+-    print 'Finding compile targets'
++      print('\t', target.name)
++    print('Finding compile targets')
+     compile_targets = _GetCompileTargets(self._changed_targets,
+                                          supplied_targets)
+     return [gyp.common.ParseQualifiedTarget(target.name)[1]
+@@ -699,7 +702,7 @@ def GenerateOutput(target_list, target_d
+ 
+     toplevel_dir = _ToGypPath(os.path.abspath(params['options'].toplevel_dir))
+     if debug:
+-      print 'toplevel_dir', toplevel_dir
++      print('toplevel_dir', toplevel_dir)
+ 
+     if _WasGypIncludeFileModified(params, config.files):
+       result_dict = { 'status': all_changed_string,
+Index: node-v8.9.4/tools/gyp/pylib/gyp/generator/cmake.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/generator/cmake.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/generator/cmake.py
+@@ -28,6 +28,8 @@ not be able to find the header file dire
+ CMakeLists.txt file.
+ """
+ 
++from __future__ import print_function
++
+ import multiprocessing
+ import os
+ import signal
+@@ -36,6 +38,12 @@ import subprocess
+ import gyp.common
+ import gyp.xcode_emulation
+ 
++try:
++  string.maketrans
++except NameError:
++  # maketrans was moved to str in python 3
++  string.maketrans = str.maketrans
++
+ generator_default_variables = {
+   'EXECUTABLE_PREFIX': '',
+   'EXECUTABLE_SUFFIX': '',
+@@ -644,8 +652,8 @@ def WriteTarget(namer, qualified_target,
+ 
+   cmake_target_type = cmake_target_type_from_gyp_target_type.get(target_type)
+   if cmake_target_type is None:
+-    print ('Target %s has unknown target type %s, skipping.' %
+-          (        target_name,               target_type  ) )
++    print('Target %s has unknown target type %s, skipping.' %
++          (        target_name,               target_type  ))
+     return
+ 
+   SetVariable(output, 'TARGET', target_name)
+@@ -868,8 +876,8 @@ def WriteTarget(namer, qualified_target,
+       default_product_ext = generator_default_variables['SHARED_LIB_SUFFIX']
+ 
+     elif target_type != 'executable':
+-      print ('ERROR: What output file should be generated?',
+-              'type', target_type, 'target', target_name)
++      print(('ERROR: What output file should be generated?',
++              'type', target_type, 'target', target_name))
+ 
+     product_prefix = spec.get('product_prefix', default_product_prefix)
+     product_name = spec.get('product_name', default_product_name)
+@@ -1207,11 +1215,11 @@ def PerformBuild(data, configurations, p
+                                               output_dir,
+                                               config_name))
+     arguments = ['cmake', '-G', 'Ninja']
+-    print 'Generating [%s]: %s' % (config_name, arguments)
++    print('Generating [%s]: %s' % (config_name, arguments))
+     subprocess.check_call(arguments, cwd=build_dir)
+ 
+     arguments = ['ninja', '-C', build_dir]
+-    print 'Building [%s]: %s' % (config_name, arguments)
++    print('Building [%s]: %s' % (config_name, arguments))
+     subprocess.check_call(arguments)
+ 
+ 
+@@ -1230,7 +1238,7 @@ def GenerateOutput(target_list, target_d
+     GenerateOutputForConfig(target_list, target_dicts, data,
+                             params, user_config)
+   else:
+-    config_names = target_dicts[target_list[0]]['configurations'].keys()
++    config_names = target_dicts[target_list[0]]['configurations']
+     if params['parallel']:
+       try:
+         pool = multiprocessing.Pool(len(config_names))
+@@ -1239,7 +1247,7 @@ def GenerateOutput(target_list, target_d
+           arglists.append((target_list, target_dicts, data,
+                            params, config_name))
+           pool.map(CallGenerateOutputForConfig, arglists)
+-      except KeyboardInterrupt, e:
++      except KeyboardInterrupt as e:
+         pool.terminate()
+         raise e
+     else:
+Index: node-v8.9.4/tools/gyp/pylib/gyp/generator/dump_dependency_json.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/generator/dump_dependency_json.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/generator/dump_dependency_json.py
+@@ -2,6 +2,8 @@
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+ 
++from __future__ import print_function
++
+ import collections
+ import os
+ import gyp
+@@ -96,4 +98,4 @@ def GenerateOutput(target_list, target_d
+   f = open(filename, 'w')
+   json.dump(edges, f)
+   f.close()
+-  print 'Wrote json to %s.' % filename
++  print('Wrote json to %s.' % filename)
+Index: node-v8.9.4/tools/gyp/pylib/gyp/generator/eclipse.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/generator/eclipse.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/generator/eclipse.py
+@@ -141,7 +141,7 @@ def GetAllIncludeDirectories(target_list
+             compiler_includes_list.append(include_dir)
+ 
+       # Find standard gyp include dirs.
+-      if config.has_key('include_dirs'):
++      if 'include_dirs' in config:
+         include_dirs = config['include_dirs']
+         for shared_intermediate_dir in shared_intermediate_dirs:
+           for include_dir in include_dirs:
+@@ -272,7 +272,7 @@ def WriteMacros(out, eclipse_langs, defi
+   out.write('    <language name="holder for library settings"></language>\n')
+   for lang in eclipse_langs:
+     out.write('    <language name="%s">\n' % lang)
+-    for key in sorted(defines.iterkeys()):
++    for key in sorted(defines.keys()):
+       out.write('      <macro><name>%s</name><value>%s</value></macro>\n' %
+                 (escape(key), escape(defines[key])))
+     out.write('    </language>\n')
+@@ -418,7 +418,7 @@ def GenerateOutput(target_list, target_d
+     GenerateOutputForConfig(target_list, target_dicts, data, params,
+                             user_config)
+   else:
+-    config_names = target_dicts[target_list[0]]['configurations'].keys()
++    config_names = target_dicts[target_list[0]]['configurations']
+     for config_name in config_names:
+       GenerateOutputForConfig(target_list, target_dicts, data, params,
+                               config_name)
+Index: node-v8.9.4/tools/gyp/pylib/gyp/generator/gypd.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/generator/gypd.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/generator/gypd.py
+@@ -88,7 +88,7 @@ def GenerateOutput(target_list, target_d
+     if not output_file in output_files:
+       output_files[output_file] = input_file
+ 
+-  for output_file, input_file in output_files.iteritems():
++  for output_file, input_file in output_files.items():
+     output = open(output_file, 'w')
+     pprint.pprint(data[input_file], output)
+     output.close()
+Index: node-v8.9.4/tools/gyp/pylib/gyp/generator/make.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/generator/make.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/generator/make.py
+@@ -21,6 +21,8 @@
+ # toplevel Makefile.  It may make sense to generate some .mk files on
+ # the side to keep the the files readable.
+ 
++from __future__ import print_function
++
+ import os
+ import re
+ import sys
+@@ -650,7 +652,7 @@ def _ValidateSourcesForOSX(spec, all_sou
+     basenames.setdefault(basename, []).append(source)
+ 
+   error = ''
+-  for basename, files in basenames.iteritems():
++  for basename, files in basenames.items():
+     if len(files) > 1:
+       error += '  %s: %s\n' % (basename, ' '.join(files))
+ 
+@@ -798,7 +800,7 @@ $(obj).$(TOOLSET)/$(TARGET)/%%.o: $(obj)
+           gyp.xcode_emulation.MacPrefixHeader(
+               self.xcode_settings, lambda p: Sourceify(self.Absolutify(p)),
+               self.Pchify))
+-      sources = filter(Compilable, all_sources)
++      sources = [x for x in all_sources if Compilable(x)]
+       if sources:
+         self.WriteLn(SHARED_HEADER_SUFFIX_RULES_COMMENT1)
+         extensions = set([os.path.splitext(s)[1] for s in sources])
+@@ -927,7 +929,7 @@ $(obj).$(TOOLSET)/$(TARGET)/%%.o: $(obj)
+                    '%s%s'
+                    % (name, cd_action, command))
+       self.WriteLn()
+-      outputs = map(self.Absolutify, outputs)
++      outputs = [self.Absolutify(o) for o in outputs]
+       # The makefile rules are all relative to the top dir, but the gyp actions
+       # are defined relative to their containing dir.  This replaces the obj
+       # variable for the action rule with an absolute version so that the output
+@@ -1017,7 +1019,7 @@ $(obj).$(TOOLSET)/$(TARGET)/%%.o: $(obj)
+         outputs = [gyp.xcode_emulation.ExpandEnvVars(o, env) for o in outputs]
+         inputs = [gyp.xcode_emulation.ExpandEnvVars(i, env) for i in inputs]
+ 
+-        outputs = map(self.Absolutify, outputs)
++        outputs = [self.Absolutify(o) for o in outputs]
+         all_outputs += outputs
+         # Only write the 'obj' and 'builddir' rules for the "primary" output
+         # (:1); it's superfluous for the "extra outputs", and this avoids
+@@ -1215,11 +1217,11 @@ $(obj).$(TOOLSET)/$(TARGET)/%%.o: $(obj)
+         self.WriteList(cflags_objcc, 'CFLAGS_OBJCC_%s' % configname)
+       includes = config.get('include_dirs')
+       if includes:
+-        includes = map(Sourceify, map(self.Absolutify, includes))
++        includes = [Sourceify(self.Absolutify(include)) for include in includes]
+       self.WriteList(includes, 'INCS_%s' % configname, prefix='-I')
+ 
+     compilable = filter(Compilable, sources)
+-    objs = map(self.Objectify, map(self.Absolutify, map(Target, compilable)))
++    objs = [self.Objectify(self.Absolutify(Target(x))) for x in compilable]
+     self.WriteList(objs, 'OBJS')
+ 
+     for obj in objs:
+@@ -1291,7 +1293,7 @@ $(obj).$(TOOLSET)/$(TARGET)/%%.o: $(obj)
+ 
+     # If there are any object files in our input file list, link them into our
+     # output.
+-    extra_link_deps += filter(Linkable, sources)
++    extra_link_deps += [source for source in sources if Linkable(source)]
+ 
+     self.WriteLn()
+ 
+@@ -1359,8 +1361,8 @@ $(obj).$(TOOLSET)/$(TARGET)/%%.o: $(obj)
+     elif self.type == 'none':
+       target = '%s.stamp' % target
+     elif self.type != 'executable':
+-      print ("ERROR: What output file should be generated?",
+-             "type", self.type, "target", target)
++      print(("ERROR: What output file should be generated?",
++             "type", self.type, "target", target))
+ 
+     target_prefix = spec.get('product_prefix', target_prefix)
+     target = spec.get('product_name', target)
+@@ -1524,9 +1526,9 @@ $(obj).$(TOOLSET)/$(TARGET)/%%.o: $(obj)
+       # Postbuilds expect to be run in the gyp file's directory, so insert an
+       # implicit postbuild to cd to there.
+       postbuilds.insert(0, gyp.common.EncodePOSIXShellList(['cd', self.path]))
+-      for i in xrange(len(postbuilds)):
+-        if not postbuilds[i].startswith('$'):
+-          postbuilds[i] = EscapeShellArgument(postbuilds[i])
++      for i, postbuild in enumerate(postbuilds):
++        if not postbuild.startswith('$'):
++          postbuilds[i] = EscapeShellArgument(postbuild)
+       self.WriteLn('%s: builddir := $(abs_builddir)' % QuoteSpaces(self.output))
+       self.WriteLn('%s: POSTBUILDS := %s' % (
+           QuoteSpaces(self.output), ' '.join(postbuilds)))
+@@ -1616,7 +1618,7 @@ $(obj).$(TOOLSET)/$(TARGET)/%%.o: $(obj)
+       self.WriteDoCmd([self.output_binary], deps, 'touch', part_of_all,
+                       postbuilds=postbuilds)
+     else:
+-      print "WARNING: no output for", self.type, target
++      print("WARNING: no output for", self.type, target)
+ 
+     # Add an alias for each target (if there are any outputs).
+     # Installable target aliases are created below.
+@@ -1723,7 +1725,7 @@ $(obj).$(TOOLSET)/$(TARGET)/%%.o: $(obj)
+            output is just a name to run the rule
+     command: (optional) command name to generate unambiguous labels
+     """
+-    outputs = map(QuoteSpaces, outputs)
++    outputs = [QuoteSpaces(o) for o in outputs]
+     inputs = map(QuoteSpaces, inputs)
+ 
+     if comment:
+@@ -1968,7 +1970,7 @@ def PerformBuild(data, configurations, p
+     if options.toplevel_dir and options.toplevel_dir != '.':
+       arguments += '-C', options.toplevel_dir
+     arguments.append('BUILDTYPE=' + config)
+-    print 'Building [%s]: %s' % (config, arguments)
++    print('Building [%s]: %s' % (config, arguments))
+     subprocess.check_call(arguments)
+ 
+ 
+Index: node-v8.9.4/tools/gyp/pylib/gyp/generator/msvs.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/generator/msvs.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/generator/msvs.py
+@@ -2,6 +2,9 @@
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+ 
++from __future__ import print_function
++
++import collections
+ import copy
+ import ntpath
+ import os
+@@ -23,16 +26,6 @@ import gyp.MSVSVersion as MSVSVersion
+ from gyp.common import GypError
+ from gyp.common import OrderedSet
+ 
+-# TODO: Remove once bots are on 2.7, http://crbug.com/241769
+-def _import_OrderedDict():
+-  import collections
+-  try:
+-    return collections.OrderedDict
+-  except AttributeError:
+-    import gyp.ordered_dict
+-    return gyp.ordered_dict.OrderedDict
+-OrderedDict = _import_OrderedDict()
+-
+ 
+ # Regular expression for validating Visual Studio GUIDs.  If the GUID
+ # contains lowercase hex letters, MSVS will be fine. However,
+@@ -202,7 +195,7 @@ def _ConvertSourcesToFilterHierarchy(sou
+   if not prefix: prefix = []
+   result = []
+   excluded_result = []
+-  folders = OrderedDict()
++  folders = collections.OrderedDict()
+   # Gather files into the final result, excluded, or folders.
+   for s in sources:
+     if len(s) == 1:
+@@ -469,7 +462,7 @@ def _AddCustomBuildToolForMSVS(p, spec,
+        'CommandLine': cmd,
+       })
+   # Add to the properties of primary input for each config.
+-  for config_name, c_data in spec['configurations'].iteritems():
++  for config_name, c_data in spec['configurations'].items():
+     p.AddFileConfig(_FixPath(primary_input),
+                     _ConfigFullName(config_name, c_data), tools=[tool])
+ 
+@@ -775,8 +768,8 @@ def _EscapeVCProjCommandLineArgListItem(
+     # the VCProj but cause the same problem on the final command-line. Moving
+     # the item to the end of the list does works, but that's only possible if
+     # there's only one such item. Let's just warn the user.
+-    print >> sys.stderr, ('Warning: MSVS may misinterpret the odd number of ' +
+-                          'quotes in ' + s)
++    print(('Warning: MSVS may misinterpret the odd number of ' +
++                          'quotes in ' + s), file=sys.stderr)
+   return s
+ 
+ 
+@@ -991,7 +984,7 @@ def _ValidateSourcesForMSVSProject(spec,
+     basenames.setdefault(basename, []).append(source)
+ 
+   error = ''
+-  for basename, files in basenames.iteritems():
++  for basename, files in basenames.items():
+     if len(files) > 1:
+       error += '  %s: %s\n' % (basename, ' '.join(files))
+ 
+@@ -1023,7 +1016,7 @@ def _GenerateMSVSProject(project, option
+   relative_path_of_gyp_file = gyp.common.RelativePath(gyp_path, project_dir)
+ 
+   config_type = _GetMSVSConfigurationType(spec, project.build_file)
+-  for config_name, config in spec['configurations'].iteritems():
++  for config_name, config in spec['configurations'].items():
+     _AddConfigurationToMSVSProject(p, spec, config_type, config_name, config)
+ 
+   # MSVC08 and prior version cannot handle duplicate basenames in the same
+@@ -1392,10 +1385,10 @@ def _ConvertToolsToExpectedForm(tools):
+     A list of Tool objects.
+   """
+   tool_list = []
+-  for tool, settings in tools.iteritems():
++  for tool, settings in tools.items():
+     # Collapse settings with lists.
+     settings_fixed = {}
+-    for setting, value in settings.iteritems():
++    for setting, value in settings.items():
+       if type(value) == list:
+         if ((tool == 'VCLinkerTool' and
+              setting == 'AdditionalDependencies') or
+@@ -1570,7 +1563,7 @@ def _IdlFilesHandledNonNatively(spec, so
+ def _GetPrecompileRelatedFiles(spec):
+   # Gather a list of precompiled header related sources.
+   precompiled_related = []
+-  for _, config in spec['configurations'].iteritems():
++  for _, config in spec['configurations'].items():
+     for k in precomp_keys:
+       f = config.get(k)
+       if f:
+@@ -1581,7 +1574,7 @@ def _GetPrecompileRelatedFiles(spec):
+ def _ExcludeFilesFromBeingBuilt(p, spec, excluded_sources, excluded_idl,
+                                 list_excluded):
+   exclusions = _GetExcludedFilesFromBuild(spec, excluded_sources, excluded_idl)
+-  for file_name, excluded_configs in exclusions.iteritems():
++  for file_name, excluded_configs in exclusions.items():
+     if (not list_excluded and
+             len(excluded_configs) == len(spec['configurations'])):
+       # If we're not listing excluded files, then they won't appear in the
+@@ -1598,7 +1591,7 @@ def _GetExcludedFilesFromBuild(spec, exc
+   # Exclude excluded sources from being built.
+   for f in excluded_sources:
+     excluded_configs = []
+-    for config_name, config in spec['configurations'].iteritems():
++    for config_name, config in spec['configurations'].items():
+       precomped = [_FixPath(config.get(i, '')) for i in precomp_keys]
+       # Don't do this for ones that are precompiled header related.
+       if f not in precomped:
+@@ -1608,7 +1601,7 @@ def _GetExcludedFilesFromBuild(spec, exc
+   # Exclude them now.
+   for f in excluded_idl:
+     excluded_configs = []
+-    for config_name, config in spec['configurations'].iteritems():
++    for config_name, config in spec['configurations'].items():
+       excluded_configs.append((config_name, config))
+     exclusions[f] = excluded_configs
+   return exclusions
+@@ -1617,7 +1610,7 @@ def _GetExcludedFilesFromBuild(spec, exc
+ def _AddToolFilesToMSVS(p, spec):
+   # Add in tool files (rules).
+   tool_files = OrderedSet()
+-  for _, config in spec['configurations'].iteritems():
++  for _, config in spec['configurations'].items():
+     for f in config.get('msvs_tool_files', []):
+       tool_files.add(f)
+   for f in tool_files:
+@@ -1630,7 +1623,7 @@ def _HandlePreCompiledHeaders(p, sources
+   # kind (i.e. C vs. C++) as the precompiled header source stub needs
+   # to have use of precompiled headers disabled.
+   extensions_excluded_from_precompile = []
+-  for config_name, config in spec['configurations'].iteritems():
++  for config_name, config in spec['configurations'].items():
+     source = config.get('msvs_precompiled_source')
+     if source:
+       source = _FixPath(source)
+@@ -1651,7 +1644,7 @@ def _HandlePreCompiledHeaders(p, sources
+       else:
+         basename, extension = os.path.splitext(source)
+         if extension in extensions_excluded_from_precompile:
+-          for config_name, config in spec['configurations'].iteritems():
++          for config_name, config in spec['configurations'].items():
+             tool = MSVSProject.Tool('VCCLCompilerTool',
+                                     {'UsePrecompiledHeader': '0',
+                                      'ForcedIncludeFiles': '$(NOINHERIT)'})
+@@ -1702,7 +1695,7 @@ def _WriteMSVSUserFile(project_path, ver
+     return  # Nothing to add
+   # Write out the user file.
+   user_file = _CreateMSVSUserFile(project_path, version, spec)
+-  for config_name, c_data in spec['configurations'].iteritems():
++  for config_name, c_data in spec['configurations'].items():
+     user_file.AddDebugSettings(_ConfigFullName(config_name, c_data),
+                                action, environment, working_directory)
+   user_file.WriteIfChanged()
+@@ -1756,7 +1749,7 @@ def _GetPathDict(root, path):
+ def _DictsToFolders(base_path, bucket, flat):
+   # Convert to folders recursively.
+   children = []
+-  for folder, contents in bucket.iteritems():
++  for folder, contents in bucket.items():
+     if type(contents) == dict:
+       folder_children = _DictsToFolders(os.path.join(base_path, folder),
+                                         contents, flat)
+@@ -1778,8 +1771,8 @@ def _CollapseSingles(parent, node):
+   # such projects up one level.
+   if (type(node) == dict and
+       len(node) == 1 and
+-      node.keys()[0] == parent + '.vcproj'):
+-    return node[node.keys()[0]]
++      next(iter(node)) == parent + '.vcproj'):
++    return node[next(iter(node))]
+   if type(node) != dict:
+     return node
+   for child in node:
+@@ -1798,8 +1791,8 @@ def _GatherSolutionFolders(sln_projects,
+   # Walk down from the top until we hit a folder that has more than one entry.
+   # In practice, this strips the top-level "src/" dir from the hierarchy in
+   # the solution.
+-  while len(root) == 1 and type(root[root.keys()[0]]) == dict:
+-    root = root[root.keys()[0]]
++  while len(root) == 1 and type(root[next(iter(root))]) == dict:
++    root = root[next(iter(root))]
+   # Collapse singles.
+   root = _CollapseSingles('', root)
+   # Merge buckets until everything is a root entry.
+@@ -1828,7 +1821,7 @@ def _GetPlatformOverridesOfProject(spec)
+   # Prepare a dict indicating which project configurations are used for which
+   # solution configurations for this target.
+   config_platform_overrides = {}
+-  for config_name, c in spec['configurations'].iteritems():
++  for config_name, c in spec['configurations'].items():
+     config_fullname = _ConfigFullName(config_name, c)
+     platform = c.get('msvs_target_platform', _ConfigPlatform(c))
+     fixed_config_fullname = '%s|%s' % (
+@@ -1967,7 +1960,7 @@ def PerformBuild(data, configurations, p
+   msvs_version = params['msvs_version']
+   devenv = os.path.join(msvs_version.path, 'Common7', 'IDE', 'devenv.com')
+ 
+-  for build_file, build_file_dict in data.iteritems():
++  for build_file, build_file_dict in data.items():
+     (build_file_root, build_file_ext) = os.path.splitext(build_file)
+     if build_file_ext != '.gyp':
+       continue
+@@ -1977,7 +1970,7 @@ def PerformBuild(data, configurations, p
+ 
+   for config in configurations:
+     arguments = [devenv, sln_path, '/Build', config]
+-    print 'Building [%s]: %s' % (config, arguments)
++    print('Building [%s]: %s' % (config, arguments))
+     rtn = subprocess.check_call(arguments)
+ 
+ 
+@@ -2029,7 +2022,7 @@ def GenerateOutput(target_list, target_d
+   configs = set()
+   for qualified_target in target_list:
+     spec = target_dicts[qualified_target]
+-    for config_name, config in spec['configurations'].iteritems():
++    for config_name, config in spec['configurations'].items():
+       configs.add(_ConfigFullName(config_name, config))
+   configs = list(configs)
+ 
+@@ -2072,7 +2065,7 @@ def GenerateOutput(target_list, target_d
+     if generator_flags.get('msvs_error_on_missing_sources', False):
+       raise GypError(error_message)
+     else:
+-      print >> sys.stdout, "Warning: " + error_message
++      print("Warning: " + error_message, file=sys.stdout)
+ 
+ 
+ def _GenerateMSBuildFiltersFile(filters_path, source_files,
+@@ -2669,7 +2662,7 @@ def _GetConfigurationCondition(name, set
+ 
+ def _GetMSBuildProjectConfigurations(configurations):
+   group = ['ItemGroup', {'Label': 'ProjectConfigurations'}]
+-  for (name, settings) in sorted(configurations.iteritems()):
++  for (name, settings) in sorted(configurations.items()):
+     configuration, platform = _GetConfigurationAndPlatform(name, settings)
+     designation = '%s|%s' % (configuration, platform)
+     group.append(
+@@ -2742,7 +2735,7 @@ def _GetMSBuildGlobalProperties(spec, ve
+ 
+ def _GetMSBuildConfigurationDetails(spec, build_file):
+   properties = {}
+-  for name, settings in spec['configurations'].iteritems():
++  for name, settings in spec['configurations'].items():
+     msbuild_attributes = _GetMSBuildAttributes(spec, settings, build_file)
+     condition = _GetConfigurationCondition(name, settings)
+     character_set = msbuild_attributes.get('CharacterSet')
+@@ -2776,9 +2769,9 @@ def _GetMSBuildPropertySheets(configurat
+   user_props = r'$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props'
+   additional_props = {}
+   props_specified = False
+-  for name, settings in sorted(configurations.iteritems()):
++  for name, settings in sorted(configurations.items()):
+     configuration = _GetConfigurationCondition(name, settings)
+-    if settings.has_key('msbuild_props'):
++    if 'msbuild_props' in settings:
+       additional_props[configuration] = _FixPaths(settings['msbuild_props'])
+       props_specified = True
+     else:
+@@ -2798,7 +2791,7 @@ def _GetMSBuildPropertySheets(configurat
+     ]
+   else:
+     sheets = []
+-    for condition, props in additional_props.iteritems():
++    for condition, props in additional_props.items():
+       import_group = [
+         'ImportGroup',
+         {'Label': 'PropertySheets',
+@@ -2831,7 +2824,7 @@ def _ConvertMSVSBuildAttributes(spec, co
+     elif a == 'ConfigurationType':
+       msbuild_attributes[a] = _ConvertMSVSConfigurationType(msvs_attributes[a])
+     else:
+-      print 'Warning: Do not know how to convert MSVS attribute ' + a
++      print('Warning: Do not know how to convert MSVS attribute ' + a)
+   return msbuild_attributes
+ 
+ 
+@@ -2927,7 +2920,7 @@ def _GetMSBuildConfigurationGlobalProper
+       new_paths = '$(ExecutablePath);' + ';'.join(new_paths)
+ 
+   properties = {}
+-  for (name, configuration) in sorted(configurations.iteritems()):
++  for (name, configuration) in sorted(configurations.items()):
+     condition = _GetConfigurationCondition(name, configuration)
+     attributes = _GetMSBuildAttributes(spec, configuration, build_file)
+     msbuild_settings = configuration['finalized_msbuild_settings']
+@@ -2952,7 +2945,7 @@ def _GetMSBuildConfigurationGlobalProper
+       _AddConditionalProperty(properties, condition, 'ExecutablePath',
+                               new_paths)
+     tool_settings = msbuild_settings.get('', {})
+-    for name, value in sorted(tool_settings.iteritems()):
++    for name, value in sorted(tool_settings.items()):
+       formatted_value = _GetValueFormattedForMSBuild('', name, value)
+       _AddConditionalProperty(properties, condition, name, formatted_value)
+   return _GetMSBuildPropertyGroup(spec, None, properties)
+@@ -3021,7 +3014,7 @@ def _GetMSBuildPropertyGroup(spec, label
+   # NOTE: reverse(topsort(DAG)) = topsort(reverse_edges(DAG))
+   for name in reversed(properties_ordered):
+     values = properties[name]
+-    for value, conditions in sorted(values.iteritems()):
++    for value, conditions in sorted(values.items()):
+       if len(conditions) == num_configurations:
+         # If the value is the same all configurations,
+         # just add one unconditional entry.
+@@ -3034,18 +3027,18 @@ def _GetMSBuildPropertyGroup(spec, label
+ 
+ def _GetMSBuildToolSettingsSections(spec, configurations):
+   groups = []
+-  for (name, configuration) in sorted(configurations.iteritems()):
++  for (name, configuration) in sorted(configurations.items()):
+     msbuild_settings = configuration['finalized_msbuild_settings']
+     group = ['ItemDefinitionGroup',
+              {'Condition': _GetConfigurationCondition(name, configuration)}
+             ]
+-    for tool_name, tool_settings in sorted(msbuild_settings.iteritems()):
++    for tool_name, tool_settings in sorted(msbuild_settings.items()):
+       # Skip the tool named '' which is a holder of global settings handled
+       # by _GetMSBuildConfigurationGlobalProperties.
+       if tool_name:
+         if tool_settings:
+           tool = [tool_name]
+-          for name, value in sorted(tool_settings.iteritems()):
++          for name, value in sorted(tool_settings.items()):
+             formatted_value = _GetValueFormattedForMSBuild(tool_name, name,
+                                                            value)
+             tool.append([name, formatted_value])
+@@ -3078,8 +3071,8 @@ def _FinalizeMSBuildSettings(spec, confi
+     for ignored_setting in ignored_settings:
+       value = configuration.get(ignored_setting)
+       if value:
+-        print ('Warning: The automatic conversion to MSBuild does not handle '
+-               '%s.  Ignoring setting of %s' % (ignored_setting, str(value)))
++        print('Warning: The automatic conversion to MSBuild does not handle '
++              '%s.  Ignoring setting of %s' % (ignored_setting, str(value)))
+ 
+   defines = [_EscapeCppDefineForMSBuild(d) for d in defines]
+   disabled_warnings = _GetDisabledWarnings(configuration)
+@@ -3245,7 +3238,7 @@ def _AddSources2(spec, sources, exclusio
+                            {'Condition': condition},
+                            'true'])
+         # Add precompile if needed
+-        for config_name, configuration in spec['configurations'].iteritems():
++        for config_name, configuration in spec['configurations'].items():
+           precompiled_source = configuration.get('msvs_precompiled_source', '')
+           if precompiled_source != '':
+             precompiled_source = _FixPath(precompiled_source)
+@@ -3291,7 +3284,7 @@ def _GetMSBuildProjectReferences(project
+           ['Project', guid],
+           ['ReferenceOutputAssembly', 'false']
+           ]
+-      for config in dependency.spec.get('configurations', {}).itervalues():
++      for config in dependency.spec.get('configurations', {}).values():
+         if config.get('msvs_use_library_dependency_inputs', 0):
+           project_ref.append(['UseLibraryDependencyInputs', 'true'])
+           break
+@@ -3360,7 +3353,7 @@ def _GenerateMSBuildProject(project, opt
+                               extension_to_rule_name)
+   missing_sources = _VerifySourcesExist(sources, project_dir)
+ 
+-  for configuration in configurations.itervalues():
++  for configuration in configurations.values():
+     _FinalizeMSBuildSettings(spec, configuration)
+ 
+   # Add attributes to root element
+@@ -3486,7 +3479,7 @@ def _GenerateActionsForMSBuild(spec, act
+   """
+   sources_handled_by_action = OrderedSet()
+   actions_spec = []
+-  for primary_input, actions in actions_to_add.iteritems():
++  for primary_input, actions in actions_to_add.items():
+     inputs = OrderedSet()
+     outputs = OrderedSet()
+     descriptions = []
+Index: node-v8.9.4/tools/gyp/pylib/gyp/generator/msvs_test.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/generator/msvs_test.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/generator/msvs_test.py
+@@ -7,13 +7,16 @@
+ 
+ import gyp.generator.msvs as msvs
+ import unittest
+-import StringIO
++try:
++  from StringIO import StringIO
++except ImportError:
++  from io import StringIO
+ 
+ 
+ class TestSequenceFunctions(unittest.TestCase):
+ 
+   def setUp(self):
+-    self.stderr = StringIO.StringIO()
++    self.stderr = StringIO()
+ 
+   def test_GetLibraries(self):
+     self.assertEqual(
+Index: node-v8.9.4/tools/gyp/pylib/gyp/generator/ninja.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/generator/ninja.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/generator/ninja.py
+@@ -2,6 +2,8 @@
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+ 
++from __future__ import print_function
++
+ import collections
+ import copy
+ import hashlib
+@@ -18,7 +20,10 @@ from gyp.common import OrderedSet
+ import gyp.msvs_emulation
+ import gyp.MSVSUtil as MSVSUtil
+ import gyp.xcode_emulation
+-from cStringIO import StringIO
++try:
++  from cStringIO import StringIO
++except ImportError:
++  from io import StringIO
+ 
+ from gyp.common import GetEnvironFallback
+ import gyp.ninja_syntax as ninja_syntax
+@@ -350,7 +355,7 @@ class NinjaWriter(object):
+ 
+     Uses a stamp file if necessary."""
+ 
+-    assert targets == filter(None, targets), targets
++    assert targets == [t for t in targets if t], targets
+     if len(targets) == 0:
+       assert not order_only
+       return None
+@@ -427,8 +432,8 @@ class NinjaWriter(object):
+           compile_depends.append(target.PreCompileInput())
+           if target.uses_cpp:
+             self.target.uses_cpp = True
+-      actions_depends = filter(None, actions_depends)
+-      compile_depends = filter(None, compile_depends)
++      actions_depends = [d for d in actions_depends if d]
++      compile_depends = [d for d in compile_depends if d]
+       actions_depends = self.WriteCollapsedDependencies('actions_depends',
+                                                         actions_depends)
+       compile_depends = self.WriteCollapsedDependencies('compile_depends',
+@@ -455,8 +460,8 @@ class NinjaWriter(object):
+     try:
+       sources = extra_sources + spec.get('sources', [])
+     except TypeError:
+-      print 'extra_sources: ', str(extra_sources)
+-      print 'spec.get("sources"): ', str(spec.get('sources'))
++      print('extra_sources: ', str(extra_sources))
++      print('spec.get("sources"): ', str(spec.get('sources')))
+       raise
+     if sources:
+       if self.flavor == 'mac' and len(self.archs) > 1:
+@@ -485,8 +490,9 @@ class NinjaWriter(object):
+         if self.flavor != 'mac' or len(self.archs) == 1:
+           link_deps += [self.GypPathToNinja(o) for o in obj_outputs]
+         else:
+-          print "Warning: Actions/rules writing object files don't work with " \
+-                "multiarch targets, dropping. (target %s)" % spec['target_name']
++          print("Warning: Actions/rules writing object files don't work with " \
++                "multiarch targets, dropping. (target %s)" %
++                spec['target_name'])
+     elif self.flavor == 'mac' and len(self.archs) > 1:
+       link_deps = collections.defaultdict(list)
+ 
+@@ -838,7 +844,7 @@ class NinjaWriter(object):
+         'XCASSETS_LAUNCH_IMAGE': 'launch-image',
+     }
+     settings = self.xcode_settings.xcode_settings[self.config_name]
+-    for settings_key, arg_name in settings_to_arg.iteritems():
++    for settings_key, arg_name in settings_to_arg.items():
+       value = settings.get(settings_key)
+       if value:
+         extra_arguments[arg_name] = value
+@@ -1769,7 +1775,7 @@ def GetDefaultConcurrentLinks():
+ 
+     # VS 2015 uses 20% more working set than VS 2013 and can consume all RAM
+     # on a 64 GB machine.
+-    mem_limit = max(1, stat.ullTotalPhys / (5 * (2 ** 30)))  # total / 5GB
++    mem_limit = max(1, stat.ullTotalPhys // (5 * (2 ** 30)))  # total / 5GB
+     hard_cap = max(1, int(os.environ.get('GYP_LINK_CONCURRENCY_MAX', 2**32)))
+     return min(mem_limit, hard_cap)
+   elif sys.platform.startswith('linux'):
+@@ -1781,14 +1787,14 @@ def GetDefaultConcurrentLinks():
+           if not match:
+             continue
+           # Allow 8Gb per link on Linux because Gold is quite memory hungry
+-          return max(1, int(match.group(1)) / (8 * (2 ** 20)))
++          return max(1, int(match.group(1)) // (8 * (2 ** 20)))
+     return 1
+   elif sys.platform == 'darwin':
+     try:
+       avail_bytes = int(subprocess.check_output(['sysctl', '-n', 'hw.memsize']))
+       # A static library debug build of Chromium's unit_tests takes ~2.7GB, so
+       # 4GB per ld process allows for some more bloat.
+-      return max(1, avail_bytes / (4 * (2 ** 30)))  # total / 4GB
++      return max(1, avail_bytes // (4 * (2 ** 30)))  # total / 4GB
+     except:
+       return 1
+   else:
+@@ -1943,7 +1949,7 @@ def GenerateOutputForConfig(target_list,
+       wrappers[key[:-len('_wrapper')]] = os.path.join(build_to_root, value)
+ 
+   # Support wrappers from environment variables too.
+-  for key, value in os.environ.iteritems():
++  for key, value in os.environ.items():
+     if key.lower().endswith('_wrapper'):
+       key_prefix = key[:-len('_wrapper')]
+       key_prefix = re.sub(r'\.HOST$', '.host', key_prefix)
+@@ -1963,7 +1969,7 @@ def GenerateOutputForConfig(target_list,
+               configs, generator_flags)
+     cl_paths = gyp.msvs_emulation.GenerateEnvironmentFiles(
+         toplevel_build, generator_flags, shared_system_includes, OpenOutput)
+-    for arch, path in sorted(cl_paths.iteritems()):
++    for arch, path in sorted(cl_paths.items()):
+       if clang_cl:
+         # If we have selected clang-cl, use that instead.
+         path = clang_cl
+@@ -2371,6 +2377,7 @@ def GenerateOutputForConfig(target_list,
+ 
+     qualified_target_for_hash = gyp.common.QualifiedTarget(build_file, name,
+                                                            toolset)
++    qualified_target_for_hash = qualified_target_for_hash.encode('utf-8')
+     hash_for_rules = hashlib.md5(qualified_target_for_hash).hexdigest()
+ 
+     base_path = os.path.dirname(build_file)
+@@ -2437,7 +2444,7 @@ def PerformBuild(data, configurations, p
+   for config in configurations:
+     builddir = os.path.join(options.toplevel_dir, 'out', config)
+     arguments = ['ninja', '-C', builddir]
+-    print 'Building [%s]: %s' % (config, arguments)
++    print('Building [%s]: %s' % (config, arguments))
+     subprocess.check_call(arguments)
+ 
+ 
+@@ -2465,7 +2472,7 @@ def GenerateOutput(target_list, target_d
+     GenerateOutputForConfig(target_list, target_dicts, data, params,
+                             user_config)
+   else:
+-    config_names = target_dicts[target_list[0]]['configurations'].keys()
++    config_names = target_dicts[target_list[0]]['configurations']
+     if params['parallel']:
+       try:
+         pool = multiprocessing.Pool(len(config_names))
+@@ -2474,7 +2481,7 @@ def GenerateOutput(target_list, target_d
+           arglists.append(
+               (target_list, target_dicts, data, params, config_name))
+         pool.map(CallGenerateOutputForConfig, arglists)
+-      except KeyboardInterrupt, e:
++      except KeyboardInterrupt as e:
+         pool.terminate()
+         raise e
+     else:
+Index: node-v8.9.4/tools/gyp/pylib/gyp/generator/ninja_test.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/generator/ninja_test.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/generator/ninja_test.py
+@@ -8,7 +8,6 @@
+ 
+ import gyp.generator.ninja as ninja
+ import unittest
+-import StringIO
+ import sys
+ import TestCommon
+ 
+Index: node-v8.9.4/tools/gyp/pylib/gyp/generator/xcode.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/generator/xcode.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/generator/xcode.py
+@@ -2,6 +2,8 @@
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+ 
++from __future__ import print_function
++
+ import filecmp
+ import gyp.common
+ import gyp.xcodeproj_file
+@@ -129,7 +131,7 @@ class XcodeProject(object):
+     try:
+       os.makedirs(self.path)
+       self.created_dir = True
+-    except OSError, e:
++    except OSError as e:
+       if e.errno != errno.EEXIST:
+         raise
+ 
+@@ -183,7 +185,7 @@ class XcodeProject(object):
+     # the tree tree view for UI display.
+     # Any values set globally are applied to all configurations, then any
+     # per-configuration values are applied.
+-    for xck, xcv in self.build_file_dict.get('xcode_settings', {}).iteritems():
++    for xck, xcv in self.build_file_dict.get('xcode_settings', {}).items():
+       xccl.SetBuildSetting(xck, xcv)
+     if 'xcode_config_file' in self.build_file_dict:
+       config_ref = self.project.AddOrGetFileInRootGroup(
+@@ -197,7 +199,7 @@ class XcodeProject(object):
+         if build_file_configuration_named:
+           xcc = xccl.ConfigurationNamed(config_name)
+           for xck, xcv in build_file_configuration_named.get('xcode_settings',
+-                                                             {}).iteritems():
++                                                             {}).items():
+             xcc.SetBuildSetting(xck, xcv)
+           if 'xcode_config_file' in build_file_configuration_named:
+             config_ref = self.project.AddOrGetFileInRootGroup(
+@@ -273,7 +275,7 @@ class XcodeProject(object):
+           script = script + "\n".join(
+             ['export %s="%s"' %
+              (key, gyp.xcodeproj_file.ConvertVariablesToShellSyntax(val))
+-             for (key, val) in command.get('environment').iteritems()]) + "\n"
++             for (key, val) in command.get('environment').items()]) + "\n"
+ 
+         # Some test end up using sockets, files on disk, etc. and can get
+         # confused if more then one test runs at a time.  The generator
+@@ -444,7 +446,7 @@ sys.exit(subprocess.call(sys.argv[1:]))"
+                          dir=self.path)
+ 
+     try:
+-      output_file = os.fdopen(output_fd, 'wb')
++      output_file = os.fdopen(output_fd, 'w')
+ 
+       self.project_file.Print(output_file)
+       output_file.close()
+@@ -454,7 +456,7 @@ sys.exit(subprocess.call(sys.argv[1:]))"
+       same = False
+       try:
+         same = filecmp.cmp(pbxproj_path, new_pbxproj_path, False)
+-      except OSError, e:
++      except OSError as e:
+         if e.errno != errno.ENOENT:
+           raise
+ 
+@@ -473,10 +475,10 @@ sys.exit(subprocess.call(sys.argv[1:]))"
+         #
+         # No way to get the umask without setting a new one?  Set a safe one
+         # and then set it back to the old value.
+-        umask = os.umask(077)
++        umask = os.umask(0o77)
+         os.umask(umask)
+ 
+-        os.chmod(new_pbxproj_path, 0666 & ~umask)
++        os.chmod(new_pbxproj_path, 0o666 & ~umask)
+         os.rename(new_pbxproj_path, pbxproj_path)
+ 
+     except Exception:
+@@ -566,7 +568,7 @@ def EscapeXcodeDefine(s):
+ def PerformBuild(data, configurations, params):
+   options = params['options']
+ 
+-  for build_file, build_file_dict in data.iteritems():
++  for build_file, build_file_dict in data.items():
+     (build_file_root, build_file_ext) = os.path.splitext(build_file)
+     if build_file_ext != '.gyp':
+       continue
+@@ -577,7 +579,7 @@ def PerformBuild(data, configurations, p
+   for config in configurations:
+     arguments = ['xcodebuild', '-project', xcodeproj_path]
+     arguments += ['-configuration', config]
+-    print "Building [%s]: %s" % (config, arguments)
++    print("Building [%s]: %s" % (config, arguments))
+     subprocess.check_call(arguments)
+ 
+ 
+@@ -625,7 +627,7 @@ def GenerateOutput(target_list, target_d
+   skip_excluded_files = \
+       not generator_flags.get('xcode_list_excluded_files', True)
+   xcode_projects = {}
+-  for build_file, build_file_dict in data.iteritems():
++  for build_file, build_file_dict in data.items():
+     (build_file_root, build_file_ext) = os.path.splitext(build_file)
+     if build_file_ext != '.gyp':
+       continue
+@@ -744,7 +746,7 @@ def GenerateOutput(target_list, target_d
+       xctarget_type = gyp.xcodeproj_file.PBXNativeTarget
+       try:
+         target_properties['productType'] = _types[type_bundle_key]
+-      except KeyError, e:
++      except KeyError as e:
+         gyp.common.ExceptionAppend(e, "-- unknown product type while "
+                                    "writing target %s" % target_name)
+         raise
+@@ -1016,22 +1018,21 @@ def GenerateOutput(target_list, target_d
+                                      makefile_name)
+         # TODO(mark): try/close?  Write to a temporary file and swap it only
+         # if it's got changes?
+-        makefile = open(makefile_path, 'wb')
++        makefile = open(makefile_path, 'w')
+ 
+         # make will build the first target in the makefile by default.  By
+         # convention, it's called "all".  List all (or at least one)
+         # concrete output for each rule source as a prerequisite of the "all"
+         # target.
+         makefile.write('all: \\\n')
+-        for concrete_output_index in \
+-            xrange(0, len(concrete_outputs_by_rule_source)):
++        for concrete_output_index, concrete_output_by_rule_source in \
++            enumerate(concrete_outputs_by_rule_source):
+           # Only list the first (index [0]) concrete output of each input
+           # in the "all" target.  Otherwise, a parallel make (-j > 1) would
+           # attempt to process each input multiple times simultaneously.
+           # Otherwise, "all" could just contain the entire list of
+           # concrete_outputs_all.
+-          concrete_output = \
+-              concrete_outputs_by_rule_source[concrete_output_index][0]
++          concrete_output = concrete_output_by_rule_source[0]
+           if concrete_output_index == len(concrete_outputs_by_rule_source) - 1:
+             eol = ''
+           else:
+@@ -1047,8 +1048,8 @@ def GenerateOutput(target_list, target_d
+           # rule source.  Collect the names of the directories that are
+           # required.
+           concrete_output_dirs = []
+-          for concrete_output_index in xrange(0, len(concrete_outputs)):
+-            concrete_output = concrete_outputs[concrete_output_index]
++          for concrete_output_index, concrete_output in \
++              enumerate(concrete_outputs):
+             if concrete_output_index == 0:
+               bol = ''
+             else:
+@@ -1066,8 +1067,7 @@ def GenerateOutput(target_list, target_d
+           # the set of additional rule inputs, if any.
+           prerequisites = [rule_source]
+           prerequisites.extend(rule.get('inputs', []))
+-          for prerequisite_index in xrange(0, len(prerequisites)):
+-            prerequisite = prerequisites[prerequisite_index]
++          for prerequisite_index, prerequisite in enumerate(prerequisites):
+             if prerequisite_index == len(prerequisites) - 1:
+               eol = ''
+             else:
+@@ -1288,7 +1288,7 @@ exit 1
+           set_define = EscapeXcodeDefine(define)
+           xcbc.AppendBuildSetting('GCC_PREPROCESSOR_DEFINITIONS', set_define)
+       if 'xcode_settings' in configuration:
+-        for xck, xcv in configuration['xcode_settings'].iteritems():
++        for xck, xcv in configuration['xcode_settings'].items():
+           xcbc.SetBuildSetting(xck, xcv)
+       if 'xcode_config_file' in configuration:
+         config_ref = pbxp.AddOrGetFileInRootGroup(
+@@ -1296,7 +1296,7 @@ exit 1
+         xcbc.SetBaseConfiguration(config_ref)
+ 
+   build_files = []
+-  for build_file, build_file_dict in data.iteritems():
++  for build_file, build_file_dict in data.items():
+     if build_file.endswith('.gyp'):
+       build_files.append(build_file)
+ 
+Index: node-v8.9.4/tools/gyp/pylib/gyp/input.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/input.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/input.py
+@@ -2,14 +2,9 @@
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+ 
+-from compiler.ast import Const
+-from compiler.ast import Dict
+-from compiler.ast import Discard
+-from compiler.ast import List
+-from compiler.ast import Module
+-from compiler.ast import Node
+-from compiler.ast import Stmt
+-import compiler
++from __future__ import print_function
++
++import ast
+ import gyp.common
+ import gyp.simple_copy
+ import multiprocessing
+@@ -183,43 +178,38 @@ def CheckedEval(file_contents):
+   Note that this is slower than eval() is.
+   """
+ 
+-  ast = compiler.parse(file_contents)
+-  assert isinstance(ast, Module)
+-  c1 = ast.getChildren()
+-  assert c1[0] is None
+-  assert isinstance(c1[1], Stmt)
+-  c2 = c1[1].getChildren()
+-  assert isinstance(c2[0], Discard)
+-  c3 = c2[0].getChildren()
+-  assert len(c3) == 1
+-  return CheckNode(c3[0], [])
++  syntax_tree = ast.parse(file_contents)
++  assert isinstance(syntax_tree, ast.Module)
++  c1 = syntax_tree.body
++  assert len(c1) == 1
++  c2 = c1[0]
++  assert isinstance(c2, ast.Expr)
++  return CheckNode(c2.value, [])
+ 
+ 
+ def CheckNode(node, keypath):
+-  if isinstance(node, Dict):
+-    c = node.getChildren()
++  if isinstance(node, ast.Dict):
+     dict = {}
+-    for n in range(0, len(c), 2):
+-      assert isinstance(c[n], Const)
+-      key = c[n].getChildren()[0]
++    for key, value in zip(node.keys, node.values):
++      assert isinstance(key, ast.Str)
++      key = key.s
+       if key in dict:
+         raise GypError("Key '" + key + "' repeated at level " +
+               repr(len(keypath) + 1) + " with key path '" +
+               '.'.join(keypath) + "'")
+       kp = list(keypath)  # Make a copy of the list for descending this node.
+       kp.append(key)
+-      dict[key] = CheckNode(c[n + 1], kp)
++      dict[key] = CheckNode(value, kp)
+     return dict
+-  elif isinstance(node, List):
+-    c = node.getChildren()
++  elif isinstance(node, ast.List):
+     children = []
+-    for index, child in enumerate(c):
++    for index, child in enumerate(node.elts):
+       kp = list(keypath)  # Copy list.
+       kp.append(repr(index))
+       children.append(CheckNode(child, kp))
+     return children
+-  elif isinstance(node, Const):
+-    return node.getChildren()[0]
++  elif isinstance(node, ast.Str):
++    return node.s
+   else:
+     raise TypeError("Unknown AST node at key path '" + '.'.join(keypath) +
+          "': " + repr(node))
+@@ -242,10 +232,10 @@ def LoadOneBuildFile(build_file_path, da
+     else:
+       build_file_data = eval(build_file_contents, {'__builtins__': None},
+                              None)
+-  except SyntaxError, e:
++  except SyntaxError as e:
+     e.filename = build_file_path
+     raise
+-  except Exception, e:
++  except Exception as e:
+     gyp.common.ExceptionAppend(e, 'while reading ' + build_file_path)
+     raise
+ 
+@@ -265,7 +255,7 @@ def LoadOneBuildFile(build_file_path, da
+       else:
+         LoadBuildFileIncludesIntoDict(build_file_data, build_file_path, data,
+                                       aux_data, None, check)
+-    except Exception, e:
++    except Exception as e:
+       gyp.common.ExceptionAppend(e,
+                                  'while reading includes of ' + build_file_path)
+       raise
+@@ -302,7 +292,7 @@ def LoadBuildFileIncludesIntoDict(subdic
+                subdict_path, include)
+ 
+   # Recurse into subdictionaries.
+-  for k, v in subdict.iteritems():
++  for k, v in subdict.items():
+     if type(v) is dict:
+       LoadBuildFileIncludesIntoDict(v, subdict_path, data, aux_data,
+                                     None, check)
+@@ -467,7 +457,7 @@ def LoadTargetBuildFile(build_file_path,
+       try:
+         LoadTargetBuildFile(dependency, data, aux_data, variables,
+                             includes, depth, check, load_dependencies)
+-      except Exception, e:
++      except Exception as e:
+         gyp.common.ExceptionAppend(
+           e, 'while loading dependencies of %s' % build_file_path)
+         raise
+@@ -488,7 +478,7 @@ def CallLoadTargetBuildFile(global_flags
+     signal.signal(signal.SIGINT, signal.SIG_IGN)
+ 
+     # Apply globals so that the worker process behaves the same.
+-    for key, value in global_flags.iteritems():
++    for key, value in global_flags.items():
+       globals()[key] = value
+ 
+     SetGeneratorGlobals(generator_input_info)
+@@ -510,12 +500,12 @@ def CallLoadTargetBuildFile(global_flags
+     return (build_file_path,
+             build_file_data,
+             dependencies)
+-  except GypError, e:
++  except GypError as e:
+     sys.stderr.write("gyp: %s\n" % e)
+     return None
+-  except Exception, e:
+-    print >>sys.stderr, 'Exception:', e
+-    print >>sys.stderr, traceback.format_exc()
++  except Exception as e:
++    print('Exception:', e, file=sys.stderr)
++    print(traceback.format_exc(), file=sys.stderr)
+     return None
+ 
+ 
+@@ -605,7 +595,7 @@ def LoadTargetBuildFilesParallel(build_f
+           args = (global_flags, dependency,
+                   variables, includes, depth, check, generator_input_info),
+           callback = parallel_state.LoadTargetBuildFileCallback)
+-  except KeyboardInterrupt, e:
++  except KeyboardInterrupt as e:
+     parallel_state.pool.terminate()
+     raise e
+ 
+@@ -904,8 +894,9 @@ def ExpandVariables(input, phase, variab
+                                  stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE,
+                                  stdin=subprocess.PIPE,
+-                                 cwd=build_file_dir)
+-          except Exception, e:
++                                 cwd=build_file_dir,
++                                 universal_newlines=True)
++          except Exception as e:
+             raise GypError("%s while executing command '%s' in %s" %
+                            (e, contents, build_file))
+ 
+@@ -1019,9 +1010,9 @@ def ExpandVariables(input, phase, variab
+ 
+   # Convert all strings that are canonically-represented integers into integers.
+   if type(output) is list:
+-    for index in xrange(0, len(output)):
+-      if IsStrCanonicalInt(output[index]):
+-        output[index] = int(output[index])
++    for index, outstr in enumerate(output):
++      if IsStrCanonicalInt(outstr):
++        output[index] = int(outstr)
+   elif IsStrCanonicalInt(output):
+     output = int(output)
+ 
+@@ -1090,13 +1081,13 @@ def EvalSingleCondition(
+     if eval(ast_code, {'__builtins__': None}, variables):
+       return true_dict
+     return false_dict
+-  except SyntaxError, e:
++  except SyntaxError as e:
+     syntax_error = SyntaxError('%s while evaluating condition \'%s\' in %s '
+                                'at character %d.' %
+                                (str(e.args[0]), e.text, build_file, e.offset),
+                                e.filename, e.lineno, e.offset, e.text)
+     raise syntax_error
+-  except NameError, e:
++  except NameError as e:
+     gyp.common.ExceptionAppend(e, 'while evaluating condition \'%s\' in %s' %
+                                (cond_expr_expanded, build_file))
+     raise GypError(e)
+@@ -1151,7 +1142,7 @@ def ProcessConditionsInDict(the_dict, ph
+ def LoadAutomaticVariablesFromDict(variables, the_dict):
+   # Any keys with plain string values in the_dict become automatic variables.
+   # The variable name is the key name with a "_" character prepended.
+-  for key, value in the_dict.iteritems():
++  for key, value in the_dict.items():
+     if type(value) in (str, int, list):
+       variables['_' + key] = value
+ 
+@@ -1164,7 +1155,7 @@ def LoadVariablesFromVariablesDict(varia
+   # the_dict in the_dict's parent dict.  If the_dict's parent is not a dict
+   # (it could be a list or it could be parentless because it is a root dict),
+   # the_dict_key will be None.
+-  for key, value in the_dict.get('variables', {}).iteritems():
++  for key, value in the_dict.get('variables', {}).items():
+     if type(value) not in (str, int, list):
+       continue
+ 
+@@ -1203,7 +1194,7 @@ def ProcessVariablesAndConditionsInDict(
+     # list before we process them so that you can reference one
+     # variable from another.  They will be fully expanded by recursion
+     # in ExpandVariables.
+-    for key, value in the_dict['variables'].iteritems():
++    for key, value in the_dict['variables'].items():
+       variables[key] = value
+ 
+     # Handle the associated variables dict first, so that any variable
+@@ -1216,7 +1207,7 @@ def ProcessVariablesAndConditionsInDict(
+ 
+   LoadVariablesFromVariablesDict(variables, the_dict, the_dict_key)
+ 
+-  for key, value in the_dict.iteritems():
++  for key, value in the_dict.items():
+     # Skip "variables", which was already processed if present.
+     if key != 'variables' and type(value) is str:
+       expanded = ExpandVariables(value, phase, variables, build_file)
+@@ -1274,7 +1265,7 @@ def ProcessVariablesAndConditionsInDict(
+ 
+   # Recurse into child dicts, or process child lists which may result in
+   # further recursion into descendant dicts.
+-  for key, value in the_dict.iteritems():
++  for key, value in the_dict.items():
+     # Skip "variables" and string values, which were already processed if
+     # present.
+     if key == 'variables' or type(value) is str:
+@@ -1371,14 +1362,14 @@ def QualifyDependencies(targets):
+                              for dep in dependency_sections
+                              for op in ('', '!', '/')]
+ 
+-  for target, target_dict in targets.iteritems():
++  for target, target_dict in targets.items():
+     target_build_file = gyp.common.BuildFile(target)
+     toolset = target_dict['toolset']
+     for dependency_key in all_dependency_sections:
+       dependencies = target_dict.get(dependency_key, [])
+-      for index in xrange(0, len(dependencies)):
++      for index, dep in enumerate(dependencies):
+         dep_file, dep_target, dep_toolset = gyp.common.ResolveTarget(
+-            target_build_file, dependencies[index], toolset)
++            target_build_file, dep, toolset)
+         if not multiple_toolsets:
+           # Ignore toolset specification in the dependency if it is specified.
+           dep_toolset = toolset
+@@ -1411,7 +1402,7 @@ def ExpandWildcardDependencies(targets,
+   dependency list, must be qualified when this function is called.
+   """
+ 
+-  for target, target_dict in targets.iteritems():
++  for target, target_dict in targets.items():
+     toolset = target_dict['toolset']
+     target_build_file = gyp.common.BuildFile(target)
+     for dependency_key in dependency_sections:
+@@ -1473,7 +1464,7 @@ def Unify(l):
+ def RemoveDuplicateDependencies(targets):
+   """Makes sure every dependency appears only once in all targets's dependency
+   lists."""
+-  for target_name, target_dict in targets.iteritems():
++  for target_name, target_dict in targets.items():
+     for dependency_key in dependency_sections:
+       dependencies = target_dict.get(dependency_key, [])
+       if dependencies:
+@@ -1489,7 +1480,7 @@ def Filter(l, item):
+ def RemoveSelfDependencies(targets):
+   """Remove self dependencies from targets that have the prune_self_dependency
+   variable set."""
+-  for target_name, target_dict in targets.iteritems():
++  for target_name, target_dict in targets.items():
+     for dependency_key in dependency_sections:
+       dependencies = target_dict.get(dependency_key, [])
+       if dependencies:
+@@ -1502,7 +1493,7 @@ def RemoveSelfDependencies(targets):
+ def RemoveLinkDependenciesFromNoneTargets(targets):
+   """Remove dependencies having the 'link_dependency' attribute from the 'none'
+   targets."""
+-  for target_name, target_dict in targets.iteritems():
++  for target_name, target_dict in targets.items():
+     for dependency_key in dependency_sections:
+       dependencies = target_dict.get(dependency_key, [])
+       if dependencies:
+@@ -1794,14 +1785,14 @@ def BuildDependencyList(targets):
+   # Create a DependencyGraphNode for each target.  Put it into a dict for easy
+   # access.
+   dependency_nodes = {}
+-  for target, spec in targets.iteritems():
++  for target, spec in targets.items():
+     if target not in dependency_nodes:
+       dependency_nodes[target] = DependencyGraphNode(target)
+ 
+   # Set up the dependency links.  Targets that have no dependencies are treated
+   # as dependent on root_node.
+   root_node = DependencyGraphNode(None)
+-  for target, spec in targets.iteritems():
++  for target, spec in targets.items():
+     target_node = dependency_nodes[target]
+     target_build_file = gyp.common.BuildFile(target)
+     dependencies = spec.get('dependencies')
+@@ -1825,7 +1816,7 @@ def BuildDependencyList(targets):
+     if not root_node.dependents:
+       # If all targets have dependencies, add the first target as a dependent
+       # of root_node so that the cycle can be discovered from root_node.
+-      target = targets.keys()[0]
++      target = next(iter(targets))
+       target_node = dependency_nodes[target]
+       target_node.dependencies.append(root_node)
+       root_node.dependents.append(target_node)
+@@ -1844,20 +1835,20 @@ def VerifyNoGYPFileCircularDependencies(
+   # Create a DependencyGraphNode for each gyp file containing a target.  Put
+   # it into a dict for easy access.
+   dependency_nodes = {}
+-  for target in targets.iterkeys():
++  for target in targets.keys():
+     build_file = gyp.common.BuildFile(target)
+     if not build_file in dependency_nodes:
+       dependency_nodes[build_file] = DependencyGraphNode(build_file)
+ 
+   # Set up the dependency links.
+-  for target, spec in targets.iteritems():
++  for target, spec in targets.items():
+     build_file = gyp.common.BuildFile(target)
+     build_file_node = dependency_nodes[build_file]
+     target_dependencies = spec.get('dependencies', [])
+     for dependency in target_dependencies:
+       try:
+         dependency_build_file = gyp.common.BuildFile(dependency)
+-      except GypError, e:
++      except GypError as e:
+         gyp.common.ExceptionAppend(
+             e, 'while computing dependencies of .gyp file %s' % build_file)
+         raise
+@@ -1875,7 +1866,7 @@ def VerifyNoGYPFileCircularDependencies(
+ 
+   # Files that have no dependencies are treated as dependent on root_node.
+   root_node = DependencyGraphNode(None)
+-  for build_file_node in dependency_nodes.itervalues():
++  for build_file_node in dependency_nodes.values():
+     if len(build_file_node.dependencies) == 0:
+       build_file_node.dependencies.append(root_node)
+       root_node.dependents.append(build_file_node)
+@@ -1888,7 +1879,7 @@ def VerifyNoGYPFileCircularDependencies(
+     if not root_node.dependents:
+       # If all files have dependencies, add the first file as a dependent
+       # of root_node so that the cycle can be discovered from root_node.
+-      file_node = dependency_nodes.values()[0]
++      file_node = next(iter(dependency_nodes.values()))
+       file_node.dependencies.append(root_node)
+       root_node.dependents.append(file_node)
+     cycles = []
+@@ -2115,7 +2106,7 @@ def MergeLists(to, fro, to_file, fro_fil
+ 
+ def MergeDicts(to, fro, to_file, fro_file):
+   # I wanted to name the parameter "from" but it's a Python keyword...
+-  for k, v in fro.iteritems():
++  for k, v in fro.items():
+     # It would be nice to do "if not k in to: to[k] = v" but that wouldn't give
+     # copy semantics.  Something else may want to merge from the |fro| dict
+     # later, and having the same dict ref pointed to twice in the tree isn't
+@@ -2250,13 +2241,13 @@ def SetUpConfigurations(target, target_d
+   if not 'configurations' in target_dict:
+     target_dict['configurations'] = {'Default': {}}
+   if not 'default_configuration' in target_dict:
+-    concrete = [i for (i, config) in target_dict['configurations'].iteritems()
++    concrete = [i for (i, config) in target_dict['configurations'].items()
+                 if not config.get('abstract')]
+     target_dict['default_configuration'] = sorted(concrete)[0]
+ 
+   merged_configurations = {}
+   configs = target_dict['configurations']
+-  for (configuration, old_configuration_dict) in configs.iteritems():
++  for (configuration, old_configuration_dict) in configs.items():
+     # Skip abstract configurations (saves work only).
+     if old_configuration_dict.get('abstract'):
+       continue
+@@ -2264,7 +2255,7 @@ def SetUpConfigurations(target, target_d
+     # Get the inheritance relationship right by making a copy of the target
+     # dict.
+     new_configuration_dict = {}
+-    for (key, target_val) in target_dict.iteritems():
++    for (key, target_val) in target_dict.items():
+       key_ext = key[-1:]
+       if key_ext in key_suffixes:
+         key_base = key[:-1]
+@@ -2285,10 +2276,9 @@ def SetUpConfigurations(target, target_d
+         merged_configurations[configuration])
+ 
+   # Now drop all the abstract ones.
+-  for configuration in target_dict['configurations'].keys():
+-    old_configuration_dict = target_dict['configurations'][configuration]
+-    if old_configuration_dict.get('abstract'):
+-      del target_dict['configurations'][configuration]
++  configs = target_dict['configurations']
++  target_dict['configurations'] = \
++      {k: v for k, v in configs.items() if not v.get('abstract')}
+ 
+   # Now that all of the target's configurations have been built, go through
+   # the target dict's keys and remove everything that's been moved into a
+@@ -2348,7 +2338,7 @@ def ProcessListFiltersInDict(name, the_d
+ 
+   lists = []
+   del_lists = []
+-  for key, value in the_dict.iteritems():
++  for key, value in the_dict.items():
+     operation = key[-1]
+     if operation != '!' and operation != '/':
+       continue
+@@ -2396,8 +2386,8 @@ def ProcessListFiltersInDict(name, the_d
+     exclude_key = list_key + '!'
+     if exclude_key in the_dict:
+       for exclude_item in the_dict[exclude_key]:
+-        for index in xrange(0, len(the_list)):
+-          if exclude_item == the_list[index]:
++        for index, list_item in enumerate(the_list):
++          if exclude_item == list_item:
+             # This item matches the exclude_item, so set its action to 0
+             # (exclude).
+             list_actions[index] = 0
+@@ -2422,8 +2412,7 @@ def ProcessListFiltersInDict(name, the_d
+           raise ValueError('Unrecognized action ' + action + ' in ' + name + \
+                            ' key ' + regex_key)
+ 
+-        for index in xrange(0, len(the_list)):
+-          list_item = the_list[index]
++        for index, list_item in enumerate(the_list):
+           if list_actions[index] == action_value:
+             # Even if the regex matches, nothing will change so continue (regex
+             # searches are expensive).
+@@ -2453,7 +2442,7 @@ def ProcessListFiltersInDict(name, the_d
+     # the indices of items that haven't been seen yet don't shift.  That means
+     # that things need to be prepended to excluded_list to maintain them in the
+     # same order that they existed in the_list.
+-    for index in xrange(len(list_actions) - 1, -1, -1):
++    for index in range(len(list_actions) - 1, -1, -1):
+       if list_actions[index] == 0:
+         # Dump anything with action 0 (exclude).  Keep anything with action 1
+         # (include) or -1 (no include or exclude seen for the item).
+@@ -2466,7 +2455,7 @@ def ProcessListFiltersInDict(name, the_d
+       the_dict[excluded_key] = excluded_list
+ 
+   # Now recurse into subdicts and lists that may contain dicts.
+-  for key, value in the_dict.iteritems():
++  for key, value in the_dict.items():
+     if type(value) is dict:
+       ProcessListFiltersInDict(key, value)
+     elif type(value) is list:
+@@ -2523,7 +2512,7 @@ def ValidateSourcesInTarget(target, targ
+     basenames.setdefault(basename, []).append(source)
+ 
+   error = ''
+-  for basename, files in basenames.iteritems():
++  for basename, files in basenames.items():
+     if len(files) > 1:
+       error += '  %s: %s\n' % (basename, ' '.join(files))
+ 
+@@ -2662,8 +2651,7 @@ def TurnIntIntoStrInDict(the_dict):
+ def TurnIntIntoStrInList(the_list):
+   """Given list the_list, recursively converts all integers into strings.
+   """
+-  for index in xrange(0, len(the_list)):
+-    item = the_list[index]
++  for index, item in enumerate(the_list):
+     if type(item) is int:
+       the_list[index] = str(item)
+     elif type(item) is dict:
+@@ -2780,7 +2768,7 @@ def Load(build_files, variables, include
+       try:
+         LoadTargetBuildFile(build_file, data, aux_data,
+                             variables, includes, depth, check, True)
+-      except Exception, e:
++      except Exception as e:
+         gyp.common.ExceptionAppend(e, 'while trying to load %s' % build_file)
+         raise
+ 
+@@ -2802,7 +2790,7 @@ def Load(build_files, variables, include
+   RemoveLinkDependenciesFromNoneTargets(targets)
+ 
+   # Apply exclude (!) and regex (/) list filters only for dependency_sections.
+-  for target_name, target_dict in targets.iteritems():
++  for target_name, target_dict in targets.items():
+     tmp_dict = {}
+     for key_base in dependency_sections:
+       for op in ('', '!', '/'):
+Index: node-v8.9.4/tools/gyp/pylib/gyp/input_test.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/input_test.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/input_test.py
+@@ -22,7 +22,7 @@ class TestFindCycles(unittest.TestCase):
+     dependency.dependents.append(dependent)
+ 
+   def test_no_cycle_empty_graph(self):
+-    for label, node in self.nodes.iteritems():
++    for label, node in self.nodes.items():
+       self.assertEquals([], node.FindCycles())
+ 
+   def test_no_cycle_line(self):
+@@ -30,7 +30,7 @@ class TestFindCycles(unittest.TestCase):
+     self._create_dependency(self.nodes['b'], self.nodes['c'])
+     self._create_dependency(self.nodes['c'], self.nodes['d'])
+ 
+-    for label, node in self.nodes.iteritems():
++    for label, node in self.nodes.items():
+       self.assertEquals([], node.FindCycles())
+ 
+   def test_no_cycle_dag(self):
+@@ -38,7 +38,7 @@ class TestFindCycles(unittest.TestCase):
+     self._create_dependency(self.nodes['a'], self.nodes['c'])
+     self._create_dependency(self.nodes['b'], self.nodes['c'])
+ 
+-    for label, node in self.nodes.iteritems():
++    for label, node in self.nodes.items():
+       self.assertEquals([], node.FindCycles())
+ 
+   def test_cycle_self_reference(self):
+Index: node-v8.9.4/tools/gyp/pylib/gyp/mac_tool.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/mac_tool.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/mac_tool.py
+@@ -8,6 +8,8 @@
+ These functions are executed via gyp-mac-tool when using the Makefile generator.
+ """
+ 
++from __future__ import print_function
++
+ import fcntl
+ import fnmatch
+ import glob
+@@ -16,7 +18,6 @@ import os
+ import plistlib
+ import re
+ import shutil
+-import string
+ import struct
+ import subprocess
+ import sys
+@@ -155,11 +156,11 @@ class MacTool(object):
+       fp.close()
+       return None
+     fp.close()
+-    if header.startswith("\xFE\xFF"):
++    if header.startswith(b"\xFE\xFF"):
+       return "UTF-16"
+-    elif header.startswith("\xFF\xFE"):
++    elif header.startswith(b"\xFF\xFE"):
+       return "UTF-16"
+-    elif header.startswith("\xEF\xBB\xBF"):
++    elif header.startswith(b"\xEF\xBB\xBF"):
+       return "UTF-8"
+     else:
+       return None
+@@ -174,7 +175,7 @@ class MacTool(object):
+     # Insert synthesized key/value pairs (e.g. BuildMachineOSBuild).
+     plist = plistlib.readPlistFromString(lines)
+     if keys:
+-      plist = dict(plist.items() + json.loads(keys[0]).items())
++      plist.update(json.loads(keys[0]))
+     lines = plistlib.writePlistToString(plist)
+ 
+     # Go through all the environment variables and replace them as variables in
+@@ -185,7 +186,7 @@ class MacTool(object):
+         continue
+       evar = '${%s}' % key
+       evalue = os.environ[key]
+-      lines = string.replace(lines, evar, evalue)
++      lines = lines.replace(evar, evalue)
+ 
+       # Xcode supports various suffices on environment variables, which are
+       # all undocumented. :rfc1034identifier is used in the standard project
+@@ -195,11 +196,11 @@ class MacTool(object):
+       # in a URL either -- oops, hence :rfc1034identifier was born.
+       evar = '${%s:identifier}' % key
+       evalue = IDENT_RE.sub('_', os.environ[key])
+-      lines = string.replace(lines, evar, evalue)
++      lines = lines.replace(evar, evalue)
+ 
+       evar = '${%s:rfc1034identifier}' % key
+       evalue = IDENT_RE.sub('-', os.environ[key])
+-      lines = string.replace(lines, evar, evalue)
++      lines = lines.replace(evar, evalue)
+ 
+     # Remove any keys with values that haven't been replaced.
+     lines = lines.split('\n')
+@@ -270,7 +271,7 @@ class MacTool(object):
+     _, err = libtoolout.communicate()
+     for line in err.splitlines():
+       if not libtool_re.match(line) and not libtool_re5.match(line):
+-        print >>sys.stderr, line
++        print(line, file=sys.stderr)
+     # Unconditionally touch the output .a file on the command line if present
+     # and the command succeeded. A bit hacky.
+     if not libtoolout.returncode:
+@@ -385,7 +386,7 @@ class MacTool(object):
+       ])
+     if keys:
+       keys = json.loads(keys)
+-      for key, value in keys.iteritems():
++      for key, value in keys.items():
+         arg_name = '--' + key
+         if isinstance(value, bool):
+           if value:
+@@ -480,8 +481,9 @@ class MacTool(object):
+     profiles_dir = os.path.join(
+         os.environ['HOME'], 'Library', 'MobileDevice', 'Provisioning Profiles')
+     if not os.path.isdir(profiles_dir):
+-      print >>sys.stderr, (
+-          'cannot find mobile provisioning for %s' % bundle_identifier)
++      print((
++          'cannot find mobile provisioning for %s' % bundle_identifier),
++          file=sys.stderr)
+       sys.exit(1)
+     provisioning_profiles = None
+     if profile:
+@@ -502,8 +504,9 @@ class MacTool(object):
+           valid_provisioning_profiles[app_id_pattern] = (
+               profile_path, profile_data, team_identifier)
+     if not valid_provisioning_profiles:
+-      print >>sys.stderr, (
+-          'cannot find mobile provisioning for %s' % bundle_identifier)
++      print((
++          'cannot find mobile provisioning for %s' % bundle_identifier),
++          file=sys.stderr)
+       sys.exit(1)
+     # If the user has multiple provisioning profiles installed that can be
+     # used for ${bundle_identifier}, pick the most specific one (ie. the
+@@ -527,7 +530,7 @@ class MacTool(object):
+ 
+   def _MergePlist(self, merged_plist, plist):
+     """Merge |plist| into |merged_plist|."""
+-    for key, value in plist.iteritems():
++    for key, value in plist.items():
+       if isinstance(value, dict):
+         merged_value = merged_plist.get(key, {})
+         if isinstance(merged_value, dict):
+@@ -637,7 +640,7 @@ class MacTool(object):
+       the key was not found.
+     """
+     if isinstance(data, str):
+-      for key, value in substitutions.iteritems():
++      for key, value in substitutions.items():
+         data = data.replace('$(%s)' % key, value)
+       return data
+     if isinstance(data, list):
+Index: node-v8.9.4/tools/gyp/pylib/gyp/msvs_emulation.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/msvs_emulation.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/msvs_emulation.py
+@@ -7,6 +7,7 @@ This module helps emulate Visual Studio
+ build systems, primarily ninja.
+ """
+ 
++import collections
+ import os
+ import re
+ import subprocess
+@@ -16,6 +17,10 @@ from gyp.common import OrderedSet
+ import gyp.MSVSUtil
+ import gyp.MSVSVersion
+ 
++try:
++  basestring = basestring
++except NameError:
++  basestring = str
+ 
+ windows_quoter_regex = re.compile(r'(\\*)"')
+ 
+@@ -84,8 +89,8 @@ def _AddPrefix(element, prefix):
+   """Add |prefix| to |element| or each subelement if element is iterable."""
+   if element is None:
+     return element
+-  # Note, not Iterable because we don't want to handle strings like that.
+-  if isinstance(element, list) or isinstance(element, tuple):
++  if (isinstance(element, collections.Iterable) and
++      not isinstance(element, basestring)):
+     return [prefix + e for e in element]
+   else:
+     return prefix + element
+@@ -97,7 +102,8 @@ def _DoRemapping(element, map):
+   if map is not None and element is not None:
+     if not callable(map):
+       map = map.get # Assume it's a dict, otherwise a callable to do the remap.
+-    if isinstance(element, list) or isinstance(element, tuple):
++    if (isinstance(element, collections.Iterable) and
++        not isinstance(element, basestring)):
+       element = filter(None, [map(elem) for elem in element])
+     else:
+       element = map(element)
+@@ -109,7 +115,8 @@ def _AppendOrReturn(append, element):
+   then add |element| to it, adding each item in |element| if it's a list or
+   tuple."""
+   if append is not None and element is not None:
+-    if isinstance(element, list) or isinstance(element, tuple):
++    if (isinstance(element, collections.Iterable) and
++        not isinstance(element, basestring)):
+       append.extend(element)
+     else:
+       append.append(element)
+@@ -209,7 +216,7 @@ class MsvsSettings(object):
+     configs = spec['configurations']
+     for field, default in supported_fields:
+       setattr(self, field, {})
+-      for configname, config in configs.iteritems():
++      for configname, config in configs.items():
+         getattr(self, field)[configname] = config.get(field, default())
+ 
+     self.msvs_cygwin_dirs = spec.get('msvs_cygwin_dirs', ['.'])
+@@ -482,7 +489,7 @@ class MsvsSettings(object):
+       # https://msdn.microsoft.com/en-us/library/dn502518.aspx
+       cflags.append('/FS')
+     # ninja handles parallelism by itself, don't have the compiler do it too.
+-    cflags = filter(lambda x: not x.startswith('/MP'), cflags)
++    cflags = [x for x in cflags if not x.startswith('/MP')]
+     return cflags
+ 
+   def _GetPchFlags(self, config, extension):
+@@ -649,19 +656,17 @@ class MsvsSettings(object):
+ 
+     # If the base address is not specifically controlled, DYNAMICBASE should
+     # be on by default.
+-    base_flags = filter(lambda x: 'DYNAMICBASE' in x or x == '/FIXED',
+-                        ldflags)
+-    if not base_flags:
++    if not any('DYNAMICBASE' in flag or flag == '/FIXED' for flag in ldflags):
+       ldflags.append('/DYNAMICBASE')
+ 
+     # If the NXCOMPAT flag has not been specified, default to on. Despite the
+     # documentation that says this only defaults to on when the subsystem is
+     # Vista or greater (which applies to the linker), the IDE defaults it on
+     # unless it's explicitly off.
+-    if not filter(lambda x: 'NXCOMPAT' in x, ldflags):
++    if not any('NXCOMPAT' in flag for flag in ldflags):
+       ldflags.append('/NXCOMPAT')
+ 
+-    have_def_file = filter(lambda x: x.startswith('/DEF:'), ldflags)
++    have_def_file = any(flag.startswith('/DEF:') for flag in ldflags)
+     manifest_flags, intermediate_manifest, manifest_files = \
+         self._GetLdManifestFlags(config, manifest_base_name, gyp_to_build_path,
+                                  is_executable and not have_def_file, build_dir)
+@@ -953,7 +958,7 @@ def ExpandMacros(string, expansions):
+   """Expand $(Variable) per expansions dict. See MsvsSettings.GetVSMacroEnv
+   for the canonical way to retrieve a suitable dict."""
+   if '$' in string:
+-    for old, new in expansions.iteritems():
++    for old, new in expansions.items():
+       assert '$(' not in new, new
+       string = string.replace(old, new)
+   return string
+@@ -1001,7 +1006,7 @@ def _FormatAsEnvironmentBlock(envvar_dic
+   CreateProcess documentation for more details."""
+   block = ''
+   nul = '\0'
+-  for key, value in envvar_dict.iteritems():
++  for key, value in envvar_dict.items():
+     block += key + '=' + value + nul
+   block += nul
+   return block
+@@ -1056,7 +1061,7 @@ def GenerateEnvironmentFiles(toplevel_bu
+       env['INCLUDE'] = ';'.join(system_includes)
+ 
+     env_block = _FormatAsEnvironmentBlock(env)
+-    f = open_out(os.path.join(toplevel_build_dir, 'environment.' + arch), 'wb')
++    f = open_out(os.path.join(toplevel_build_dir, 'environment.' + arch), 'w')
+     f.write(env_block)
+     f.close()
+ 
+@@ -1078,7 +1083,7 @@ def VerifyMissingSources(sources, build_
+   if int(generator_flags.get('msvs_error_on_missing_sources', 0)):
+     no_specials = filter(lambda x: '$' not in x, sources)
+     relative = [os.path.join(build_dir, gyp_to_ninja(s)) for s in no_specials]
+-    missing = filter(lambda x: not os.path.exists(x), relative)
++    missing = [x for x in relative if not os.path.exists(x)]
+     if missing:
+       # They'll look like out\Release\..\..\stuff\things.cc, so normalize the
+       # path for a slightly less crazy looking output.
+Index: node-v8.9.4/tools/gyp/pylib/gyp/ordered_dict.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/ordered_dict.py
++++ /dev/null
+@@ -1,289 +0,0 @@
+-# Unmodified from http://code.activestate.com/recipes/576693/
+-# other than to add MIT license header (as specified on page, but not in code).
+-# Linked from Python documentation here:
+-# http://docs.python.org/2/library/collections.html#collections.OrderedDict
+-#
+-# This should be deleted once Py2.7 is available on all bots, see
+-# http://crbug.com/241769.
+-#
+-# Copyright (c) 2009 Raymond Hettinger.
+-#
+-# Permission is hereby granted, free of charge, to any person obtaining a copy
+-# of this software and associated documentation files (the "Software"), to deal
+-# in the Software without restriction, including without limitation the rights
+-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+-# copies of the Software, and to permit persons to whom the Software is
+-# furnished to do so, subject to the following conditions:
+-#
+-# The above copyright notice and this permission notice shall be included in
+-# all copies or substantial portions of the Software.
+-#
+-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+-# THE SOFTWARE.
+-
+-# Backport of OrderedDict() class that runs on Python 2.4, 2.5, 2.6, 2.7 and pypy.
+-# Passes Python2.7's test suite and incorporates all the latest updates.
+-
+-try:
+-    from thread import get_ident as _get_ident
+-except ImportError:
+-    from dummy_thread import get_ident as _get_ident
+-
+-try:
+-    from _abcoll import KeysView, ValuesView, ItemsView
+-except ImportError:
+-    pass
+-
+-
+-class OrderedDict(dict):
+-    'Dictionary that remembers insertion order'
+-    # An inherited dict maps keys to values.
+-    # The inherited dict provides __getitem__, __len__, __contains__, and get.
+-    # The remaining methods are order-aware.
+-    # Big-O running times for all methods are the same as for regular dictionaries.
+-
+-    # The internal self.__map dictionary maps keys to links in a doubly linked list.
+-    # The circular doubly linked list starts and ends with a sentinel element.
+-    # The sentinel element never gets deleted (this simplifies the algorithm).
+-    # Each link is stored as a list of length three:  [PREV, NEXT, KEY].
+-
+-    def __init__(self, *args, **kwds):
+-        '''Initialize an ordered dictionary.  Signature is the same as for
+-        regular dictionaries, but keyword arguments are not recommended
+-        because their insertion order is arbitrary.
+-
+-        '''
+-        if len(args) > 1:
+-            raise TypeError('expected at most 1 arguments, got %d' % len(args))
+-        try:
+-            self.__root
+-        except AttributeError:
+-            self.__root = root = []                     # sentinel node
+-            root[:] = [root, root, None]
+-            self.__map = {}
+-        self.__update(*args, **kwds)
+-
+-    def __setitem__(self, key, value, dict_setitem=dict.__setitem__):
+-        'od.__setitem__(i, y) <==> od[i]=y'
+-        # Setting a new item creates a new link which goes at the end of the linked
+-        # list, and the inherited dictionary is updated with the new key/value pair.
+-        if key not in self:
+-            root = self.__root
+-            last = root[0]
+-            last[1] = root[0] = self.__map[key] = [last, root, key]
+-        dict_setitem(self, key, value)
+-
+-    def __delitem__(self, key, dict_delitem=dict.__delitem__):
+-        'od.__delitem__(y) <==> del od[y]'
+-        # Deleting an existing item uses self.__map to find the link which is
+-        # then removed by updating the links in the predecessor and successor nodes.
+-        dict_delitem(self, key)
+-        link_prev, link_next, key = self.__map.pop(key)
+-        link_prev[1] = link_next
+-        link_next[0] = link_prev
+-
+-    def __iter__(self):
+-        'od.__iter__() <==> iter(od)'
+-        root = self.__root
+-        curr = root[1]
+-        while curr is not root:
+-            yield curr[2]
+-            curr = curr[1]
+-
+-    def __reversed__(self):
+-        'od.__reversed__() <==> reversed(od)'
+-        root = self.__root
+-        curr = root[0]
+-        while curr is not root:
+-            yield curr[2]
+-            curr = curr[0]
+-
+-    def clear(self):
+-        'od.clear() -> None.  Remove all items from od.'
+-        try:
+-            for node in self.__map.itervalues():
+-                del node[:]
+-            root = self.__root
+-            root[:] = [root, root, None]
+-            self.__map.clear()
+-        except AttributeError:
+-            pass
+-        dict.clear(self)
+-
+-    def popitem(self, last=True):
+-        '''od.popitem() -> (k, v), return and remove a (key, value) pair.
+-        Pairs are returned in LIFO order if last is true or FIFO order if false.
+-
+-        '''
+-        if not self:
+-            raise KeyError('dictionary is empty')
+-        root = self.__root
+-        if last:
+-            link = root[0]
+-            link_prev = link[0]
+-            link_prev[1] = root
+-            root[0] = link_prev
+-        else:
+-            link = root[1]
+-            link_next = link[1]
+-            root[1] = link_next
+-            link_next[0] = root
+-        key = link[2]
+-        del self.__map[key]
+-        value = dict.pop(self, key)
+-        return key, value
+-
+-    # -- the following methods do not depend on the internal structure --
+-
+-    def keys(self):
+-        'od.keys() -> list of keys in od'
+-        return list(self)
+-
+-    def values(self):
+-        'od.values() -> list of values in od'
+-        return [self[key] for key in self]
+-
+-    def items(self):
+-        'od.items() -> list of (key, value) pairs in od'
+-        return [(key, self[key]) for key in self]
+-
+-    def iterkeys(self):
+-        'od.iterkeys() -> an iterator over the keys in od'
+-        return iter(self)
+-
+-    def itervalues(self):
+-        'od.itervalues -> an iterator over the values in od'
+-        for k in self:
+-            yield self[k]
+-
+-    def iteritems(self):
+-        'od.iteritems -> an iterator over the (key, value) items in od'
+-        for k in self:
+-            yield (k, self[k])
+-
+-    # Suppress 'OrderedDict.update: Method has no argument':
+-    # pylint: disable=E0211
+-    def update(*args, **kwds):
+-        '''od.update(E, **F) -> None.  Update od from dict/iterable E and F.
+-
+-        If E is a dict instance, does:           for k in E: od[k] = E[k]
+-        If E has a .keys() method, does:         for k in E.keys(): od[k] = E[k]
+-        Or if E is an iterable of items, does:   for k, v in E: od[k] = v
+-        In either case, this is followed by:     for k, v in F.items(): od[k] = v
+-
+-        '''
+-        if len(args) > 2:
+-            raise TypeError('update() takes at most 2 positional '
+-                            'arguments (%d given)' % (len(args),))
+-        elif not args:
+-            raise TypeError('update() takes at least 1 argument (0 given)')
+-        self = args[0]
+-        # Make progressively weaker assumptions about "other"
+-        other = ()
+-        if len(args) == 2:
+-            other = args[1]
+-        if isinstance(other, dict):
+-            for key in other:
+-                self[key] = other[key]
+-        elif hasattr(other, 'keys'):
+-            for key in other.keys():
+-                self[key] = other[key]
+-        else:
+-            for key, value in other:
+-                self[key] = value
+-        for key, value in kwds.items():
+-            self[key] = value
+-
+-    __update = update  # let subclasses override update without breaking __init__
+-
+-    __marker = object()
+-
+-    def pop(self, key, default=__marker):
+-        '''od.pop(k[,d]) -> v, remove specified key and return the corresponding value.
+-        If key is not found, d is returned if given, otherwise KeyError is raised.
+-
+-        '''
+-        if key in self:
+-            result = self[key]
+-            del self[key]
+-            return result
+-        if default is self.__marker:
+-            raise KeyError(key)
+-        return default
+-
+-    def setdefault(self, key, default=None):
+-        'od.setdefault(k[,d]) -> od.get(k,d), also set od[k]=d if k not in od'
+-        if key in self:
+-            return self[key]
+-        self[key] = default
+-        return default
+-
+-    def __repr__(self, _repr_running={}):
+-        'od.__repr__() <==> repr(od)'
+-        call_key = id(self), _get_ident()
+-        if call_key in _repr_running:
+-            return '...'
+-        _repr_running[call_key] = 1
+-        try:
+-            if not self:
+-                return '%s()' % (self.__class__.__name__,)
+-            return '%s(%r)' % (self.__class__.__name__, self.items())
+-        finally:
+-            del _repr_running[call_key]
+-
+-    def __reduce__(self):
+-        'Return state information for pickling'
+-        items = [[k, self[k]] for k in self]
+-        inst_dict = vars(self).copy()
+-        for k in vars(OrderedDict()):
+-            inst_dict.pop(k, None)
+-        if inst_dict:
+-            return (self.__class__, (items,), inst_dict)
+-        return self.__class__, (items,)
+-
+-    def copy(self):
+-        'od.copy() -> a shallow copy of od'
+-        return self.__class__(self)
+-
+-    @classmethod
+-    def fromkeys(cls, iterable, value=None):
+-        '''OD.fromkeys(S[, v]) -> New ordered dictionary with keys from S
+-        and values equal to v (which defaults to None).
+-
+-        '''
+-        d = cls()
+-        for key in iterable:
+-            d[key] = value
+-        return d
+-
+-    def __eq__(self, other):
+-        '''od.__eq__(y) <==> od==y.  Comparison to another OD is order-sensitive
+-        while comparison to a regular mapping is order-insensitive.
+-
+-        '''
+-        if isinstance(other, OrderedDict):
+-            return len(self)==len(other) and self.items() == other.items()
+-        return dict.__eq__(self, other)
+-
+-    def __ne__(self, other):
+-        return not self == other
+-
+-    # -- the following methods are only used in Python 2.7 --
+-
+-    def viewkeys(self):
+-        "od.viewkeys() -> a set-like object providing a view on od's keys"
+-        return KeysView(self)
+-
+-    def viewvalues(self):
+-        "od.viewvalues() -> an object providing a view on od's values"
+-        return ValuesView(self)
+-
+-    def viewitems(self):
+-        "od.viewitems() -> a set-like object providing a view on od's items"
+-        return ItemsView(self)
+-
+Index: node-v8.9.4/tools/gyp/pylib/gyp/simple_copy.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/simple_copy.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/simple_copy.py
+@@ -28,8 +28,19 @@ _deepcopy_dispatch = d = {}
+ def _deepcopy_atomic(x):
+   return x
+ 
+-for x in (type(None), int, long, float,
+-          bool, str, unicode, type):
++try:
++  _string_types = (str, unicode)
++# There's no unicode in python3
++except NameError:
++  _string_types = (str, )
++
++try:
++  _integer_types = (int, long)
++# There's no long in python3
++except NameError:
++  _integer_types = (int, )
++
++for x in (type(None), float, bool, type) + _integer_types + _string_types:
+   d[x] = _deepcopy_atomic
+ 
+ def _deepcopy_list(x):
+@@ -38,7 +49,7 @@ d[list] = _deepcopy_list
+ 
+ def _deepcopy_dict(x):
+   y = {}
+-  for key, value in x.iteritems():
++  for key, value in x.items():
+     y[deepcopy(key)] = deepcopy(value)
+   return y
+ d[dict] = _deepcopy_dict
+Index: node-v8.9.4/tools/gyp/pylib/gyp/win_tool.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/win_tool.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/win_tool.py
+@@ -9,6 +9,8 @@
+ These functions are executed via gyp-win-tool when using the ninja generator.
+ """
+ 
++from __future__ import print_function
++
+ import os
+ import re
+ import shutil
+@@ -134,7 +136,7 @@ class WinTool(object):
+       if (not line.startswith('   Creating library ') and
+           not line.startswith('Generating code') and
+           not line.startswith('Finished generating code')):
+-        print line
++        print(line)
+     return link.returncode
+ 
+   def ExecLinkWithManifests(self, arch, embed_manifest, out, ldcmd, resname,
+@@ -193,16 +195,18 @@ class WinTool(object):
+       our_manifest = '%(out)s.manifest' % variables
+       # Load and normalize the manifests. mt.exe sometimes removes whitespace,
+       # and sometimes doesn't unfortunately.
+-      with open(our_manifest, 'rb') as our_f:
+-        with open(assert_manifest, 'rb') as assert_f:
++      with open(our_manifest, 'r') as our_f:
++        with open(assert_manifest, 'r') as assert_f:
+           our_data = our_f.read().translate(None, string.whitespace)
+           assert_data = assert_f.read().translate(None, string.whitespace)
+       if our_data != assert_data:
+         os.unlink(out)
+         def dump(filename):
+-          sys.stderr.write('%s\n-----\n' % filename)
+-          with open(filename, 'rb') as f:
+-            sys.stderr.write(f.read() + '\n-----\n')
++          print(filename, file=sys.stderr)
++          print('-----', file=sys.stderr)
++          with open(filename, 'r') as f:
++            print(f.read(), file=sys.stderr)
++            print('-----', file=sys.stderr)
+         dump(intermediate_manifest)
+         dump(our_manifest)
+         dump(assert_manifest)
+@@ -223,7 +227,7 @@ class WinTool(object):
+     out, _ = popen.communicate()
+     for line in out.splitlines():
+       if line and 'manifest authoring warning 81010002' not in line:
+-        print line
++        print(line)
+     return popen.returncode
+ 
+   def ExecManifestToRc(self, arch, *args):
+@@ -231,7 +235,7 @@ class WinTool(object):
+     |args| is tuple containing path to resource file, path to manifest file
+     and resource name which can be "1" (for executables) or "2" (for DLLs)."""
+     manifest_path, resource_path, resource_name = args
+-    with open(resource_path, 'wb') as output:
++    with open(resource_path, 'w') as output:
+       output.write('#include <windows.h>\n%s RT_MANIFEST "%s"' % (
+         resource_name,
+         os.path.abspath(manifest_path).replace('\\', '/')))
+@@ -263,7 +267,7 @@ class WinTool(object):
+                      for x in lines if x.startswith(prefixes))
+     for line in lines:
+       if not line.startswith(prefixes) and line not in processing:
+-        print line
++        print(line)
+     return popen.returncode
+ 
+   def ExecAsmWrapper(self, arch, *args):
+@@ -277,7 +281,7 @@ class WinTool(object):
+           not line.startswith('Microsoft (R) Macro Assembler') and
+           not line.startswith(' Assembling: ') and
+           line):
+-        print line
++        print(line)
+     return popen.returncode
+ 
+   def ExecRcWrapper(self, arch, *args):
+@@ -291,7 +295,7 @@ class WinTool(object):
+       if (not line.startswith('Microsoft (R) Windows (R) Resource Compiler') and
+           not line.startswith('Copyright (C) Microsoft Corporation') and
+           line):
+-        print line
++        print(line)
+     return popen.returncode
+ 
+   def ExecActionWrapper(self, arch, rspfile, *dir):
+@@ -300,7 +304,7 @@ class WinTool(object):
+     env = self._GetEnv(arch)
+     # TODO(scottmg): This is a temporary hack to get some specific variables
+     # through to actions that are set after gyp-time. http://crbug.com/333738.
+-    for k, v in os.environ.iteritems():
++    for k, v in os.environ.items():
+       if k not in env:
+         env[k] = v
+     args = open(rspfile).read()
+Index: node-v8.9.4/tools/gyp/pylib/gyp/xcode_emulation.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/xcode_emulation.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/xcode_emulation.py
+@@ -7,6 +7,8 @@ This module contains classes that help t
+ other build systems, such as make and ninja.
+ """
+ 
++from __future__ import print_function
++
+ import copy
+ import gyp.common
+ import os
+@@ -73,7 +75,7 @@ class XcodeArchsDefault(object):
+             if arch not in expanded_archs:
+               expanded_archs.append(arch)
+         except KeyError as e:
+-          print 'Warning: Ignoring unsupported variable "%s".' % variable
++          print('Warning: Ignoring unsupported variable "%s".' % variable)
+       elif arch not in expanded_archs:
+         expanded_archs.append(arch)
+     return expanded_archs
+@@ -171,7 +173,7 @@ class XcodeSettings(object):
+     # the same for all configs are implicitly per-target settings.
+     self.xcode_settings = {}
+     configs = spec['configurations']
+-    for configname, config in configs.iteritems():
++    for configname, config in configs.items():
+       self.xcode_settings[configname] = config.get('xcode_settings', {})
+       self._ConvertConditionalKeys(configname)
+       if self.xcode_settings[configname].get('IPHONEOS_DEPLOYMENT_TARGET',
+@@ -197,8 +199,8 @@ class XcodeSettings(object):
+           new_key = key.split("[")[0]
+           settings[new_key] = settings[key]
+       else:
+-        print 'Warning: Conditional keys not implemented, ignoring:', \
+-              ' '.join(conditional_keys)
++        print('Warning: Conditional keys not implemented, ignoring:', \
++              ' '.join(conditional_keys))
+       del settings[key]
+ 
+   def _Settings(self):
+@@ -216,7 +218,7 @@ class XcodeSettings(object):
+ 
+   def _WarnUnimplemented(self, test_key):
+     if test_key in self._Settings():
+-      print 'Warning: Ignoring not yet implemented key "%s".' % test_key
++      print('Warning: Ignoring not yet implemented key "%s".' % test_key)
+ 
+   def IsBinaryOutputFormat(self, configname):
+     default = "binary" if self.isIOS else "xml"
+@@ -963,7 +965,7 @@ class XcodeSettings(object):
+         result = dict(self.xcode_settings[configname])
+         first_pass = False
+       else:
+-        for key, value in self.xcode_settings[configname].iteritems():
++        for key, value in self.xcode_settings[configname].items():
+           if key not in result:
+             continue
+           elif result[key] != value:
+@@ -1084,8 +1086,8 @@ class XcodeSettings(object):
+     unimpl = ['OTHER_CODE_SIGN_FLAGS']
+     unimpl = set(unimpl) & set(self.xcode_settings[configname].keys())
+     if unimpl:
+-      print 'Warning: Some codesign keys not implemented, ignoring: %s' % (
+-          ', '.join(sorted(unimpl)))
++      print('Warning: Some codesign keys not implemented, ignoring: %s' % (
++          ', '.join(sorted(unimpl))))
+ 
+     if self._IsXCTest():
+       # For device xctests, Xcode copies two extra frameworks into $TEST_HOST.
+@@ -1739,7 +1741,7 @@ def _TopologicallySortedEnvVarKeys(env):
+     order = gyp.common.TopologicallySorted(env.keys(), GetEdges)
+     order.reverse()
+     return order
+-  except gyp.common.CycleError, e:
++  except gyp.common.CycleError as e:
+     raise GypError(
+         'Xcode environment variables are cyclically dependent: ' + str(e.nodes))
+ 
+@@ -1776,10 +1778,11 @@ def _HasIOSTarget(targets):
+ def _AddIOSDeviceConfigurations(targets):
+   """Clone all targets and append -iphoneos to the name. Configure these targets
+   to build for iOS devices and use correct architectures for those builds."""
+-  for target_dict in targets.itervalues():
++  for target_dict in targets.values():
+     toolset = target_dict['toolset']
+     configs = target_dict['configurations']
+-    for config_name, simulator_config_dict in dict(configs).iteritems():
++
++    for config_name, simulator_config_dict in dict(configs).items():
+       iphoneos_config_dict = copy.deepcopy(simulator_config_dict)
+       configs[config_name + '-iphoneos'] = iphoneos_config_dict
+       configs[config_name + '-iphonesimulator'] = simulator_config_dict
+Index: node-v8.9.4/tools/gyp/pylib/gyp/xcode_ninja.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/xcode_ninja.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/xcode_ninja.py
+@@ -28,7 +28,7 @@ def _WriteWorkspace(main_gyp, sources_gy
+     workspace_path = os.path.join(options.generator_output, workspace_path)
+   try:
+     os.makedirs(workspace_path)
+-  except OSError, e:
++  except OSError as e:
+     if e.errno != errno.EEXIST:
+       raise
+   output_string = '<?xml version="1.0" encoding="UTF-8"?>\n' + \
+@@ -85,7 +85,7 @@ def _TargetFromSpec(old_spec, params):
+         "%s/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)" % ninja_toplevel
+ 
+   if 'configurations' in old_spec:
+-    for config in old_spec['configurations'].iterkeys():
++    for config in old_spec['configurations'].keys():
+       old_xcode_settings = \
+         old_spec['configurations'][config].get('xcode_settings', {})
+       if 'IPHONEOS_DEPLOYMENT_TARGET' in old_xcode_settings:
+@@ -167,7 +167,7 @@ def CreateWrapper(target_list, target_di
+     params: Dict of global options for gyp.
+   """
+   orig_gyp = params['build_files'][0]
+-  for gyp_name, gyp_dict in data.iteritems():
++  for gyp_name, gyp_dict in data.items():
+     if gyp_name == orig_gyp:
+       depth = gyp_dict['_DEPTH']
+ 
+@@ -238,7 +238,7 @@ def CreateWrapper(target_list, target_di
+       not generator_flags.get('xcode_ninja_list_excluded_files', True)
+ 
+   sources = []
+-  for target, target_dict in target_dicts.iteritems():
++  for target, target_dict in target_dicts.items():
+     base = os.path.dirname(target)
+     files = target_dict.get('sources', []) + \
+             target_dict.get('mac_bundle_resources', [])
+Index: node-v8.9.4/tools/gyp/pylib/gyp/xcodeproj_file.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/xcodeproj_file.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/xcodeproj_file.py
+@@ -154,6 +154,10 @@ except ImportError:
+   import sha
+   _new_sha1 = sha.new
+ 
++try:
++  basestring = basestring
++except NameError:
++  basestring = str
+ 
+ # See XCObject._EncodeString.  This pattern is used to determine when a string
+ # can be printed unquoted.  Strings that match this pattern may be printed
+@@ -314,7 +318,7 @@ class XCObject(object):
+     """
+ 
+     that = self.__class__(id=self.id, parent=self.parent)
+-    for key, value in self._properties.iteritems():
++    for key, value in self._properties.items():
+       is_strong = self._schema[key][2]
+ 
+       if isinstance(value, XCObject):
+@@ -324,8 +328,7 @@ class XCObject(object):
+           that._properties[key] = new_value
+         else:
+           that._properties[key] = value
+-      elif isinstance(value, str) or isinstance(value, unicode) or \
+-           isinstance(value, int):
++      elif isinstance(value, basestring) or isinstance(value, int):
+         that._properties[key] = value
+       elif isinstance(value, list):
+         if is_strong:
+@@ -449,10 +452,10 @@ class XCObject(object):
+       # is 160 bits.  Instead of throwing out 64 bits of the digest, xor them
+       # into the portion that gets used.
+       assert hash.digest_size % 4 == 0
+-      digest_int_count = hash.digest_size / 4
++      digest_int_count = hash.digest_size // 4
+       digest_ints = struct.unpack('>' + 'I' * digest_int_count, hash.digest())
+       id_ints = [0, 0, 0]
+-      for index in xrange(0, digest_int_count):
++      for index in range(0, digest_int_count):
+         id_ints[index % 3] ^= digest_ints[index]
+       self.id = '%08X%08X%08X' % tuple(id_ints)
+ 
+@@ -475,7 +478,7 @@ class XCObject(object):
+     """Returns a list of all of this object's owned (strong) children."""
+ 
+     children = []
+-    for property, attributes in self._schema.iteritems():
++    for property, attributes in self._schema.items():
+       (is_list, property_type, is_strong) = attributes[0:3]
+       if is_strong and property in self._properties:
+         if not is_list:
+@@ -603,7 +606,12 @@ class XCObject(object):
+       comment = value.Comment()
+     elif isinstance(value, str):
+       printable += self._EncodeString(value)
+-    elif isinstance(value, unicode):
++    # A python3 compatible way of saying isinstance(value, unicode).
++    # basestring is str in python3 so this is equivalent to the above
++    # isinstance. Thus if it failed above it will fail here.
++    # In python2 we test against str and unicode at this point. str has already
++    # failed in the above isinstance so we test against unicode.
++    elif isinstance(value, basestring):
+       printable += self._EncodeString(value.encode('utf-8'))
+     elif isinstance(value, int):
+       printable += str(value)
+@@ -622,7 +630,7 @@ class XCObject(object):
+         printable += end_tabs + ')'
+     elif isinstance(value, dict):
+       printable = '{' + sep
+-      for item_key, item_value in sorted(value.iteritems()):
++      for item_key, item_value in sorted(value.items()):
+         printable += element_tabs + \
+             self._XCPrintableValue(tabs + 1, item_key, flatten_list) + ' = ' + \
+             self._XCPrintableValue(tabs + 1, item_value, flatten_list) + ';' + \
+@@ -691,7 +699,7 @@ class XCObject(object):
+           printable_value[0] == '"' and printable_value[-1] == '"':
+         printable_value = printable_value[1:-1]
+       printable += printable_key + ' = ' + printable_value + ';' + after_kv
+-    except TypeError, e:
++    except TypeError as e:
+       gyp.common.ExceptionAppend(e,
+                                  'while printing key "%s"' % key)
+       raise
+@@ -730,7 +738,7 @@ class XCObject(object):
+     self._XCKVPrint(file, 3, 'isa', self.__class__.__name__)
+ 
+     # The remaining elements of an object dictionary are sorted alphabetically.
+-    for property, value in sorted(self._properties.iteritems()):
++    for property, value in sorted(self._properties.items()):
+       self._XCKVPrint(file, 3, property, value)
+ 
+     # End the object.
+@@ -752,7 +760,7 @@ class XCObject(object):
+     if properties is None:
+       return
+ 
+-    for property, value in properties.iteritems():
++    for property, value in properties.items():
+       # Make sure the property is in the schema.
+       if not property in self._schema:
+         raise KeyError(property + ' not in ' + self.__class__.__name__)
+@@ -766,7 +774,7 @@ class XCObject(object):
+                 ' must be list, not ' + value.__class__.__name__)
+         for item in value:
+           if not isinstance(item, property_type) and \
+-             not (item.__class__ == unicode and property_type == str):
++             not (isinstance(item, basestring) and property_type == str):
+             # Accept unicode where str is specified.  str is treated as
+             # UTF-8-encoded.
+             raise TypeError(
+@@ -774,7 +782,7 @@ class XCObject(object):
+                   ' must be ' + property_type.__name__ + ', not ' + \
+                   item.__class__.__name__)
+       elif not isinstance(value, property_type) and \
+-           not (value.__class__ == unicode and property_type == str):
++           not (isinstance(value, basestring) and property_type == str):
+         # Accept unicode where str is specified.  str is treated as
+         # UTF-8-encoded.
+         raise TypeError(
+@@ -788,8 +796,7 @@ class XCObject(object):
+             self._properties[property] = value.Copy()
+           else:
+             self._properties[property] = value
+-        elif isinstance(value, str) or isinstance(value, unicode) or \
+-             isinstance(value, int):
++        elif isinstance(value, basestring) or isinstance(value, int):
+           self._properties[property] = value
+         elif isinstance(value, list):
+           if is_strong:
+@@ -865,7 +872,7 @@ class XCObject(object):
+ 
+     # TODO(mark): A stronger verification mechanism is needed.  Some
+     # subclasses need to perform validation beyond what the schema can enforce.
+-    for property, attributes in self._schema.iteritems():
++    for property, attributes in self._schema.items():
+       (is_list, property_type, is_strong, is_required) = attributes[0:4]
+       if is_required and not property in self._properties:
+         raise KeyError(self.__class__.__name__ + ' requires ' + property)
+@@ -875,7 +882,7 @@ class XCObject(object):
+     overwrite properties that have already been set."""
+ 
+     defaults = {}
+-    for property, attributes in self._schema.iteritems():
++    for property, attributes in self._schema.items():
+       (is_list, property_type, is_strong, is_required) = attributes[0:4]
+       if is_required and len(attributes) >= 5 and \
+           not property in self._properties:
+@@ -1426,8 +1433,8 @@ class XCFileLikeElement(XCHierarchicalEl
+     xche = self
+     while xche != None and isinstance(xche, XCHierarchicalElement):
+       xche_hashables = xche.Hashables()
+-      for index in xrange(0, len(xche_hashables)):
+-        hashables.insert(index, xche_hashables[index])
++      for index, xche_hashable in enumerate(xche_hashables):
++        hashables.insert(index, xche_hashable)
+       xche = xche.parent
+     return hashables
+ 
+@@ -2468,8 +2475,7 @@ class PBXNativeTarget(XCTarget):
+       # The headers phase should come before the resources, sources, and
+       # frameworks phases, if any.
+       insert_at = len(self._properties['buildPhases'])
+-      for index in xrange(0, len(self._properties['buildPhases'])):
+-        phase = self._properties['buildPhases'][index]
++      for index, phase in enumerate(self._properties['buildPhases']):
+         if isinstance(phase, PBXResourcesBuildPhase) or \
+            isinstance(phase, PBXSourcesBuildPhase) or \
+            isinstance(phase, PBXFrameworksBuildPhase):
+@@ -2489,8 +2495,7 @@ class PBXNativeTarget(XCTarget):
+       # The resources phase should come before the sources and frameworks
+       # phases, if any.
+       insert_at = len(self._properties['buildPhases'])
+-      for index in xrange(0, len(self._properties['buildPhases'])):
+-        phase = self._properties['buildPhases'][index]
++      for index, phase in enumerate(self._properties['buildPhases']):
+         if isinstance(phase, PBXSourcesBuildPhase) or \
+            isinstance(phase, PBXFrameworksBuildPhase):
+           insert_at = index
+@@ -2911,7 +2916,7 @@ class PBXProject(XCContainerPortal):
+       # determine the sort order.
+       return cmp(x_index, y_index)
+ 
+-    for other_pbxproject, ref_dict in self._other_pbxprojects.iteritems():
++    for other_pbxproject, ref_dict in self._other_pbxprojects.items():
+       # Build up a list of products in the remote project file, ordered the
+       # same as the targets that produce them.
+       remote_products = []
+Index: node-v8.9.4/tools/gyp/pylib/gyp/xml_fix.py
+===================================================================
+--- node-v8.9.4.orig/tools/gyp/pylib/gyp/xml_fix.py
++++ node-v8.9.4/tools/gyp/pylib/gyp/xml_fix.py
+@@ -32,8 +32,7 @@ def _Replacement_writexml(self, writer,
+   writer.write(indent+"<" + self.tagName)
+ 
+   attrs = self._get_attributes()
+-  a_names = attrs.keys()
+-  a_names.sort()
++  a_names = sorted(attrs.keys())
+ 
+   for a_name in a_names:
+     writer.write(" %s=\"" % a_name)

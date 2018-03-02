@@ -95,10 +95,11 @@ Source2:        https://nodejs.org/dist/v%{version}/SHASUMS256.txt.sig
 Source3:        nodejs.keyring
 
 ## UPSTREAM PATCHES HERE, if any
-Patch1:         8334.diff        # PATCH_FOR: 4
-Patch2:         openssl11.patch  # PATCH_FOR: 8
+Patch1:         8334.diff              # PATCH_FOR: 4
+Patch2:         openssl11.patch        # PATCH_FOR: 8
 Patch3:         fix_ci_tests.patch
 Patch4:         fix_ci_ssl_tests.patch # PATCH_FOR: 4
+Patch5:         gyp_to_python3.patch   # PATCH_FOR: 8, 9
 
 ## Our patches
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
@@ -171,7 +172,11 @@ BuildRequires:  procps
 BuildRequires:  python
 BuildRequires:  xz
 BuildRequires:  zlib-devel
+%if %node_version_number >= 8
+BuildRequires:  python3
+%else
 BuildRequires:  python2
+%endif
 
 %if ! %{with intree_openssl}
 
@@ -249,7 +254,11 @@ Provides:       nodejs-npm = %{version}
 Obsoletes:      nodejs-npm < 4.0.0
 Provides:       npm(npm) = {{npm_version}}
 Provides:       npm = %{version}
+%if %node_version_number >= 8
+Recommends:     python3
+%else
 Recommends:     python2
+%endif
 
 %description -n npm{{node_version_major}}
 A package manager for Node.js that allows developers to install and
@@ -275,6 +284,7 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %if ! %{with intree_openssl}
 %patch4 -p1
 %endif
+%patch5 -p1
 %patch101 -p1
 %patch102 -p1
 # Add check_output to configure script (not part of Python 2.6 in SLE11).
@@ -430,8 +440,8 @@ make test-ci || echo "****** UNIT TESTS NOT ALL HAPPY *****"
 %dir %{_libdir}/node_modules
 %{_bindir}/node%{node_version_number}
 %{_mandir}/man1/node%{node_version_number}.1%{ext_man}
-%ghost %{_bindir}/node-default
-%ghost %{_mandir}/man1/node.1%{ext_man}
+%{_bindir}/node-default
+%{_mandir}/man1/node.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/node-default
 %ghost %{_sysconfdir}/alternatives/node.1%{ext_man}
 %exclude %{_libdir}/node_modules/npm%{node_version_number}
@@ -441,15 +451,15 @@ make test-ci || echo "****** UNIT TESTS NOT ALL HAPPY *****"
 %{_bindir}/npm%{node_version_number}
 %{_libdir}/node_modules/npm%{node_version_number}
 %{_mandir}/man1/npm%{node_version_number}.1%{ext_man}
-%ghost %{_bindir}/npm-default
-%ghost %{_mandir}/man1/npm.1%{ext_man}
+%{_bindir}/npm-default
+%{_mandir}/man1/npm.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/npm-default
 %ghost %{_sysconfdir}/alternatives/npm.1%{ext_man}
 
 %if %{node_version_number} >= 8
 %{_bindir}/npx%{node_version_number}
-%ghost %{_bindir}/npx-default
-%ghost %{_mandir}/man1/npx.1%{ext_man}
+%{_bindir}/npx-default
+%{_mandir}/man1/npx.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/npx-default
 %ghost %{_sysconfdir}/alternatives/npx.1%{ext_man}
 %endif
