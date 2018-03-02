@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Fri Mar  2 12:39:04 UTC 2018 - adam.majer@suse.de
 
-- gyp_to_python3.patch: attempt to add support for python3.
+- gyp_to_python3.patch: add support for python3 (bnc#1079778)
 
 -------------------------------------------------------------------
 Tue Feb 13 08:40:52 UTC 2018 - adam.majer@suse.de
