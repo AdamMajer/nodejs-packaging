@@ -18,6 +18,9 @@ Thu Mar 22 10:28:38 UTC 2018 - adam.majer@suse.de
   * src: make process.dlopen() load well-known symbol
   * trace_events: add file pattern cli option
 
+- remove any old manpage files in %pre from before update-alternatives
+  were used to manage symlinks to these manpages.
+
 -------------------------------------------------------------------
 Fri Mar  2 12:39:31 UTC 2018 - adam.majer@suse.de
 

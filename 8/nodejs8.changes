@@ -32,6 +32,8 @@ Thu Mar 22 10:38:46 UTC 2018 - adam.majer@suse.de
   * process: improve unhandled rejection message
   * stream: remove usage of *State.highWaterMark
   * trace_events: add executionAsyncId to init events
+- remove any old manpage files in %pre from before update-alternatives
+  were used to manage symlinks to these manpages.
 - versioned.patch: refreshed
 
 -------------------------------------------------------------------
