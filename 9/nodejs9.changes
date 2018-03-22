@@ -1,4 +1,24 @@
 -------------------------------------------------------------------
+Thu Mar 22 10:28:38 UTC 2018 - adam.majer@suse.de
+
+- New upstream release 9.9.0:
+  * assert: From now on all error messages produced by assert in
+    strict mode will produce a error diff.
+  * crypto: allow passing null as IV unless required
+  * fs: support as and as+ flags in stringToFlags()
+  * tls: expose Finished messages in TLSSocket
+  * tty: Add getColorDepth function to determine if terminal
+    supports colors.
+  * util: add util.inspect compact option
+
+- Changes in version 9.8.0:
+  * crypto: add cert.fingerprint256 as SHA256 fingerprint
+  * http2: Fixed issues with aborted connections
+  * loader: --inspect-brk now works properly for esmodules
+  * src: make process.dlopen() load well-known symbol
+  * trace_events: add file pattern cli option
+
+-------------------------------------------------------------------
 Fri Mar  2 12:39:31 UTC 2018 - adam.majer@suse.de
 
 - New upstream release 9.7.1/9.7.0:

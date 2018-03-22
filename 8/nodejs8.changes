@@ -1,4 +1,40 @@
 -------------------------------------------------------------------
+Thu Mar 22 10:38:46 UTC 2018 - adam.majer@suse.de
+
+- New upstream LTS release 8.10.0:
+  * deps:
+    + update V8 to 6.2.414.46
+    + revert ABI breaking changes in V8 6.2
+    + upgrade libuv to 1.19.1
+    + re land npm 5.6.0
+  * crypto:
+    + Support both OpenSSL 1.1.0 and 1.0.2. This allows us to drop
+      openssl11.patch
+    + warn on invalid authentication tag length
+  * async_hooks:
+    + update defaultTriggerAsyncIdScope for perf
+    + use typed array stack as fast path
+    + use scope for defaultTriggerAsyncId
+    + separate missing from default context
+    + deprecate undocumented API
+  * n-api: add helper for addons to get the event loop
+  * cli: add --stack-trace-limit to NODE_OPTIONS
+  * console: add support for console.debug
+  * module:
+    + add builtinModules
+    + replace default paths in require.resolve()
+  * src: add process.ppid
+  * http:
+    + support generic Duplex streams
+    + add rawPacket in err of clientError event
+    + better support for IPv6 addresses
+  * tls: unconsume stream on destroy
+  * process: improve unhandled rejection message
+  * stream: remove usage of *State.highWaterMark
+  * trace_events: add executionAsyncId to init events
+- versioned.patch: refreshed
+
+-------------------------------------------------------------------
 Tue Feb 13 08:40:52 UTC 2018 - adam.majer@suse.de
 
 - Add Recommends and BuildRequire on python2 for npm. node-gyp

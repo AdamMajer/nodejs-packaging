@@ -8,11 +8,11 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-v8.9.4/Makefile
+Index: node-v8.10.0/Makefile
 ===================================================================
---- node-v8.9.4.orig/Makefile
-+++ node-v8.9.4/Makefile
-@@ -45,7 +45,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
+--- node-v8.10.0.orig/Makefile
++++ node-v8.10.0/Makefile
+@@ -46,7 +46,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
  
@@ -21,10 +21,10 @@ Index: node-v8.9.4/Makefile
  NODE ?= ./$(NODE_EXE)
  NODE_G_EXE = node_g$(EXEEXT)
  NPM ?= ./deps/npm/bin/npm-cli.js
-Index: node-v8.9.4/tools/install.py
+Index: node-v8.10.0/tools/install.py
 ===================================================================
---- node-v8.9.4.orig/tools/install.py
-+++ node-v8.9.4/tools/install.py
+--- node-v8.10.0.orig/tools/install.py
++++ node-v8.10.0/tools/install.py
 @@ -78,7 +78,7 @@ def install(paths, dst): map(lambda path
  def uninstall(paths, dst): map(lambda path: try_remove(path, dst), paths)
  
@@ -125,10 +125,10 @@ Index: node-v8.9.4/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-v8.9.4/doc/node.1
+Index: node-v8.10.0/doc/node.1
 ===================================================================
---- node-v8.9.4.orig/doc/node.1
-+++ node-v8.9.4/doc/node.1
+--- node-v8.10.0.orig/doc/node.1
++++ node-v8.10.0/doc/node.1
 @@ -26,12 +26,12 @@
  
  .SH NAME
@@ -161,10 +161,10 @@ Index: node-v8.9.4/doc/node.1
  .RB [ \-\-v8-options ]
  
  Execute without arguments to start the REPL.
-Index: node-v8.9.4/src/node.stp
+Index: node-v8.10.0/src/node.stp
 ===================================================================
---- node-v8.9.4.orig/src/node.stp
-+++ node-v8.9.4/src/node.stp
+--- node-v8.10.0.orig/src/node.stp
++++ node-v8.10.0/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -237,12 +237,12 @@ Index: node-v8.9.4/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-v8.9.4/deps/npm/man/man1/npm.1
+Index: node-v8.10.0/deps/npm/man/man1/npm.1
 ===================================================================
---- node-v8.9.4.orig/deps/npm/man/man1/npm.1
-+++ node-v8.9.4/deps/npm/man/man1/npm.1
+--- node-v8.10.0.orig/deps/npm/man/man1/npm.1
++++ node-v8.10.0/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
- .TH "NPM" "1" "December 2017" "" ""
+ .TH "NPM" "1" "February 2018" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm8\fR \- javascript package manager
@@ -370,10 +370,10 @@ Index: node-v8.9.4/deps/npm/man/man1/npm.1
  
  .RE
  
-Index: node-v8.9.4/node.gyp
+Index: node-v8.10.0/node.gyp
 ===================================================================
---- node-v8.9.4.orig/node.gyp
-+++ node-v8.9.4/node.gyp
+--- node-v8.10.0.orig/node.gyp
++++ node-v8.10.0/node.gyp
 @@ -21,7 +21,7 @@
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',
@@ -383,7 +383,7 @@ Index: node-v8.9.4/node.gyp
      'library_files': [
        'lib/internal/bootstrap_node.js',
        'lib/async_hooks.js',
-@@ -637,10 +637,10 @@
+@@ -650,10 +650,10 @@
              {
                'action_name': 'node_dtrace_provider_o',
                'inputs': [
@@ -396,7 +396,7 @@ Index: node-v8.9.4/node.gyp
                ],
                'action': [ 'dtrace', '-G', '-xnolibs', '-s', 'src/node_provider.d',
                  '<@(_inputs)', '-o', '<@(_outputs)' ]
-@@ -690,7 +690,7 @@
+@@ -703,7 +703,7 @@
                  '<(SHARED_INTERMEDIATE_DIR)/v8constants.h'
                ],
                'outputs': [
@@ -405,7 +405,7 @@ Index: node-v8.9.4/node.gyp
                ],
                'conditions': [
                  [ 'target_arch=="ia32" or target_arch=="arm"', {
-@@ -751,9 +751,9 @@
+@@ -764,9 +764,9 @@
        ],
  
        'variables': {
@@ -418,7 +418,7 @@ Index: node-v8.9.4/node.gyp
          'OBJ_SUFFIX': 'o',
          'OBJ_SEPARATOR': '/',
          'conditions': [
-@@ -999,7 +999,7 @@
+@@ -1025,7 +1025,7 @@
      ['OS=="aix"', {
        'targets': [
          {
@@ -427,20 +427,20 @@ Index: node-v8.9.4/node.gyp
            'conditions': [
              ['node_shared=="true"', {
                'type': 'shared_library',
-Index: node-v8.9.4/deps/npm/bin/npm-cli.js
+Index: node-v8.10.0/deps/npm/bin/npm-cli.js
 ===================================================================
---- node-v8.9.4.orig/deps/npm/bin/npm-cli.js
-+++ node-v8.9.4/deps/npm/bin/npm-cli.js
+--- node-v8.10.0.orig/deps/npm/bin/npm-cli.js
++++ node-v8.10.0/deps/npm/bin/npm-cli.js
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env node
 +#!/usr/bin/env node8
  ;(function () { // wrapper in case we're in module_context mode
    // windows: running "npm blah" in this folder will invoke WSH, not node.
    /*global WScript*/
-Index: node-v8.9.4/src/node_main.cc
+Index: node-v8.10.0/src/node_main.cc
 ===================================================================
---- node-v8.9.4.orig/src/node_main.cc
-+++ node-v8.9.4/src/node_main.cc
+--- node-v8.10.0.orig/src/node_main.cc
++++ node-v8.10.0/src/node_main.cc
 @@ -101,6 +101,7 @@ int main(int argc, char *argv[]) {
  #endif
    // Disable stdio buffering, it interacts poorly with printf()
@@ -449,10 +449,10 @@ Index: node-v8.9.4/src/node_main.cc
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
-Index: node-v8.9.4/tools/test.py
+Index: node-v8.10.0/tools/test.py
 ===================================================================
---- node-v8.9.4.orig/tools/test.py
-+++ node-v8.9.4/tools/test.py
+--- node-v8.10.0.orig/tools/test.py
++++ node-v8.10.0/tools/test.py
 @@ -905,7 +905,7 @@ class Context(object):
  
    def GetVm(self, arch, mode):
