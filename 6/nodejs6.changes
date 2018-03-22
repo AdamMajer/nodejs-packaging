@@ -1,4 +1,33 @@
 -------------------------------------------------------------------
+Thu Mar 22 10:52:48 UTC 2018 - adam.majer@suse.de
+
+- New upstream LTS release 6.13.1:
+  * http,tls: better support for IPv6 addresses
+  * console: added console.count() and console.clear()
+  * crypto:
+    + expose ECDH class
+    + added cypto.randomFill() and crypto.randomFillSync()
+    + warn on invalid authentication tag length
+  * deps: upgrade libuv to 1.16.1
+  * dgram: added socket.setMulticastInterface()
+  * http: add agent.keepSocketAlive and agent.reuseSocket as to
+    allow overridable keep-alive behavior of Agent
+  * lib: return this from net.Socket.end()
+  * module: add builtinModules api that provides list of all
+    builtin modules in Node
+  * net: return this from getConnections()
+  * promises: more robust stringification for unhandled rejections
+  * repl: improve require() autocompletion
+  * src:
+    + add openssl-system-ca-path configure option
+    + add --use-bundled-ca --use-openssl-ca check
+    + add process.ppid
+  * tls: accept lookup option for tls.connect()
+  * tools,build: a new macOS installer!
+  * url: WHATWG URL api support
+  * util: add %i and %f formatting specifiers
+
+-------------------------------------------------------------------
 Tue Feb 13 08:40:52 UTC 2018 - adam.majer@suse.de
 
 - Add Recommends and BuildRequire on python2 for npm. node-gyp
