@@ -360,8 +360,11 @@ rm -f %{buildroot}%{_datadir}/doc/node/lldb_commands.py
 # remove .bak files, if any
 find %{buildroot} -name \*.bak -print -delete
 
-# npm man page
+# npm/npx man page
 install -D -m 644 deps/npm/man/man1/npm.1 %{buildroot}%{_mandir}/man1/npm%{node_version_number}.1
+%if %{node_version_number} >= 8
+install -D -m 644 deps/npm/man/man1/npx.1 %{buildroot}%{_mandir}/man1/npm%{node_version_number}.1
+%endif
 
 #node-gyp needs common.gypi too
 install -D -m 644 common.gypi \
@@ -455,6 +458,7 @@ make test-ci || echo "****** UNIT TESTS NOT ALL HAPPY *****"
 
 %if %{node_version_number} >= 8
 %{_bindir}/npx%{node_version_number}
+%{_mandir}/man1/npx%{node_version_number}.1%{ext_man}
 %ghost %{_bindir}/npx-default
 %ghost %{_mandir}/man1/npx.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/npx-default
