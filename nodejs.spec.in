@@ -99,7 +99,7 @@ Patch1:         8334.diff              # PATCH_FOR: 4
 Patch2:         openssl11.patch        # PATCH_FOR: 8
 Patch3:         fix_ci_tests.patch
 Patch4:         fix_ci_ssl_tests.patch # PATCH_FOR: 4
-Patch5:         gyp_to_python3.patch   # PATCH_FOR: 8, 9
+Patch5:         gyp_to_python3.patch   # PATCH_FOR: 100
 
 ## Our patches
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
@@ -169,13 +169,12 @@ BuildRequires:  gcc-c++
 BuildRequires:  fdupes
 BuildRequires:  pkg-config
 BuildRequires:  procps
-BuildRequires:  python
 BuildRequires:  xz
 BuildRequires:  zlib-devel
-%if %node_version_number >= 8
-BuildRequires:  python3
-%else
+%if 0%{?suse_versino} >= 1500
 BuildRequires:  python2
+%else
+BuildRequires:  python
 %endif
 
 %if ! %{with intree_openssl}
@@ -254,10 +253,10 @@ Provides:       nodejs-npm = %{version}
 Obsoletes:      nodejs-npm < 4.0.0
 Provides:       npm(npm) = {{npm_version}}
 Provides:       npm = %{version}
-%if %node_version_number >= 8
-Recommends:     python3
-%else
+%if 0%{?suse_versino} >= 1500
 Recommends:     python2
+%else
+Recommends:     python
 %endif
 
 %description -n npm{{node_version_major}}
