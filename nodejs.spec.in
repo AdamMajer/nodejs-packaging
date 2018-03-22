@@ -437,8 +437,8 @@ make test-ci || echo "****** UNIT TESTS NOT ALL HAPPY *****"
 %dir %{_libdir}/node_modules
 %{_bindir}/node%{node_version_number}
 %{_mandir}/man1/node%{node_version_number}.1%{ext_man}
-%{_bindir}/node-default
-%{_mandir}/man1/node.1%{ext_man}
+%ghost %{_bindir}/node-default
+%ghost %{_mandir}/man1/node.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/node-default
 %ghost %{_sysconfdir}/alternatives/node.1%{ext_man}
 %exclude %{_libdir}/node_modules/npm%{node_version_number}
@@ -448,15 +448,15 @@ make test-ci || echo "****** UNIT TESTS NOT ALL HAPPY *****"
 %{_bindir}/npm%{node_version_number}
 %{_libdir}/node_modules/npm%{node_version_number}
 %{_mandir}/man1/npm%{node_version_number}.1%{ext_man}
-%{_bindir}/npm-default
-%{_mandir}/man1/npm.1%{ext_man}
+%ghost %{_bindir}/npm-default
+%ghost %{_mandir}/man1/npm.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/npm-default
 %ghost %{_sysconfdir}/alternatives/npm.1%{ext_man}
 
 %if %{node_version_number} >= 8
 %{_bindir}/npx%{node_version_number}
-%{_bindir}/npx-default
-%{_mandir}/man1/npx.1%{ext_man}
+%ghost %{_bindir}/npx-default
+%ghost %{_mandir}/man1/npx.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/npx-default
 %ghost %{_sysconfdir}/alternatives/npx.1%{ext_man}
 %endif
@@ -472,6 +472,12 @@ make test-ci || echo "****** UNIT TESTS NOT ALL HAPPY *****"
 %defattr(-,root,root)
 %doc doc/api
 
+%pre
+# remove files that are no longer owned but provided by update-alternatives
+if [ -f %{_mandir}/man1/node.1%{ext_man} ]; then
+    rm -f %{_mandir}/man1/node.1%{ext_man}
+fi
+
 %post
 update-alternatives \
         --install %{_bindir}/node-default node-default %{_bindir}/node%{node_version_number} %{node_version_number} \
@@ -480,6 +486,12 @@ update-alternatives \
 %postun
 if [ ! -f %{_bindir}/node%{node_version_number} ] ; then
     update-alternatives --remove node-default %{_bindir}/node%{node_version_number}
+fi
+
+%pre -n npm%{node_version_number}
+# remove files that are no longer owned but provided by update-alternatives
+if [ -f %{_mandir}/man1/npm.1%{ext_man} ]; then
+    rm -f %{_mandir}/man1/npm.1%{ext_man}
 fi
 
 %post -n npm%{node_version_number}
