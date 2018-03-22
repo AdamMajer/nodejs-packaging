@@ -363,7 +363,7 @@ find %{buildroot} -name \*.bak -print -delete
 # npm/npx man page
 install -D -m 644 deps/npm/man/man1/npm.1 %{buildroot}%{_mandir}/man1/npm%{node_version_number}.1
 %if %{node_version_number} >= 8
-install -D -m 644 deps/npm/man/man1/npx.1 %{buildroot}%{_mandir}/man1/npm%{node_version_number}.1
+install -D -m 644 deps/npm/man/man1/npx.1 %{buildroot}%{_mandir}/man1/npx%{node_version_number}.1
 %endif
 
 #node-gyp needs common.gypi too
