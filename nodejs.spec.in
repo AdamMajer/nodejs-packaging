@@ -170,7 +170,7 @@ BuildRequires:  pkg-config
 BuildRequires:  procps
 BuildRequires:  xz
 BuildRequires:  zlib-devel
-%if 0%{?suse_versino} >= 1500
+%if 0%{?suse_version} >= 1500
 BuildRequires:  python2
 %else
 BuildRequires:  python
@@ -252,7 +252,7 @@ Provides:       nodejs-npm = %{version}
 Obsoletes:      nodejs-npm < 4.0.0
 Provides:       npm(npm) = {{npm_version}}
 Provides:       npm = %{version}
-%if 0%{?suse_versino} >= 1500
+%if 0%{?suse_version} >= 1500
 Recommends:     python2
 %else
 Recommends:     python
