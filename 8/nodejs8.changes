@@ -1,4 +1,17 @@
 -------------------------------------------------------------------
+Tue Apr  3 11:02:33 UTC 2018 - adam.majer@suse.de
+
+- New upstream LTS release 8.11.1:
+  * Security fixes:
+    + Fix for inspector DNS rebinding vulnerability
+      (bsc#1087463, CVE-2018-7160)
+    + Fix for 'path' module regular expression denial of service
+      (bsc#1087459, CVE-2018-7158)
+    + Reject spaces in HTTP Content-Length header values
+      (bsc#1087453, CVE-2018-7159)
+  * deps: upgrade http-parser to v2.8.0
+
+-------------------------------------------------------------------
 Thu Mar 22 10:38:46 UTC 2018 - adam.majer@suse.de
 
 - New upstream LTS release 8.10.0:

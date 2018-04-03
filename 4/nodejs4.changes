@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Tue Apr  3 11:03:14 UTC 2018 - adam.majer@suse.de
+
+- New upstream maintenance 4.9.1:
+  * Security fixes:
+    + Fix for 'path' module regular expression denial of service
+      (bsc#1087459, CVE-2018-7158)
+    + Reject spaces in HTTP Content-Length header values
+      (bsc#1087453, CVE-2018-7159)
+  * Upgrade to OpenSSL 1.0.2o
+  * deps: reject interior blanks in Content-Length
+  * deps: upgrade http-parser to v2.8.0
+- fix_ci_tests.patch: refreshed
+
+-------------------------------------------------------------------
 Thu Mar 22 13:17:38 UTC 2018 - adam.majer@suse.de
 
 - remove any old manpage files in %pre from before update-alternatives
