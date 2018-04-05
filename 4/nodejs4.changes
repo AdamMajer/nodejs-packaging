@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Apr  4 13:29:24 UTC 2018 - adam.majer@suse.de
+
+- Fix some node-gyp permissions
+
+-------------------------------------------------------------------
 Tue Apr  3 11:03:14 UTC 2018 - adam.majer@suse.de
 
 - New upstream maintenance 4.9.1:

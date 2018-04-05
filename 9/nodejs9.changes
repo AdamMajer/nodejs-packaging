@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Apr  4 13:29:24 UTC 2018 - adam.majer@suse.de
+
+- Fix some node-gyp permissions
+
+-------------------------------------------------------------------
 Tue Apr  3 10:45:48 UTC 2018 - adam.majer@suse.de
 
 - New upstream release 9.10.1:

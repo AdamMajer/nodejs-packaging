@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Apr  4 13:29:24 UTC 2018 - adam.majer@suse.de
+
+- Fix some node-gyp permissions
+
+-------------------------------------------------------------------
 Tue Apr  3 11:02:56 UTC 2018 - adam.majer@suse.de
 
 - New upstream LTS release 6.14.1:
