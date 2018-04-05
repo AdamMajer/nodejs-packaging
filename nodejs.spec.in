@@ -424,6 +424,11 @@ ln -s %{_sysconfdir}/alternatives/npx-default          %{buildroot}%{_bindir}/np
 ln -s %{_sysconfdir}/alternatives/npx.1%{ext_man}      %{buildroot}%{_mandir}/man1/npx.1%{ext_man}
 %endif
 
+# We need to own directory on old versions of SLE
+%if 0%{?suse_version} < 1500
+mkdir -p %{buildroot}%{_defaultlicensedir}
+%endif
+
 %check
 ln addon-rpm.gypi deps/npm/node_modules/node-gyp/addon-rpm.gypi
 # Tarball doesn't have eslint package distributed, so disable some tests
@@ -440,7 +445,8 @@ make test-ci || echo "****** UNIT TESTS NOT ALL HAPPY *****"
 
 %files
 %defattr(-, root, root)
-%doc AUTHORS LICENSE *.md
+%license LICENSE
+%doc AUTHORS *.md
 %doc deps/v8/tools/gdbinit
 %dir %{_libdir}/node_modules
 %{_bindir}/node%{node_version_number}
@@ -450,6 +456,10 @@ make test-ci || echo "****** UNIT TESTS NOT ALL HAPPY *****"
 %ghost %{_sysconfdir}/alternatives/node-default
 %ghost %{_sysconfdir}/alternatives/node.1%{ext_man}
 %exclude %{_libdir}/node_modules/npm%{node_version_number}
+# We need to own directory on old versions of SLE
+%if 0%{?suse_version} < 1500
+%dir %{_defaultlicensedir}
+%endif
 
 %files -n npm%{node_version_number}
 %defattr(-, root, root)

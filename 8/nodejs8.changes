@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Apr  5 07:18:42 UTC 2018 - adam.majer@suse.de
+
+- Install license with %license, not %doc (bsc#1082318)
+
+-------------------------------------------------------------------
 Wed Apr  4 13:29:24 UTC 2018 - adam.majer@suse.de
 
 - Fix some node-gyp permissions
