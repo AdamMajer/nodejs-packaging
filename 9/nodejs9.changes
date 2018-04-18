@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Wed Apr 18 12:45:26 UTC 2018 - adam.majer@suse.de
+
+- New upstream release 9.11.1:
+  * deps: Updated ICU to 61.1
+  * fs: Emit 'ready' event for ReadStream and WriteStream
+  * n-api: Bump version of n-api supported to 3
+  * net: Emit 'ready' event for Socket
+- versioned.patch, nodejs-libpath.patch: refreshed
+
+-------------------------------------------------------------------
 Thu Apr  5 07:18:42 UTC 2018 - adam.majer@suse.de
 
 - Install license with %license, not %doc (bsc#1082318)
