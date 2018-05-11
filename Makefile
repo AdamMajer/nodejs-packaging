@@ -1,5 +1,5 @@
 
-ALL_TARGETS = $(shell ls -d ?)
+ALL_TARGETS = $(shell ls -d ? ??)
 TARGET_STAMPS := $(addsuffix .target,${ALL_TARGETS}) changelog.target common.target
 NODEJS_PROJECT ?= devel:languages:nodejs
 CHANGELOG_TS := $(shell date)
