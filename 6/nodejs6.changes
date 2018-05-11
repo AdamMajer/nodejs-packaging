@@ -1,6 +1,8 @@
 -------------------------------------------------------------------
 Fri May 11 12:36:46 UTC 2018 - adam.majer@suse.de
 
+- New upstream LTS release 6.14.2:
+  * n-api: n-api has been backported to v6.x.
 - icu_61_namespacefix.patch: Fix building with ICU61.1 (bsc#1091764)
 
 -------------------------------------------------------------------
