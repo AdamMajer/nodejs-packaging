@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri May 11 12:36:46 UTC 2018 - adam.majer@suse.de
+
+- icu_61_namespacefix.patch: Fix building with ICU61.1 (bsc#1091764)
+
+-------------------------------------------------------------------
 Thu Apr  5 07:18:42 UTC 2018 - adam.majer@suse.de
 
 - Install license with %license, not %doc (bsc#1082318)

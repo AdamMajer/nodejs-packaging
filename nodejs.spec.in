@@ -99,6 +99,7 @@ Patch1:         8334.diff              # PATCH_FOR: 4
 Patch3:         fix_ci_tests.patch
 Patch4:         fix_ci_ssl_tests.patch # PATCH_FOR: 4
 Patch5:         gyp_to_python3.patch   # PATCH_FOR: 100
+Patch6:         icu_61_namespacefix.patch    # PATCH_FOR: 4, 6, 8
 
 ## Our patches
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
@@ -282,6 +283,7 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %patch4 -p1
 %endif
 %patch5 -p1
+%patch6 -p1
 %patch101 -p1
 %patch102 -p1
 # Add check_output to configure script (not part of Python 2.6 in SLE11).
