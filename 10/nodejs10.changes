@@ -85,6 +85,8 @@ Fri May 11 13:43:43 UTC 2018 - adam.majer@suse.de
     + util.types.is[…] type checks have been added.
     + Support for bigint formatting has been added to util.inspect().
 
+- OpenSSL 1.1.0+ is required.
+
 -------------------------------------------------------------------
 Wed Apr 18 12:45:26 UTC 2018 - adam.majer@suse.de
 
