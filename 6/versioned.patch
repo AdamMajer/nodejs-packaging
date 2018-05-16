@@ -8,65 +8,25 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-v6.12.2/node.gyp
+Index: node-v6.14.2/node.gyp
 ===================================================================
---- node-v6.12.2.orig/node.gyp
-+++ node-v6.12.2/node.gyp
-@@ -19,7 +19,7 @@
+--- node-v6.14.2.orig/node.gyp
++++ node-v6.14.2/node.gyp
+@@ -20,8 +20,8 @@
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',
      'node_enable_v8_vtunejit%': 'false',
 -    'node_core_target_name%': 'node',
+-    'node_lib_target_name%': 'node_lib',
 +    'node_core_target_name%': 'node6',
++    'node_lib_target_name%': 'node6_lib',
+     'node_intermediate_lib_type%': 'static_library',
      'library_files': [
        'lib/internal/bootstrap_node.js',
-       'lib/_debug_agent.js',
-@@ -437,10 +437,10 @@
-             {
-               'action_name': 'node_dtrace_provider_o',
-               'inputs': [
--                '<(OBJ_DIR)/node/src/node_dtrace.o',
-+                '<(OBJ_DIR)/node6/src/node_dtrace.o',
-               ],
-               'outputs': [
--                '<(OBJ_DIR)/node/src/node_dtrace_provider.o'
-+                '<(OBJ_DIR)/node6/src/node_dtrace_provider.o'
-               ],
-               'action': [ 'dtrace', '-G', '-xnolibs', '-s', 'src/node_provider.d',
-                 '<@(_inputs)', '-o', '<@(_outputs)' ]
-@@ -490,7 +490,7 @@
-                 '<(SHARED_INTERMEDIATE_DIR)/v8constants.h'
-               ],
-               'outputs': [
--                '<(OBJ_DIR)/node/src/node_dtrace_ustack.o'
-+                '<(OBJ_DIR)/node6/src/node_dtrace_ustack.o'
-               ],
-               'conditions': [
-                 [ 'target_arch=="ia32" or target_arch=="arm"', {
-@@ -551,8 +551,8 @@
-       ],
- 
-       'variables': {
--        'OBJ_PATH': '<(OBJ_DIR)/node/src',
--        'OBJ_GEN_PATH': '<(OBJ_DIR)/node/gen',
-+        'OBJ_PATH': '<(OBJ_DIR)/node6/src',
-+        'OBJ_GEN_PATH': '<(OBJ_DIR)/node6/gen',
-         'OBJ_SUFFIX': 'o',
-         'conditions': [
-           ['OS=="win"', {
-@@ -660,7 +660,7 @@
-     ['OS=="aix"', {
-       'targets': [
-         {
--          'target_name': 'node',
-+          'target_name': 'node6',
-           'conditions': [
-             ['node_shared=="true"', {
-               'type': 'shared_library',
-Index: node-v6.12.2/Makefile
+Index: node-v6.14.2/Makefile
 ===================================================================
---- node-v6.12.2.orig/Makefile
-+++ node-v6.12.2/Makefile
+--- node-v6.14.2.orig/Makefile
++++ node-v6.14.2/Makefile
 @@ -37,10 +37,10 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
@@ -80,10 +40,10 @@ Index: node-v6.12.2/Makefile
  
  # Flags for packaging.
  BUILD_DOWNLOAD_FLAGS ?= --download=all
-Index: node-v6.12.2/tools/install.py
+Index: node-v6.14.2/tools/install.py
 ===================================================================
---- node-v6.12.2.orig/tools/install.py
-+++ node-v6.12.2/tools/install.py
+--- node-v6.14.2.orig/tools/install.py
++++ node-v6.14.2/tools/install.py
 @@ -78,7 +78,7 @@ def install(paths, dst): map(lambda path
  def uninstall(paths, dst): map(lambda path: try_remove(path, dst), paths)
  
@@ -135,7 +95,7 @@ Index: node-v6.12.2/tools/install.py
  
    if 'true' == variables.get('node_install_npm'): npm_files(action)
  
-@@ -158,31 +158,31 @@ def headers(action):
+@@ -160,31 +160,31 @@ def headers(action):
      'src/node_buffer.h',
      'src/node_object_wrap.h',
      'src/node_version.h',
@@ -176,10 +136,10 @@ Index: node-v6.12.2/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-v6.12.2/doc/node.1
+Index: node-v6.14.2/doc/node.1
 ===================================================================
---- node-v6.12.2.orig/doc/node.1
-+++ node-v6.12.2/doc/node.1
+--- node-v6.14.2.orig/doc/node.1
++++ node-v6.14.2/doc/node.1
 @@ -26,12 +26,12 @@
  
  .SH NAME
@@ -212,10 +172,10 @@ Index: node-v6.12.2/doc/node.1
  .RB [ \-\-v8-options ]
  
  Execute without arguments to start the REPL.
-Index: node-v6.12.2/src/node.stp
+Index: node-v6.14.2/src/node.stp
 ===================================================================
---- node-v6.12.2.orig/src/node.stp
-+++ node-v6.12.2/src/node.stp
+--- node-v6.14.2.orig/src/node.stp
++++ node-v6.14.2/src/node.stp
 @@ -1,4 +1,4 @@
 -probe node_net_server_connection = process("node").mark("net__server__connection")
 +probe node_net_server_connection = process("node6").mark("net__server__connection")
@@ -285,10 +245,10 @@ Index: node-v6.12.2/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-v6.12.2/deps/npm/man/man1/npm.1
+Index: node-v6.14.2/deps/npm/man/man1/npm.1
 ===================================================================
---- node-v6.12.2.orig/deps/npm/man/man1/npm.1
-+++ node-v6.12.2/deps/npm/man/man1/npm.1
+--- node-v6.14.2.orig/deps/npm/man/man1/npm.1
++++ node-v6.14.2/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
  .TH "NPM" "1" "November 2016" "" ""
  .SH "NAME"
@@ -418,21 +378,27 @@ Index: node-v6.12.2/deps/npm/man/man1/npm.1
  
  .RE
  
-Index: node-v6.12.2/deps/npm/bin/npm-cli.js
+Index: node-v6.14.2/deps/npm/bin/npm-cli.js
 ===================================================================
---- node-v6.12.2.orig/deps/npm/bin/npm-cli.js
-+++ node-v6.12.2/deps/npm/bin/npm-cli.js
+--- node-v6.14.2.orig/deps/npm/bin/npm-cli.js
++++ node-v6.14.2/deps/npm/bin/npm-cli.js
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env node
 +#!/usr/bin/env node6
  ;(function () { // wrapper in case we're in module_context mode
    // windows: running "npm blah" in this folder will invoke WSH, not node.
    /*global WScript*/
-Index: node-v6.12.2/src/node_main.cc
+Index: node-v6.14.2/src/node_main.cc
 ===================================================================
---- node-v6.12.2.orig/src/node_main.cc
-+++ node-v6.12.2/src/node_main.cc
-@@ -52,6 +52,7 @@ int wmain(int argc, wchar_t *wargv[]) {
+--- node-v6.14.2.orig/src/node_main.cc
++++ node-v6.14.2/src/node_main.cc
+@@ -1,4 +1,5 @@
+ #include "node.h"
++#include <stdlib.h>
+ 
+ #ifdef _WIN32
+ #include <windows.h>
+@@ -53,6 +54,7 @@ int wmain(int argc, wchar_t *wargv[]) {
  int main(int argc, char *argv[]) {
    // Disable stdio buffering, it interacts poorly with printf()
    // calls elsewhere in the program (e.g., any logging from V8.)
@@ -440,10 +406,10 @@ Index: node-v6.12.2/src/node_main.cc
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
-Index: node-v6.12.2/tools/test.py
+Index: node-v6.14.2/tools/test.py
 ===================================================================
---- node-v6.12.2.orig/tools/test.py
-+++ node-v6.12.2/tools/test.py
+--- node-v6.14.2.orig/tools/test.py
++++ node-v6.14.2/tools/test.py
 @@ -858,7 +858,7 @@ class Context(object):
  
    def GetVm(self, arch, mode):
