@@ -30,6 +30,12 @@ Release:        0
 
 %define node_version_number {{node_version_major}}
 
+%if %node_version_number >= 10
+%define openssl_req_ver 1.1.0
+%else # node8 or older
+%define openssl_req_ver 1.0.2
+%endif
+
 %if 0%{?suse_version} == 1110
 %define _libexecdir %{_exec_prefix}/lib
 %endif
@@ -180,13 +186,13 @@ BuildRequires:  python
 %if ! %{with intree_openssl}
 
 %if %node_version_number >= 8
-BuildRequires:  openssl-devel >= 1.0.2
+BuildRequires:  openssl-devel >= %{openssl_req_ver}
 %else # older node doesn't support OpenSSL 1.1
 
 %if 0%{?suse_version} >= 1330
 BuildRequires:  libopenssl-1_0_0-devel
 %else
-BuildRequires:  openssl-devel >= 1.0.2
+BuildRequires:  openssl-devel >= %{openssl_req_ver}
 %endif
 
 %endif # older node doesn't support OpenSSL 1.1
