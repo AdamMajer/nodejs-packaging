@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Wed May 16 11:04:43 UTC 2018 - adam.majer@suse.de
+
+- New upstream LTS release 8.11.2:
+  * deps:
+    + update node-inspect to 1.11.3
+    + update nghttp2 to 1.29.0
+  * http2: Sync with current release stream
+  * n-api: Sync with current release stream
+
+-------------------------------------------------------------------
 Fri May 11 12:36:10 UTC 2018 - adam.majer@suse.de
 
 - icu_61_namespacefix.patch: Fix building with ICU61.1 (bsc#1091764)
