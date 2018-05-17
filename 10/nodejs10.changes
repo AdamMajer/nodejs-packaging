@@ -86,6 +86,7 @@ Fri May 11 13:43:43 UTC 2018 - adam.majer@suse.de
     + Support for bigint formatting has been added to util.inspect().
 
 - OpenSSL 1.1.0+ is required.
+- versioned.patch: rebased
 
 -------------------------------------------------------------------
 Wed Apr 18 12:45:26 UTC 2018 - adam.majer@suse.de

@@ -7,6 +7,7 @@ Wed May 16 11:04:43 UTC 2018 - adam.majer@suse.de
     + update nghttp2 to 1.29.0
   * http2: Sync with current release stream
   * n-api: Sync with current release stream
+- versioned.patch: rebased
 
 -------------------------------------------------------------------
 Fri May 11 12:36:10 UTC 2018 - adam.majer@suse.de
