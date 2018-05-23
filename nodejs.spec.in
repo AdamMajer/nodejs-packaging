@@ -100,7 +100,7 @@ Source1:        https://nodejs.org/dist/v%{version}/SHASUMS256.txt
 Source2:        https://nodejs.org/dist/v%{version}/SHASUMS256.txt.sig
 Source3:        nodejs.keyring
 
-## UPSTREAM PATCHES HERE, if any
+## Patches not distribution specific
 Patch1:         8334.diff              # PATCH_FOR: 4
 Patch3:         fix_ci_tests.patch
 Patch4:         fix_ci_ssl_tests.patch # PATCH_FOR: 4
@@ -109,7 +109,7 @@ Patch6:         icu_61_namespacefix.patch    # PATCH_FOR: 4, 6, 8
 Patch7:         manual_configure.patch # PATCH_FOR: 10, 9, 8
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 10, 9
 
-## Our patches
+## Patches specific to SUSE and openSUSE
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
 Patch101:       nodejs-libpath.patch
 # PATCH-FIX-UPSTREAM -- use custom addon.gypi by default instead of
