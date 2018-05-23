@@ -1,0 +1,27 @@
+Author: Adam Majer <amajer@suse.de>
+Date: Wed May 23 14:13:33 CEST 2018
+Summary: Should not happen, but could...
+
+U_ASSERT doesn't throw an assert in non-debug code. It's a no-op.
+This means it is theoretically possible for this code to
+fall-through and return garbage. This changes the code to return
+no groupings by default.
+
+
+Index: node-v10.1.0/deps/icu-small/source/i18n/number_grouping.cpp
+===================================================================
+--- node-v10.1.0.orig/deps/icu-small/source/i18n/number_grouping.cpp
++++ node-v10.1.0/deps/icu-small/source/i18n/number_grouping.cpp
+@@ -46,9 +46,10 @@ Grouper Grouper::forStrategy(UGroupingSt
+         return {-4, -4, 1};
+     case UNUM_GROUPING_THOUSANDS:
+         return {3, 3, 1};
+-    default:
+-        U_ASSERT(FALSE);
+     }
++
++    U_ASSERT(FALSE);
++    return {-1, -1, -2}; // should not happen, but we default to no groupings
+ }
+ 
+ void Grouper::setLocaleData(const impl::ParsedPatternInfo &patternInfo, const Locale& locale) {

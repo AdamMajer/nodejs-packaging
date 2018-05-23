@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed May 23 12:22:03 UTC 2018 - adam.majer@suse.de
+
+- use gcc7 for SLE12
+- manual_configure.patch: configure nghttp2 correctly
+- icu_small_grouping.patch: prevents undefined behaviour possibility
+
+-------------------------------------------------------------------
 Wed Apr 18 12:45:26 UTC 2018 - adam.majer@suse.de
 
 - New upstream release 9.11.1:
