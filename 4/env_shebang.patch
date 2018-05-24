@@ -1,0 +1,321 @@
+Index: node-v4.9.1/deps/npm/bin/npm-cli.js
+===================================================================
+--- node-v4.9.1.orig/deps/npm/bin/npm-cli.js
++++ node-v4.9.1/deps/npm/bin/npm-cli.js
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env node
++#!/usr/bin/node4
+ ;(function () { // wrapper in case we're in module_context mode
+ 
+ // windows: running "npm blah" in this folder will invoke WSH, not node.
+Index: node-v4.9.1/deps/npm/bin/npm
+===================================================================
+--- node-v4.9.1.orig/deps/npm/bin/npm
++++ node-v4.9.1/deps/npm/bin/npm
+@@ -1,4 +1,3 @@
+-#!/bin/sh
+ (set -o igncr) 2>/dev/null && set -o igncr; # cygwin encoding fix
+ 
+ basedir=`dirname "$0"`
+Index: node-v4.9.1/deps/npm/node_modules/mkdirp/bin/cmd.js
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/mkdirp/bin/cmd.js
++++ node-v4.9.1/deps/npm/node_modules/mkdirp/bin/cmd.js
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env node
+-
+ var mkdirp = require('../');
+ var minimist = require('minimist');
+ var fs = require('fs');
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/gyp
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/gyp
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/gyp
+@@ -1,4 +1,3 @@
+-#!/bin/sh
+ # Copyright 2013 The Chromium Authors. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/gyp_main.py
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/gyp_main.py
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/gyp_main.py
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env python
+-
+ # Copyright (c) 2009 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/gyptest.py
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/gyptest.py
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/gyptest.py
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env python
+-
+ # Copyright (c) 2012 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/__init__.py
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/__init__.py
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/__init__.py
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env python
+-
+ # Copyright (c) 2012 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/flock_tool.py
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/flock_tool.py
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/flock_tool.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python
+ # Copyright (c) 2011 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/mac_tool.py
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/mac_tool.py
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/mac_tool.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python
+ # Copyright (c) 2012 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/win_tool.py
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/win_tool.py
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/win_tool.py
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env python
+-
+ # Copyright (c) 2012 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/samples/samples
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/samples/samples
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/samples/samples
+@@ -1,5 +1,3 @@
+-#!/usr/bin/python
+-
+ # Copyright (c) 2009 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/setup.py
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/setup.py
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/setup.py
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env python
+-
+ # Copyright (c) 2009 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/tools/graphviz.py
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/tools/graphviz.py
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/tools/graphviz.py
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env python
+-
+ # Copyright (c) 2011 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/tools/pretty_gyp.py
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/tools/pretty_gyp.py
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/tools/pretty_gyp.py
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env python
+-
+ # Copyright (c) 2012 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/tools/pretty_sln.py
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/tools/pretty_sln.py
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/tools/pretty_sln.py
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env python
+-
+ # Copyright (c) 2012 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/tools/pretty_vcproj.py
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/tools/pretty_vcproj.py
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/tools/pretty_vcproj.py
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env python
+-
+ # Copyright (c) 2012 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/nopt/bin/nopt.js
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/nopt/bin/nopt.js
++++ node-v4.9.1/deps/npm/node_modules/nopt/bin/nopt.js
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env node
+ var nopt = require("../lib/nopt")
+   , path = require("path")
+   , types = { num: Number
+Index: node-v4.9.1/deps/npm/node_modules/opener/opener.js
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/opener/opener.js
++++ node-v4.9.1/deps/npm/node_modules/opener/opener.js
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env node
+-
+ "use strict";
+ 
+ var childProcess = require("child_process");
+Index: node-v4.9.1/deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/bin/sshpk-conv
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/bin/sshpk-conv
++++ node-v4.9.1/deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/bin/sshpk-conv
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env node
+ // -*- mode: js -*-
+ // vim: set filetype=javascript :
+ // Copyright 2015 Joyent, Inc.  All rights reserved.
+Index: node-v4.9.1/deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/bin/sshpk-sign
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/bin/sshpk-sign
++++ node-v4.9.1/deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/bin/sshpk-sign
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env node
+ // -*- mode: js -*-
+ // vim: set filetype=javascript :
+ // Copyright 2015 Joyent, Inc.  All rights reserved.
+Index: node-v4.9.1/deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/bin/sshpk-verify
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/bin/sshpk-verify
++++ node-v4.9.1/deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/bin/sshpk-verify
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env node
+ // -*- mode: js -*-
+ // vim: set filetype=javascript :
+ // Copyright 2015 Joyent, Inc.  All rights reserved.
+Index: node-v4.9.1/deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/node_modules/dashdash/etc/dashdash.bash_completion.in
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/node_modules/dashdash/etc/dashdash.bash_completion.in
++++ node-v4.9.1/deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/node_modules/dashdash/etc/dashdash.bash_completion.in
+@@ -1,4 +1,3 @@
+-#!/bin/bash
+ #
+ # Bash completion generated for '{{name}}' at {{date}}.
+ #
+@@ -385,4 +384,4 @@ fi
+ ##
+ ##     cp FILE > ~/.{{name}}.completion
+ ##     echo "source ~/.{{name}}.completion" >> ~/.bashrc
+-##
+\ No newline at end of file
++##
+Index: node-v4.9.1/deps/npm/node_modules/rimraf/bin.js
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/rimraf/bin.js
++++ node-v4.9.1/deps/npm/node_modules/rimraf/bin.js
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env node
+-
+ var rimraf = require('./')
+ 
+ var help = false
+Index: node-v4.9.1/deps/npm/node_modules/semver/bin/semver
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/semver/bin/semver
++++ node-v4.9.1/deps/npm/node_modules/semver/bin/semver
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env node
+ // Standalone semver comparison program.
+ // Exits successfully and prints matching version(s) if
+ // any supplied version is valid and passes all tests.
+Index: node-v4.9.1/deps/npm/node_modules/which/bin/which
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/which/bin/which
++++ node-v4.9.1/deps/npm/node_modules/which/bin/which
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env node
+ var which = require("../")
+ if (process.argv.length < 3)
+   usage()
+Index: node-v4.9.1/deps/npm/bin/node-gyp-bin/node-gyp
+===================================================================
+--- node-v4.9.1.orig/deps/npm/bin/node-gyp-bin/node-gyp
++++ node-v4.9.1/deps/npm/bin/node-gyp-bin/node-gyp
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env sh
++#!/bin/sh
+ if [ "x$npm_config_node_gyp" = "x" ]; then
+   node "`dirname "$0"`/../../node_modules/node-gyp/bin/node-gyp.js" "$@"
+ else
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/bin/node-gyp.js
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/bin/node-gyp.js
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/bin/node-gyp.js
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env node
++#!/usr/bin/node4
+ 
+ /**
+  * Set the title.
+Index: node-v4.9.1/deps/npm/lib/utils/completion.sh
+===================================================================
+--- node-v4.9.1.orig/deps/npm/lib/utils/completion.sh
++++ node-v4.9.1/deps/npm/lib/utils/completion.sh
+@@ -1,4 +1,3 @@
+-#!/bin/bash
+ ###-begin-npm-completion-###
+ #
+ # npm command completion script
+Index: node-v4.9.1/deps/npm/cli.js
+===================================================================
+--- node-v4.9.1.orig/deps/npm/cli.js
++++ node-v4.9.1/deps/npm/cli.js
+@@ -1,2 +1 @@
+-#!/usr/bin/env node
+ require("./bin/npm-cli.js")
+Index: node-v4.9.1/deps/npm/configure
+===================================================================
+--- node-v4.9.1.orig/deps/npm/configure
++++ node-v4.9.1/deps/npm/configure
+@@ -1,5 +1,3 @@
+-#!/bin/bash
+-
+ # set configurations that will be "sticky" on this system,
+ # surviving npm self-updates.
+ 
+Index: node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/buildbot/buildbot_run.py
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/node-gyp/gyp/buildbot/buildbot_run.py
++++ node-v4.9.1/deps/npm/node_modules/node-gyp/gyp/buildbot/buildbot_run.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python
+ # Copyright (c) 2012 Google Inc. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+Index: node-v4.9.1/deps/npm/node_modules/request/node_modules/har-validator/bin/har-validator
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/request/node_modules/har-validator/bin/har-validator
++++ node-v4.9.1/deps/npm/node_modules/request/node_modules/har-validator/bin/har-validator
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env node
+-
+ 'use strict'
+ 
+ var chalk = require('chalk')
+Index: node-v4.9.1/deps/npm/node_modules/request/node_modules/node-uuid/bin/uuid
+===================================================================
+--- node-v4.9.1.orig/deps/npm/node_modules/request/node_modules/node-uuid/bin/uuid
++++ node-v4.9.1/deps/npm/node_modules/request/node_modules/node-uuid/bin/uuid
+@@ -1,5 +1,3 @@
+-#!/usr/bin/env node
+-
+ var path = require('path');
+ var uuid = require(path.join(__dirname, '..'));
+ 

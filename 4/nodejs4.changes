@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 24 14:17:25 UTC 2018 - adam.majer@suse.de
+
+- env_shebang.patch: use absolute paths in executable shebang lines
+- versioned.patch: updated to move shebang modifications to above
+  patch.
+
+-------------------------------------------------------------------
 Fri May 11 12:36:51 UTC 2018 - adam.majer@suse.de
 
 - icu_61_namespacefix.patch: Fix building with ICU61.1 (bsc#1091764)

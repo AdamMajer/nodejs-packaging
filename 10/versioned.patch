@@ -376,16 +376,6 @@ Index: node-v10.1.0/node.gyp
      'node_intermediate_lib_type%': 'static_library',
      'library_files': [
        'lib/internal/bootstrap/loaders.js',
-Index: node-v10.1.0/deps/npm/bin/npm-cli.js
-===================================================================
---- node-v10.1.0.orig/deps/npm/bin/npm-cli.js
-+++ node-v10.1.0/deps/npm/bin/npm-cli.js
-@@ -1,4 +1,4 @@
--#!/usr/bin/env node
-+#!/usr/bin/env node10
- ;(function () { // wrapper in case we're in module_context mode
-   // windows: running "npm blah" in this folder will invoke WSH, not node.
-   /*global WScript*/
 Index: node-v10.1.0/src/node_main.cc
 ===================================================================
 --- node-v10.1.0.orig/src/node_main.cc

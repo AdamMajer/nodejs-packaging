@@ -385,16 +385,6 @@ Index: node-v8.11.2/node.gyp
      'node_intermediate_lib_type%': 'static_library',
      'library_files': [
        'lib/internal/bootstrap_node.js',
-Index: node-v8.11.2/deps/npm/bin/npm-cli.js
-===================================================================
---- node-v8.11.2.orig/deps/npm/bin/npm-cli.js
-+++ node-v8.11.2/deps/npm/bin/npm-cli.js
-@@ -1,4 +1,4 @@
--#!/usr/bin/env node
-+#!/usr/bin/env node8
- ;(function () { // wrapper in case we're in module_context mode
-   // windows: running "npm blah" in this folder will invoke WSH, not node.
-   /*global WScript*/
 Index: node-v8.11.2/src/node_main.cc
 ===================================================================
 --- node-v8.11.2.orig/src/node_main.cc

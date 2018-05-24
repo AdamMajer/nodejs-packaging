@@ -396,16 +396,6 @@ Index: node-v4.8.7/deps/npm/man/man1/npm.1
  .IP \(bu 2
  npm apihelp npm
  
-Index: node-v4.8.7/deps/npm/bin/npm-cli.js
-===================================================================
---- node-v4.8.7.orig/deps/npm/bin/npm-cli.js
-+++ node-v4.8.7/deps/npm/bin/npm-cli.js
-@@ -1,4 +1,4 @@
--#!/usr/bin/env node
-+#!/usr/bin/env node4
- ;(function () { // wrapper in case we're in module_context mode
- 
- // windows: running "npm blah" in this folder will invoke WSH, not node.
 Index: node-v4.8.7/src/node_main.cc
 ===================================================================
 --- node-v4.8.7.orig/src/node_main.cc
