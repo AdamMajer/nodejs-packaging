@@ -350,6 +350,9 @@ export CXX=%{?cpp_exec}
 
 make %{?_smp_mflags}
 
+# Fix documentation permissions
+find doc/api -type f -exec chmod 0644 {} +
+
 %install
 make install DESTDIR=%{buildroot} %{?_smp_mflags}
 rm %{buildroot}%{_datadir}/doc/node/gdbinit
@@ -391,7 +394,7 @@ find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules 
 find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules -type d -name "benchmark" -print0 | xargs -0 rm -rf --
 
 # fix permissions
-find %{buildroot}%{_libdir}/node_modules -type f -exec chmod -x {} +
+find %{buildroot}%{_libdir}/node_modules -type f -exec chmod 0644 {} +
 chmod 0755 %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/bin/np*-cli.js
 chmod 0755 %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/bin/node-gyp-bin/node-gyp
 chmod 0755 %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules/node-gyp/bin/node-gyp.js
