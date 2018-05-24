@@ -1,4 +1,21 @@
 -------------------------------------------------------------------
+Thu May 24 14:48:00 UTC 2018 - adam.majer@suse.de
+
+- New upstream release 10.2.0:
+  * addons: Fixed a memory leak for users of AsyncResource and N-API.
+  * assert: The error parameter of assert.throws() can now be
+    an object containing regular expressions.
+  * crypto: The authTagLength option has been made more flexible.
+  * esm: Builtin modules now provide named exports in ES6 modules.
+  * http: Handling of close and aborted events has been made more
+    consistent.
+  * module: add --preserve-symlinks-main
+  * timers: timeout.refresh() has been added to the public API.
+
+- fix_ci_tests.patch: refreshed
+- versioned.patch: refreshed
+
+-------------------------------------------------------------------
 Wed May 23 11:30:11 UTC 2018 - adam.majer@suse.de
 
 - use gcc7 for SLE12

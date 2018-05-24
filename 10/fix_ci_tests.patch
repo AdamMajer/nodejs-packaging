@@ -2,11 +2,11 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-v9.7.1/test/parallel/test-module-loading-globalpaths.js
+Index: node-v10.2.0/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-v9.7.1.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-v9.7.1/test/parallel/test-module-loading-globalpaths.js
-@@ -10,6 +10,9 @@ const { addLibraryPath } = require('../c
+--- node-v10.2.0.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-v10.2.0/test/parallel/test-module-loading-globalpaths.js
+@@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
  
@@ -16,11 +16,11 @@ Index: node-v9.7.1/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-v9.7.1/Makefile
+Index: node-v10.2.0/Makefile
 ===================================================================
---- node-v9.7.1.orig/Makefile
-+++ node-v9.7.1/Makefile
-@@ -445,7 +445,7 @@ test-ci-js: | clear-stalled
+--- node-v10.2.0.orig/Makefile
++++ node-v10.2.0/Makefile
+@@ -443,7 +443,7 @@ test-ci-js: | clear-stalled
  .PHONY: test-ci
  # Related CI jobs: most CI tests, excluding node-test-commit-arm-fanned
  test-ci: LOGLEVEL := info
@@ -28,11 +28,11 @@ Index: node-v9.7.1/Makefile
 +test-ci: | clear-stalled build-addons build-addons-napi
  	out/Release/cctest --gtest_output=tap:cctest.tap
  	$(PYTHON) tools/test.py $(PARALLEL_ARGS) -p tap --logfile test.tap \
- 		--mode=release --flaky-tests=$(FLAKY_TESTS) \
-Index: node-v9.7.1/test/parallel/test-tls-env-bad-extra-ca.js
+ 		--mode=$(BUILDTYPE_LOWER) --flaky-tests=$(FLAKY_TESTS) \
+Index: node-v10.2.0/test/parallel/test-tls-env-bad-extra-ca.js
 ===================================================================
---- node-v9.7.1.orig/test/parallel/test-tls-env-bad-extra-ca.js
-+++ node-v9.7.1/test/parallel/test-tls-env-bad-extra-ca.js
+--- node-v10.2.0.orig/test/parallel/test-tls-env-bad-extra-ca.js
++++ node-v10.2.0/test/parallel/test-tls-env-bad-extra-ca.js
 @@ -35,7 +35,7 @@ fork(__filename, opts)
      // TODO(addaleax): Make `SafeGetenv` work like `process.env`
      // encoding-wise
