@@ -290,6 +290,7 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %patch104 -p1
 %patch200 -p1
 
+%build
 # Make sure nothing gets included from bundled deps:
 # We only delete the source and header files, because
 # the remaining build scripts are still used.
@@ -311,7 +312,6 @@ find deps/zlib -name *.[ch] -delete
 # documentation changes every version.
 find -name *.md.orig -delete
 
-%build
 # percent-configure pulls in something that confuses node's configure
 # script, so we'll do it thus:
 export CFLAGS="%{optflags}"
