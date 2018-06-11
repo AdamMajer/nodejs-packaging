@@ -1,4 +1,22 @@
 -------------------------------------------------------------------
+Mon Jun 11 12:58:06 UTC 2018 - adam.majer@suse.de
+
+- New upstream release 10.4.0:
+  * deps: update V8 to 6.7.288.43
+  * stream: ensure Stream.pipeline re-throws errors without callback
+
+- Changes in version 10.3.0:
+  * deps: upgrade npm to 6.1.0
+  * fs: fix reads with pos > 4GB
+  * net: new option to allow IPC servers to be readable and writable
+    by all users
+  * stream: fix removeAllListeners() for Stream.Readable to work as
+    expected when no arguments are passed
+
+npm_search_paths.patch: no longer override explicitly prefixed etc/
+versioned.patch, env_shebang.patch: refreshed
+
+-------------------------------------------------------------------
 Thu May 24 14:48:00 UTC 2018 - adam.majer@suse.de
 
 - New upstream release 10.2.0:
