@@ -1,4 +1,22 @@
 -------------------------------------------------------------------
+Wed Jun 13 16:24:04 UTC 2018 - adam.majer@suse.de
+
+- New upstream release 10.4.1:
+  * Fixes memory exhaustion DoS (CVE-2018-7164): Fixes a bug
+    introduced in 9.7.0 that increases the memory consumed when
+    reading from the network into JavaScript using the net.Socket
+    object directly as a stream.
+  * http2:
+    + Fixes Denial of Service vulnerability by updating the
+    http2 implementation to not crash under certain circumstances
+    during cleanup (CVE-2018-7161, bsc#1097404)
+    + Fixes Denial of Service vulnerability by upgrading nghttp2
+    to 1.32.0 (CVE-2018-1000168, bsc#1097401)
+  * tls: Fixes Denial of Service vulnerability by updating the TLS
+    implementation to not crash upon receiving
+    (CVE-2018-7162)
+
+-------------------------------------------------------------------
 Mon Jun 11 12:58:06 UTC 2018 - adam.majer@suse.de
 
 - New upstream release 10.4.0:
