@@ -59,6 +59,12 @@ Release:        0
 %bcond_without intree_icu
 %endif
 
+%if {{intree_nghttp2}}
+%bcond_with    intree_nghttp2
+%else
+%bcond_without intree_nghttp2
+%endif
+
 %ifarch aarch64 ppc ppc64 ppc64le s390 s390x
 %bcond_with    gdb
 %else
@@ -195,6 +201,10 @@ BuildRequires:  pkgconfig(libcares) >= {{min_libcares2_version}}
 
 %if ! %{with intree_icu}
 BuildRequires:  pkgconfig(icu-i18n) >= {{min_icu_version}}
+%endif
+
+%if ! %{with intree_nghttp2}
+BuildRequires: libnghttp2-devel >= {{min_nghttp2_version}}
 %endif
 
 Requires(post): update-alternatives
@@ -344,6 +354,9 @@ export CXX=%{?cpp_exec}
     --with-intl=small-icu \
     --with-icu-source=deps/icu-small \
 %endif
+%endif
+%if ! %{with intree_nghttp2}
+    --shared-nghttp2 \
 %endif
 %if %{with gdb}
     --gdb \

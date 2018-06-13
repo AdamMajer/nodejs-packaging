@@ -13,3 +13,8 @@ s/{{min_icu_version}}/52/g
 # libcares2 version - option unavailable in Nodejs4
 s/{{intree_libcares2}}/0/g
 s/{{min_libcares2_version}}/1.10.0/g
+#
+#
+# nghttp2 version - unavailable in Node 6.x
+s/{{intree_nghttp2}}/0/g
+s/{{min_nghttp2_version}}/1.31.0/g
