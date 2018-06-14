@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Jun 14 09:20:15 UTC 2018 - adam.majer@suse.de
+
+- New upstream LTS release 6.14.3:
+  * buffer: Fixes Denial of Service vulnerability where calling
+    Buffer.fill() could hang (CVE-2018-7167, bsc#1097375)
+
+-------------------------------------------------------------------
 Thu May 24 14:17:25 UTC 2018 - adam.majer@suse.de
 
 - env_shebang.patch: use absolute paths in executable shebang lines
