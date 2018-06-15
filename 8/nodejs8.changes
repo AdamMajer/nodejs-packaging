@@ -8,6 +8,8 @@ Wed Jun 13 16:32:24 UTC 2018 - adam.majer@suse.de
     + Fixes Denial of Service vulnerability by updating the http2
       implementation to not crash under certain circumstances
       during cleanup (CVE-2018-7161, bsc#1097404)
+    + Unbundled nghttp2 to fix Denial of Service vulnerability
+      (CVE-2018-1000168, bsc#1097401)
 
 -------------------------------------------------------------------
 Thu May 24 14:17:25 UTC 2018 - adam.majer@suse.de
