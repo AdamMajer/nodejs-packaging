@@ -209,7 +209,7 @@ BuildRequires: libnghttp2-devel >= {{min_nghttp2_version}}
 
 Requires(post): update-alternatives
 Requires(postun): update-alternatives
-Recommends:     npm(npm) = {{npm_version}}
+Recommends:     npm{{node_version_major}}
 
 #we need ABI virtual provides where SONAMEs aren't enough/not present so deps
 #break when binary compatibility is broken

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Jun 15 12:03:47 UTC 2018 - adam.majer@suse.de
+
+- Recommend same major version npm package (bsc#1097748)
+
+-------------------------------------------------------------------
 Wed Jun 13 16:32:24 UTC 2018 - adam.majer@suse.de
 
 - New upstream LTS release 8.11.3:
