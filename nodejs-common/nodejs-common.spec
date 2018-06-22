@@ -32,6 +32,7 @@ Summary:        Common files for the NodeJS ecosystem
 Url:            https://github.com/AdamMajer/nodejs-packaging
 Group:          Development/Languages/NodeJS
 Source1:        node
+Source2:        LICENSE
 Requires:       nodejs
 Conflicts:      nodejs4 < 4.8.4
 Conflicts:      nodejs6 < 6.11.1
@@ -47,6 +48,7 @@ while retaining the same codestream version.
 
 %prep
 %build
+cp %{S:2} .
 %install
 install -D -m 0755 %{S:1} %{buildroot}%{_bindir}/node
 ln -s node %{buildroot}%{_bindir}/npm
@@ -57,6 +59,7 @@ ln -s node %{buildroot}%{_bindir}/npx
 %{_bindir}/node
 %{_bindir}/npm
 %{_bindir}/npx
+%license LICENSE
 
 %changelog
 
