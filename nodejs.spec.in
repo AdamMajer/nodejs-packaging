@@ -442,7 +442,7 @@ ln -s %{_sysconfdir}/alternatives/npx-default          %{buildroot}%{_bindir}/np
 ln -s %{_sysconfdir}/alternatives/npx.1%{ext_man}      %{buildroot}%{_mandir}/man1/npx.1%{ext_man}
 %endif
 
-# We need to own directory on old versions of SLE
+# We need to own license directory on old versions of SLE
 %if 0%{?suse_version} < 1500
 mkdir -p %{buildroot}%{_defaultlicensedir}
 %endif
