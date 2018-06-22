@@ -12,6 +12,7 @@ Fri Jun 22 11:28:39 UTC 2018 - adam.majer@suse.de
     --experimental-worker flag in the worker_threads module.
     This feature is *experimental* and may receive breaking changes
     at any time.
+- npm_search_paths.patch: Fix typo causing npm to not work
 
 -------------------------------------------------------------------
 Wed Jun 13 16:24:04 UTC 2018 - adam.majer@suse.de
