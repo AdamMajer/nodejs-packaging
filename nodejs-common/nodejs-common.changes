@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Jun 22 12:31:05 UTC 2018 - dcassany@suse.de
+
+- Add LICENSE text to the package
+
+-------------------------------------------------------------------
 Wed Aug  2 14:29:04 UTC 2017 - adam.majer@suse.de
 
 - NodeJS 8.2.0 adds support for `npx` binary. Add conditional
