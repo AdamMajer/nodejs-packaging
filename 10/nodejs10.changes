@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Fri Jun 22 11:28:39 UTC 2018 - adam.majer@suse.de
+
+- New upstream release 10.5.0:
+  * crypto: Support for crypto.scrypt() has been added
+  * fs:
+    + APIs that take mode as arguments no longer throw on values
+      larger than 0o777
+    + BigInt support has been added to fs.stat and fs.watchFile
+    + Fix crashes in closed event watchers.
+  * worker_threads: multi-threading has been added behind the
+    --experimental-worker flag in the worker_threads module.
+    This feature is *experimental* and may receive breaking changes
+    at any time.
+
+-------------------------------------------------------------------
 Wed Jun 13 16:24:04 UTC 2018 - adam.majer@suse.de
 
 - New upstream release 10.4.1:
