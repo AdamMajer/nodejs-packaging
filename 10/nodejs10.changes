@@ -1,4 +1,26 @@
 -------------------------------------------------------------------
+Thu Jul  5 21:21:20 UTC 2018 - adam.majer@suse.de
+
+- New upstream release 10.6.0:
+  * dns: An experimental promisified version of the dns module is
+    now available. Give it a try with require('dns').promises.
+  * fs: fs.lchown has been undeprecated now that libuv supports it.
+  * lib: Atomics.wake is being renamed to Atomics.notify in the
+    ECMAScript specification (reference). Since Node.js now has
+    experimental support for worker threads, we are being proactive
+    and added a notify alias, while emitting a warning if wake is used.
+  * n-api: Add API for asynchronous functions.
+  * util: util.inspect is now able to return a result instead of
+    throwing when the maximum call stack size is exceeded during
+    inspection.
+  * vm: Add script.createCachedData(). This API replaces the
+    produceCachedData option of the Script constructor that is
+    now deprecated
+  * worker: Support for relative paths has been added to the Worker
+    constructor. Paths are interpreted relative to the current
+    working directory.
+
+-------------------------------------------------------------------
 Fri Jun 22 11:28:39 UTC 2018 - adam.majer@suse.de
 
 - New upstream release 10.5.0:
