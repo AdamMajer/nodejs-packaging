@@ -19,6 +19,7 @@ Thu Jul  5 21:21:20 UTC 2018 - adam.majer@suse.de
   * worker: Support for relative paths has been added to the Worker
     constructor. Paths are interpreted relative to the current
     working directory.
+- versioned.patch: refreshed
 
 -------------------------------------------------------------------
 Fri Jun 22 11:28:39 UTC 2018 - adam.majer@suse.de
