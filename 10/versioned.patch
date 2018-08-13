@@ -8,8 +8,10 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
---- a/Makefile
-+++ b/Makefile
+Index: node-v10.8.0/Makefile
+===================================================================
+--- node-v10.8.0.orig/Makefile
++++ node-v10.8.0/Makefile
 @@ -43,7 +43,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
@@ -19,9 +21,11 @@ modules for multiple versions of NodeJS
  NODE ?= ./$(NODE_EXE)
  NODE_G_EXE = node_g$(EXEEXT)
  NPM ?= ./deps/npm/bin/npm-cli.js
---- a/tools/install.py
-+++ b/tools/install.py
-@@ -78,7 +78,7 @@ def install(paths, dst): map(lambda path
+Index: node-v10.8.0/tools/install.py
+===================================================================
+--- node-v10.8.0.orig/tools/install.py
++++ node-v10.8.0/tools/install.py
+@@ -76,7 +76,7 @@ def install(paths, dst): map(lambda path
  def uninstall(paths, dst): map(lambda path: try_remove(path, dst), paths)
  
  def npm_files(action):
@@ -30,7 +34,7 @@ modules for multiple versions of NodeJS
  
    # don't install npm if the target path is a symlink, it probably means
    # that a dev version of npm is installed there
-@@ -92,20 +92,20 @@ def npm_files(action):
+@@ -90,20 +90,20 @@ def npm_files(action):
      action(paths, target_path + dirname[9:] + '/')
  
    # create/remove symlink
@@ -57,7 +61,7 @@ modules for multiple versions of NodeJS
    else:
      assert(0) # unhandled action type
  
-@@ -119,7 +119,7 @@ def subdir_files(path, dest, action):
+@@ -117,7 +117,7 @@ def subdir_files(path, dest, action):
  
  def files(action):
    is_windows = sys.platform == 'win32'
@@ -66,7 +70,7 @@ modules for multiple versions of NodeJS
    output_prefix = 'out/Release/'
  
    if 'false' == variables.get('node_shared'):
-@@ -144,7 +144,7 @@ def files(action):
+@@ -142,7 +142,7 @@ def files(action):
      action(['out/Release/node.d'], sysconfig.get_config_var("LIB") + '/dtrace/node.d')
  
    # behave similarly for systemtap
@@ -75,7 +79,7 @@ modules for multiple versions of NodeJS
  
    action(['deps/v8/tools/gdbinit'], 'share/doc/node/')
    action(['deps/v8/tools/lldbinit'], 'share/doc/node/')
-@@ -153,7 +153,7 @@ def files(action):
+@@ -151,7 +151,7 @@ def files(action):
    if 'freebsd' in sys.platform or 'openbsd' in sys.platform:
      action(['doc/node.1'], 'man/man1/')
    else:
@@ -84,7 +88,7 @@ modules for multiple versions of NodeJS
  
    if 'true' == variables.get('node_install_npm'): npm_files(action)
  
-@@ -169,28 +169,28 @@ def headers(action):
+@@ -167,28 +167,28 @@ def headers(action):
      'src/node_buffer.h',
      'src/node_object_wrap.h',
      'src/node_version.h',
@@ -121,8 +125,10 @@ modules for multiple versions of NodeJS
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
---- a/doc/node.1
-+++ b/doc/node.1
+Index: node-v10.8.0/doc/node.1
+===================================================================
+--- node-v10.8.0.orig/doc/node.1
++++ node-v10.8.0/doc/node.1
 @@ -30,24 +30,24 @@
  .Dt NODE 1
  .
@@ -152,8 +158,10 @@ modules for multiple versions of NodeJS
  .Op Fl -v8-options
  .
  .\"======================================================================
---- a/src/node.stp
-+++ b/src/node.stp
+Index: node-v10.8.0/src/node.stp
+===================================================================
+--- node-v10.8.0.orig/src/node.stp
++++ node-v10.8.0/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -226,10 +234,12 @@ modules for multiple versions of NodeJS
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
---- a/deps/npm/man/man1/npm.1
-+++ b/deps/npm/man/man1/npm.1
+Index: node-v10.8.0/deps/npm/man/man1/npm.1
+===================================================================
+--- node-v10.8.0.orig/deps/npm/man/man1/npm.1
++++ node-v10.8.0/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
- .TH "NPM" "1" "May 2018" "" ""
+ .TH "NPM" "1" "July 2018" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm10\fR \- javascript package manager
@@ -273,7 +283,7 @@ modules for multiple versions of NodeJS
  .P
  In particular, npm has two modes of operation:
  .RS 0
-@@ -80,19 +80,19 @@ Make a package\.json file\.  See npm hel
+@@ -78,19 +78,19 @@ Make a package\.json file\.  See npm hel
  link:
  For linking your current working code into Node's path, so that you
  don't have to reinstall every time you make a change\.  Use
@@ -296,7 +306,7 @@ modules for multiple versions of NodeJS
  
  .RE
  .SH CONFIGURATION
-@@ -133,14 +133,14 @@ lib/utils/config\-defs\.js\.  These must
+@@ -126,7 +126,7 @@ lib/utils/config\-defs\.js\.  These must
  
  .RE
  .P
@@ -305,24 +315,7 @@ modules for multiple versions of NodeJS
  .SH CONTRIBUTIONS
  .P
  Patches welcome!
- .RS 0
- .IP \(bu 2
- code:
--Read through npm help 7 \fBnpm\-coding\-style\fP if you plan to submit code\.
-+Read through npm10 help 7 \fBnpm\-coding\-style\fP if you plan to submit code\.
- You don't have to agree with it, but you do have to follow it\.
- .IP \(bu 2
- docs:
-@@ -150,7 +150,7 @@ file in the "doc" folder\.  (Don't worry
- .RE
- .P
- Contributors are listed in npm's \fBpackage\.json\fP file\.  You can view them
--easily by doing \fBnpm view npm contributors\fP\|\.
-+easily by doing \fBnpm10 view npm contributors\fP\|\.
- .P
- If you would like to contribute, but don't know what to work on, read
- the contributing guidelines and check the issues list\.
-@@ -185,21 +185,21 @@ i@izs\.me
+@@ -165,21 +165,21 @@ i@izs\.me
  .SH SEE ALSO
  .RS 0
  .IP \(bu 2
@@ -351,8 +344,10 @@ modules for multiple versions of NodeJS
  
  .RE
  
---- a/node.gyp
-+++ b/node.gyp
+Index: node-v10.8.0/node.gyp
+===================================================================
+--- node-v10.8.0.orig/node.gyp
++++ node-v10.8.0/node.gyp
 @@ -21,8 +21,8 @@
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',
@@ -364,8 +359,10 @@ modules for multiple versions of NodeJS
      'node_intermediate_lib_type%': 'static_library',
      'library_files': [
        'lib/internal/per_context.js',
---- a/src/node_main.cc
-+++ b/src/node_main.cc
+Index: node-v10.8.0/src/node_main.cc
+===================================================================
+--- node-v10.8.0.orig/src/node_main.cc
++++ node-v10.8.0/src/node_main.cc
 @@ -119,6 +119,7 @@ int main(int argc, char* argv[]) {
  #endif
    // Disable stdio buffering, it interacts poorly with printf()
@@ -374,8 +371,10 @@ modules for multiple versions of NodeJS
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
---- a/deps/npm/man/man1/npx.1
-+++ b/deps/npm/man/man1/npx.1
+Index: node-v10.8.0/deps/npm/man/man1/npx.1
+===================================================================
+--- node-v10.8.0.orig/deps/npm/man/man1/npx.1
++++ node-v10.8.0/deps/npm/man/man1/npx.1
 @@ -1,32 +1,32 @@
  .TH "NPX" "1" "April 2018" "npx@10.1.1" "User Commands"
  .SH "NAME"
@@ -459,9 +458,11 @@ modules for multiple versions of NodeJS
 +\fBnpm10\-config(7)\fP
  
  .RE
---- a/tools/test.py
-+++ b/tools/test.py
-@@ -907,7 +907,7 @@ class Context(object):
+Index: node-v10.8.0/tools/test.py
+===================================================================
+--- node-v10.8.0.orig/tools/test.py
++++ node-v10.8.0/tools/test.py
+@@ -894,7 +894,7 @@ class Context(object):
  
    def GetVm(self, arch, mode):
      if arch == 'none':

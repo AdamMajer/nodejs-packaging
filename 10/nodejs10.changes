@@ -1,4 +1,26 @@
 -------------------------------------------------------------------
+Mon Aug 13 10:53:42 UTC 2018 - adam.majer@suse.de
+
+- New upstream release 10.8.0:
+  * deps: upgrade npm to 6.2.0
+
+- Changes in version 10.7.0:
+  * console: The console.timeLog() method has been implemented.
+  * http: Added support for passing both timeout and agent options
+    to http.request.
+  * inspector: Expose the original console API in
+    require('inspector').console.
+  * napi: Added experimental support for functions dealing with
+    bigint numbers.
+  * process:
+    + The process.hrtime.bigint() method has been implemented.
+    + Added the --title command line argument to set the process
+      title on startup.
+  * trace_events: Added process_name metadata.
+- icu_small_grouping.patch: upstreamed
+- versioned.patch, env_shebang.patch: refreshed
+
+-------------------------------------------------------------------
 Thu Jul  5 21:21:20 UTC 2018 - adam.majer@suse.de
 
 - New upstream release 10.6.0:
