@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sun Jul 29 10:47:39 UTC 2018 - jengelh@inai.de
+
+- Ensure neutrality of description.
+- Use %make_install.
+
+-------------------------------------------------------------------
 Fri Jun 15 12:03:47 UTC 2018 - adam.majer@suse.de
 
 - Recommend same major version npm package (bsc#1097748)

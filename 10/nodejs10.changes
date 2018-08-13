@@ -19,6 +19,13 @@ Mon Aug 13 10:53:42 UTC 2018 - adam.majer@suse.de
   * trace_events: Added process_name metadata.
 - icu_small_grouping.patch: upstreamed
 - versioned.patch, env_shebang.patch: refreshed
+- update Jan's description changes for grammar and merge into git
+
+-------------------------------------------------------------------
+Sun Jul 29 10:47:39 UTC 2018 - jengelh@inai.de
+
+- Ensure neutrality of description.
+- Use %make_install.
 
 -------------------------------------------------------------------
 Thu Jul  5 21:21:20 UTC 2018 - adam.majer@suse.de
