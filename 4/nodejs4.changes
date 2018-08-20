@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug 20 10:22:19 UTC 2018 - adam.majer@suse.de
+
+- CVE-2018-12115.patch: buffer: avoid overrun on UCS-2 string write
+  (CVE-2018-12115, bsc#1105019)
+
+-------------------------------------------------------------------
 Sun Jul 29 10:47:39 UTC 2018 - jengelh@inai.de
 
 - Ensure neutrality of description.

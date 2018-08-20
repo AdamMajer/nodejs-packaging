@@ -115,6 +115,8 @@ Patch6:         icu_61_namespacefix.patch    # PATCH_FOR: 4, 6, 8
 Patch7:         manual_configure.patch # PATCH_FOR: 10, 9, 8
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
 
+Patch20:        CVE-2018-12115.patch   # PATCH_FOR: 4
+
 ## Patches specific to SUSE and openSUSE
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
 Patch101:       nodejs-libpath.patch
@@ -292,6 +294,7 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch20 -p1
 %patch101 -p1
 %patch102 -p1
 # Add check_output to configure script (not part of Python 2.6 in SLE11).
