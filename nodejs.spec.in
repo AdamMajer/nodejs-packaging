@@ -302,6 +302,9 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %patch200 -p1
 %patch201 -p1
 
+# abnormalities from patching
+find -name configure.js.orig -delete
+
 %build
 # Make sure nothing gets included from bundled deps:
 # We only delete the source and header files, because
