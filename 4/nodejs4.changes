@@ -1,8 +1,11 @@
 -------------------------------------------------------------------
-Mon Aug 20 10:22:19 UTC 2018 - adam.majer@suse.de
+Thu Aug 23 13:44:19 UTC 2018 - adam.majer@suse.de
 
 - CVE-2018-12115.patch: buffer: avoid overrun on UCS-2 string write
   (CVE-2018-12115, bsc#1105019)
+- openssl_1_0_2p.patch: deps: Upgrade to OpenSSL 1.0.2p, fixing:
+  * Client DoS due to large DH parameter (CVE-2018-0732, bsc#1097158)
+  * ECDSA key extraction via local side-channel
 
 -------------------------------------------------------------------
 Sun Jul 29 10:47:39 UTC 2018 - jengelh@inai.de
