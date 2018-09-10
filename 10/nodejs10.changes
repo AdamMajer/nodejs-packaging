@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Sep 10 14:11:54 UTC 2018 - adam.majer@suse.de
+
+- 21257.diff: Revert an upstream revert that resulted that stdout
+  remaining O_NONBLOCK during build process. This resulted in
+  build failures.
+
+-------------------------------------------------------------------
 Mon Aug 20 09:01:38 UTC 2018 - adam.majer@suse.de
 
 - New upstream release 10.9.0:
