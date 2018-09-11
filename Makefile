@@ -30,7 +30,7 @@ common.target: nodejs-common/*
 	touch common.target
 
 changelog.target: common.changes
-        # Prepend common changelog to the changelog files
+	# Prepend common changelog to the changelog files
 	if [ $$(stat -c %s common.changes) -gt 0 ]; then \
 		for changelog in ${TARGET_CHANGELOGS}; do \
 			echo "Updating $$changelog changes..."; \
