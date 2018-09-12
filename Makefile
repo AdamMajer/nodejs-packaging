@@ -1,5 +1,5 @@
 
-ALL_TARGETS = $(shell ls -d ? ??)
+ALL_TARGETS = $(shell ls -d ? ??) _git
 TARGET_STAMPS := $(addsuffix .target,${ALL_TARGETS}) changelog.target common.target
 NODEJS_PROJECT ?= devel:languages:nodejs
 CHANGELOG_TS := $(shell date)
@@ -50,11 +50,13 @@ ${ALL_TARGETS}: changelog.target common.target
 	# Parse spec file
 	sed -f nodejs$@.sed nodejs.spec.in | perl patch.pl $@ > ${NODEJS_PROJECT}/nodejs$@/nodejs$@.spec
 	
-	# Verify that patches actually apply
-	cd ${NODEJS_PROJECT}/nodejs$@ && \
-	quilt setup --fast nodejs$@.spec && \
-	cd node-v$@.*.? && \
-	quilt push -a --fuzz=0
+	# Verify that patches actually apply in non-git version
+	if [ "$@" != "_git" ]; then \
+		cd ${NODEJS_PROJECT}/nodejs$@ && \
+		quilt setup --fast nodejs$@.spec && \
+		cd node-v$@.*.? && \
+		quilt push -a --fuzz=0; \
+	fi
 
 	touch $@.target
 

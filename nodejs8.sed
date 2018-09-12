@@ -20,4 +20,4 @@ s/{{min_libcares2_version}}/1.10.0/g
 s/{{intree_nghttp2}}/0%{suse_version} >= 1500/g
 s/{{min_nghttp2_version}}/1.31.0/g
 
-
+s/{{git_node}}/0/
