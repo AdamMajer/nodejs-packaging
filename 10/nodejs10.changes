@@ -1,4 +1,36 @@
 -------------------------------------------------------------------
+Wed Sep 12 10:02:47 UTC 2018 - adam.majer@suse.de
+
+- New upstream version 10.10.0:
+  * child_process: TypedArray and DataView values are now accepted as
+    input by execFileSync and spawnSync.
+  * coverage: Native V8 code coverage information can now be output to
+    disk by setting the environment variable NODE_V8_COVERAGE
+    to a directory.
+  * deps: The bundled npm was upgraded to version 6.4.1.
+  * fs:
+    + The methods fs.read, fs.readSync, fs.write, fs.writeSync,
+    fs.writeFile and fs.writeFileSync now all accept TypedArray and
+    DataView objects.
+    + A new boolean option, withFileTypes, can be passed to
+    fs.readdir and fs.readdirSync. If set to true, the methods
+    return an array of directory entries. These are objects that
+    can be used to determine the type of each entry and filter them
+    based on that without calling fs.stat.
+  * http2: The http2 module is no longer experimental.
+  * os: Added two new methods: os.getPriority and os.setPriority,
+    allowing to manipulate the scheduling priority of processes.
+  * process: Added process.allowedNodeEnvironmentFlags. This object
+    can be used to programmatically validate and list flags that
+    are allowed in the NODE_OPTIONS environment variable.
+  * src: Deprecated option variables in public C++ API.
+  * vm: Added vm.compileFunction, a method to create new JavaScript
+    functions from a source body, with options similar to those of
+    the other vm methods.
+- 21257.diff: refresh patch (and make it forward apply)
+- versioned.patch, env_shebang.path: refreshed
+
+-------------------------------------------------------------------
 Mon Sep 10 14:11:54 UTC 2018 - adam.majer@suse.de
 
 - 21257.diff: Revert an upstream revert that resulted that stdout

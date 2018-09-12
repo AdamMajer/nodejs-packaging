@@ -1,11 +1,11 @@
 https://github.com/nodejs/node/pull/21257
 
 
-Index: node-v10.9.0/src/node.cc
+Index: node-v10.10.0/src/node.cc
 ===================================================================
---- node-v10.9.0.orig/src/node.cc
-+++ node-v10.9.0/src/node.cc
-@@ -103,6 +103,7 @@ typedef int mode_t;
+--- node-v10.10.0.orig/src/node.cc
++++ node-v10.10.0/src/node.cc
+@@ -102,6 +102,7 @@ typedef int mode_t;
  #else
  #include <pthread.h>
  #include <sys/resource.h>  // getrlimit, setrlimit
@@ -13,17 +13,17 @@ Index: node-v10.9.0/src/node.cc
  #include <unistd.h>  // setuid, getuid
  #endif
  
-@@ -172,6 +173,9 @@ using v8::Value;
- static Mutex process_mutex;
- static Mutex environ_mutex;
+@@ -174,6 +175,9 @@ using v8::Undefined;
+ using v8::V8;
+ using v8::Value;
  
 +// Safe to call more than once and from signal handlers.
 +inline void PlatformExit();
 +
- static bool print_eval = false;
- static bool force_repl = false;
- static bool syntax_check_only = false;
-@@ -991,7 +995,7 @@ void AppendExceptionLine(Environment* en
+ static bool v8_is_profiling = false;
+ static bool node_is_initialized = false;
+ static uv_once_t init_modpending_once = UV_ONCE_INIT;
+@@ -970,7 +974,7 @@ void AppendExceptionLine(Environment* en
      Mutex::ScopedLock lock(process_mutex);
      env->set_printed_error(true);
  
@@ -32,7 +32,7 @@ Index: node-v10.9.0/src/node.cc
      PrintErrorString("\n%s", arrow);
      return;
    }
-@@ -2416,7 +2420,7 @@ void SetupProcessObject(Environment* env
+@@ -2198,7 +2202,7 @@ void SetupProcessObject(Environment* env
  
  
  void SignalExit(int signo) {
@@ -41,7 +41,7 @@ Index: node-v10.9.0/src/node.cc
    v8_platform.StopTracingAgent();
  #ifdef __FreeBSD__
    // FreeBSD has a nasty bug, see RegisterSignalHandler for details
-@@ -3245,6 +3249,27 @@ static void DebugEnd(const FunctionCallb
+@@ -2512,6 +2516,27 @@ static void DebugEnd(const FunctionCallb
  }
  
  
@@ -69,7 +69,7 @@ Index: node-v10.9.0/src/node.cc
  inline void PlatformInit() {
  #ifdef __POSIX__
  #if HAVE_INSPECTOR
-@@ -3255,9 +3280,9 @@ inline void PlatformInit() {
+@@ -2522,9 +2547,9 @@ inline void PlatformInit() {
  #endif  // HAVE_INSPECTOR
  
    // Make sure file descriptors 0-2 are valid before we start logging anything.
@@ -82,7 +82,7 @@ Index: node-v10.9.0/src/node.cc
        continue;
      // Anything but EBADF means something is seriously wrong.  We don't
      // have to special-case EINTR, fstat() is not interruptible.
-@@ -3265,6 +3290,8 @@ inline void PlatformInit() {
+@@ -2532,6 +2557,8 @@ inline void PlatformInit() {
        ABORT();
      if (fd != open("/dev/null", O_RDWR))
        ABORT();
@@ -91,7 +91,7 @@ Index: node-v10.9.0/src/node.cc
    }
  
  #if HAVE_INSPECTOR
-@@ -3287,6 +3314,24 @@ inline void PlatformInit() {
+@@ -2554,6 +2581,24 @@ inline void PlatformInit() {
    }
  #endif  // !NODE_SHARED_MODE
  
@@ -116,9 +116,9 @@ Index: node-v10.9.0/src/node.cc
    RegisterSignalHandler(SIGINT, SignalExit, true);
    RegisterSignalHandler(SIGTERM, SignalExit, true);
  
-@@ -3327,6 +3372,49 @@ inline void PlatformInit() {
- }
- 
+@@ -2603,6 +2648,49 @@ bool force_fips_crypto = false;
+ #endif
+ #endif
  
 +// This function must be safe to call more than once and from signal handlers.
 +inline void PlatformExit() {
@@ -163,10 +163,10 @@ Index: node-v10.9.0/src/node.cc
 +}
 +
 +
- void ProcessArgv(int* argc,
-                  const char** argv,
-                  int* exec_argc,
-@@ -3717,7 +3805,6 @@ inline int Start(Isolate* isolate, Isola
+ void ProcessArgv(std::vector<std::string>* args,
+                  std::vector<std::string>* exec_args,
+                  bool is_env) {
+@@ -3093,7 +3181,6 @@ inline int Start(Isolate* isolate, Isola
  
    env.set_can_call_into_js(false);
    env.stop_sub_worker_contexts();
@@ -174,7 +174,7 @@ Index: node-v10.9.0/src/node.cc
    env.RunCleanup();
    RunAtExit(&env);
  
-@@ -3803,7 +3890,7 @@ inline int Start(uv_loop_t* event_loop,
+@@ -3181,7 +3268,7 @@ inline int Start(uv_loop_t* event_loop,
  }
  
  int Start(int argc, char** argv) {
