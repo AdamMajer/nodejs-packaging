@@ -323,6 +323,12 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 # abnormalities from patching
 find -name configure.js.orig -delete
 
+# normalize shebang
+find -name \*.py -perm -1 -type f | xargs sed -i 's,^#!/usr/bin/env python,#!/usr/bin/python,'
+find -name \*.js -perm -1 -type f | xargs sed -i 's,^#!/usr/bin/env node,#!/usr/bin/node,; s,^#! /usr/bin/env node,#!/usr/bin/node,'
+sed -i 's,^#!/usr/bin/env node,#!/usr/bin/node,' deps/npm/node_modules/which/bin/which deps/npm/node_modules/uuid/bin/uuid deps/npm/node_modules/request/node_modules/http-signature/node_modules/sshpk/bin/sshpk-* deps/npm/node_modules/semver/bin/semver deps/npm/node_modules/node-gyp/node_modules/semver/bin/semver deps/npm/node_modules/request/node_modules/har-validator/node_modules/ajv/scripts/info
+find deps/npm/node_modules/request/node_modules/hawk -type f -exec chmod 0644 {} +
+
 %build
 # Make sure nothing gets included from bundled deps:
 # We only delete the source and header files, because
@@ -430,7 +436,6 @@ find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules 
 find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules -type d -name "benchmark" -print0 | xargs -0 rm -rf --
 
 # fix permissions
-find %{buildroot}%{_libdir}/node_modules -type f -exec chmod 0644 {} +
 chmod 0755 %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/bin/np*-cli.js
 chmod 0755 %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/bin/node-gyp-bin/node-gyp
 chmod 0755 %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules/node-gyp/bin/node-gyp.js
