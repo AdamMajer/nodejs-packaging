@@ -119,7 +119,7 @@ Patch1:         8334.diff              # PATCH_FOR: 4
 Patch3:         fix_ci_tests.patch
 Patch4:         fix_ci_ssl_tests.patch # PATCH_FOR: 4
 Patch5:         gyp_to_python3.patch   # PATCH_FOR: 100
-Patch6:         icu_61_namespacefix.patch    # PATCH_FOR: 4, 6, 8
+Patch6:         icu_61_namespacefix.patch    # PATCH_FOR: 4, 6
 Patch7:         manual_configure.patch # PATCH_FOR: 11, 10, 9, 8
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
 

@@ -2,13 +2,13 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-v8.11.4/test/parallel/test-module-loading-globalpaths.js
+Index: node-v8.12.0/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-v8.11.4.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-v8.11.4/test/parallel/test-module-loading-globalpaths.js
-@@ -7,6 +7,9 @@ const fs = require('fs');
- const child_process = require('child_process');
- const pkgName = 'foo';
+--- node-v8.12.0.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-v8.12.0/test/parallel/test-module-loading-globalpaths.js
+@@ -10,6 +10,9 @@ const { addLibraryPath } = require('../c
+ 
+ addLibraryPath(process.env);
  
 +common.skip('hardcoded global paths');
 +return;
@@ -16,11 +16,11 @@ Index: node-v8.11.4/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-v8.11.4/Makefile
+Index: node-v8.12.0/Makefile
 ===================================================================
---- node-v8.11.4.orig/Makefile
-+++ node-v8.11.4/Makefile
-@@ -416,7 +416,7 @@ test-ci-js: | clear-stalled
+--- node-v8.12.0.orig/Makefile
++++ node-v8.12.0/Makefile
+@@ -420,7 +420,7 @@ test-ci-js: | clear-stalled
  	fi
  
  test-ci: LOGLEVEL := info
@@ -29,10 +29,10 @@ Index: node-v8.11.4/Makefile
  	out/Release/cctest --gtest_output=tap:cctest.tap
  	$(PYTHON) tools/test.py $(PARALLEL_ARGS) -p tap --logfile test.tap \
  		--mode=release --flaky-tests=$(FLAKY_TESTS) \
-Index: node-v8.11.4/test/doctool/test-make-doc.js
+Index: node-v8.12.0/test/doctool/test-make-doc.js
 ===================================================================
---- node-v8.11.4.orig/test/doctool/test-make-doc.js
-+++ node-v8.11.4/test/doctool/test-make-doc.js
+--- node-v8.12.0.orig/test/doctool/test-make-doc.js
++++ node-v8.12.0/test/doctool/test-make-doc.js
 @@ -11,7 +11,7 @@ const assert = require('assert');
  const fs = require('fs');
  const path = require('path');
@@ -42,10 +42,10 @@ Index: node-v8.11.4/test/doctool/test-make-doc.js
  const docs = fs.readdirSync(apiPath);
  assert.ok(docs.includes('_toc.html'));
  
-Index: node-v8.11.4/test/parallel/test-tls-passphrase.js
+Index: node-v8.12.0/test/parallel/test-tls-passphrase.js
 ===================================================================
---- node-v8.11.4.orig/test/parallel/test-tls-passphrase.js
-+++ node-v8.11.4/test/parallel/test-tls-passphrase.js
+--- node-v8.12.0.orig/test/parallel/test-tls-passphrase.js
++++ node-v8.12.0/test/parallel/test-tls-passphrase.js
 @@ -221,7 +221,7 @@ server.listen(0, common.mustCall(functio
    }, common.mustCall());
  })).unref();

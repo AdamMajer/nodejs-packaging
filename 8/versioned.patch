@@ -8,10 +8,10 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-v8.11.2/Makefile
+Index: node-v8.12.0/Makefile
 ===================================================================
---- node-v8.11.2.orig/Makefile
-+++ node-v8.11.2/Makefile
+--- node-v8.12.0.orig/Makefile
++++ node-v8.12.0/Makefile
 @@ -46,7 +46,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
@@ -21,10 +21,10 @@ Index: node-v8.11.2/Makefile
  NODE ?= ./$(NODE_EXE)
  NODE_G_EXE = node_g$(EXEEXT)
  NPM ?= ./deps/npm/bin/npm-cli.js
-Index: node-v8.11.2/tools/install.py
+Index: node-v8.12.0/tools/install.py
 ===================================================================
---- node-v8.11.2.orig/tools/install.py
-+++ node-v8.11.2/tools/install.py
+--- node-v8.12.0.orig/tools/install.py
++++ node-v8.12.0/tools/install.py
 @@ -78,7 +78,7 @@ def install(paths, dst): map(lambda path
  def uninstall(paths, dst): map(lambda path: try_remove(path, dst), paths)
  
@@ -125,10 +125,10 @@ Index: node-v8.11.2/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-v8.11.2/doc/node.1
+Index: node-v8.12.0/doc/node.1
 ===================================================================
---- node-v8.11.2.orig/doc/node.1
-+++ node-v8.11.2/doc/node.1
+--- node-v8.12.0.orig/doc/node.1
++++ node-v8.12.0/doc/node.1
 @@ -26,12 +26,12 @@
  
  .SH NAME
@@ -161,10 +161,10 @@ Index: node-v8.11.2/doc/node.1
  .RB [ \-\-v8-options ]
  
  Execute without arguments to start the REPL.
-Index: node-v8.11.2/src/node.stp
+Index: node-v8.12.0/src/node.stp
 ===================================================================
---- node-v8.11.2.orig/src/node.stp
-+++ node-v8.11.2/src/node.stp
+--- node-v8.12.0.orig/src/node.stp
++++ node-v8.12.0/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -237,12 +237,12 @@ Index: node-v8.11.2/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-v8.11.2/deps/npm/man/man1/npm.1
+Index: node-v8.12.0/deps/npm/man/man1/npm.1
 ===================================================================
---- node-v8.11.2.orig/deps/npm/man/man1/npm.1
-+++ node-v8.11.2/deps/npm/man/man1/npm.1
+--- node-v8.12.0.orig/deps/npm/man/man1/npm.1
++++ node-v8.12.0/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
- .TH "NPM" "1" "February 2018" "" ""
+ .TH "NPM" "1" "August 2018" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm8\fR \- javascript package manager
@@ -255,13 +255,16 @@ Index: node-v8.11.2/deps/npm/man/man1/npm.1
  .fi
  .RE
  .SH VERSION
-@@ -21,16 +21,16 @@ It is extremely configurable to support
+@@ -21,7 +21,7 @@ It is extremely configurable to support
  Most commonly, it is used to publish, discover, install, and develop node
  programs\.
  .P
 -Run \fBnpm help\fP to get a list of available commands\.
 +Run \fBnpm8 help\fP to get a list of available commands\.
- .SH INTRODUCTION
+ .SH IMPORTANT
+ .P
+ npm is configured to use npm, Inc\.'s public registry at
+@@ -35,11 +35,11 @@ terms of use\.
  .P
  You probably got npm because you want to install stuff\.
  .P
@@ -277,7 +280,7 @@ Index: node-v8.11.2/deps/npm/man/man1/npm.1
  .SH DEPENDENCIES
  .P
  If a package references to another package with a git URL, npm depends
-@@ -48,7 +48,7 @@ the node\-gyp repository \fIhttps://gith
+@@ -57,7 +57,7 @@ the node\-gyp repository \fIhttps://gith
  the node\-gyp Wiki \fIhttps://github\.com/TooTallNate/node\-gyp/wiki\fR\|\.
  .SH DIRECTORIES
  .P
@@ -286,7 +289,7 @@ Index: node-v8.11.2/deps/npm/man/man1/npm.1
  .P
  In particular, npm has two modes of operation:
  .RS 0
-@@ -75,24 +75,24 @@ following help topics:
+@@ -82,24 +82,24 @@ following help topics:
  .RS 0
  .IP \(bu 2
  json:
@@ -315,7 +318,7 @@ Index: node-v8.11.2/deps/npm/man/man1/npm.1
  
  .RE
  .SH CONFIGURATION
-@@ -133,14 +133,14 @@ lib/utils/config\-defs\.js\.  These must
+@@ -135,7 +135,7 @@ lib/utils/config\-defs\.js\.  These must
  
  .RE
  .P
@@ -324,24 +327,7 @@ Index: node-v8.11.2/deps/npm/man/man1/npm.1
  .SH CONTRIBUTIONS
  .P
  Patches welcome!
- .RS 0
- .IP \(bu 2
- code:
--Read through npm help 7 \fBnpm\-coding\-style\fP if you plan to submit code\.
-+Read through npm8 help 7 \fBnpm\-coding\-style\fP if you plan to submit code\.
- You don't have to agree with it, but you do have to follow it\.
- .IP \(bu 2
- docs:
-@@ -150,7 +150,7 @@ file in the "doc" folder\.  (Don't worry
- .RE
- .P
- Contributors are listed in npm's \fBpackage\.json\fP file\.  You can view them
--easily by doing \fBnpm view npm contributors\fP\|\.
-+easily by doing \fBnpm8 view npm contributors\fP\|\.
- .P
- If you would like to contribute, but don't know what to work on, read
- the contributing guidelines and check the issues list\.
-@@ -185,21 +185,21 @@ i@izs\.me
+@@ -174,21 +174,21 @@ i@izs\.me
  .SH SEE ALSO
  .RS 0
  .IP \(bu 2
@@ -370,10 +356,10 @@ Index: node-v8.11.2/deps/npm/man/man1/npm.1
  
  .RE
  
-Index: node-v8.11.2/node.gyp
+Index: node-v8.12.0/node.gyp
 ===================================================================
---- node-v8.11.2.orig/node.gyp
-+++ node-v8.11.2/node.gyp
+--- node-v8.12.0.orig/node.gyp
++++ node-v8.12.0/node.gyp
 @@ -21,8 +21,8 @@
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',
@@ -385,10 +371,10 @@ Index: node-v8.11.2/node.gyp
      'node_intermediate_lib_type%': 'static_library',
      'library_files': [
        'lib/internal/bootstrap_node.js',
-Index: node-v8.11.2/src/node_main.cc
+Index: node-v8.12.0/src/node_main.cc
 ===================================================================
---- node-v8.11.2.orig/src/node_main.cc
-+++ node-v8.11.2/src/node_main.cc
+--- node-v8.12.0.orig/src/node_main.cc
++++ node-v8.12.0/src/node_main.cc
 @@ -21,6 +21,7 @@
  
  #include "node.h"
@@ -405,11 +391,11 @@ Index: node-v8.11.2/src/node_main.cc
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
-Index: node-v8.11.2/tools/test.py
+Index: node-v8.12.0/tools/test.py
 ===================================================================
---- node-v8.11.2.orig/tools/test.py
-+++ node-v8.11.2/tools/test.py
-@@ -905,7 +905,7 @@ class Context(object):
+--- node-v8.12.0.orig/tools/test.py
++++ node-v8.12.0/tools/test.py
+@@ -906,7 +906,7 @@ class Context(object):
  
    def GetVm(self, arch, mode):
      if arch == 'none':

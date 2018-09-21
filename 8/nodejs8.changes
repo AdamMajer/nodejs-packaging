@@ -1,4 +1,40 @@
 -------------------------------------------------------------------
+Fri Sep 21 15:28:17 UTC 2018 - adam.majer@suse.de
+
+- New upstream LTS release 8.12.0:
+  * async_hooks:
+    + rename PromiseWrap.parentId
+    + remove runtime deprecation
+    + deprecate unsafe emit{Before,After}
+  * cluster:
+    + add cwd to cluster.settings
+    + support windowsHide option for workers
+  * crypto: allow passing null as IV unless required
+  * deps:
+    + upgrade npm to 6.4.1
+    + upgrade libuv to 1.19.2
+    + Upgrade node-inspect to 1.11.5
+  * fs, net:
+    + support as and as+ flags in stringToFlags()
+    + emit 'ready' for fs streams and sockets
+  * http, http2:
+    + add options to http.createServer()
+    + add 103 Early Hints status code
+    + add http fallback options to .createServer
+  * n-api: take n-api out of experimental
+  * perf_hooks: add warning when too many entries in the timeline
+  * src:
+    + add public API for managing NodePlatform
+    + allow --perf-(basic-)?prof in NODE_OPTIONS
+    + node internals' postmortem metadata
+  * tls: expose Finished messages in TLSSocket
+  * trace_events: add file pattern cli option
+  * util: implement util.getSystemErrorName()
+icu_61_namespacefix.patch: upstreamed
+npm_search_paths.patch, versioned.patch, env_shebang.patch,
+  fix_ci_tests.patch: refreshed
+
+-------------------------------------------------------------------
 Mon Aug 20 08:30:52 UTC 2018 - adam.majer@suse.de
 
 - New upstream LTS release 8.11.4:
