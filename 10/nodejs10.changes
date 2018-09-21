@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Sep 21 15:00:41 UTC 2018 - adam.majer@suse.de
+
+- 21257.diff: drop the patch in favour of running node compilation
+  by redirecting stdio through a FIFO
+
+-------------------------------------------------------------------
 Wed Sep 12 10:02:47 UTC 2018 - adam.majer@suse.de
 
 - New upstream version 10.10.0:

@@ -112,6 +112,7 @@ Source3:        nodejs.keyring
 Url:            https://github.com/nodejs/node
 Source:         node-%{version}.tar
 %endif
+Source4:        bash_output_helper.bash
 
 ## Patches not distribution specific
 Patch1:         8334.diff              # PATCH_FOR: 4
@@ -121,7 +122,6 @@ Patch5:         gyp_to_python3.patch   # PATCH_FOR: 100
 Patch6:         icu_61_namespacefix.patch    # PATCH_FOR: 4, 6, 8
 Patch7:         manual_configure.patch # PATCH_FOR: 11, 10, 9, 8
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
-Patch9:         21257.diff             # PATCH_FOR: 10
 
 Patch20:        CVE-2018-12115.patch   # PATCH_FOR: 4
 Patch21:        openssl_1_0_2p.patch   # PATCH_FOR: 4
@@ -307,7 +307,6 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
 %patch20 -p1
 %patch21 -p1
 %patch101 -p1
@@ -324,6 +323,7 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 find -name configure.js.orig -delete
 
 %build
+. %{SOURCE4}
 # Make sure nothing gets included from bundled deps:
 # We only delete the source and header files, because
 # the remaining build scripts are still used.
@@ -384,13 +384,15 @@ export CXX=%{?cpp_exec}
     --without-dtrace \
     --openssl-use-def-ca-store
 
-make %{?_smp_mflags}
+decoupled_cmd make %{?_smp_mflags}
 
 # Fix documentation permissions
 find doc/api -type f -exec chmod 0644 {} +
 
 %install
-%make_install %{?_smp_mflags}
+. %{SOURCE4}
+
+decoupled_cmd %make_install %{?_smp_mflags}
 rm %{buildroot}%{_datadir}/doc/node/gdbinit
 rm -f %{buildroot}%{_datadir}/doc/node/lldbinit
 rm -f %{buildroot}%{_datadir}/doc/node/lldb_commands.py
