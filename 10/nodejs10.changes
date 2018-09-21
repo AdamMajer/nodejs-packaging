@@ -1,8 +1,13 @@
 -------------------------------------------------------------------
 Fri Sep 21 15:00:41 UTC 2018 - adam.majer@suse.de
 
+- New upstream version 10.11.0:
+  * fs: Fixed fsPromises.readdir withFileTypes.
+  * http2: Added http2stream.endAfterHeaders property.
+  * util: Added util.types.isBoxedPrimitive(value).
 - 21257.diff: drop the patch in favour of running node compilation
   by redirecting stdio through a FIFO
+- versioned.patch: refreshed
 
 -------------------------------------------------------------------
 Wed Sep 12 10:02:47 UTC 2018 - adam.majer@suse.de
