@@ -12,6 +12,5 @@ function decoupled_cmd
    cat _log
    rm _log
    wait $!
-   if ! $?; then exit $?; fi
 }
 
