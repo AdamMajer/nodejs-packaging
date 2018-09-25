@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-Fri Sep 21 15:00:41 UTC 2018 - adam.majer@suse.de
+Tue Sep 25 16:00:11 UTC 2018 - adam.majer@suse.de
 
 - New upstream version 10.11.0:
   * fs: Fixed fsPromises.readdir withFileTypes.
@@ -8,6 +8,7 @@ Fri Sep 21 15:00:41 UTC 2018 - adam.majer@suse.de
 - 21257.diff: drop the patch in favour of running node compilation
   by redirecting stdio through a FIFO
 - versioned.patch: refreshed
+- fix_ci_tests.patch: explicity disable doc target in unit tests
 
 -------------------------------------------------------------------
 Wed Sep 12 10:02:47 UTC 2018 - adam.majer@suse.de

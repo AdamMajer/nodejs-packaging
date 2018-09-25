@@ -2,10 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-v10.2.0/test/parallel/test-module-loading-globalpaths.js
+Index: node-v10.11.0/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-v10.2.0.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-v10.2.0/test/parallel/test-module-loading-globalpaths.js
+--- node-v10.11.0.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-v10.11.0/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -16,11 +16,11 @@ Index: node-v10.2.0/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-v10.2.0/Makefile
+Index: node-v10.11.0/Makefile
 ===================================================================
---- node-v10.2.0.orig/Makefile
-+++ node-v10.2.0/Makefile
-@@ -443,7 +443,7 @@ test-ci-js: | clear-stalled
+--- node-v10.11.0.orig/Makefile
++++ node-v10.11.0/Makefile
+@@ -460,7 +460,7 @@ test-ci-js: | clear-stalled
  .PHONY: test-ci
  # Related CI jobs: most CI tests, excluding node-test-commit-arm-fanned
  test-ci: LOGLEVEL := info
@@ -29,11 +29,28 @@ Index: node-v10.2.0/Makefile
  	out/Release/cctest --gtest_output=tap:cctest.tap
  	$(PYTHON) tools/test.py $(PARALLEL_ARGS) -p tap --logfile test.tap \
  		--mode=$(BUILDTYPE_LOWER) --flaky-tests=$(FLAKY_TESTS) \
-Index: node-v10.2.0/test/parallel/test-tls-env-bad-extra-ca.js
+@@ -616,11 +616,11 @@ apidocs_json = $(addprefix out/,$(apidoc
+ apiassets = $(subst api_assets,api/assets,$(addprefix out/,$(wildcard doc/api_assets/*)))
+ 
+ tools/doc/node_modules: tools/doc/package.json
+-ifeq ($(node_use_openssl),true)
+-	cd tools/doc && $(call available-node,$(run-npm-ci))
+-else
+-	@echo "Skipping tools/doc/node_modules (no crypto)"
+-endif
++#ifeq ($(node_use_openssl),true)
++#	cd tools/doc && $(call available-node,$(run-npm-ci))
++#else
++	@echo "Skipping tools/doc/node_modules - on purpose"
++#endif
+ 
+ .PHONY: doc-only
+ doc-only: tools/doc/node_modules \
+Index: node-v10.11.0/test/parallel/test-tls-env-bad-extra-ca.js
 ===================================================================
---- node-v10.2.0.orig/test/parallel/test-tls-env-bad-extra-ca.js
-+++ node-v10.2.0/test/parallel/test-tls-env-bad-extra-ca.js
-@@ -35,7 +35,7 @@ fork(__filename, opts)
+--- node-v10.11.0.orig/test/parallel/test-tls-env-bad-extra-ca.js
++++ node-v10.11.0/test/parallel/test-tls-env-bad-extra-ca.js
+@@ -36,7 +36,7 @@ fork(__filename, opts)
      // TODO(addaleax): Make `SafeGetenv` work like `process.env`
      // encoding-wise
      if (!common.isWindows) {
