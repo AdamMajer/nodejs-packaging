@@ -392,6 +392,11 @@ find doc/api -type f -exec chmod 0644 {} +
 %install
 . %{SOURCE4}
 
+%if 0%{?cc_exec:1}
+export CC=%{?cc_exec}
+export CXX=%{?cpp_exec}
+%endif
+
 decoupled_cmd %make_install %{?_smp_mflags}
 rm %{buildroot}%{_datadir}/doc/node/gdbinit
 rm -f %{buildroot}%{_datadir}/doc/node/lldbinit
@@ -470,6 +475,11 @@ mkdir -p %{buildroot}%{_defaultlicensedir}
 %endif
 
 %check
+%if 0%{?cc_exec:1}
+export CC=%{?cc_exec}
+export CXX=%{?cpp_exec}
+%endif
+
 ln addon-rpm.gypi deps/npm/node_modules/node-gyp/addon-rpm.gypi
 # Tarball doesn't have eslint package distributed, so disable some tests
 find test -name \*-eslint-\* -print -delete
