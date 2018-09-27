@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Sep 27 14:42:39 UTC 2018 - adam.majer@suse.de
+
+- fix_ci_tests.patch: fix unit tests
+
+-------------------------------------------------------------------
 Tue Sep 11 11:27:31 UTC 2018 - adam.majer@suse.de
 
 - Import NodeJS 10.10.0

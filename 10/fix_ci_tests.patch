@@ -59,3 +59,29 @@ Index: node-v10.11.0/test/parallel/test-tls-env-bad-extra-ca.js
        assert(re.test(stderr), stderr);
      }
    }))
+Index: node-v10.11.0/test/parallel/test-tls-passphrase.js
+===================================================================
+--- node-v10.11.0.orig/test/parallel/test-tls-passphrase.js
++++ node-v10.11.0/test/parallel/test-tls-passphrase.js
+@@ -221,7 +221,7 @@ server.listen(0, common.mustCall(functio
+   }, common.mustCall());
+ })).unref();
+ 
+-const errMessagePassword = /bad decrypt/;
++const errMessagePassword = /bad (decrypt|password read)/;
+ 
+ // Missing passphrase
+ assert.throws(function() {
+Index: node-v10.11.0/test/parallel/test-crypto-scrypt.js
+===================================================================
+--- node-v10.11.0.orig/test/parallel/test-crypto-scrypt.js
++++ node-v10.11.0/test/parallel/test-crypto-scrypt.js
+@@ -167,7 +167,7 @@ for (const options of bad) {
+ 
+ for (const options of toobig) {
+   const expected = {
+-    message: /error:[^:]+:digital envelope routines:EVP_PBE_scrypt:memory limit exceeded/,
++    message: /(error:[^:]+:digital envelope routines:EVP_PBE_scrypt:memory limit exceeded|Invalid scrypt parameter)/,
+     type: Error,
+   };
+   common.expectsError(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
