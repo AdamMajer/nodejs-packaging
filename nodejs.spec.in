@@ -125,9 +125,9 @@ Patch3:         fix_ci_tests.patch
 Patch4:         fix_ci_ssl_tests.patch # PATCH_FOR: 4
 Patch5:         gyp_to_python3.patch   # PATCH_FOR: 100
 Patch6:         icu_61_namespacefix.patch    # PATCH_FOR: 4, 6
-Patch7:         manual_configure.patch # PATCH_FOR: 11, 10, 9, 8
+Patch7:         manual_configure.patch # PATCH_FOR: _git, 10, 9, 8
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
-Patch9:         dont_return_garbage.patch #PATCH_FOR: 11
+Patch9:         dont_return_garbage.patch # PATCH_FOR: _git
 
 Patch20:        CVE-2018-12115.patch   # PATCH_FOR: 4
 Patch21:        openssl_1_0_2p.patch   # PATCH_FOR: 4
