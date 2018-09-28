@@ -51,10 +51,10 @@ Index: node-git.90c93682d1/tools/install.py
  
    # create/remove symlink
 -  link_path = abspath(install_path, 'bin/npx')
-+  link_path = abspath(install_path, 'bin/npx10')
++  link_path = abspath(install_path, 'bin/npx11')
    if action == uninstall:
 -    action([link_path], 'bin/npx')
-+    action([link_path], 'bin/npx10')
++    action([link_path], 'bin/npx11')
    elif action == install:
 -    try_symlink('../lib/node_modules/npm/bin/npx-cli.js', link_path)
 +    try_symlink("../" + sysconfig.get_config_var("LIB") + '/node_modules/npm11/bin/npx-cli.js', link_path)
@@ -373,20 +373,20 @@ Index: node-git.90c93682d1/deps/npm/man/man1/npx.1
  .TH "NPX" "1" "April 2018" "npx@10.1.1" "User Commands"
  .SH "NAME"
 -\fBnpx\fR \- execute npm package binaries
-+\fBnpx10\fR \- execute npm package binaries
++\fBnpx11\fR \- execute npm package binaries
  .SH SYNOPSIS
  .P
 -\fBnpx [options] <command>[@version] [command\-arg]\.\.\.\fP
-+\fBnpx10 [options] <command>[@version] [command\-arg]\.\.\.\fP
++\fBnpx11 [options] <command>[@version] [command\-arg]\.\.\.\fP
  .P
 -\fBnpx [options] [\-p|\-\-package <pkg>]\.\.\. <command> [command\-arg]\.\.\.\fP
-+\fBnpx10 [options] [\-p|\-\-package <pkg>]\.\.\. <command> [command\-arg]\.\.\.\fP
++\fBnpx11 [options] [\-p|\-\-package <pkg>]\.\.\. <command> [command\-arg]\.\.\.\fP
  .P
 -\fBnpx [options] \-c '<command\-string>'\fP
-+\fBnpx10 [options] \-c '<command\-string>'\fP
++\fBnpx11 [options] \-c '<command\-string>'\fP
  .P
 -\fBnpx \-\-shell\-auto\-fallback [shell]\fP
-+\fBnpx10 \-\-shell\-auto\-fallback [shell]\fP
++\fBnpx11 \-\-shell\-auto\-fallback [shell]\fP
  .SH INSTALL
  .P
 -\fBnpm install \-g npx\fP
@@ -396,10 +396,10 @@ Index: node-git.90c93682d1/deps/npm/man/man1/npx.1
  Executes \fB<command>\fP either from a local \fBnode_modules/\.bin\fP, or from a central cache, installing any packages needed in order for \fB<command>\fP to run\.
  .P
 -By default, \fBnpx\fP will check whether \fB<command>\fP exists in \fB$PATH\fP, or in the local project binaries, and execute that\. If \fB<command>\fP is not found, it will be installed prior to execution\.
-+By default, \fBnpx10\fP will check whether \fB<command>\fP exists in \fB$PATH\fP, or in the local project binaries, and execute that\. If \fB<command>\fP is not found, it will be installed prior to execution\.
++By default, \fBnpx11\fP will check whether \fB<command>\fP exists in \fB$PATH\fP, or in the local project binaries, and execute that\. If \fB<command>\fP is not found, it will be installed prior to execution\.
  .P
 -Unless a \fB\-\-package\fP option is specified, \fBnpx\fP will try to guess the name of the binary to invoke depending on the specifier provided\. All package specifiers understood by \fBnpm\fP may be used with \fBnpx\fP, including git specifiers, remote tarballs, local directories, or scoped packages\.
-+Unless a \fB\-\-package\fP option is specified, \fBnpx10\fP will try to guess the name of the binary to invoke depending on the specifier provided\. All package specifiers understood by \fBnpm11\fP may be used with \fBnpx10\fP, including git specifiers, remote tarballs, local directories, or scoped packages\.
++Unless a \fB\-\-package\fP option is specified, \fBnpx11\fP will try to guess the name of the binary to invoke depending on the specifier provided\. All package specifiers understood by \fBnpm11\fP may be used with \fBnpx11\fP, including git specifiers, remote tarballs, local directories, or scoped packages\.
  .P
  If a full specifier is included, or if \fB\-\-package\fP is used, npx will always use a freshly\-installed, temporary version of the package\. This can also be forced with the \fB\-\-ignore\-existing\fP flag\.
  .RS 0
@@ -407,7 +407,7 @@ Index: node-git.90c93682d1/deps/npm/man/man1/npx.1
  \fB\-p, \-\-package <package>\fP \- define the package to be installed\. This defaults to the value of \fB<command>\fP\|\. This is only needed for packages with multiple binaries if you want to call one of the other executables, or where the binary name does not match the package name\. If this option is provided \fB<command>\fP will be executed as\-is, without interpreting \fB@version\fP if it's there\. Multiple \fB\-\-package\fP options may be provided, and all the packages specified will be installed\.
  .IP \(bu 2
 -\fB\-\-no\-install\fP \- If passed to \fBnpx\fP, it will only try to run \fB<command>\fP if it already exists in the current path or in \fB$prefix/node_modules/\.bin\fP\|\. It won't try to install missing commands\.
-+\fB\-\-no\-install\fP \- If passed to \fBnpx10\fP, it will only try to run \fB<command>\fP if it already exists in the current path or in \fB$prefix/node_modules/\.bin\fP\|\. It won't try to install missing commands\.
++\fB\-\-no\-install\fP \- If passed to \fBnpx11\fP, it will only try to run \fB<command>\fP if it already exists in the current path or in \fB$prefix/node_modules/\.bin\fP\|\. It won't try to install missing commands\.
  .IP \(bu 2
  \fB\-\-cache <path>\fP \- set the location of the npm cache\. Defaults to npm's own cache settings\.
  .IP \(bu 2
@@ -416,7 +416,7 @@ Index: node-git.90c93682d1/deps/npm/man/man1/npx.1
  \fB\-\-shell <string>\fP \- The shell to invoke the command with, if any\.
  .IP \(bu 2
 -\fB\-\-shell\-auto\-fallback [<shell>]\fP \- Generates shell code to override your shell's "command not found" handler with one that calls \fBnpx\fP\|\. Tries to figure out your shell, or you can pass its name (either \fBbash\fP, \fBfish\fP, or \fBzsh\fP) as an option\. See below for how to install\.
-+\fB\-\-shell\-auto\-fallback [<shell>]\fP \- Generates shell code to override your shell's "command not found" handler with one that calls \fBnpx10\fP\|\. Tries to figure out your shell, or you can pass its name (either \fBbash\fP, \fBfish\fP, or \fBzsh\fP) as an option\. See below for how to install\.
++\fB\-\-shell\-auto\-fallback [<shell>]\fP \- Generates shell code to override your shell's "command not found" handler with one that calls \fBnpx11\fP\|\. Tries to figure out your shell, or you can pass its name (either \fBbash\fP, \fBfish\fP, or \fBzsh\fP) as an option\. See below for how to install\.
  .IP \(bu 2
  \fB\-\-ignore\-existing\fP \- If this flag is set, npx will not look in \fB$PATH\fP, or in the current package's \fBnode_modules/\.bin\fP for an existing version before deciding whether to install\. Binaries in those paths will still be available for execution, but will be shadowed by any packages requested by this install\.
  .IP \(bu 2
@@ -425,7 +425,7 @@ Index: node-git.90c93682d1/deps/npm/man/man1/npx.1
  .SH SHELL AUTO FALLBACK
  .P
 -You can configure \fBnpx\fP to run as your default fallback command when you type something in the command line with an \fB@\fP but the command is not found\. This includes installing packages that were not found in the local prefix either\.
-+You can configure \fBnpx10\fP to run as your default fallback command when you type something in the command line with an \fB@\fP but the command is not found\. This includes installing packages that were not found in the local prefix either\.
++You can configure \fBnpx11\fP to run as your default fallback command when you type something in the command line with an \fB@\fP but the command is not found\. This includes installing packages that were not found in the local prefix either\.
  .P
  For example:
  .P
@@ -434,7 +434,7 @@ Index: node-git.90c93682d1/deps/npm/man/man1/npx.1
  .SH ACKNOWLEDGEMENTS
  .P
 -Huge thanks to Kwyn Meagher \fIhttps://blog\.kwyn\.io\fR for generously donating the package name in the main npm registry\. Previously \fBnpx\fP was used for a Tessel board Neopixels library, which can now be found under \fBnpx\-tessel\fP \fIhttps://npm\.im/npx\-tessel\fR\|\.
-+Huge thanks to Kwyn Meagher \fIhttps://blog\.kwyn\.io\fR for generously donating the package name in the main npm registry\. Previously \fBnpx10\fP was used for a Tessel board Neopixels library, which can now be found under \fBnpx\-tessel\fP \fIhttps://npm\.im/npx\-tessel\fR\|\.
++Huge thanks to Kwyn Meagher \fIhttps://blog\.kwyn\.io\fR for generously donating the package name in the main npm registry\. Previously \fBnpx11\fP was used for a Tessel board Neopixels library, which can now be found under \fBnpx\-tessel\fP \fIhttps://npm\.im/npx\-tessel\fR\|\.
  .SH AUTHOR
  .P
  Written by Kat Marchan \fIhttps://github\.com/zkat\fR\|\.
