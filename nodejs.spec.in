@@ -196,6 +196,11 @@ BuildRequires:  python2
 BuildRequires:  python
 %endif
 
+%if 0%{?suse_version} >= 1500 && %{node_version_number} >= 10
+BuildRequires:  user(nobody)
+BuildRequires:  group(nobody)
+%endif
+
 %if ! %{with intree_openssl}
 
 %if %node_version_number >= 8
