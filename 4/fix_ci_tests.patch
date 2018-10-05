@@ -68,3 +68,27 @@ Index: node-v4.9.1/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
+Index: node-v4.9.1/test/parallel/test-tick-processor.js
+===================================================================
+--- node-v4.9.1.orig/test/parallel/test-tick-processor.js
++++ node-v4.9.1/test/parallel/test-tick-processor.js
+@@ -3,6 +3,7 @@ const fs = require('fs');
+ const assert = require('assert');
+ const cp = require('child_process');
+ const common = require('../common');
++const process = require('process');
+ 
+ // TODO(mhdawson) Currently the test-tick-processor functionality in V8
+ // depends on addresses being smaller than a full 64 bits.  Aix supports
+@@ -14,6 +15,11 @@ if (common.isAix) {
+   return;
+ }
+ 
++if (process.arch.includes('arm')) {
++  common.skip('flaky on OBS');
++  return;
++}
++
+ common.refreshTmpDir();
+ process.chdir(common.tmpDir);
+ // Unknown checked for to prevent flakiness, if pattern is not found,

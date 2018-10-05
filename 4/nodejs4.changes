@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Oct  5 12:12:20 UTC 2018 - adam.majer@suse.de
+
+- fix_ci_tests.patch: skip parallel/test-tick-processor on arm.
+  Unreliable test in shared environment.
+- enable unit tests build failures
+
+-------------------------------------------------------------------
 Mon Oct  1 13:35:32 UTC 2018 - adam.majer@suse.de
 
 - test-ca-bumps.patch: update certificates used in unit tests
