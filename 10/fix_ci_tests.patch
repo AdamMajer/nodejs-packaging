@@ -85,3 +85,95 @@ Index: node-v10.11.0/test/parallel/test-crypto-scrypt.js
      type: Error,
    };
    common.expectsError(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
+Index: node-v10.11.0/test/parallel/test-repl-envvars.js
+===================================================================
+--- node-v10.11.0.orig/test/parallel/test-repl-envvars.js
++++ node-v10.11.0/test/parallel/test-repl-envvars.js
+@@ -2,12 +2,14 @@
+ 
+ // Flags: --expose-internals
+ 
+-require('../common');
++const common = require('../common');
+ const stream = require('stream');
+ const REPL = require('internal/repl');
+ const assert = require('assert');
+ const inspect = require('util').inspect;
+ 
++common.skip('Not running test in OBS');
++
+ const tests = [
+   {
+     env: {},
+Index: node-v10.11.0/test/parallel/test-fs-utimes.js
+===================================================================
+--- node-v10.11.0.orig/test/parallel/test-fs-utimes.js
++++ node-v10.11.0/test/parallel/test-fs-utimes.js
+@@ -186,8 +186,8 @@ process.on('exit', () => {
+ const path = `${tmpdir.path}/test-utimes-precision`;
+ fs.writeFileSync(path, '');
+ 
+-// test Y2K38 for all platforms [except 'arm', 'OpenBSD' and 'SunOS']
+-if (!process.arch.includes('arm') && !common.isOpenBSD && !common.isSunOS) {
++// test Y2K38 for all platforms [except 'arm', 's390', 'OpenBSD' and 'SunOS']
++if (!process.arch.includes('arm') && process.arch !== 's390' && !common.isOpenBSD && !common.isSunOS) {
+   // because 2 ** 31 doesn't look right
+   // eslint-disable-next-line space-infix-ops
+   const Y2K38_mtime = 2**31;
+Index: node-v10.11.0/test/parallel/test-trace-events-dynamic-enable.js
+===================================================================
+--- node-v10.11.0.orig/test/parallel/test-trace-events-dynamic-enable.js
++++ node-v10.11.0/test/parallel/test-trace-events-dynamic-enable.js
+@@ -3,6 +3,7 @@
+ const common = require('../common');
+ 
+ common.skipIfInspectorDisabled();
++common.skipIfWorker(); // https://github.com/nodejs/node/issues/22767
+ 
+ const assert = require('assert');
+ const { performance } = require('perf_hooks');
+Index: node-v10.11.0/test/common/index.js
+===================================================================
+--- node-v10.11.0.orig/test/common/index.js
++++ node-v10.11.0/test/common/index.js
+@@ -625,6 +625,12 @@ function skipIf32Bits() {
+   }
+ }
+ 
++function skipIfWorker() {
++  if (!isMainThread) {
++    skip('This test only works on a main thread');
++  }
++}
++
+ function getArrayBufferViews(buf) {
+   const { buffer, byteOffset, byteLength } = buf;
+ 
+@@ -743,6 +749,7 @@ module.exports = {
+   skipIf32Bits,
+   skipIfEslintMissing,
+   skipIfInspectorDisabled,
++  skipIfWorker,
+ 
+   get localhostIPv6() { return '::1'; },
+ 
+Index: node-v10.11.0/test/common/index.mjs
+===================================================================
+--- node-v10.11.0.orig/test/common/index.mjs
++++ node-v10.11.0/test/common/index.mjs
+@@ -45,6 +45,7 @@ const {
+   expectsError,
+   skipIfInspectorDisabled,
+   skipIf32Bits,
++  skipIfWorker,
+   getArrayBufferViews,
+   getBufferSources,
+   disableCrashOnUnhandledRejection,
+@@ -95,6 +96,7 @@ export {
+   expectsError,
+   skipIfInspectorDisabled,
+   skipIf32Bits,
++  skipIfWorker,
+   getArrayBufferViews,
+   getBufferSources,
+   disableCrashOnUnhandledRejection,
