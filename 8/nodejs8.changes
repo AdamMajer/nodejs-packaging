@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Oct  5 11:36:31 UTC 2018 - adam.majer@suse.de
+
+- fix_ci_tests.patch: fix unit tests
+
+-------------------------------------------------------------------
 Fri Sep 21 15:28:17 UTC 2018 - adam.majer@suse.de
 
 - New upstream LTS release 8.12.0:
