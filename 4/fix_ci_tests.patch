@@ -92,3 +92,16 @@ Index: node-v4.9.1/test/parallel/test-tick-processor.js
  common.refreshTmpDir();
  process.chdir(common.tmpDir);
  // Unknown checked for to prevent flakiness, if pattern is not found,
+Index: node-v4.9.1/test/common.js
+===================================================================
+--- node-v4.9.1.orig/test/common.js
++++ node-v4.9.1/test/common.js
+@@ -251,6 +251,8 @@ exports.spawnSyncPwd = function(options)
+ };
+ 
+ exports.platformTimeout = function(ms) {
++  ms = 10 * ms; // overhead on OBS
++
+   if (process.config.target_defaults.default_configuration === 'Debug')
+     ms = 2 * ms;
+ 

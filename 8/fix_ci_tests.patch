@@ -134,3 +134,16 @@ Index: node-v8.12.0/test/parallel/test-fs-utimes.js
    // because 2 ** 31 doesn't look right
    // eslint-disable-next-line space-infix-ops
    const Y2K38_mtime = 2**31;
+Index: node-v8.12.0/test/common/index.js
+===================================================================
+--- node-v8.12.0.orig/test/common/index.js
++++ node-v8.12.0/test/common/index.js
+@@ -277,6 +277,8 @@ exports.spawnSyncPwd = function(options)
+ };
+ 
+ exports.platformTimeout = function(ms) {
++  ms = 10 * ms; // OBS overhead and such.
++
+   if (process.features.debug)
+     ms = 2 * ms;
+ 

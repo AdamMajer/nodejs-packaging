@@ -2,10 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-git.0f78b9a26c/test/parallel/test-module-loading-globalpaths.js
+Index: node-git.314c1fa583/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-git.0f78b9a26c.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-git.0f78b9a26c/test/parallel/test-module-loading-globalpaths.js
+--- node-git.314c1fa583.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-git.314c1fa583/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -16,11 +16,11 @@ Index: node-git.0f78b9a26c/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-git.0f78b9a26c/Makefile
+Index: node-git.314c1fa583/Makefile
 ===================================================================
---- node-git.0f78b9a26c.orig/Makefile
-+++ node-git.0f78b9a26c/Makefile
-@@ -460,7 +460,7 @@ test-ci-js: | clear-stalled
+--- node-git.314c1fa583.orig/Makefile
++++ node-git.314c1fa583/Makefile
+@@ -454,7 +454,7 @@ test-ci-js: | clear-stalled
  .PHONY: test-ci
  # Related CI jobs: most CI tests, excluding node-test-commit-arm-fanned
  test-ci: LOGLEVEL := info
@@ -29,7 +29,7 @@ Index: node-git.0f78b9a26c/Makefile
  	out/Release/cctest --gtest_output=tap:cctest.tap
  	$(PYTHON) tools/test.py $(PARALLEL_ARGS) -p tap --logfile test.tap \
  		--mode=$(BUILDTYPE_LOWER) --flaky-tests=$(FLAKY_TESTS) \
-@@ -616,11 +616,11 @@ apidocs_json = $(addprefix out/,$(apidoc
+@@ -605,11 +605,11 @@ apidocs_json = $(addprefix out/,$(apidoc
  apiassets = $(subst api_assets,api/assets,$(addprefix out/,$(wildcard doc/api_assets/*)))
  
  tools/doc/node_modules: tools/doc/package.json
@@ -46,10 +46,10 @@ Index: node-git.0f78b9a26c/Makefile
  
  .PHONY: doc-only
  doc-only: tools/doc/node_modules \
-Index: node-git.0f78b9a26c/test/parallel/test-tls-env-bad-extra-ca.js
+Index: node-git.314c1fa583/test/parallel/test-tls-env-bad-extra-ca.js
 ===================================================================
---- node-git.0f78b9a26c.orig/test/parallel/test-tls-env-bad-extra-ca.js
-+++ node-git.0f78b9a26c/test/parallel/test-tls-env-bad-extra-ca.js
+--- node-git.314c1fa583.orig/test/parallel/test-tls-env-bad-extra-ca.js
++++ node-git.314c1fa583/test/parallel/test-tls-env-bad-extra-ca.js
 @@ -36,7 +36,7 @@ fork(__filename, opts)
      // TODO(addaleax): Make `SafeGetenv` work like `process.env`
      // encoding-wise
@@ -59,10 +59,10 @@ Index: node-git.0f78b9a26c/test/parallel/test-tls-env-bad-extra-ca.js
        assert(re.test(stderr), stderr);
      }
    }))
-Index: node-git.0f78b9a26c/test/parallel/test-tls-passphrase.js
+Index: node-git.314c1fa583/test/parallel/test-tls-passphrase.js
 ===================================================================
---- node-git.0f78b9a26c.orig/test/parallel/test-tls-passphrase.js
-+++ node-git.0f78b9a26c/test/parallel/test-tls-passphrase.js
+--- node-git.314c1fa583.orig/test/parallel/test-tls-passphrase.js
++++ node-git.314c1fa583/test/parallel/test-tls-passphrase.js
 @@ -221,7 +221,7 @@ server.listen(0, common.mustCall(functio
    }, common.mustCall());
  })).unref();
@@ -72,10 +72,10 @@ Index: node-git.0f78b9a26c/test/parallel/test-tls-passphrase.js
  
  // Missing passphrase
  assert.throws(function() {
-Index: node-git.0f78b9a26c/test/parallel/test-crypto-scrypt.js
+Index: node-git.314c1fa583/test/parallel/test-crypto-scrypt.js
 ===================================================================
---- node-git.0f78b9a26c.orig/test/parallel/test-crypto-scrypt.js
-+++ node-git.0f78b9a26c/test/parallel/test-crypto-scrypt.js
+--- node-git.314c1fa583.orig/test/parallel/test-crypto-scrypt.js
++++ node-git.314c1fa583/test/parallel/test-crypto-scrypt.js
 @@ -169,7 +169,7 @@ for (const options of bad) {
  
  for (const options of toobig) {
@@ -85,11 +85,11 @@ Index: node-git.0f78b9a26c/test/parallel/test-crypto-scrypt.js
      type: Error,
    };
    common.expectsError(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
-Index: node-git.0f78b9a26c/test/parallel/test-crypto-keygen.js
+Index: node-git.314c1fa583/test/parallel/test-crypto-keygen.js
 ===================================================================
---- node-git.0f78b9a26c.orig/test/parallel/test-crypto-keygen.js
-+++ node-git.0f78b9a26c/test/parallel/test-crypto-keygen.js
-@@ -169,7 +169,7 @@ function convertDERToPEM(label, der) {
+--- node-git.314c1fa583.orig/test/parallel/test-crypto-keygen.js
++++ node-git.314c1fa583/test/parallel/test-crypto-keygen.js
+@@ -209,7 +209,7 @@ function convertDERToPEM(label, der) {
      // Since the private key is encrypted, signing shouldn't work anymore.
      assert.throws(() => {
        testSignVerify(publicKey, privateKey);
@@ -98,7 +98,7 @@ Index: node-git.0f78b9a26c/test/parallel/test-crypto-keygen.js
  
      // Signing should work with the correct password.
      testSignVerify(publicKey, {
-@@ -232,7 +232,7 @@ function convertDERToPEM(label, der) {
+@@ -302,7 +302,7 @@ function convertDERToPEM(label, der) {
      // Since the private key is encrypted, signing shouldn't work anymore.
      assert.throws(() => {
        testSignVerify(publicKey, privateKey);
@@ -107,3 +107,16 @@ Index: node-git.0f78b9a26c/test/parallel/test-crypto-keygen.js
  
      testSignVerify(publicKey, {
        key: privateKey,
+Index: node-git.314c1fa583/test/sequential/test-http2-session-timeout.js
+===================================================================
+--- node-git.314c1fa583.orig/test/sequential/test-http2-session-timeout.js
++++ node-git.314c1fa583/test/sequential/test-http2-session-timeout.js
+@@ -6,7 +6,7 @@ if (!common.hasCrypto)
+ const assert = require('assert');
+ const http2 = require('http2');
+ 
+-const serverTimeout = common.platformTimeout(200);
++const serverTimeout = common.platformTimeout(50);
+ 
+ let requests = 0;
+ const mustNotCall = () => {

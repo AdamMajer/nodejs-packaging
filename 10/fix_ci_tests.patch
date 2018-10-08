@@ -136,7 +136,16 @@ Index: node-v10.11.0/test/common/index.js
 ===================================================================
 --- node-v10.11.0.orig/test/common/index.js
 +++ node-v10.11.0/test/common/index.js
-@@ -625,6 +625,12 @@ function skipIf32Bits() {
+@@ -191,6 +191,8 @@ const pwdCommand = isWindows ?
+ 
+ 
+ function platformTimeout(ms) {
++  ms = 10 * ms; // OBS overhead and such.
++
+   if (process.features.debug)
+     ms = 2 * ms;
+ 
+@@ -625,6 +627,12 @@ function skipIf32Bits() {
    }
  }
  
@@ -149,7 +158,7 @@ Index: node-v10.11.0/test/common/index.js
  function getArrayBufferViews(buf) {
    const { buffer, byteOffset, byteLength } = buf;
  
-@@ -743,6 +749,7 @@ module.exports = {
+@@ -743,6 +751,7 @@ module.exports = {
    skipIf32Bits,
    skipIfEslintMissing,
    skipIfInspectorDisabled,
@@ -177,3 +186,16 @@ Index: node-v10.11.0/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
+Index: node-v10.11.0/test/sequential/test-http2-session-timeout.js
+===================================================================
+--- node-v10.11.0.orig/test/sequential/test-http2-session-timeout.js
++++ node-v10.11.0/test/sequential/test-http2-session-timeout.js
+@@ -5,7 +5,7 @@ if (!common.hasCrypto)
+   common.skip('missing crypto');
+ const http2 = require('http2');
+ 
+-const serverTimeout = common.platformTimeout(200);
++const serverTimeout = common.platformTimeout(50);
+ const mustNotCall = common.mustNotCall();
+ 
+ const server = http2.createServer();

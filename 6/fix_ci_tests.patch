@@ -57,3 +57,16 @@ Index: node-v6.14.4/test/parallel/test-repl-envvars.js
  const tests = [
    {
      env: {},
+Index: node-v6.14.4/test/common/index.js
+===================================================================
+--- node-v6.14.4.orig/test/common/index.js
++++ node-v6.14.4/test/common/index.js
+@@ -277,6 +277,8 @@ exports.spawnSyncPwd = function(options)
+ };
+ 
+ exports.platformTimeout = function(ms) {
++  ms = 10 * ms; // OBS overhead
++
+   if (process.features.debug)
+     ms = 2 * ms;
+ 
