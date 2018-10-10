@@ -6,9 +6,8 @@ s/{{exclusive_arch}}/%{ix86} x86_64 armv7hl aarch64 ppc ppc64 ppc64le s390 s390x
 
 #
 #
-# openssl version
-# Only Leap 42.2+, SLE 12 SP2+ and Tumbleweed have OpenSSL 1.0.2.
-s/{{intree_openssl}}/0%{?suse_version} > 1320 || 0%{?sle_version} >= 120200/
+# openssl version - need version 1.1+
+s/{{intree_openssl}}/0%{?suse_version} >= 1500 || 0%{?sle_version} >= 120400/
 
 #
 #
