@@ -40,8 +40,7 @@ Release:        0
 %define _libexecdir %{_exec_prefix}/lib
 %endif
 
-# Only Leap 42.2+, SLE 12 SP2+ and Tumbleweed have OpenSSL 1.0.2.
-%if 0%{?suse_version} > 1320 || 0%{?sle_version} >= 120200
+%if {{intree_openssl}}
 %bcond_with    intree_openssl
 %else
 %bcond_without intree_openssl
@@ -125,9 +124,9 @@ Patch3:         fix_ci_tests.patch
 Patch4:         fix_ci_ssl_tests.patch # PATCH_FOR: 4
 Patch5:         gyp_to_python3.patch   # PATCH_FOR: 100
 Patch6:         icu_61_namespacefix.patch    # PATCH_FOR: 4, 6
-Patch7:         manual_configure.patch # PATCH_FOR: _git, 10, 9, 8
+Patch7:         manual_configure.patch # PATCH_FOR: master, 10, 9, 8
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
-Patch9:         dont_return_garbage.patch # PATCH_FOR: _git
+Patch9:         dont_return_garbage.patch # PATCH_FOR: master
 Patch10:        test-ca-bumps.patch    # PATCH_FOR: 4
 
 Patch20:        CVE-2018-12115.patch   # PATCH_FOR: 4

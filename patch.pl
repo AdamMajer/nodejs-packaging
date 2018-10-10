@@ -11,12 +11,15 @@ use warnings;
 # will have Patch10 removed in all versions not 4 and 6
 
 my @removed_patches;
+my $cur_version=$ARGV[0];
+
+$cur_version =~ s/nodejs|staging-//;
 
 NEXT_LINE:
 while (<STDIN>) {
     my @a;
     if (@a = m/Patch([\d]+):.*PATCH_FOR:(.*)$/) {
-        if (!($a[1] =~ "\\b$ARGV[0]\\b")) {
+        if (!($a[1] =~ "\\b$cur_version\\b")) {
             push @removed_patches, $a[0];
             next;
         }
