@@ -1,0 +1,23 @@
+<services>
+<service mode="serveronly" name="obs_scm">
+  <param name="scm">git</param>
+  <param name="url">https://github.com/nodejs/node.git</param>
+  <param name="revision">{{git_branch}}</param>
+  <param name="versionprefix">git</param>
+  <param name="versionformat">%h</param>
+  <param name="filename">node</param>
+</service>
+<service mode="disabled" name="obs_scm">
+  <param name="scm">git</param>
+  <param name="url">{{pwd}}/../node</param>
+  <param name="revision">{{git_branch}}</param>
+  <param name="versionprefix">git</param>
+  <param name="versionformat">%h</param>
+  <param name="filename">node</param>
+</service>
+<service mode="buildtime" name="tar" />
+<service mode="buildtime" name="set_version" />
+<service mode="disabled" name="tar" />
+<service mode="disabled" name="set_version" />
+</services>
+

@@ -1,0 +1,15 @@
+<services>
+<service name="obs_scm">
+  <param name="scm">git</param>
+  <param name="url">https://github.com/nodejs/node.git</param>
+  <param name="revision">v6.x-staging</param>
+  <param name="versionprefix">git</param>
+  <param name="versionformat">%h</param>
+  <param name="filename">node</param>
+</service>
+<service mode="buildtime" name="tar" />
+<service mode="buildtime" name="set_version" />
+<service mode="disabled" name="tar" />
+<service mode="disabled" name="set_version" />
+</services>
+
