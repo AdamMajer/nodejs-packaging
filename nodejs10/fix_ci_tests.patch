@@ -2,10 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-v10.11.0/test/parallel/test-module-loading-globalpaths.js
+Index: node-git.46c7d0d21f/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-v10.11.0.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-v10.11.0/test/parallel/test-module-loading-globalpaths.js
+--- node-git.46c7d0d21f.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-git.46c7d0d21f/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -16,11 +16,11 @@ Index: node-v10.11.0/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-v10.11.0/Makefile
+Index: node-git.46c7d0d21f/Makefile
 ===================================================================
---- node-v10.11.0.orig/Makefile
-+++ node-v10.11.0/Makefile
-@@ -460,7 +460,7 @@ test-ci-js: | clear-stalled
+--- node-git.46c7d0d21f.orig/Makefile
++++ node-git.46c7d0d21f/Makefile
+@@ -454,7 +454,7 @@ test-ci-js: | clear-stalled
  .PHONY: test-ci
  # Related CI jobs: most CI tests, excluding node-test-commit-arm-fanned
  test-ci: LOGLEVEL := info
@@ -29,7 +29,7 @@ Index: node-v10.11.0/Makefile
  	out/Release/cctest --gtest_output=tap:cctest.tap
  	$(PYTHON) tools/test.py $(PARALLEL_ARGS) -p tap --logfile test.tap \
  		--mode=$(BUILDTYPE_LOWER) --flaky-tests=$(FLAKY_TESTS) \
-@@ -616,11 +616,11 @@ apidocs_json = $(addprefix out/,$(apidoc
+@@ -605,11 +605,11 @@ apidocs_json = $(addprefix out/,$(apidoc
  apiassets = $(subst api_assets,api/assets,$(addprefix out/,$(wildcard doc/api_assets/*)))
  
  tools/doc/node_modules: tools/doc/package.json
@@ -46,10 +46,10 @@ Index: node-v10.11.0/Makefile
  
  .PHONY: doc-only
  doc-only: tools/doc/node_modules \
-Index: node-v10.11.0/test/parallel/test-tls-env-bad-extra-ca.js
+Index: node-git.46c7d0d21f/test/parallel/test-tls-env-bad-extra-ca.js
 ===================================================================
---- node-v10.11.0.orig/test/parallel/test-tls-env-bad-extra-ca.js
-+++ node-v10.11.0/test/parallel/test-tls-env-bad-extra-ca.js
+--- node-git.46c7d0d21f.orig/test/parallel/test-tls-env-bad-extra-ca.js
++++ node-git.46c7d0d21f/test/parallel/test-tls-env-bad-extra-ca.js
 @@ -36,7 +36,7 @@ fork(__filename, opts)
      // TODO(addaleax): Make `SafeGetenv` work like `process.env`
      // encoding-wise
@@ -59,10 +59,10 @@ Index: node-v10.11.0/test/parallel/test-tls-env-bad-extra-ca.js
        assert(re.test(stderr), stderr);
      }
    }))
-Index: node-v10.11.0/test/parallel/test-tls-passphrase.js
+Index: node-git.46c7d0d21f/test/parallel/test-tls-passphrase.js
 ===================================================================
---- node-v10.11.0.orig/test/parallel/test-tls-passphrase.js
-+++ node-v10.11.0/test/parallel/test-tls-passphrase.js
+--- node-git.46c7d0d21f.orig/test/parallel/test-tls-passphrase.js
++++ node-git.46c7d0d21f/test/parallel/test-tls-passphrase.js
 @@ -221,7 +221,7 @@ server.listen(0, common.mustCall(functio
    }, common.mustCall());
  })).unref();
@@ -72,10 +72,10 @@ Index: node-v10.11.0/test/parallel/test-tls-passphrase.js
  
  // Missing passphrase
  assert.throws(function() {
-Index: node-v10.11.0/test/parallel/test-crypto-scrypt.js
+Index: node-git.46c7d0d21f/test/parallel/test-crypto-scrypt.js
 ===================================================================
---- node-v10.11.0.orig/test/parallel/test-crypto-scrypt.js
-+++ node-v10.11.0/test/parallel/test-crypto-scrypt.js
+--- node-git.46c7d0d21f.orig/test/parallel/test-crypto-scrypt.js
++++ node-git.46c7d0d21f/test/parallel/test-crypto-scrypt.js
 @@ -167,7 +167,7 @@ for (const options of bad) {
  
  for (const options of toobig) {
@@ -85,10 +85,10 @@ Index: node-v10.11.0/test/parallel/test-crypto-scrypt.js
      type: Error,
    };
    common.expectsError(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
-Index: node-v10.11.0/test/parallel/test-repl-envvars.js
+Index: node-git.46c7d0d21f/test/parallel/test-repl-envvars.js
 ===================================================================
---- node-v10.11.0.orig/test/parallel/test-repl-envvars.js
-+++ node-v10.11.0/test/parallel/test-repl-envvars.js
+--- node-git.46c7d0d21f.orig/test/parallel/test-repl-envvars.js
++++ node-git.46c7d0d21f/test/parallel/test-repl-envvars.js
 @@ -2,12 +2,14 @@
  
  // Flags: --expose-internals
@@ -105,10 +105,10 @@ Index: node-v10.11.0/test/parallel/test-repl-envvars.js
  const tests = [
    {
      env: {},
-Index: node-v10.11.0/test/parallel/test-fs-utimes.js
+Index: node-git.46c7d0d21f/test/parallel/test-fs-utimes.js
 ===================================================================
---- node-v10.11.0.orig/test/parallel/test-fs-utimes.js
-+++ node-v10.11.0/test/parallel/test-fs-utimes.js
+--- node-git.46c7d0d21f.orig/test/parallel/test-fs-utimes.js
++++ node-git.46c7d0d21f/test/parallel/test-fs-utimes.js
 @@ -186,8 +186,8 @@ process.on('exit', () => {
  const path = `${tmpdir.path}/test-utimes-precision`;
  fs.writeFileSync(path, '');
@@ -120,23 +120,11 @@ Index: node-v10.11.0/test/parallel/test-fs-utimes.js
    // because 2 ** 31 doesn't look right
    // eslint-disable-next-line space-infix-ops
    const Y2K38_mtime = 2**31;
-Index: node-v10.11.0/test/parallel/test-trace-events-dynamic-enable.js
+Index: node-git.46c7d0d21f/test/common/index.js
 ===================================================================
---- node-v10.11.0.orig/test/parallel/test-trace-events-dynamic-enable.js
-+++ node-v10.11.0/test/parallel/test-trace-events-dynamic-enable.js
-@@ -3,6 +3,7 @@
- const common = require('../common');
- 
- common.skipIfInspectorDisabled();
-+common.skipIfWorker(); // https://github.com/nodejs/node/issues/22767
- 
- const assert = require('assert');
- const { performance } = require('perf_hooks');
-Index: node-v10.11.0/test/common/index.js
-===================================================================
---- node-v10.11.0.orig/test/common/index.js
-+++ node-v10.11.0/test/common/index.js
-@@ -191,6 +191,8 @@ const pwdCommand = isWindows ?
+--- node-git.46c7d0d21f.orig/test/common/index.js
++++ node-git.46c7d0d21f/test/common/index.js
+@@ -190,6 +190,8 @@ const pwdCommand = isWindows ?
  
  
  function platformTimeout(ms) {
@@ -145,32 +133,11 @@ Index: node-v10.11.0/test/common/index.js
    if (process.features.debug)
      ms = 2 * ms;
  
-@@ -625,6 +627,12 @@ function skipIf32Bits() {
-   }
- }
- 
-+function skipIfWorker() {
-+  if (!isMainThread) {
-+    skip('This test only works on a main thread');
-+  }
-+}
-+
- function getArrayBufferViews(buf) {
-   const { buffer, byteOffset, byteLength } = buf;
- 
-@@ -743,6 +751,7 @@ module.exports = {
-   skipIf32Bits,
-   skipIfEslintMissing,
-   skipIfInspectorDisabled,
-+  skipIfWorker,
- 
-   get localhostIPv6() { return '::1'; },
- 
-Index: node-v10.11.0/test/common/index.mjs
+Index: node-git.46c7d0d21f/test/common/index.mjs
 ===================================================================
---- node-v10.11.0.orig/test/common/index.mjs
-+++ node-v10.11.0/test/common/index.mjs
-@@ -45,6 +45,7 @@ const {
+--- node-git.46c7d0d21f.orig/test/common/index.mjs
++++ node-git.46c7d0d21f/test/common/index.mjs
+@@ -44,6 +44,7 @@ const {
    expectsError,
    skipIfInspectorDisabled,
    skipIf32Bits,
@@ -178,7 +145,7 @@ Index: node-v10.11.0/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
-@@ -95,6 +96,7 @@ export {
+@@ -93,6 +94,7 @@ export {
    expectsError,
    skipIfInspectorDisabled,
    skipIf32Bits,
@@ -186,16 +153,16 @@ Index: node-v10.11.0/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
-Index: node-v10.11.0/test/sequential/test-http2-session-timeout.js
+Index: node-git.46c7d0d21f/test/sequential/test-http2-session-timeout.js
 ===================================================================
---- node-v10.11.0.orig/test/sequential/test-http2-session-timeout.js
-+++ node-v10.11.0/test/sequential/test-http2-session-timeout.js
-@@ -5,7 +5,7 @@ if (!common.hasCrypto)
-   common.skip('missing crypto');
+--- node-git.46c7d0d21f.orig/test/sequential/test-http2-session-timeout.js
++++ node-git.46c7d0d21f/test/sequential/test-http2-session-timeout.js
+@@ -6,7 +6,7 @@ if (!common.hasCrypto)
+ const assert = require('assert');
  const http2 = require('http2');
  
 -const serverTimeout = common.platformTimeout(200);
 +const serverTimeout = common.platformTimeout(50);
- const mustNotCall = common.mustNotCall();
  
- const server = http2.createServer();
+ let requests = 0;
+ const mustNotCall = () => {
