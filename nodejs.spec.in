@@ -36,6 +36,8 @@ Release:        0
 %define openssl_req_ver 1.0.2
 %endif
 
+%bcond_with    valgrind_tests
+
 %if 0%{?suse_version} == 1110
 %define _libexecdir %{_exec_prefix}/lib
 %endif
@@ -128,6 +130,7 @@ Patch7:         manual_configure.patch # PATCH_FOR: master, 10, 9, 8
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
 Patch9:         dont_return_garbage.patch # PATCH_FOR: master
 Patch10:        test-ca-bumps.patch    # PATCH_FOR: 4
+Patch11:        valgrind_fixes.patch   # PATCH_FOR: 10
 
 Patch20:        CVE-2018-12115.patch   # PATCH_FOR: 4
 Patch21:        openssl_1_0_2p.patch   # PATCH_FOR: 4
@@ -150,7 +153,7 @@ Patch200:       versioned.patch
 
 Patch201:       env_shebang.patch
 
-%if %{with binutils_gold}
+%if 0%{with binutils_gold}
 BuildRequires:  binutils-gold
 %endif
 
@@ -202,7 +205,7 @@ BuildRequires:  user(nobody)
 BuildRequires:  group(nobody)
 %endif
 
-%if ! %{with intree_openssl}
+%if ! 0%{with intree_openssl}
 
 %if %node_version_number >= 8
 BuildRequires:  openssl-devel >= %{openssl_req_ver}
@@ -217,16 +220,20 @@ BuildRequires:  openssl-devel >= %{openssl_req_ver}
 %endif # older node doesn't support OpenSSL 1.1
 %endif # ! {with intree_openssl}
 
-%if ! %{with intree_cares}
+%if ! 0%{with intree_cares}
 BuildRequires:  pkgconfig(libcares) >= {{min_libcares2_version}}
 %endif
 
-%if ! %{with intree_icu}
+%if ! 0%{with intree_icu}
 BuildRequires:  pkgconfig(icu-i18n) >= {{min_icu_version}}
 %endif
 
-%if ! %{with intree_nghttp2}
+%if ! 0%{with intree_nghttp2}
 BuildRequires: libnghttp2-devel >= {{min_nghttp2_version}}
+%endif
+
+%if 0%{with valgrind_tests}
+BuildRequires: valgrind
 %endif
 
 Requires(post): update-alternatives
@@ -316,7 +323,7 @@ tar Jxvf %{SOURCE11}
 
 %patch1 -p1
 %patch3 -p1
-%if ! %{with intree_openssl}
+%if ! 0%{with intree_openssl}
 %patch4 -p1
 %endif
 %patch5 -p1
@@ -325,6 +332,9 @@ tar Jxvf %{SOURCE11}
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%if 0%{with valgrind_tests}
+%patch11 -p1
+%endif
 %patch20 -p1
 %patch21 -p1
 %patch101 -p1
@@ -345,15 +355,15 @@ find -name configure.js.orig -delete
 # Make sure nothing gets included from bundled deps:
 # We only delete the source and header files, because
 # the remaining build scripts are still used.
-%if ! %{with intree_openssl}
+%if ! 0%{with intree_openssl}
 find deps/openssl -name *.[ch] -delete
 %endif
 
-%if ! %{with intree_icu}
+%if ! 0%{with intree_icu}
 rm -rf deps/icu-small
 %endif
 
-%if ! %{with intree_cares}
+%if ! 0%{with intree_cares}
 find deps/cares -name *.[ch] -delete
 %endif
 
@@ -378,14 +388,14 @@ export CXX=%{?cpp_exec}
 
 ./configure \
     --prefix=%{_prefix} \
-%if ! %{with intree_openssl}
+%if ! 0%{with intree_openssl}
     --shared-openssl \
 %endif
     --shared-zlib \
-%if ! %{with intree_cares}
+%if ! 0%{with intree_cares}
     --shared-cares \
 %endif
-%if ! %{with intree_icu}
+%if ! 0%{with intree_icu}
     --with-intl=system-icu \
 %else
 %if %{has_small_icu}
@@ -393,10 +403,10 @@ export CXX=%{?cpp_exec}
     --with-icu-source=deps/icu-small \
 %endif
 %endif
-%if ! %{with intree_nghttp2}
+%if ! 0%{with intree_nghttp2}
     --shared-nghttp2 \
 %endif
-%if %{with gdb}
+%if 0%{with gdb}
     --gdb \
 %endif
     --without-dtrace \
@@ -509,6 +519,9 @@ rm -f test/parallel/test-dns-cancel-reverse-lookup.js \
 # multicast test fail since no socket?
 rm -f test/parallel/test-dgram-membership.js
 # Run CI tests
+%if 0%{with valgrind_tests}
+make test-valgrind
+%endif
 make test-ci
 
 %files
