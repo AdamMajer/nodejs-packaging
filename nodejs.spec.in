@@ -103,17 +103,8 @@ Release:        0
 Summary:        Evented I/O for V8 JavaScript
 License:        MIT
 Group:          Development/Languages/NodeJS
-%if ! %{git_node}
-Url:            https://nodejs.org
-Source:         https://nodejs.org/dist/v%{version}/node-v%{version}.tar.xz
-Source1:        https://nodejs.org/dist/v%{version}/SHASUMS256.txt
-Source2:        https://nodejs.org/dist/v%{version}/SHASUMS256.txt.sig
-Source3:        nodejs.keyring
-%else
-Url:            https://github.com/nodejs/node
-Source:         node-%{version}.tar
-%endif
-Source4:        bash_output_helper.bash
+{{URL}}
+{{SOURCES}}
 %if %{node_version_number} >= 10
 # Only required to run unit tests in NodeJS 10+
 Source10:       update_npm_tarball.sh
