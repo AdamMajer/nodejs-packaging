@@ -26,3 +26,8 @@ s/{{min_nghttp2_version}}/1.34.0/g
 
 # Git staging directory
 s/{{git_branch}}/v11.x-staging/
+
+# Extra Sources
+s,{{SOURCES_EXTRA}},# Only required to run unit tests in NodeJS 10+ \
+Source10:       update_npm_tarball.sh \
+Source11:       node_modules.tar.xz,

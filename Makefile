@@ -77,7 +77,7 @@ ${ALL_TARGETS}: changelog.target common.target
 	cp $@/* $D
 	
 	# Parse spec file
-	sed -e 's,{{git_node}},$(GIT),' -f nodejs_$(if $(findstring staging,$@),git,releases).sed -f nodejs$(NODEJS_VERSION).sed nodejs.spec.in \
+	sed -e 's,{{git_node}},$(GIT),' -f nodejs$(NODEJS_VERSION).sed -f nodejs_$(if $(findstring staging,$@),git,releases).sed nodejs.spec.in \
 		| perl patch.pl $@ > $D/nodejs$(NODEJS_VERSION).spec
 	
 	# Parse _service file, if staging
