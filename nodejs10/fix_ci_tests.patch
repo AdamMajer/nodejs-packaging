@@ -2,10 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-git.46c7d0d21f/test/parallel/test-module-loading-globalpaths.js
+Index: node-v10.12.0/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-git.46c7d0d21f.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-git.46c7d0d21f/test/parallel/test-module-loading-globalpaths.js
+--- node-v10.12.0.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-v10.12.0/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -16,10 +16,10 @@ Index: node-git.46c7d0d21f/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-git.46c7d0d21f/Makefile
+Index: node-v10.12.0/Makefile
 ===================================================================
---- node-git.46c7d0d21f.orig/Makefile
-+++ node-git.46c7d0d21f/Makefile
+--- node-v10.12.0.orig/Makefile
++++ node-v10.12.0/Makefile
 @@ -454,7 +454,7 @@ test-ci-js: | clear-stalled
  .PHONY: test-ci
  # Related CI jobs: most CI tests, excluding node-test-commit-arm-fanned
@@ -46,10 +46,10 @@ Index: node-git.46c7d0d21f/Makefile
  
  .PHONY: doc-only
  doc-only: tools/doc/node_modules \
-Index: node-git.46c7d0d21f/test/parallel/test-tls-env-bad-extra-ca.js
+Index: node-v10.12.0/test/parallel/test-tls-env-bad-extra-ca.js
 ===================================================================
---- node-git.46c7d0d21f.orig/test/parallel/test-tls-env-bad-extra-ca.js
-+++ node-git.46c7d0d21f/test/parallel/test-tls-env-bad-extra-ca.js
+--- node-v10.12.0.orig/test/parallel/test-tls-env-bad-extra-ca.js
++++ node-v10.12.0/test/parallel/test-tls-env-bad-extra-ca.js
 @@ -36,7 +36,7 @@ fork(__filename, opts)
      // TODO(addaleax): Make `SafeGetenv` work like `process.env`
      // encoding-wise
@@ -59,10 +59,10 @@ Index: node-git.46c7d0d21f/test/parallel/test-tls-env-bad-extra-ca.js
        assert(re.test(stderr), stderr);
      }
    }))
-Index: node-git.46c7d0d21f/test/parallel/test-tls-passphrase.js
+Index: node-v10.12.0/test/parallel/test-tls-passphrase.js
 ===================================================================
---- node-git.46c7d0d21f.orig/test/parallel/test-tls-passphrase.js
-+++ node-git.46c7d0d21f/test/parallel/test-tls-passphrase.js
+--- node-v10.12.0.orig/test/parallel/test-tls-passphrase.js
++++ node-v10.12.0/test/parallel/test-tls-passphrase.js
 @@ -221,7 +221,7 @@ server.listen(0, common.mustCall(functio
    }, common.mustCall());
  })).unref();
@@ -72,10 +72,10 @@ Index: node-git.46c7d0d21f/test/parallel/test-tls-passphrase.js
  
  // Missing passphrase
  assert.throws(function() {
-Index: node-git.46c7d0d21f/test/parallel/test-crypto-scrypt.js
+Index: node-v10.12.0/test/parallel/test-crypto-scrypt.js
 ===================================================================
---- node-git.46c7d0d21f.orig/test/parallel/test-crypto-scrypt.js
-+++ node-git.46c7d0d21f/test/parallel/test-crypto-scrypt.js
+--- node-v10.12.0.orig/test/parallel/test-crypto-scrypt.js
++++ node-v10.12.0/test/parallel/test-crypto-scrypt.js
 @@ -167,7 +167,7 @@ for (const options of bad) {
  
  for (const options of toobig) {
@@ -85,10 +85,10 @@ Index: node-git.46c7d0d21f/test/parallel/test-crypto-scrypt.js
      type: Error,
    };
    common.expectsError(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
-Index: node-git.46c7d0d21f/test/parallel/test-repl-envvars.js
+Index: node-v10.12.0/test/parallel/test-repl-envvars.js
 ===================================================================
---- node-git.46c7d0d21f.orig/test/parallel/test-repl-envvars.js
-+++ node-git.46c7d0d21f/test/parallel/test-repl-envvars.js
+--- node-v10.12.0.orig/test/parallel/test-repl-envvars.js
++++ node-v10.12.0/test/parallel/test-repl-envvars.js
 @@ -2,12 +2,14 @@
  
  // Flags: --expose-internals
@@ -105,10 +105,10 @@ Index: node-git.46c7d0d21f/test/parallel/test-repl-envvars.js
  const tests = [
    {
      env: {},
-Index: node-git.46c7d0d21f/test/parallel/test-fs-utimes.js
+Index: node-v10.12.0/test/parallel/test-fs-utimes.js
 ===================================================================
---- node-git.46c7d0d21f.orig/test/parallel/test-fs-utimes.js
-+++ node-git.46c7d0d21f/test/parallel/test-fs-utimes.js
+--- node-v10.12.0.orig/test/parallel/test-fs-utimes.js
++++ node-v10.12.0/test/parallel/test-fs-utimes.js
 @@ -186,8 +186,8 @@ process.on('exit', () => {
  const path = `${tmpdir.path}/test-utimes-precision`;
  fs.writeFileSync(path, '');
@@ -120,10 +120,10 @@ Index: node-git.46c7d0d21f/test/parallel/test-fs-utimes.js
    // because 2 ** 31 doesn't look right
    // eslint-disable-next-line space-infix-ops
    const Y2K38_mtime = 2**31;
-Index: node-git.46c7d0d21f/test/common/index.js
+Index: node-v10.12.0/test/common/index.js
 ===================================================================
---- node-git.46c7d0d21f.orig/test/common/index.js
-+++ node-git.46c7d0d21f/test/common/index.js
+--- node-v10.12.0.orig/test/common/index.js
++++ node-v10.12.0/test/common/index.js
 @@ -190,6 +190,8 @@ const pwdCommand = isWindows ?
  
  
@@ -133,10 +133,10 @@ Index: node-git.46c7d0d21f/test/common/index.js
    if (process.features.debug)
      ms = 2 * ms;
  
-Index: node-git.46c7d0d21f/test/common/index.mjs
+Index: node-v10.12.0/test/common/index.mjs
 ===================================================================
---- node-git.46c7d0d21f.orig/test/common/index.mjs
-+++ node-git.46c7d0d21f/test/common/index.mjs
+--- node-v10.12.0.orig/test/common/index.mjs
++++ node-v10.12.0/test/common/index.mjs
 @@ -44,6 +44,7 @@ const {
    expectsError,
    skipIfInspectorDisabled,
@@ -153,10 +153,10 @@ Index: node-git.46c7d0d21f/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
-Index: node-git.46c7d0d21f/test/sequential/test-http2-session-timeout.js
+Index: node-v10.12.0/test/sequential/test-http2-session-timeout.js
 ===================================================================
---- node-git.46c7d0d21f.orig/test/sequential/test-http2-session-timeout.js
-+++ node-git.46c7d0d21f/test/sequential/test-http2-session-timeout.js
+--- node-v10.12.0.orig/test/sequential/test-http2-session-timeout.js
++++ node-v10.12.0/test/sequential/test-http2-session-timeout.js
 @@ -6,7 +6,7 @@ if (!common.hasCrypto)
  const assert = require('assert');
  const http2 = require('http2');
@@ -166,3 +166,43 @@ Index: node-git.46c7d0d21f/test/sequential/test-http2-session-timeout.js
  
  let requests = 0;
  const mustNotCall = () => {
+Index: node-v10.12.0/test/parallel/test-crypto-keygen.js
+===================================================================
+--- node-v10.12.0.orig/test/parallel/test-crypto-keygen.js
++++ node-v10.12.0/test/parallel/test-crypto-keygen.js
+@@ -171,7 +171,7 @@ function convertDERToPEM(label, der) {
+     // Since the private key is encrypted, signing shouldn't work anymore.
+     assert.throws(() => {
+       testSignVerify(publicKey, privateKey);
+-    }, /bad decrypt|asn1 encoding routines/);
++    }, /bad decrypt|asn1 encoding routines|bad password read/);
+ 
+     const key = { key: privateKey, passphrase: 'secret' };
+     testEncryptDecrypt(publicKey, key);
+@@ -209,7 +209,7 @@ function convertDERToPEM(label, der) {
+     // Since the private key is encrypted, signing shouldn't work anymore.
+     assert.throws(() => {
+       testSignVerify(publicKey, privateKey);
+-    }, /bad decrypt|asn1 encoding routines/);
++    }, /bad decrypt|asn1 encoding routines|bad password read/);
+ 
+     // Signing should work with the correct password.
+     testSignVerify(publicKey, {
+@@ -269,7 +269,7 @@ function convertDERToPEM(label, der) {
+     // Since the private key is encrypted, signing shouldn't work anymore.
+     assert.throws(() => {
+       testSignVerify(publicKey, privateKey);
+-    }, /bad decrypt|asn1 encoding routines/);
++    }, /bad decrypt|asn1 encoding routines|bad password read/);
+ 
+     testSignVerify(publicKey, { key: privateKey, passphrase: 'secret' });
+   }));
+@@ -302,7 +302,7 @@ function convertDERToPEM(label, der) {
+     // Since the private key is encrypted, signing shouldn't work anymore.
+     assert.throws(() => {
+       testSignVerify(publicKey, privateKey);
+-    }, /bad decrypt|asn1 encoding routines/);
++    }, /bad decrypt|asn1 encoding routines|bad password read/);
+ 
+     testSignVerify(publicKey, {
+       key: privateKey,
