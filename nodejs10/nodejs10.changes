@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Sun Oct 14 14:54:04 UTC 2018 - adam.majer@suse.de
+
+- add support for runnign valgrind tests during check, disabled
+  by default
+- valgrind_fixes.patch: valgrind fixes
+
+-------------------------------------------------------------------
 Thu Oct 11 11:50:27 UTC 2018 - adam.majer@suse.de
 
 - New upstream version 10.12.0:
