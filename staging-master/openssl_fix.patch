@@ -1,0 +1,13 @@
+Index: node-git.deaddd212c/test/parallel/test-crypto-keygen.js
+===================================================================
+--- node-git.deaddd212c.orig/test/parallel/test-crypto-keygen.js
++++ node-git.deaddd212c/test/parallel/test-crypto-keygen.js
+@@ -182,7 +182,7 @@ function convertDERToPEM(label, der) {
+ {
+   // Test async DSA key generation.
+   generateKeyPair('dsa', {
+-    modulusLength: 256,
++    modulusLength: 512,
+     divisorLength: 256,
+     publicKeyEncoding: {
+       type: 'spki',
