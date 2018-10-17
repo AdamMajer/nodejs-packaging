@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Oct 16 09:34:09 UTC 2018 - adam.majer@suse.de
+
+- node-gyp-addon-gypi.patch: patch fixes (bsc#1094617)
+
+-------------------------------------------------------------------
 Sun Oct 14 14:54:04 UTC 2018 - adam.majer@suse.de
 
 - add support for runnign valgrind tests during check, disabled
