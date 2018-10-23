@@ -136,6 +136,7 @@ Patch103:       nodejs-sle11-python26-check_output.patch
 # PATCH-FIX-OPENSUSE -- install user global npm packages to /usr/local
 # instead of /usr
 Patch104:       npm_search_paths.patch
+Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 6, 8, 10, 11, master
 
 # Use versioned binaries and paths
 Patch200:       versioned.patch
@@ -334,6 +335,7 @@ tar Jxvf %{SOURCE11}
 %patch103 -p1
 %endif
 %patch104 -p1
+%patch105 -p1
 %patch200 -p1
 %patch201 -p1
 
