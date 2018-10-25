@@ -1,0 +1,26 @@
+PR: https://github.com/nodejs/node/pull/23871
+
+commit a1e653a42eb47a6cd5002a7c1bbb74e1212a7c73
+Author: Adam Majer <amajer@suse.de>
+Date:   Thu Oct 25 13:19:27 2018 +0200
+
+    Fix test regression for OpenSSL compiled with FIPS
+    
+    In commit bff53c5a9d6, a check was added for very specific OpenSSL
+    format. Unfortunately, when OpenSSL is compiled in FIPS mode, this
+    check fails. Added additional regex to satisfy OpenSSL version
+    strings in both regular and FIPS modes.
+
+diff --git a/test/parallel/test-process-versions.js b/test/parallel/test-process-versions.js
+index 9a21128677..e8527fe574 100644
+--- a/test/parallel/test-process-versions.js
++++ b/test/parallel/test-process-versions.js
+@@ -34,7 +34,7 @@ assert(/^\d+\.\d+\.\d+(?:\.\d+)?-node\.\d+(?: \(candidate\))?$/
+ assert(/^\d+$/.test(process.versions.modules));
+ 
+ if (common.hasCrypto) {
+-  assert(/^\d+\.\d+\.\d+[a-z]?$/.test(process.versions.openssl));
++  assert(/^\d+\.\d+\.\d+[a-z]?(-fips)?$/.test(process.versions.openssl));
+ }
+ 
+ for (let i = 0; i < expected_keys.length; i++) {
