@@ -84,10 +84,15 @@ ${ALL_TARGETS}: changelog.target common.target
 	[ "$(findstring staging,$@)" != "staging" ] || \
 		sed -e 's,{{pwd}},$(PWD),' -f nodejs$(NODEJS_VERSION).sed _service.in > $D/_service
 	
-	# Verify that patches actually apply in non-git version
+	# Verify that patches actually apply
 	if [ "$(findstring staging,$@)" != "staging" ]; then \
 		cd $D && quilt setup --fast *.spec && \
 		cd `find -maxdepth 1 -mindepth 1 -type d -name node\*` && quilt push -a --fuzz=0; \
+	else \
+		cd $D && find -maxdepth 1 -mindepth 1 -type d -name node-git\* -exec rm -rf {} \+ && \
+		osc service disabledrun && \
+		quilt setup --fast *.spec && \
+		cd `find -maxdepth 1 -mindepth 1 -type d -name node-git\*` && quilt push -a --fuzz=0; \
 	fi
 	touch $@.target
 
