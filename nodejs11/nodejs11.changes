@@ -1,0 +1,24 @@
+-------------------------------------------------------------------
+Thu Oct 25 14:24:02 UTC 2018 - adam.majer@suse.de
+
+- Initial release of NodeJS 11.0.0
+- Notable changes since NodeJS 10.12.0:
+  * Use of process.binding() has been deprecated.
+  * An experimental implementation of queueMicrotask() is added.
+
+  * child_process: The default value of the windowsHide option
+    has been changed to true.
+  * deps: V8 has been updated to 7.0.
+  * fs:
+    + fs.read() method now requires a callback
+    + The previously deprecated fs.SyncWriteStream utility has
+      been removed
+  * http: The http, https, and tls modules now use the WHATWG URL
+    parser by default.
+  * timers: nextTick queue will be run after each immediate and timer.
+  * util:
+    + WHATWG TextEncoder and TextDecoder are now globals.
+    + util.inspect() output size is limited to 128 MB by default.
+    + A runtime warning will be emitted when NODE_DEBUG is set for
+      either http or http2.
+
