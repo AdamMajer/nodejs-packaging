@@ -119,7 +119,7 @@ Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
 Patch9:         dont_return_garbage.patch # PATCH_FOR: master, 11
 Patch10:        test-ca-bumps.patch    # PATCH_FOR: 4
 Patch11:        valgrind_fixes.patch   # PATCH_FOR: 10
-Patch12:        openssl_fix.patch      # PATCH_FOR: +10, master, +11
+Patch12:        openssl_fix.patch      # PATCH_FOR: +10
 
 Patch20:        CVE-2018-12115.patch   # PATCH_FOR: 4
 Patch21:        openssl_1_0_2p.patch   # PATCH_FOR: 4
