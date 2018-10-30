@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 30 11:36:20 UTC 2018 - adam.majer@suse.de
+
+- New upstream LTS 10.13.0: (bsc#1112438, FATE#326776)
+  * buffer: fix crash for invalid index types
+  * deps: fix wrong default for v8 handle zapping
+
+-------------------------------------------------------------------
 Tue Oct 16 09:34:09 UTC 2018 - adam.majer@suse.de
 
 - node-gyp-addon-gypi.patch: patch fixes (bsc#1094617)
