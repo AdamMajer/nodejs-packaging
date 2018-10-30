@@ -141,8 +141,6 @@ Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 6, 8, 10, 11, master
 # Use versioned binaries and paths
 Patch200:       versioned.patch
 
-Patch201:       env_shebang.patch
-
 %if 0%{with binutils_gold}
 BuildRequires:  binutils-gold
 %endif
@@ -337,12 +335,16 @@ tar Jxvf %{SOURCE11}
 %patch104 -p1
 %patch105 -p1
 %patch200 -p1
-%patch201 -p1
 
 # abnormalities from patching
 find -name configure.js.orig -delete
 
 %build
+# normalize shebang
+find -name \*.py -perm -1 -type f | xargs sed -i '1 s,^#!\s\?/usr/bin/env python$,#!/usr/bin/python,'
+find deps/npm -type f | xargs sed -i '1 s,^#!\s\?/usr/bin/env node$,#!/usr/bin/node%{node_version_number},'
+find deps/npm -type f | xargs sed -i '1 s,^#!\s\?/usr/bin/env \(bash\|sh\)\?$,#!/bin/bash,'
+
 . %{SOURCE20}
 # Make sure nothing gets included from bundled deps:
 # We only delete the source and header files, because
@@ -457,7 +459,6 @@ find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules 
 find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules -type d -name "benchmark" -print0 | xargs -0 rm -rf --
 
 # fix permissions
-find %{buildroot}%{_libdir}/node_modules -type f -exec chmod 0644 {} +
 chmod 0755 %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/bin/np*-cli.js
 chmod 0755 %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/bin/node-gyp-bin/node-gyp
 chmod 0755 %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules/node-gyp/bin/node-gyp.js
