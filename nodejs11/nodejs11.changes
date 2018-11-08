@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Thu Nov  8 13:03:23 UTC 2018 - adam.majer@suse.de
+
+- New upstream release 11.1.0:
+  * repl: Top-level for-await-of is now supported in the REPL.
+  * timers: Fixed an issue that could cause timers to enter
+    an infinite loop.
+- openssl_fix.patch: removed, upstreamed
+
+-------------------------------------------------------------------
 Thu Oct 25 14:24:02 UTC 2018 - adam.majer@suse.de
 
 - Initial release of NodeJS 11.0.0
