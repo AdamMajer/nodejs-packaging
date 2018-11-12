@@ -21,7 +21,7 @@ s/{{min_libcares2_version}}/1.10.0/g
 #
 #
 # nghttp2 version
-s/{{intree_nghttp2}}/0%{suse_version} >= 1500/g
+s/{{intree_nghttp2}}/0%{suse_version} >= 1550/g
 s/{{min_nghttp2_version}}/1.34.0/g
 
 s/{{git_branch}}/master/
