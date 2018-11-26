@@ -138,6 +138,8 @@ Patch103:       nodejs-sle11-python26-check_output.patch
 Patch104:       npm_search_paths.patch
 Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 6, 8, 10, 11, master
 
+Patch120:       flaky_test_rerun.patch
+
 # Use versioned binaries and paths
 Patch200:       versioned.patch
 
@@ -334,6 +336,7 @@ tar Jxvf %{SOURCE11}
 %endif
 %patch104 -p1
 %patch105 -p1
+%patch120 -p1
 %patch200 -p1
 
 # abnormalities from patching

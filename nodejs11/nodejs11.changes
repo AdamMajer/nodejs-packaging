@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Nov 26 14:06:57 UTC 2018 - adam.majer@suse.de
+
+- flaky_test_rerun.patch: Rerun failing tests in case of flakiness
+
+-------------------------------------------------------------------
 Thu Nov  8 13:03:23 UTC 2018 - adam.majer@suse.de
 
 - New upstream release 11.1.0:

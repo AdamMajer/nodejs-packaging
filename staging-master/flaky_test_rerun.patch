@@ -1,0 +1,23 @@
+diff --git a/tools/test.py b/tools/test.py
+index 67b8cb917e..51aaa3f8e0 100755
+--- a/tools/test.py
++++ b/tools/test.py
+@@ -512,11 +512,17 @@ class TestCase(object):
+ 
+   def RunCommand(self, command, env):
+     full_command = self.context.processor(command)
+-    output = Execute(full_command,
++    reruns = 0
++    while(reruns < 5):
++      print("FLAKY rerun: ", command)
++      reruns += 1
++      output = Execute(full_command,
+                      self.context,
+                      self.context.GetTimeout(self.mode),
+                      env,
+                      disable_core_files = self.disable_core_files)
++      if output.exit_code == 0:
++        break;
+     return TestOutput(self,
+                       full_command,
+                       output,

@@ -2,10 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-git.1f6c4ba61d/test/parallel/test-module-loading-globalpaths.js
+Index: node-git.f85b43537d/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-git.1f6c4ba61d.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-git.1f6c4ba61d/test/parallel/test-module-loading-globalpaths.js
+--- node-git.f85b43537d.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-git.f85b43537d/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -16,20 +16,20 @@ Index: node-git.1f6c4ba61d/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-git.1f6c4ba61d/Makefile
+Index: node-git.f85b43537d/Makefile
 ===================================================================
---- node-git.1f6c4ba61d.orig/Makefile
-+++ node-git.1f6c4ba61d/Makefile
-@@ -455,7 +455,7 @@ test-ci-js: | clear-stalled
+--- node-git.f85b43537d.orig/Makefile
++++ node-git.f85b43537d/Makefile
+@@ -456,7 +456,7 @@ test-ci-js: | clear-stalled
  .PHONY: test-ci
  # Related CI jobs: most CI tests, excluding node-test-commit-arm-fanned
  test-ci: LOGLEVEL := info
--test-ci: | clear-stalled build-addons build-addons-napi doc-only bench-addons-build
-+test-ci: | clear-stalled build-addons build-addons-napi bench-addons-build
+-test-ci: | clear-stalled build-addons build-addons-napi doc-only
++test-ci: | clear-stalled build-addons build-addons-napi
  	out/Release/cctest --gtest_output=tap:cctest.tap
  	$(PYTHON) tools/test.py $(PARALLEL_ARGS) -p tap --logfile test.tap \
  		--mode=$(BUILDTYPE_LOWER) --flaky-tests=$(FLAKY_TESTS) \
-@@ -609,11 +609,11 @@ apidocs_json = $(addprefix out/,$(apidoc
+@@ -616,11 +616,7 @@ apidocs_json = $(addprefix out/,$(apidoc
  apiassets = $(subst api_assets,api/assets,$(addprefix out/,$(wildcard doc/api_assets/*)))
  
  tools/doc/node_modules: tools/doc/package.json
@@ -38,18 +38,14 @@ Index: node-git.1f6c4ba61d/Makefile
 -	else \
 -		cd tools/doc && $(call available-node,$(run-npm-ci)) \
 -  fi
-+#	@if [ "$(shell $(node_use_openssl))" != "true" ]; then
-+	@echo "Skipping tools/doc/node_modules";
-+#	else
-+#		cd tools/doc && $(call available-node,$(run-npm-ci))
-+#fi
++	echo "Skipping tools/doc/node_modules";
  
  .PHONY: doc-only
  doc-only: tools/doc/node_modules \
-Index: node-git.1f6c4ba61d/test/parallel/test-tls-env-bad-extra-ca.js
+Index: node-git.f85b43537d/test/parallel/test-tls-env-bad-extra-ca.js
 ===================================================================
---- node-git.1f6c4ba61d.orig/test/parallel/test-tls-env-bad-extra-ca.js
-+++ node-git.1f6c4ba61d/test/parallel/test-tls-env-bad-extra-ca.js
+--- node-git.f85b43537d.orig/test/parallel/test-tls-env-bad-extra-ca.js
++++ node-git.f85b43537d/test/parallel/test-tls-env-bad-extra-ca.js
 @@ -36,7 +36,7 @@ fork(__filename, opts)
      // TODO(addaleax): Make `SafeGetenv` work like `process.env`
      // encoding-wise
@@ -59,10 +55,10 @@ Index: node-git.1f6c4ba61d/test/parallel/test-tls-env-bad-extra-ca.js
        assert(re.test(stderr), stderr);
      }
    }))
-Index: node-git.1f6c4ba61d/test/parallel/test-tls-passphrase.js
+Index: node-git.f85b43537d/test/parallel/test-tls-passphrase.js
 ===================================================================
---- node-git.1f6c4ba61d.orig/test/parallel/test-tls-passphrase.js
-+++ node-git.1f6c4ba61d/test/parallel/test-tls-passphrase.js
+--- node-git.f85b43537d.orig/test/parallel/test-tls-passphrase.js
++++ node-git.f85b43537d/test/parallel/test-tls-passphrase.js
 @@ -221,7 +221,7 @@ server.listen(0, common.mustCall(functio
    }, common.mustCall());
  })).unref();
@@ -72,10 +68,10 @@ Index: node-git.1f6c4ba61d/test/parallel/test-tls-passphrase.js
  
  // Missing passphrase
  assert.throws(function() {
-Index: node-git.1f6c4ba61d/test/parallel/test-crypto-scrypt.js
+Index: node-git.f85b43537d/test/parallel/test-crypto-scrypt.js
 ===================================================================
---- node-git.1f6c4ba61d.orig/test/parallel/test-crypto-scrypt.js
-+++ node-git.1f6c4ba61d/test/parallel/test-crypto-scrypt.js
+--- node-git.f85b43537d.orig/test/parallel/test-crypto-scrypt.js
++++ node-git.f85b43537d/test/parallel/test-crypto-scrypt.js
 @@ -169,7 +169,7 @@ for (const options of bad) {
  
  for (const options of toobig) {
@@ -85,10 +81,10 @@ Index: node-git.1f6c4ba61d/test/parallel/test-crypto-scrypt.js
      type: Error,
    };
    common.expectsError(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
-Index: node-git.1f6c4ba61d/test/parallel/test-crypto-keygen.js
+Index: node-git.f85b43537d/test/parallel/test-crypto-keygen.js
 ===================================================================
---- node-git.1f6c4ba61d.orig/test/parallel/test-crypto-keygen.js
-+++ node-git.1f6c4ba61d/test/parallel/test-crypto-keygen.js
+--- node-git.f85b43537d.orig/test/parallel/test-crypto-keygen.js
++++ node-git.f85b43537d/test/parallel/test-crypto-keygen.js
 @@ -171,7 +171,7 @@ function convertDERToPEM(label, der) {
      // Since the private key is encrypted, signing shouldn't work anymore.
      assert.throws(() => {
@@ -125,10 +121,10 @@ Index: node-git.1f6c4ba61d/test/parallel/test-crypto-keygen.js
  
      testSignVerify(publicKey, {
        key: privateKey,
-Index: node-git.1f6c4ba61d/test/sequential/test-http2-session-timeout.js
+Index: node-git.f85b43537d/test/sequential/test-http2-session-timeout.js
 ===================================================================
---- node-git.1f6c4ba61d.orig/test/sequential/test-http2-session-timeout.js
-+++ node-git.1f6c4ba61d/test/sequential/test-http2-session-timeout.js
+--- node-git.f85b43537d.orig/test/sequential/test-http2-session-timeout.js
++++ node-git.f85b43537d/test/sequential/test-http2-session-timeout.js
 @@ -6,7 +6,7 @@ if (!common.hasCrypto)
  const assert = require('assert');
  const http2 = require('http2');
@@ -138,10 +134,10 @@ Index: node-git.1f6c4ba61d/test/sequential/test-http2-session-timeout.js
  
  let requests = 0;
  const mustNotCall = () => {
-Index: node-git.1f6c4ba61d/test/parallel/test-repl-envvars.js
+Index: node-git.f85b43537d/test/parallel/test-repl-envvars.js
 ===================================================================
---- node-git.1f6c4ba61d.orig/test/parallel/test-repl-envvars.js
-+++ node-git.1f6c4ba61d/test/parallel/test-repl-envvars.js
+--- node-git.f85b43537d.orig/test/parallel/test-repl-envvars.js
++++ node-git.f85b43537d/test/parallel/test-repl-envvars.js
 @@ -2,12 +2,14 @@
  
  // Flags: --expose-internals
@@ -158,10 +154,10 @@ Index: node-git.1f6c4ba61d/test/parallel/test-repl-envvars.js
  const tests = [
    {
      env: {},
-Index: node-git.1f6c4ba61d/test/parallel/test-fs-utimes.js
+Index: node-git.f85b43537d/test/parallel/test-fs-utimes.js
 ===================================================================
---- node-git.1f6c4ba61d.orig/test/parallel/test-fs-utimes.js
-+++ node-git.1f6c4ba61d/test/parallel/test-fs-utimes.js
+--- node-git.f85b43537d.orig/test/parallel/test-fs-utimes.js
++++ node-git.f85b43537d/test/parallel/test-fs-utimes.js
 @@ -186,8 +186,8 @@ process.on('exit', () => {
  const path = `${tmpdir.path}/test-utimes-precision`;
  fs.writeFileSync(path, '');
