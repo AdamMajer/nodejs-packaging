@@ -1,6 +1,10 @@
 -------------------------------------------------------------------
 Mon Nov 26 14:06:57 UTC 2018 - adam.majer@suse.de
 
+- New upstream release 11.2.0:
+  * deps: A new experimental HTTP parser (llhttp) is now supported.
+  * timers: Fixed an issue that could cause setTimeout to stop
+    working as expected.
 - flaky_test_rerun.patch: Rerun failing tests in case of flakiness
 
 -------------------------------------------------------------------
