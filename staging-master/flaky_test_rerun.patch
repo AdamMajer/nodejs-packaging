@@ -9,7 +9,6 @@ index 67b8cb917e..51aaa3f8e0 100755
 -    output = Execute(full_command,
 +    reruns = 0
 +    while(reruns < 5):
-+      print("FLAKY rerun: ", command)
 +      reruns += 1
 +      output = Execute(full_command,
                       self.context,
@@ -18,6 +17,7 @@ index 67b8cb917e..51aaa3f8e0 100755
                       disable_core_files = self.disable_core_files)
 +      if output.exit_code == 0:
 +        break;
++      print("FLAKY rerun: ", command)
      return TestOutput(self,
                        full_command,
                        output,
