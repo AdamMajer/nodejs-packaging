@@ -370,7 +370,7 @@ Index: node-git.f6e341a546/src/node_main.cc
  #endif
    // Disable stdio buffering, it interacts poorly with printf()
    // calls elsewhere in the program (e.g., any logging from V8.)
-+  setenv("NODE_VERSION", "10", 0);
++  setenv("NODE_VERSION", "11", 0);
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
