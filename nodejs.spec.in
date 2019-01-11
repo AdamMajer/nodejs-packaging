@@ -116,7 +116,7 @@ Patch5:         gyp_to_python3.patch   # PATCH_FOR: 100
 Patch6:         icu_61_namespacefix.patch    # PATCH_FOR: 4, 6
 Patch7:         manual_configure.patch # PATCH_FOR: master, 10, 9, 8
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
-Patch9:         dont_return_garbage.patch # PATCH_FOR: 11
+Patch9:         dont_return_garbage.patch # PATCH_FOR: 11, master
 Patch10:        test-ca-bumps.patch    # PATCH_FOR: 4
 Patch11:        valgrind_fixes.patch   # PATCH_FOR: 10
 

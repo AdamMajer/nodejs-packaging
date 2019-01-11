@@ -1,1 +1,95 @@
-../staging-master/dont_return_garbage.patch
+
+[ 1281s] I: Program returns random data in a function
+[ 1281s] E: nodejs11 no-return-in-nonvoid-function ../deps/v8/src/compiler/effect-control-linearizer.cc:3824
+[ 1281s] E: nodejs11 no-return-in-nonvoid-function ../deps/v8/src/objects/js-collator.cc:538
+[ 1281s] E: nodejs11 no-return-in-nonvoid-function ../deps/v8/src/objects/js-list-format.cc:86, 236, 249
+[ 1281s] E: nodejs11 no-return-in-nonvoid-function ../deps/v8/src/objects/js-relative-time-format.cc:40, 200, 211
+
+Index: node-git.0f78b9a26c/deps/v8/src/compiler/effect-control-linearizer.cc
+===================================================================
+--- node-git.0f78b9a26c.orig/deps/v8/src/compiler/effect-control-linearizer.cc
++++ node-git.0f78b9a26c/deps/v8/src/compiler/effect-control-linearizer.cc
+@@ -3821,6 +3821,8 @@ Node* EffectControlLinearizer::BuildReve
+     case kExternalBigUint64Array:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ Node* EffectControlLinearizer::LowerLoadDataViewElement(Node* node) {
+Index: node-git.0f78b9a26c/deps/v8/src/objects/js-collator.cc
+===================================================================
+--- node-git.0f78b9a26c.orig/deps/v8/src/objects/js-collator.cc
++++ node-git.0f78b9a26c/deps/v8/src/objects/js-collator.cc
+@@ -535,6 +535,8 @@ const char* JSCollator::UsageToString(Us
+     case Usage::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ }  // namespace internal
+Index: node-git.0f78b9a26c/deps/v8/src/objects/js-list-format.cc
+===================================================================
+--- node-git.0f78b9a26c.orig/deps/v8/src/objects/js-list-format.cc
++++ node-git.0f78b9a26c/deps/v8/src/objects/js-list-format.cc
+@@ -83,6 +83,8 @@ const char* GetIcuStyleString(JSListForm
+     case JSListFormat::Type::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ }  // namespace
+@@ -233,6 +235,8 @@ Handle<String> JSListFormat::StyleAsStri
+     case Style::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ Handle<String> JSListFormat::TypeAsString() const {
+@@ -246,6 +250,8 @@ Handle<String> JSListFormat::TypeAsStrin
+     case Type::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ namespace {
+Index: node-git.0f78b9a26c/deps/v8/src/objects/js-relative-time-format.cc
+===================================================================
+--- node-git.0f78b9a26c.orig/deps/v8/src/objects/js-relative-time-format.cc
++++ node-git.0f78b9a26c/deps/v8/src/objects/js-relative-time-format.cc
+@@ -37,6 +37,8 @@ UDateRelativeDateTimeFormatterStyle getI
+     case JSRelativeTimeFormat::Style::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ }  // namespace
+ 
+@@ -197,6 +199,8 @@ Handle<String> JSRelativeTimeFormat::Sty
+     case Style::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ Handle<String> JSRelativeTimeFormat::NumericAsString() const {
+@@ -208,6 +212,8 @@ Handle<String> JSRelativeTimeFormat::Num
+     case Numeric::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ }  // namespace internal

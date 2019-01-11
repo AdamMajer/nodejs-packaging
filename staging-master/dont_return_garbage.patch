@@ -1,15 +1,34 @@
+[ 1379s] I: Program returns random data in a function
+[ 1379s] E: nodejs42 no-return-in-nonvoid-function ../deps/v8/src/builtins/builtins-intl.cc:749
+[ 1379s] E: nodejs42 no-return-in-nonvoid-function ../deps/v8/src/compiler/effect-control-linearizer.cc:4122
+[ 1379s] E: nodejs42 no-return-in-nonvoid-function ../deps/v8/src/compiler/js-heap-broker.cc:2277
+[ 1379s] E: nodejs42 no-return-in-nonvoid-function ../deps/v8/src/objects/js-break-iterator.cc:167
+[ 1379s] E: nodejs42 no-return-in-nonvoid-function ../deps/v8/src/objects/js-date-time-format.cc:155
+[ 1379s] E: nodejs42 no-return-in-nonvoid-function ../deps/v8/src/objects/js-list-format.cc:86, 231, 244
+[ 1379s] E: nodejs42 no-return-in-nonvoid-function ../deps/v8/src/objects/js-locale.cc:375, 390, 403
+[ 1379s] E: nodejs42 no-return-in-nonvoid-function ../deps/v8/src/objects/js-number-format.cc:472, 485
+[ 1379s] E: nodejs42 no-return-in-nonvoid-function ../deps/v8/src/objects/js-relative-time-format.cc:40, 193, 204
+[ 1379s] E: nodejs42 no-return-in-nonvoid-function ../deps/v8/src/objects/js-segmenter.cc:196, 211
+[ 1379s]
 
-[ 1281s] I: Program returns random data in a function
-[ 1281s] E: nodejs11 no-return-in-nonvoid-function ../deps/v8/src/compiler/effect-control-linearizer.cc:3824
-[ 1281s] E: nodejs11 no-return-in-nonvoid-function ../deps/v8/src/objects/js-collator.cc:538
-[ 1281s] E: nodejs11 no-return-in-nonvoid-function ../deps/v8/src/objects/js-list-format.cc:86, 236, 249
-[ 1281s] E: nodejs11 no-return-in-nonvoid-function ../deps/v8/src/objects/js-relative-time-format.cc:40, 200, 211
-
-Index: node-git.0f78b9a26c/deps/v8/src/compiler/effect-control-linearizer.cc
+Index: node-git.84f0581d36/deps/v8/src/builtins/builtins-intl.cc
 ===================================================================
---- node-git.0f78b9a26c.orig/deps/v8/src/compiler/effect-control-linearizer.cc
-+++ node-git.0f78b9a26c/deps/v8/src/compiler/effect-control-linearizer.cc
-@@ -3821,6 +3821,8 @@ Node* EffectControlLinearizer::BuildReve
+--- node-git.84f0581d36.orig/deps/v8/src/builtins/builtins-intl.cc
++++ node-git.84f0581d36/deps/v8/src/builtins/builtins-intl.cc
+@@ -746,6 +746,8 @@ BUILTIN(LocalePrototypeNumeric) {
+     case JSLocale::Numeric::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ BUILTIN(LocalePrototypeNumberingSystem) {
+Index: node-git.84f0581d36/deps/v8/src/compiler/effect-control-linearizer.cc
+===================================================================
+--- node-git.84f0581d36.orig/deps/v8/src/compiler/effect-control-linearizer.cc
++++ node-git.84f0581d36/deps/v8/src/compiler/effect-control-linearizer.cc
+@@ -4119,6 +4119,8 @@ Node* EffectControlLinearizer::BuildReve
      case kExternalBigUint64Array:
        UNREACHABLE();
    }
@@ -18,12 +37,25 @@ Index: node-git.0f78b9a26c/deps/v8/src/compiler/effect-control-linearizer.cc
  }
  
  Node* EffectControlLinearizer::LowerLoadDataViewElement(Node* node) {
-Index: node-git.0f78b9a26c/deps/v8/src/objects/js-collator.cc
+Index: node-git.84f0581d36/deps/v8/src/compiler/js-heap-broker.cc
 ===================================================================
---- node-git.0f78b9a26c.orig/deps/v8/src/objects/js-collator.cc
-+++ node-git.0f78b9a26c/deps/v8/src/objects/js-collator.cc
-@@ -535,6 +535,8 @@ const char* JSCollator::UsageToString(Us
-     case Usage::COUNT:
+--- node-git.84f0581d36.orig/deps/v8/src/compiler/js-heap-broker.cc
++++ node-git.84f0581d36/deps/v8/src/compiler/js-heap-broker.cc
+@@ -2274,6 +2274,8 @@ ObjectData* ObjectRef::data() const {
+     case JSHeapBroker::kRetired:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ Reduction NoChangeBecauseOfMissingData(JSHeapBroker* broker,
+Index: node-git.84f0581d36/deps/v8/src/objects/js-break-iterator.cc
+===================================================================
+--- node-git.84f0581d36.orig/deps/v8/src/objects/js-break-iterator.cc
++++ node-git.84f0581d36/deps/v8/src/objects/js-break-iterator.cc
+@@ -164,6 +164,8 @@ Handle<String> JSV8BreakIterator::TypeAs
+     case Type::COUNT:
        UNREACHABLE();
    }
 +
@@ -31,10 +63,23 @@ Index: node-git.0f78b9a26c/deps/v8/src/objects/js-collator.cc
  }
  
  }  // namespace internal
-Index: node-git.0f78b9a26c/deps/v8/src/objects/js-list-format.cc
+Index: node-git.84f0581d36/deps/v8/src/objects/js-date-time-format.cc
 ===================================================================
---- node-git.0f78b9a26c.orig/deps/v8/src/objects/js-list-format.cc
-+++ node-git.0f78b9a26c/deps/v8/src/objects/js-list-format.cc
+--- node-git.84f0581d36.orig/deps/v8/src/objects/js-date-time-format.cc
++++ node-git.84f0581d36/deps/v8/src/objects/js-date-time-format.cc
+@@ -152,6 +152,8 @@ const std::vector<PatternData> GetPatter
+     case HourOption::H_UNKNOWN:
+       return data;
+   }
++
++  UNREACHABLE();
+ }
+ 
+ void SetPropertyFromPattern(Isolate* isolate, const std::string& pattern,
+Index: node-git.84f0581d36/deps/v8/src/objects/js-list-format.cc
+===================================================================
+--- node-git.84f0581d36.orig/deps/v8/src/objects/js-list-format.cc
++++ node-git.84f0581d36/deps/v8/src/objects/js-list-format.cc
 @@ -83,6 +83,8 @@ const char* GetIcuStyleString(JSListForm
      case JSListFormat::Type::COUNT:
        UNREACHABLE();
@@ -44,7 +89,7 @@ Index: node-git.0f78b9a26c/deps/v8/src/objects/js-list-format.cc
  }
  
  }  // namespace
-@@ -233,6 +235,8 @@ Handle<String> JSListFormat::StyleAsStri
+@@ -228,6 +230,8 @@ Handle<String> JSListFormat::StyleAsStri
      case Style::COUNT:
        UNREACHABLE();
    }
@@ -53,7 +98,7 @@ Index: node-git.0f78b9a26c/deps/v8/src/objects/js-list-format.cc
  }
  
  Handle<String> JSListFormat::TypeAsString() const {
-@@ -246,6 +250,8 @@ Handle<String> JSListFormat::TypeAsStrin
+@@ -241,6 +245,8 @@ Handle<String> JSListFormat::TypeAsStrin
      case Type::COUNT:
        UNREACHABLE();
    }
@@ -62,10 +107,63 @@ Index: node-git.0f78b9a26c/deps/v8/src/objects/js-list-format.cc
  }
  
  namespace {
-Index: node-git.0f78b9a26c/deps/v8/src/objects/js-relative-time-format.cc
+Index: node-git.84f0581d36/deps/v8/src/objects/js-locale.cc
 ===================================================================
---- node-git.0f78b9a26c.orig/deps/v8/src/objects/js-relative-time-format.cc
-+++ node-git.0f78b9a26c/deps/v8/src/objects/js-relative-time-format.cc
+--- node-git.84f0581d36.orig/deps/v8/src/objects/js-locale.cc
++++ node-git.84f0581d36/deps/v8/src/objects/js-locale.cc
+@@ -372,6 +372,8 @@ Handle<String> JSLocale::CaseFirstAsStri
+     case CaseFirst::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ Handle<String> JSLocale::HourCycleAsString() const {
+@@ -387,6 +389,8 @@ Handle<String> JSLocale::HourCycleAsStri
+     case HourCycle::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ Handle<String> JSLocale::NumericAsString() const {
+@@ -400,6 +404,8 @@ Handle<String> JSLocale::NumericAsString
+     case Numeric::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ }  // namespace internal
+Index: node-git.84f0581d36/deps/v8/src/objects/js-number-format.cc
+===================================================================
+--- node-git.84f0581d36.orig/deps/v8/src/objects/js-number-format.cc
++++ node-git.84f0581d36/deps/v8/src/objects/js-number-format.cc
+@@ -469,6 +469,8 @@ Handle<String> JSNumberFormat::StyleAsSt
+     case Style::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ Handle<String> JSNumberFormat::CurrencyDisplayAsString() const {
+@@ -482,6 +484,8 @@ Handle<String> JSNumberFormat::CurrencyD
+     case CurrencyDisplay::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ MaybeHandle<String> JSNumberFormat::FormatNumber(
+Index: node-git.84f0581d36/deps/v8/src/objects/js-relative-time-format.cc
+===================================================================
+--- node-git.84f0581d36.orig/deps/v8/src/objects/js-relative-time-format.cc
++++ node-git.84f0581d36/deps/v8/src/objects/js-relative-time-format.cc
 @@ -37,6 +37,8 @@ UDateRelativeDateTimeFormatterStyle getI
      case JSRelativeTimeFormat::Style::COUNT:
        UNREACHABLE();
@@ -75,7 +173,7 @@ Index: node-git.0f78b9a26c/deps/v8/src/objects/js-relative-time-format.cc
  }
  }  // namespace
  
-@@ -197,6 +199,8 @@ Handle<String> JSRelativeTimeFormat::Sty
+@@ -190,6 +192,8 @@ Handle<String> JSRelativeTimeFormat::Sty
      case Style::COUNT:
        UNREACHABLE();
    }
@@ -84,8 +182,30 @@ Index: node-git.0f78b9a26c/deps/v8/src/objects/js-relative-time-format.cc
  }
  
  Handle<String> JSRelativeTimeFormat::NumericAsString() const {
-@@ -208,6 +212,8 @@ Handle<String> JSRelativeTimeFormat::Num
+@@ -201,6 +205,8 @@ Handle<String> JSRelativeTimeFormat::Num
      case Numeric::COUNT:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ namespace {
+Index: node-git.84f0581d36/deps/v8/src/objects/js-segmenter.cc
+===================================================================
+--- node-git.84f0581d36.orig/deps/v8/src/objects/js-segmenter.cc
++++ node-git.84f0581d36/deps/v8/src/objects/js-segmenter.cc
+@@ -193,6 +193,8 @@ Handle<String> JSSegmenter::LineBreakSty
+     case LineBreakStyle::NOTSET:
+       UNREACHABLE();
+   }
++
++  UNREACHABLE();
+ }
+ 
+ Handle<String> JSSegmenter::GranularityAsString() const {
+@@ -208,6 +210,8 @@ Handle<String> JSSegmenter::GranularityA
+     case Granularity::COUNT:
        UNREACHABLE();
    }
 +
