@@ -179,3 +179,16 @@ Index: node-v11.6.0/Makefile
  
  .PHONY: doc-only
  doc-only: tools/doc/node_modules \
+Index: node-v11.6.0/test/parallel/test-child-process-spawnsync-args.js
+===================================================================
+--- node-v11.6.0.orig/test/parallel/test-child-process-spawnsync-args.js
++++ node-v11.6.0/test/parallel/test-child-process-spawnsync-args.js
+@@ -12,6 +12,8 @@ const { spawnSync } = require('child_pro
+ const common = require('../common');
+ const tmpdir = require('../common/tmpdir');
+ 
++tmpdir.refresh();
++
+ const command = common.isWindows ? 'cd' : 'pwd';
+ const options = { cwd: tmpdir.path };
+ 
