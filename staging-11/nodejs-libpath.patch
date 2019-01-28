@@ -1,1 +1,52 @@
-../staging-10/nodejs-libpath.patch
+Index: node-git.fbeaf49523/tools/install.py
+===================================================================
+--- node-git.fbeaf49523.orig/tools/install.py
++++ node-git.fbeaf49523/tools/install.py
+@@ -7,6 +7,7 @@ import os
+ import re
+ import shutil
+ import sys
++from distutils import sysconfig
+ from getmoduleversion import get_version
+ 
+ # set at init time
+@@ -81,7 +82,7 @@ def uninstall(paths, dst):
+     try_remove(path, dst)
+ 
+ def npm_files(action):
+-  target_path = 'lib/node_modules/npm/'
++  target_path = sysconfig.get_config_var("LIB") + '/node_modules/npm/'
+ 
+   # don't install npm if the target path is a symlink, it probably means
+   # that a dev version of npm is installed there
+@@ -99,7 +100,7 @@ def npm_files(action):
+   if action == uninstall:
+     action([link_path], 'bin/npm')
+   elif action == install:
+-    try_symlink('../lib/node_modules/npm/bin/npm-cli.js', link_path)
++    try_symlink("../" + sysconfig.get_config_var("LIB") + '/node_modules/npm/bin/npm-cli.js',link_path)
+   else:
+     assert(0) # unhandled action type
+ 
+@@ -144,7 +145,7 @@ def files(action):
+     action([output_prefix + output_file], 'lib/' + output_file)
+ 
+   if 'true' == variables.get('node_use_dtrace'):
+-    action(['out/Release/node.d'], 'lib/dtrace/node.d')
++    action(['out/Release/node.d'], sysconfig.get_config_var("LIB") + '/dtrace/node.d')
+ 
+   # behave similarly for systemtap
+   action(['src/node.stp'], 'share/systemtap/tapset/')
+Index: node-git.fbeaf49523/lib/internal/modules/cjs/loader.js
+===================================================================
+--- node-git.fbeaf49523.orig/lib/internal/modules/cjs/loader.js
++++ node-git.fbeaf49523/lib/internal/modules/cjs/loader.js
+@@ -831,7 +831,7 @@ Module._initPaths = function() {
+   } else {
+     prefixDir = path.resolve(process.execPath, '..', '..');
+   }
+-  var paths = [path.resolve(prefixDir, 'lib', 'node')];
++  var paths = ['/usr/lib/node'];
+ 
+   if (homeDir) {
+     paths.unshift(path.resolve(homeDir, '.node_libraries'));
