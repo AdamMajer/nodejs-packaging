@@ -1,7 +1,38 @@
 -------------------------------------------------------------------
-Mon Jan 28 14:04:05 UTC 2019 - adam.majer@suse.de
+Mon Jan 28 14:18:16 UTC 2019 - adam.majer@suse.de
+
+- New upstream releases 11.8.0:
+  * events: For unhandled error events with an argument that is not
+    an Error object, the resulting exeption will have more information
+    about the argument.
+  * child_process: When the maxBuffer option is passed, stdout and
+    stderr will be truncated rather than unavailable in case of an error.
+  * policy: Experimental support for module integrity checks through
+    a manifest file is implemented now.
+  * n-api: The napi_threadsafe_function feature is now stable.
+  * report: An experimental diagnostic API for capturing process state
+    is available as process.report and through command line flags.
+  * tls: tls.connect() takes a timeout option analogous to
+    the net.connect() one.
+  * worker:
+    + process.umask() is available as a read-only function inside
+      Worker threads
+    + An execArgv option that supports a subset of Node.js command
+      line options is now supported.
+
+- Changes in version 11.7.0:
+  * compression / zlib: Added brotli support
+  * console: Added inspectOptions option
+  * crypto: Always accept private keys as public keys
+  * deps: Upgrade npm to v6.5.0
+  * fs: Use internalBinding('fs') internally instead of
+    process.binding('fs')
+  * http(s): Support overriding http(s).globalAgent
+  * util: Inspect ArrayBuffers contents closely
+  * worker: Expose workers and remove --experimental-worker flag
 
 - test-brotli.patch: fixes assumption about compression
+- versioned.patch: refreshed
 
 -------------------------------------------------------------------
 Thu Jan 10 15:57:15 UTC 2019 - adam.majer@suse.de
