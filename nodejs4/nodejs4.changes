@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb  1 12:40:17 UTC 2019 - adam.majer@suse.de
+
+- nodejs.keyring: update keyring to today's list as per
+  https://github.com/nodejs/node
+
+-------------------------------------------------------------------
 Wed Jan  9 14:19:07 UTC 2019 - adam.majer@suse.de
 
 Backport security fixes from NodeJS 6.x:
