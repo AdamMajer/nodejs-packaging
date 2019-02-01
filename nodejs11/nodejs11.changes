@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Fri Feb  1 11:42:30 UTC 2019 - adam.majer@suse.de
+
+- New upstream release 11.9.0:
+  * internal changes to ship OpenSSL 1.1.1, which has already been
+    used on all openSUSE platforms.
+
+- test-brotli.patch: removed, upstreamed
+
+-------------------------------------------------------------------
 Mon Jan 28 14:18:16 UTC 2019 - adam.majer@suse.de
 
 - New upstream releases 11.8.0:
