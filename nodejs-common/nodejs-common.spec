@@ -25,22 +25,20 @@
 ###########################################################
 
 Name:           nodejs-common
-Version:        2.0
+Version:        3.0
 Release:        0
 License:        MIT
 Summary:        Common files for the NodeJS ecosystem
 Url:            https://github.com/AdamMajer/nodejs-packaging
 Group:          Development/Languages/NodeJS
-Source1:        node
+Source1:        node.c
 Source2:        LICENSE
 Requires:       nodejs
 Conflicts:      nodejs4 < 4.8.4
 Conflicts:      nodejs6 < 6.11.1
 Conflicts:      nodejs7 < 7.10.1
 Conflicts:      nodejs8 < 8.1.4
-
-BuildArch:      noarch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRequires:  gcc
 
 %description
 Common NodeJS files that allow recursive invocation of Node executable
@@ -49,17 +47,18 @@ while retaining the same codestream version.
 %prep
 %build
 cp %{S:2} .
+gcc ${RPM_OPT_FLAGS} -g -o node %{S:1}
+
 %install
 install -D -m 0755 %{S:1} %{buildroot}%{_bindir}/node
 ln -s node %{buildroot}%{_bindir}/npm
 ln -s node %{buildroot}%{_bindir}/npx
 
 %files
-%defattr(-,root,root)
+%license LICENSE
 %{_bindir}/node
 %{_bindir}/npm
 %{_bindir}/npx
-%license LICENSE
 
 %changelog
 
