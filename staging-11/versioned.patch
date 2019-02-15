@@ -8,10 +8,10 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-git.fbeaf49523/Makefile
+Index: node-git.4a254a6ce4/Makefile
 ===================================================================
---- node-git.fbeaf49523.orig/Makefile
-+++ node-git.fbeaf49523/Makefile
+--- node-git.4a254a6ce4.orig/Makefile
++++ node-git.4a254a6ce4/Makefile
 @@ -44,7 +44,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
@@ -21,10 +21,10 @@ Index: node-git.fbeaf49523/Makefile
  NODE ?= ./$(NODE_EXE)
  NODE_G_EXE = node_g$(EXEEXT)
  NPM ?= ./deps/npm/bin/npm-cli.js
-Index: node-git.fbeaf49523/tools/install.py
+Index: node-git.4a254a6ce4/tools/install.py
 ===================================================================
---- node-git.fbeaf49523.orig/tools/install.py
-+++ node-git.fbeaf49523/tools/install.py
+--- node-git.4a254a6ce4.orig/tools/install.py
++++ node-git.4a254a6ce4/tools/install.py
 @@ -82,7 +82,7 @@ def uninstall(paths, dst):
      try_remove(path, dst)
  
@@ -125,10 +125,10 @@ Index: node-git.fbeaf49523/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-git.fbeaf49523/doc/node.1
+Index: node-git.4a254a6ce4/doc/node.1
 ===================================================================
---- node-git.fbeaf49523.orig/doc/node.1
-+++ node-git.fbeaf49523/doc/node.1
+--- node-git.4a254a6ce4.orig/doc/node.1
++++ node-git.4a254a6ce4/doc/node.1
 @@ -30,24 +30,24 @@
  .Dt NODE 1
  .
@@ -158,10 +158,10 @@ Index: node-git.fbeaf49523/doc/node.1
  .Op Fl -v8-options
  .
  .\"======================================================================
-Index: node-git.fbeaf49523/src/node.stp
+Index: node-git.4a254a6ce4/src/node.stp
 ===================================================================
---- node-git.fbeaf49523.orig/src/node.stp
-+++ node-git.fbeaf49523/src/node.stp
+--- node-git.4a254a6ce4.orig/src/node.stp
++++ node-git.4a254a6ce4/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -234,12 +234,12 @@ Index: node-git.fbeaf49523/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-git.fbeaf49523/deps/npm/man/man1/npm.1
+Index: node-git.4a254a6ce4/deps/npm/man/man1/npm.1
 ===================================================================
---- node-git.fbeaf49523.orig/deps/npm/man/man1/npm.1
-+++ node-git.fbeaf49523/deps/npm/man/man1/npm.1
+--- node-git.4a254a6ce4.orig/deps/npm/man/man1/npm.1
++++ node-git.4a254a6ce4/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
- .TH "NPM" "1" "December 2018" "" ""
+ .TH "NPM" "1" "January 2019" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm11\fR \- javascript package manager
@@ -347,10 +347,10 @@ Index: node-git.fbeaf49523/deps/npm/man/man1/npm.1
  
  .RE
  
-Index: node-git.fbeaf49523/node.gyp
+Index: node-git.4a254a6ce4/node.gyp
 ===================================================================
---- node-git.fbeaf49523.orig/node.gyp
-+++ node-git.fbeaf49523/node.gyp
+--- node-git.4a254a6ce4.orig/node.gyp
++++ node-git.4a254a6ce4/node.gyp
 @@ -22,8 +22,8 @@
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',
@@ -361,11 +361,11 @@ Index: node-git.fbeaf49523/node.gyp
 +    'node_lib_target_name%': 'node11_lib',
      'node_intermediate_lib_type%': 'static_library',
      'library_files': [
-       'lib/internal/per_context.js',
-Index: node-git.fbeaf49523/src/node_main.cc
+       'lib/internal/bootstrap/context.js',
+Index: node-git.4a254a6ce4/src/node_main.cc
 ===================================================================
---- node-git.fbeaf49523.orig/src/node_main.cc
-+++ node-git.fbeaf49523/src/node_main.cc
+--- node-git.4a254a6ce4.orig/src/node_main.cc
++++ node-git.4a254a6ce4/src/node_main.cc
 @@ -121,6 +121,7 @@ int main(int argc, char* argv[]) {
  #endif
    // Disable stdio buffering, it interacts poorly with printf()
@@ -374,10 +374,10 @@ Index: node-git.fbeaf49523/src/node_main.cc
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
-Index: node-git.fbeaf49523/deps/npm/man/man1/npx.1
+Index: node-git.4a254a6ce4/deps/npm/man/man1/npx.1
 ===================================================================
---- node-git.fbeaf49523.orig/deps/npm/man/man1/npx.1
-+++ node-git.fbeaf49523/deps/npm/man/man1/npx.1
+--- node-git.4a254a6ce4.orig/deps/npm/man/man1/npx.1
++++ node-git.4a254a6ce4/deps/npm/man/man1/npx.1
 @@ -1,32 +1,32 @@
  .TH "NPX" "1" "April 2018" "npx@10.1.1" "User Commands"
  .SH "NAME"
@@ -461,11 +461,11 @@ Index: node-git.fbeaf49523/deps/npm/man/man1/npx.1
 +\fBnpm11\-config(7)\fP
  
  .RE
-Index: node-git.fbeaf49523/tools/test.py
+Index: node-git.4a254a6ce4/tools/test.py
 ===================================================================
---- node-git.fbeaf49523.orig/tools/test.py
-+++ node-git.fbeaf49523/tools/test.py
-@@ -934,7 +934,7 @@ class Context(object):
+--- node-git.4a254a6ce4.orig/tools/test.py
++++ node-git.4a254a6ce4/tools/test.py
+@@ -943,7 +943,7 @@ class Context(object):
  
    def GetVm(self, arch, mode):
      if arch == 'none':
