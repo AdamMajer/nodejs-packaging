@@ -2,10 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-v11.6.0/test/parallel/test-module-loading-globalpaths.js
+Index: node-git.048b977d8e/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-v11.6.0.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-v11.6.0/test/parallel/test-module-loading-globalpaths.js
+--- node-git.048b977d8e.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-git.048b977d8e/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -16,10 +16,10 @@ Index: node-v11.6.0/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-v11.6.0/test/parallel/test-tls-env-bad-extra-ca.js
+Index: node-git.048b977d8e/test/parallel/test-tls-env-bad-extra-ca.js
 ===================================================================
---- node-v11.6.0.orig/test/parallel/test-tls-env-bad-extra-ca.js
-+++ node-v11.6.0/test/parallel/test-tls-env-bad-extra-ca.js
+--- node-git.048b977d8e.orig/test/parallel/test-tls-env-bad-extra-ca.js
++++ node-git.048b977d8e/test/parallel/test-tls-env-bad-extra-ca.js
 @@ -36,7 +36,7 @@ fork(__filename, opts)
      // TODO(addaleax): Make `SafeGetenv` work like `process.env`
      // encoding-wise
@@ -29,10 +29,10 @@ Index: node-v11.6.0/test/parallel/test-tls-env-bad-extra-ca.js
        assert(re.test(stderr), stderr);
      }
    }))
-Index: node-v11.6.0/test/parallel/test-tls-passphrase.js
+Index: node-git.048b977d8e/test/parallel/test-tls-passphrase.js
 ===================================================================
---- node-v11.6.0.orig/test/parallel/test-tls-passphrase.js
-+++ node-v11.6.0/test/parallel/test-tls-passphrase.js
+--- node-git.048b977d8e.orig/test/parallel/test-tls-passphrase.js
++++ node-git.048b977d8e/test/parallel/test-tls-passphrase.js
 @@ -221,7 +221,7 @@ server.listen(0, common.mustCall(functio
    }, common.mustCall());
  })).unref();
@@ -42,10 +42,10 @@ Index: node-v11.6.0/test/parallel/test-tls-passphrase.js
  
  // Missing passphrase
  assert.throws(function() {
-Index: node-v11.6.0/test/parallel/test-crypto-scrypt.js
+Index: node-git.048b977d8e/test/parallel/test-crypto-scrypt.js
 ===================================================================
---- node-v11.6.0.orig/test/parallel/test-crypto-scrypt.js
-+++ node-v11.6.0/test/parallel/test-crypto-scrypt.js
+--- node-git.048b977d8e.orig/test/parallel/test-crypto-scrypt.js
++++ node-git.048b977d8e/test/parallel/test-crypto-scrypt.js
 @@ -169,7 +169,7 @@ for (const options of bad) {
  
  for (const options of toobig) {
@@ -55,10 +55,10 @@ Index: node-v11.6.0/test/parallel/test-crypto-scrypt.js
      type: Error,
    };
    common.expectsError(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
-Index: node-v11.6.0/test/parallel/test-repl-envvars.js
+Index: node-git.048b977d8e/test/parallel/test-repl-envvars.js
 ===================================================================
---- node-v11.6.0.orig/test/parallel/test-repl-envvars.js
-+++ node-v11.6.0/test/parallel/test-repl-envvars.js
+--- node-git.048b977d8e.orig/test/parallel/test-repl-envvars.js
++++ node-git.048b977d8e/test/parallel/test-repl-envvars.js
 @@ -2,12 +2,14 @@
  
  // Flags: --expose-internals
@@ -75,11 +75,11 @@ Index: node-v11.6.0/test/parallel/test-repl-envvars.js
  const tests = [
    {
      env: {},
-Index: node-v11.6.0/test/common/index.mjs
+Index: node-git.048b977d8e/test/common/index.mjs
 ===================================================================
---- node-v11.6.0.orig/test/common/index.mjs
-+++ node-v11.6.0/test/common/index.mjs
-@@ -42,6 +42,7 @@ const {
+--- node-git.048b977d8e.orig/test/common/index.mjs
++++ node-git.048b977d8e/test/common/index.mjs
+@@ -41,6 +41,7 @@ const {
    expectsError,
    skipIfInspectorDisabled,
    skipIf32Bits,
@@ -87,7 +87,7 @@ Index: node-v11.6.0/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
-@@ -89,6 +90,7 @@ export {
+@@ -87,6 +88,7 @@ export {
    expectsError,
    skipIfInspectorDisabled,
    skipIf32Bits,
@@ -95,11 +95,11 @@ Index: node-v11.6.0/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
-Index: node-v11.6.0/test/parallel/test-crypto-keygen.js
+Index: node-git.048b977d8e/test/parallel/test-crypto-keygen.js
 ===================================================================
---- node-v11.6.0.orig/test/parallel/test-crypto-keygen.js
-+++ node-v11.6.0/test/parallel/test-crypto-keygen.js
-@@ -149,7 +149,7 @@ const sec1EncExp = (cipher) => getRegExp
+--- node-git.048b977d8e.orig/test/parallel/test-crypto-keygen.js
++++ node-git.048b977d8e/test/parallel/test-crypto-keygen.js
+@@ -168,7 +168,7 @@ const sec1EncExp = (cipher) => getRegExp
      const publicKey = { key: publicKeyDER, ...publicKeyEncoding };
      assert.throws(() => {
        testSignVerify(publicKey, privateKey);
@@ -108,7 +108,7 @@ Index: node-v11.6.0/test/parallel/test-crypto-keygen.js
  
      const key = { key: privateKey, passphrase: 'secret' };
      testEncryptDecrypt(publicKey, key);
-@@ -193,7 +193,7 @@ const sec1EncExp = (cipher) => getRegExp
+@@ -212,7 +212,7 @@ const sec1EncExp = (cipher) => getRegExp
          key: privateKeyDER,
          ...privateKeyEncoding
        });
@@ -117,7 +117,7 @@ Index: node-v11.6.0/test/parallel/test-crypto-keygen.js
  
      // Signing should work with the correct password.
      testSignVerify(publicKey, {
-@@ -254,7 +254,7 @@ const sec1EncExp = (cipher) => getRegExp
+@@ -273,7 +273,7 @@ const sec1EncExp = (cipher) => getRegExp
      // Since the private key is encrypted, signing shouldn't work anymore.
      assert.throws(() => {
        testSignVerify(publicKey, privateKey);
@@ -126,7 +126,7 @@ Index: node-v11.6.0/test/parallel/test-crypto-keygen.js
  
      testSignVerify(publicKey, { key: privateKey, passphrase: 'secret' });
    }));
-@@ -287,7 +287,7 @@ const sec1EncExp = (cipher) => getRegExp
+@@ -306,7 +306,7 @@ const sec1EncExp = (cipher) => getRegExp
      // Since the private key is encrypted, signing shouldn't work anymore.
      assert.throws(() => {
        testSignVerify(publicKey, privateKey);
@@ -135,11 +135,11 @@ Index: node-v11.6.0/test/parallel/test-crypto-keygen.js
  
      testSignVerify(publicKey, {
        key: privateKey,
-Index: node-v11.6.0/test/parallel/test-fs-utimes.js
+Index: node-git.048b977d8e/test/parallel/test-fs-utimes.js
 ===================================================================
---- node-v11.6.0.orig/test/parallel/test-fs-utimes.js
-+++ node-v11.6.0/test/parallel/test-fs-utimes.js
-@@ -187,7 +187,7 @@ const path = `${tmpdir.path}/test-utimes
+--- node-git.048b977d8e.orig/test/parallel/test-fs-utimes.js
++++ node-git.048b977d8e/test/parallel/test-fs-utimes.js
+@@ -145,7 +145,7 @@ const path = `${tmpdir.path}/test-utimes
  fs.writeFileSync(path, '');
  
  // Test Y2K38 for all platforms [except 'arm', 'OpenBSD' and 'SunOS']
@@ -148,11 +148,11 @@ Index: node-v11.6.0/test/parallel/test-fs-utimes.js
    const Y2K38_mtime = 2 ** 31;
    fs.utimesSync(path, Y2K38_mtime, Y2K38_mtime);
    const Y2K38_stats = fs.statSync(path);
-Index: node-v11.6.0/Makefile
+Index: node-git.048b977d8e/Makefile
 ===================================================================
---- node-v11.6.0.orig/Makefile
-+++ node-v11.6.0/Makefile
-@@ -486,7 +486,7 @@ test-ci-js: | clear-stalled
+--- node-git.048b977d8e.orig/Makefile
++++ node-git.048b977d8e/Makefile
+@@ -500,7 +500,7 @@ test-ci-js: | clear-stalled
  .PHONY: test-ci
  # Related CI jobs: most CI tests, excluding node-test-commit-arm-fanned
  test-ci: LOGLEVEL := info
@@ -161,7 +161,7 @@ Index: node-v11.6.0/Makefile
  	out/Release/cctest --gtest_output=tap:cctest.tap
  	$(PYTHON) tools/test.py $(PARALLEL_ARGS) -p tap --logfile test.tap \
  		--mode=$(BUILDTYPE_LOWER) --flaky-tests=$(FLAKY_TESTS) \
-@@ -657,11 +657,12 @@ apidocs_json = $(addprefix out/,$(apidoc
+@@ -671,11 +671,12 @@ apidocs_json = $(addprefix out/,$(apidoc
  apiassets = $(subst api_assets,api/assets,$(addprefix out/,$(wildcard doc/api_assets/*)))
  
  tools/doc/node_modules: tools/doc/package.json
@@ -179,10 +179,10 @@ Index: node-v11.6.0/Makefile
  
  .PHONY: doc-only
  doc-only: tools/doc/node_modules \
-Index: node-v11.6.0/test/parallel/test-child-process-spawnsync-args.js
+Index: node-git.048b977d8e/test/parallel/test-child-process-spawnsync-args.js
 ===================================================================
---- node-v11.6.0.orig/test/parallel/test-child-process-spawnsync-args.js
-+++ node-v11.6.0/test/parallel/test-child-process-spawnsync-args.js
+--- node-git.048b977d8e.orig/test/parallel/test-child-process-spawnsync-args.js
++++ node-git.048b977d8e/test/parallel/test-child-process-spawnsync-args.js
 @@ -12,6 +12,8 @@ const { spawnSync } = require('child_pro
  const common = require('../common');
  const tmpdir = require('../common/tmpdir');
@@ -192,3 +192,20 @@ Index: node-v11.6.0/test/parallel/test-child-process-spawnsync-args.js
  const command = common.isWindows ? 'cd' : 'pwd';
  const options = { cwd: tmpdir.path };
  
+Index: node-git.048b977d8e/test/parallel/test-dns.js
+===================================================================
+--- node-git.048b977d8e.orig/test/parallel/test-dns.js
++++ node-git.048b977d8e/test/parallel/test-dns.js
+@@ -315,12 +315,3 @@ common.expectsError(() => {
+   type: TypeError
+ });
+ 
+-{
+-  dns.resolveMx('foo.onion', function(err) {
+-    assert.deepStrictEqual(err.errno, 'ENOTFOUND');
+-    assert.deepStrictEqual(err.code, 'ENOTFOUND');
+-    assert.deepStrictEqual(err.syscall, 'queryMx');
+-    assert.deepStrictEqual(err.hostname, 'foo.onion');
+-    assert.deepStrictEqual(err.message, 'queryMx ENOTFOUND foo.onion');
+-  });
+-}
