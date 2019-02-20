@@ -174,7 +174,7 @@ BuildRequires:   gcc48-c++
 %endif # sles == 11
 
 # Use GCC 7, since it is in SLE-12:Update
-%if %node_version_number >= 8 && 0%{?suse_version} == 1315
+%if %node_version_number >= 8 && 0%{?suse_version} >= 120300
 BuildRequires:   gcc7-c++
 %define cc_exec  gcc-7
 %define cpp_exec g++-7
