@@ -173,8 +173,8 @@ BuildRequires:   gcc48-c++
 %endif # node >= 8
 %endif # sles == 11
 
-# Use GCC 7, since it is in SLE-12:Update
-%if %node_version_number >= 8 && 0%{?suse_version} >= 120300
+# Use GCC 7, since it is in SLE-12:Update (120300) or in Tumbleweed (1500)
+%if %node_version_number >= 8 && (0%{?sle_version} >= 120300 || 0%{?suse_version} > 1500)
 BuildRequires:   gcc7-c++
 %define cc_exec  gcc-7
 %define cpp_exec g++-7
