@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Thu Feb 28 13:23:03 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- New upstream release 11.10.1:
+  * http: Further prevention of "Slowloris" attacks on HTTP and HTTPS
+  connections by consistently applying the receive timeout set by
+  server.headersTimeout to connections in keep-alive mode.
+  (CVE-2019-5737, bsc#1127532)
+
+-------------------------------------------------------------------
 Fri Feb 15 13:00:06 UTC 2019 - adam.majer@suse.de
 
 - New upstream release 11.10.0:

@@ -129,6 +129,8 @@ Patch25:        CVE-2018-12121.patch   # PATCH_FOR: 4
 Patch26:        max_header_size.patch  # PATCH_FOR: 4
 Patch27:        CVE-2018-12122.patch   # PATCH_FOR: 4
 Patch28:        openssl_1_0_2q.patch   # PATCH_FOR: 4
+Patch29:        openssl_1_0_2r.patch   # PATCH_FOR: 4
+Patch30:        http-keep-alive.patch  # PATCH_FOR: 4
 
 ## Patches specific to SUSE and openSUSE
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
@@ -340,6 +342,8 @@ tar Jxvf %{SOURCE11}
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
+%patch29 -p1
+%patch30 -p1
 %patch101 -p1
 %patch102 -p1
 # Add check_output to configure script (not part of Python 2.6 in SLE11).

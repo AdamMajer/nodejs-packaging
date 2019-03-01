@@ -1,4 +1,26 @@
 -------------------------------------------------------------------
+Thu Feb 28 13:28:56 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- New upstream LTS release 6.17.0:
+  * deps: OpenSSL has been upgraded to 1.0.2r. Under certain
+    circumstances, a TLS server can be forced to respond differently
+    to a client if a zero-byte record is received with an
+    invalid padding compared to a zero-byte record with an
+    invalid MAC. This can be used as the basis of a padding
+    oracle attack to decrypt data.
+    (CVE-2019-1559, bsc#1127080)
+
+  * http:
+    + Backport server.keepAliveTimeout to prevent keep-alive
+      HTTP and HTTPS connections remaining open and inactive for
+      an extended period of time, leading to a potential
+      Denial of Service (DoS). (CVE-2019-5739, bsc#1127533)
+    + Further prevention of "Slowloris" attacks on HTTP and HTTPS
+      connections by consistently applying the receive timeout set
+      by server.headersTimeout to connections in keep-alive mode.
+      (CVE-2019-5737, bsc#1127532)
+
+-------------------------------------------------------------------
 Fri Feb  1 12:40:17 UTC 2019 - adam.majer@suse.de
 
 - nodejs.keyring: update keyring to today's list as per
