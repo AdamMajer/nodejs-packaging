@@ -218,7 +218,7 @@ Index: node-v4.9.1/test/parallel/test-http-server-keep-alive-timeout-slow-client
 +    request(common.mustCall(() => {
 +      // Make a second request on the same socket, after the keep-alive timeout
 +      // has been set on the server side.
-+      request(common.mustCall());
++      request(common.mustCall(() => {}));
 +    }));
 +  }));
 +
