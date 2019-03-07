@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Thu Mar  7 16:14:11 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- New upstream release 11.11.0:
+  * n-api: Implement date object
+  * util: Add compact depth mode for util.inspect()
+  * worker:
+    + Improve integration with native addons
+    + MessagePort.prototype.onmessage takes arguments closer to
+      the Web specification now
+
+-------------------------------------------------------------------
 Thu Feb 28 13:23:03 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - New upstream release 11.10.1:
