@@ -1,23 +1,21 @@
-diff --git a/tools/test.py b/tools/test.py
-index 67b8cb917e..51aaa3f8e0 100755
---- a/tools/test.py
-+++ b/tools/test.py
-@@ -512,11 +512,17 @@ class TestCase(object):
+Index: node-v10.15.3/tools/test.py
+===================================================================
+--- node-v10.15.3.orig/tools/test.py
++++ node-v10.15.3/tools/test.py
+@@ -539,6 +539,16 @@ class TestCase(object):
+                       self.context.store_unexpected_output)
  
-   def RunCommand(self, command, env):
-     full_command = self.context.processor(command)
--    output = Execute(full_command,
+   def Run(self):
 +    reruns = 0
-+    while(reruns < 5):
-+      reruns += 1
-+      output = Execute(full_command,
-                      self.context,
-                      self.context.GetTimeout(self.mode),
-                      env,
-                      disable_core_files = self.disable_core_files)
-+      if output.exit_code == 0:
-+        break;
-+      print("FLAKY rerun: ", command)
-     return TestOutput(self,
-                       full_command,
-                       output,
++    while (reruns < 5):
++        reruns += 1
++        result = self.OriginalRun()
++        if (not result.HasFailed()):
++            break
++        print("FLAKY TEST rerun: ", self.GetCommand())
++    return result
++
++  def OriginalRun(self):
+     try:
+       result = self.RunCommand(self.GetCommand(), {
+         "TEST_THREAD_ID": "%d" % self.thread_id,
