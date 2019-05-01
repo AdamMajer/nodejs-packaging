@@ -287,6 +287,10 @@ Obsoletes:      nodejs-npm < 4.0.0
 Provides:       npm(npm) = {{npm_version}}
 Provides:       npm = %{version}
 %if 0%{?suse_version} >= 1500
+%if %{node_version_number} >= 10
+Requires:       user(nobody)
+Requires:       group(nobody)
+%endif
 Recommends:     python2
 %else
 Recommends:     python
