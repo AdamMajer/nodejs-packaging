@@ -30,10 +30,14 @@ Release:        0
 
 %define node_version_number {{node_version_major}}
 
+%if %node_version_number >= 12
+%define openssl_req_ver 1.1.1
+%else
 %if %node_version_number >= 10
 %define openssl_req_ver 1.1.0
 %else # node8 or older
 %define openssl_req_ver 1.0.2
+%endif
 %endif
 
 %bcond_with    valgrind_tests
