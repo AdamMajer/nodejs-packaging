@@ -1,4 +1,26 @@
 -------------------------------------------------------------------
+Fri May  3 12:32:00 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- New upstream release 11.15.0:
+  * tls:
+    + add --tls-min-v1.2 CLI switch
+    + supported shared openssl 1.1.0
+    + revert default max toTLSv1.2
+    + revert change to invalid protocol error type
+    + support TLSv1.3
+    + add code for ERR_TLS_INVALID_PROTOCOL_METHOD
+
+- Changes in release 11.14.0:
+  * child_process: doc deprecate ChildProcess._channel
+  * deps: update bundled nghttp2 to 1.37.0
+  * dns:
+    + make dns.promises enumerable
+    + remove dns.promises experimental warning
+  * fs: remove experimental warning for fs.promises
+  * stream: make Symbol.asyncIterator support stable
+  * worker: use copy of process.env
+
+-------------------------------------------------------------------
 Fri Apr  5 12:59:05 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - New upstream release 11.13.0:

@@ -1,7 +1,7 @@
-Index: node-git.fbeaf49523/tools/install.py
+Index: node-v11.15.0/tools/install.py
 ===================================================================
---- node-git.fbeaf49523.orig/tools/install.py
-+++ node-git.fbeaf49523/tools/install.py
+--- node-v11.15.0.orig/tools/install.py
++++ node-v11.15.0/tools/install.py
 @@ -7,6 +7,7 @@ import os
  import re
  import shutil
@@ -37,11 +37,11 @@ Index: node-git.fbeaf49523/tools/install.py
  
    # behave similarly for systemtap
    action(['src/node.stp'], 'share/systemtap/tapset/')
-Index: node-git.fbeaf49523/lib/internal/modules/cjs/loader.js
+Index: node-v11.15.0/lib/internal/modules/cjs/loader.js
 ===================================================================
---- node-git.fbeaf49523.orig/lib/internal/modules/cjs/loader.js
-+++ node-git.fbeaf49523/lib/internal/modules/cjs/loader.js
-@@ -831,7 +831,7 @@ Module._initPaths = function() {
+--- node-v11.15.0.orig/lib/internal/modules/cjs/loader.js
++++ node-v11.15.0/lib/internal/modules/cjs/loader.js
+@@ -907,7 +907,7 @@ Module._initPaths = function() {
    } else {
      prefixDir = path.resolve(process.execPath, '..', '..');
    }

@@ -1,5 +1,5 @@
 s/{{npm_version}}/6.7.0/g
-s/{{node_version}}/11.13.0/g
+s/{{node_version}}/11.15.0/g
 s/{{node_version_major}}/11/g
 s/{{arch_support}}/aarch64 ppc ppc64 ppc64le s390 s390x/g
 s/{{exclusive_arch}}/%{ix86} x86_64 armv7hl aarch64 ppc ppc64 ppc64le s390 s390x/g

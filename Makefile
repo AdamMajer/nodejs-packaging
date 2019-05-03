@@ -90,7 +90,7 @@ ${ALL_TARGETS}: changelog.target common.target
 		cd `find -maxdepth 1 -mindepth 1 -type d -name node\*` && quilt push -a --fuzz=0; \
 	else \
 		cd $D && find -maxdepth 1 -mindepth 1 -type d -name node-git\* -exec rm -rf {} \+ && \
-		osc service disabledrun && \
+		TAR_SCM_TESTMODE=1 osc service disabledrun && \
 		quilt setup --fast *.spec && \
 		cd `find -maxdepth 1 -mindepth 1 -type d -name node-git\*` && quilt push -a --fuzz=0; \
 	fi
