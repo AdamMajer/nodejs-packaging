@@ -114,6 +114,11 @@ For detailed changelog, see
 https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V12.md
 
 -------------------------------------------------------------------
+Sun Apr  7 18:16:21 UTC 2019 - Guillaume GARDET <guillaume.gardet@opensuse.org>
+
+- Add _constraints file to avoid OOM errors
+
+-------------------------------------------------------------------
 Wed Feb 13 11:34:12 UTC 2019 - adam.majer@suse.de
 
 - NodeJS 12.x branch created
