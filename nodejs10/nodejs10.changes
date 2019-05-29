@@ -1,4 +1,21 @@
 -------------------------------------------------------------------
+Wed May 29 15:39:40 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- New upstream LTS version 10.16.0
+  * deps:
+    + upgrade npm to 6.9.0
+    + upgrade openssl sources to 1.1.1b (for SLE-12 based systems)
+    + upgrade libuv to 1.28.0 (for SLE-12 based systems)
+    + upgrade to libuv 1.28.0
+  * events: add once method to use promises with EventEmitter
+  * n-api: mark thread-safe function as stable
+  * repl: support top-level for-await-of
+  * zlib: add brotli support
+
+- openssl_1_1_1.patch: dropped, no longer needed
+- fix_ci_tests.patch, versioned.patch: refreshed
+
+-------------------------------------------------------------------
 Mon May  6 13:54:47 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - openssl_1_1_1.patch: backport fixes for OpenSSL 1.1.1 (bsc#1134208)
