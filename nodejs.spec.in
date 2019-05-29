@@ -399,7 +399,7 @@ find -name *.md.orig -delete
 # percent-configure pulls in something that confuses node's configure
 # script, so we'll do it thus:
 export CFLAGS="%{optflags}"
-export CXXFLAGS="%{optflags}"
+export CXXFLAGS="%{optflags} -Wno-class-memaccess"
 
 %if 0%{?cc_exec:1}
 export CC=%{?cc_exec}
@@ -411,7 +411,11 @@ export CXX=%{?cpp_exec}
 
 ./configure \
     --prefix=%{_prefix} \
+%if %{node_version_number} >= 12
+    --enable-lto \
+%endif
 %if ! 0%{with intree_openssl}
+    --openssl-is-fips \
     --shared-openssl \
 %endif
     --shared-zlib \

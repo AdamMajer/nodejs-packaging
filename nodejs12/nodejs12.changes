@@ -1,4 +1,45 @@
 -------------------------------------------------------------------
+Wed May 29 15:23:37 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- Update to 12.3.1:
+  * deps:
+    + Fix handling of +0/-0 when constant field tracking is enabled
+    + Fix os.freemem() and os.totalmem correctness
+
+- changes in 12.3.0:
+  * esm: Added the --experimental-wasm-modules flag to support
+    WebAssembly modules
+  * process: Log errors using util.inspect in case of fatal exceptions
+  * repl: Add process.on('uncaughtException') support
+  * stream: Implemented Readable.from async iterator utility
+  * tls:
+    + Expose built-in root certificates
+    + Support net.Server options
+    + Expose keylog event on TLSSocket
+  * worker: Added the ability to unshift messages from the MessagePort
+
+- changes in 12.2.0:
+  * deps: Updated llhttp to 1.1.3. This fixes a bug that made
+    Node.js' HTTP parser refuse any request URL that contained
+    the "|" (vertical bar) character
+  * tls: Added an enableTrace() method to TLSSocket and an enableTrace
+    option to tls.createServer(). When enabled, TSL packet trace
+    information is written to stderr. This can be used to debug
+    TLS connection problems
+  * cli:
+    + Added --trace-tls enables tracing of TLS connections
+    + Added --cpu-prof-interval
+  * module:
+    + Added the createRequire() method. The existing
+      createRequireFromPath() method is now deprecated
+    + Throw on require('./path.mjs')
+  * repl:
+    + The REPL now supports multi-line statements using BigInt literals
+
+- enable LTO
+- fix_ci_tests.patch: refreshed
+
+-------------------------------------------------------------------
 Fri May  3 11:35:05 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - Update to 12.1.0:
