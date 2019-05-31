@@ -186,3 +186,20 @@ Index: node-v10.16.0/test/parallel/test-crypto-keygen.js
  
      testSignVerify(publicKey, {
        key: privateKey,
+Index: node-v10.16.0/test/parallel/test-dns.js
+===================================================================
+--- node-v10.16.0.orig/test/parallel/test-dns.js
++++ node-v10.16.0/test/parallel/test-dns.js
+@@ -315,12 +315,3 @@ common.expectsError(() => {
+   type: TypeError
+ });
+ 
+-{
+-  dns.resolveMx('foo.onion', function(err) {
+-    assert.deepStrictEqual(err.errno, 'ENOTFOUND');
+-    assert.deepStrictEqual(err.code, 'ENOTFOUND');
+-    assert.deepStrictEqual(err.syscall, 'queryMx');
+-    assert.deepStrictEqual(err.hostname, 'foo.onion');
+-    assert.deepStrictEqual(err.message, 'queryMx ENOTFOUND foo.onion');
+-  });
+-}
