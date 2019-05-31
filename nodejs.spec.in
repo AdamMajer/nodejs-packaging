@@ -415,7 +415,6 @@ export CXX=%{?cpp_exec}
     --enable-lto \
 %endif
 %if ! 0%{with intree_openssl}
-    --openssl-is-fips \
     --shared-openssl \
 %endif
     --shared-zlib \
