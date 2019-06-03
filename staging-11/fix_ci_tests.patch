@@ -178,3 +178,20 @@ Index: node-v12.3.1/test/parallel/test-dns.js
 -    assert.deepStrictEqual(err.message, 'queryMx ENOTFOUND foo.onion');
 -  });
 -}
+Index: node-v12.3.1/test/abort/test-addon-uv-handle-leak.js
+===================================================================
+--- node-v12.3.1.orig/test/abort/test-addon-uv-handle-leak.js
++++ node-v12.3.1/test/abort/test-addon-uv-handle-leak.js
+@@ -79,7 +79,11 @@ if (process.argv[2] === 'child') {
+         common.isAIX ||
+         (common.isLinux && !isGlibc()) ||
+         common.isWindows)) {
+-    assert(stderr.includes('ExampleOwnerClass'), stderr);
++
++    // When LTO is enabled on Linux, some things are optimized away
++    if (common.isLinux && !process.config.variables.enable_lto)
++      assert(stderr.includes('ExampleOwnerClass'), stderr);
++
+     assert(stderr.includes('CloseCallback'), stderr);
+     assert(stderr.includes('example_instance'), stderr);
+   }
