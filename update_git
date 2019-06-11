@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd node
+git checkout origin/master
+git fetch origin
+for branch in $(git branch -r | grep origin\.\*staging) master
+do
+    echo "Updating $branch ...."
+    git branch --track -f ${branch#origin/} $branch
+done
+
