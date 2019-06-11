@@ -1,4 +1,29 @@
 -------------------------------------------------------------------
+Tue Jun 11 12:38:25 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- Update to 12.4.0:
+  * esm: JSON module support is always enabled under
+    --experimental-modules. The --experimental-json-modules flag
+    has been removed
+  * http, http2: A new flag has been added for overriding
+    the default HTTP server socket timeout (which is two minutes).
+    Pass --http-server-default-timeout=milliseconds or
+    --http-server-default-timeout=0 to respectively change or
+    disable the timeout. Starting with Node.js 13.0.0,
+    the timeout will be disabled by default
+  * inspector: Added an experimental --heap-prof flag to start
+    the V8 heap profiler on startup and write the heap
+    profile to disk before exit
+  * stream: The readable.unshift() method now correctly converts
+    strings to buffers. Additionally, a new optional argument is
+    accepted to specify the string's encoding, such as 'utf8' or 'ascii'
+  * v8: The object returned by v8.getHeapStatistics() has two
+    new properties: number_of_native_contexts and number_of_detached_contexts
+
+- nodejs-libpath.patch: install npx into proper directory
+- versioned.patch, fix_ci_tests.patch: refreshed
+
+-------------------------------------------------------------------
 Wed May 29 15:23:37 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - Update to 12.3.1:
