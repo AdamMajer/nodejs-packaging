@@ -7,7 +7,7 @@ s/{{exclusive_arch}}/%{ix86} x86_64 armv7hl aarch64 ppc ppc64 ppc64le s390 s390x
 #
 #
 # openssl version - need OpenSSL 1.1.1+
-s/{{intree_openssl}}/0%{?suse_version} >= 1600 || 0%{?sle_version} >= 120500/
+s/{{intree_openssl}}/0%{?suse_version} >= 1550 || 0%{?sle_version} >= 120500/
 #
 #
 # icu versions

@@ -8,10 +8,10 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-git.8dae89b396/Makefile
+Index: node-git.62ac84b5f8/Makefile
 ===================================================================
---- node-git.8dae89b396.orig/Makefile
-+++ node-git.8dae89b396/Makefile
+--- node-git.62ac84b5f8.orig/Makefile
++++ node-git.62ac84b5f8/Makefile
 @@ -45,7 +45,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
@@ -21,10 +21,10 @@ Index: node-git.8dae89b396/Makefile
  NODE ?= ./$(NODE_EXE)
  NODE_G_EXE = node_g$(EXEEXT)
  NPM ?= ./deps/npm/bin/npm-cli.js
-Index: node-git.8dae89b396/tools/install.py
+Index: node-git.62ac84b5f8/tools/install.py
 ===================================================================
---- node-git.8dae89b396.orig/tools/install.py
-+++ node-git.8dae89b396/tools/install.py
+--- node-git.62ac84b5f8.orig/tools/install.py
++++ node-git.62ac84b5f8/tools/install.py
 @@ -81,7 +81,7 @@ def uninstall(paths, dst):
      try_remove(path, dst)
  
@@ -56,8 +56,8 @@ Index: node-git.8dae89b396/tools/install.py
 -    action([link_path], 'bin/npx')
 +    action([link_path], 'bin/npx42')
    elif action == install:
--    try_symlink('../lib/node_modules/npm/bin/npx-cli.js', link_path)
-+    try_symlink('../lib/node_modules/npm42/bin/npx-cli.js', link_path)
+-    try_symlink('../' + sysconfig.get_config_var("LIB") + '/node_modules/npm/bin/npx-cli.js', link_path)
++    try_symlink('../' + sysconfig.get_config_var("LIB") + '/node_modules/npm42/bin/npx-cli.js', link_path)
    else:
      assert 0 # unhandled action type
  
@@ -125,10 +125,10 @@ Index: node-git.8dae89b396/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-git.8dae89b396/doc/node.1
+Index: node-git.62ac84b5f8/doc/node.1
 ===================================================================
---- node-git.8dae89b396.orig/doc/node.1
-+++ node-git.8dae89b396/doc/node.1
+--- node-git.62ac84b5f8.orig/doc/node.1
++++ node-git.62ac84b5f8/doc/node.1
 @@ -30,24 +30,24 @@
  .Dt NODE 1
  .
@@ -158,10 +158,10 @@ Index: node-git.8dae89b396/doc/node.1
  .Op Fl -v8-options
  .
  .\"======================================================================
-Index: node-git.8dae89b396/src/node.stp
+Index: node-git.62ac84b5f8/src/node.stp
 ===================================================================
---- node-git.8dae89b396.orig/src/node.stp
-+++ node-git.8dae89b396/src/node.stp
+--- node-git.62ac84b5f8.orig/src/node.stp
++++ node-git.62ac84b5f8/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -234,10 +234,10 @@ Index: node-git.8dae89b396/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-git.8dae89b396/deps/npm/man/man1/npm.1
+Index: node-git.62ac84b5f8/deps/npm/man/man1/npm.1
 ===================================================================
---- node-git.8dae89b396.orig/deps/npm/man/man1/npm.1
-+++ node-git.8dae89b396/deps/npm/man/man1/npm.1
+--- node-git.62ac84b5f8.orig/deps/npm/man/man1/npm.1
++++ node-git.62ac84b5f8/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
  .TH "NPM" "1" "April 2019" "" ""
  .SH "NAME"
@@ -338,10 +338,10 @@ Index: node-git.8dae89b396/deps/npm/man/man1/npm.1
  
  .RE
  
-Index: node-git.8dae89b396/node.gyp
+Index: node-git.62ac84b5f8/node.gyp
 ===================================================================
---- node-git.8dae89b396.orig/node.gyp
-+++ node-git.8dae89b396/node.gyp
+--- node-git.62ac84b5f8.orig/node.gyp
++++ node-git.62ac84b5f8/node.gyp
 @@ -22,8 +22,8 @@
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',
@@ -353,10 +353,10 @@ Index: node-git.8dae89b396/node.gyp
      'node_intermediate_lib_type%': 'static_library',
      'library_files': [
        'lib/internal/bootstrap/environment.js',
-Index: node-git.8dae89b396/src/node_main.cc
+Index: node-git.62ac84b5f8/src/node_main.cc
 ===================================================================
---- node-git.8dae89b396.orig/src/node_main.cc
-+++ node-git.8dae89b396/src/node_main.cc
+--- node-git.62ac84b5f8.orig/src/node_main.cc
++++ node-git.62ac84b5f8/src/node_main.cc
 @@ -121,6 +121,7 @@ int main(int argc, char* argv[]) {
  #endif
    // Disable stdio buffering, it interacts poorly with printf()
@@ -365,10 +365,10 @@ Index: node-git.8dae89b396/src/node_main.cc
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
-Index: node-git.8dae89b396/deps/npm/man/man1/npx.1
+Index: node-git.62ac84b5f8/deps/npm/man/man1/npx.1
 ===================================================================
---- node-git.8dae89b396.orig/deps/npm/man/man1/npx.1
-+++ node-git.8dae89b396/deps/npm/man/man1/npx.1
+--- node-git.62ac84b5f8.orig/deps/npm/man/man1/npx.1
++++ node-git.62ac84b5f8/deps/npm/man/man1/npx.1
 @@ -1,32 +1,32 @@
  .TH "NPX" "1" "April 2018" "npx@10.1.1" "User Commands"
  .SH "NAME"
@@ -452,10 +452,10 @@ Index: node-git.8dae89b396/deps/npm/man/man1/npx.1
 +\fBnpm42\-config(7)\fP
  
  .RE
-Index: node-git.8dae89b396/tools/test.py
+Index: node-git.62ac84b5f8/tools/test.py
 ===================================================================
---- node-git.8dae89b396.orig/tools/test.py
-+++ node-git.8dae89b396/tools/test.py
+--- node-git.62ac84b5f8.orig/tools/test.py
++++ node-git.62ac84b5f8/tools/test.py
 @@ -935,7 +935,7 @@ class Context(object):
      if self.vm is not None:
        return self.vm
