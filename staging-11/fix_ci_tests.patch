@@ -2,10 +2,8 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-git.f607e16961/test/parallel/test-module-loading-globalpaths.js
-===================================================================
---- node-git.f607e16961.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-git.f607e16961/test/parallel/test-module-loading-globalpaths.js
+--- a/test/parallel/test-module-loading-globalpaths.js
++++ b/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -16,10 +14,8 @@ Index: node-git.f607e16961/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-git.f607e16961/test/parallel/test-tls-env-bad-extra-ca.js
-===================================================================
---- node-git.f607e16961.orig/test/parallel/test-tls-env-bad-extra-ca.js
-+++ node-git.f607e16961/test/parallel/test-tls-env-bad-extra-ca.js
+--- a/test/parallel/test-tls-env-bad-extra-ca.js
++++ b/test/parallel/test-tls-env-bad-extra-ca.js
 @@ -36,7 +36,7 @@ fork(__filename, opts)
      // TODO(addaleax): Make `SafeGetenv` work like `process.env`
      // encoding-wise
@@ -29,10 +25,8 @@ Index: node-git.f607e16961/test/parallel/test-tls-env-bad-extra-ca.js
        assert(re.test(stderr), stderr);
      }
    }))
-Index: node-git.f607e16961/test/parallel/test-tls-passphrase.js
-===================================================================
---- node-git.f607e16961.orig/test/parallel/test-tls-passphrase.js
-+++ node-git.f607e16961/test/parallel/test-tls-passphrase.js
+--- a/test/parallel/test-tls-passphrase.js
++++ b/test/parallel/test-tls-passphrase.js
 @@ -221,7 +221,7 @@ server.listen(0, common.mustCall(functio
    }, common.mustCall());
  })).unref();
@@ -51,10 +45,8 @@ Index: node-git.f607e16961/test/parallel/test-tls-passphrase.js
  
  // Invalid passphrase
  assert.throws(function() {
-Index: node-git.f607e16961/test/parallel/test-crypto-scrypt.js
-===================================================================
---- node-git.f607e16961.orig/test/parallel/test-crypto-scrypt.js
-+++ node-git.f607e16961/test/parallel/test-crypto-scrypt.js
+--- a/test/parallel/test-crypto-scrypt.js
++++ b/test/parallel/test-crypto-scrypt.js
 @@ -169,7 +169,7 @@ for (const options of bad) {
  
  for (const options of toobig) {
@@ -64,10 +56,8 @@ Index: node-git.f607e16961/test/parallel/test-crypto-scrypt.js
      type: Error,
    };
    common.expectsError(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
-Index: node-git.f607e16961/test/parallel/test-repl-envvars.js
-===================================================================
---- node-git.f607e16961.orig/test/parallel/test-repl-envvars.js
-+++ node-git.f607e16961/test/parallel/test-repl-envvars.js
+--- a/test/parallel/test-repl-envvars.js
++++ b/test/parallel/test-repl-envvars.js
 @@ -2,12 +2,14 @@
  
  // Flags: --expose-internals
@@ -84,11 +74,9 @@ Index: node-git.f607e16961/test/parallel/test-repl-envvars.js
  const tests = [
    {
      env: {},
-Index: node-git.f607e16961/test/common/index.mjs
-===================================================================
---- node-git.f607e16961.orig/test/common/index.mjs
-+++ node-git.f607e16961/test/common/index.mjs
-@@ -41,6 +41,7 @@ const {
+--- a/test/common/index.mjs
++++ b/test/common/index.mjs
+@@ -44,6 +44,7 @@ const {
    expectsError,
    skipIfInspectorDisabled,
    skipIf32Bits,
@@ -96,7 +84,7 @@ Index: node-git.f607e16961/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
-@@ -87,6 +88,7 @@ export {
+@@ -93,6 +94,7 @@ export {
    expectsError,
    skipIfInspectorDisabled,
    skipIf32Bits,
@@ -104,77 +92,14 @@ Index: node-git.f607e16961/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
-Index: node-git.f607e16961/test/parallel/test-fs-utimes.js
-===================================================================
---- node-git.f607e16961.orig/test/parallel/test-fs-utimes.js
-+++ node-git.f607e16961/test/parallel/test-fs-utimes.js
-@@ -145,7 +145,7 @@ const path = `${tmpdir.path}/test-utimes
+--- a/test/parallel/test-fs-utimes.js
++++ b/test/parallel/test-fs-utimes.js
+@@ -187,7 +187,7 @@ const path = `${tmpdir.path}/test-utimes
  fs.writeFileSync(path, '');
  
- // Test Y2K38 for all platforms [except 'arm', 'OpenBSD' and 'SunOS']
+ // test Y2K38 for all platforms [except 'arm', 'OpenBSD' and 'SunOS']
 -if (!process.arch.includes('arm') && !common.isOpenBSD && !common.isSunOS) {
 +if (!process.arch.includes('arm') && process.arch !== 's390' && !common.isOpenBSD && !common.isSunOS) {
-   const Y2K38_mtime = 2 ** 31;
-   fs.utimesSync(path, Y2K38_mtime, Y2K38_mtime);
-   const Y2K38_stats = fs.statSync(path);
-Index: node-git.f607e16961/Makefile
-===================================================================
---- node-git.f607e16961.orig/Makefile
-+++ node-git.f607e16961/Makefile
-@@ -467,7 +467,7 @@ test-all-valgrind: test-build
- 	$(PYTHON) tools/test.py $(PARALLEL_ARGS) --mode=debug,release --valgrind
- 
- .PHONY: test-all-suites
--test-all-suites: | clear-stalled test-build bench-addons-build doc-only ## Run all test suites.
-+test-all-suites: | clear-stalled test-build bench-addons-build ## Run all test suites.
- 	$(PYTHON) tools/test.py $(PARALLEL_ARGS) --mode=$(BUILDTYPE_LOWER) test/*
- 
- CI_NATIVE_SUITES ?= addons js-native-api node-api
-@@ -671,11 +671,12 @@ apidocs_json = $(addprefix out/,$(apidoc
- apiassets = $(subst api_assets,api/assets,$(addprefix out/,$(wildcard doc/api_assets/*)))
- 
- tools/doc/node_modules: tools/doc/package.json
--	@if [ "$(shell $(node_use_openssl))" != "true" ]; then \
--		echo "Skipping tools/doc/node_modules (no crypto)"; \
--	else \
--		cd tools/doc && $(call available-node,$(run-npm-ci)) \
--	fi
-+	echo "Skipping tools/doc/node_modules (no crypto)";
-+#	@if [ "$(shell $(node_use_openssl))" != "true" ]; then \
-+#		echo "Skipping tools/doc/node_modules (no crypto)"; \
-+#	else \
-+#		cd tools/doc && $(call available-node,$(run-npm-ci)) \
-+#	fi
- 
- .PHONY: doc-only
- doc-only: tools/doc/node_modules \
-Index: node-git.f607e16961/test/parallel/test-child-process-spawnsync-args.js
-===================================================================
---- node-git.f607e16961.orig/test/parallel/test-child-process-spawnsync-args.js
-+++ node-git.f607e16961/test/parallel/test-child-process-spawnsync-args.js
-@@ -12,6 +12,8 @@ const { spawnSync } = require('child_pro
- const common = require('../common');
- const tmpdir = require('../common/tmpdir');
- 
-+tmpdir.refresh();
-+
- const command = common.isWindows ? 'cd' : 'pwd';
- const options = { cwd: tmpdir.path };
- 
-Index: node-git.f607e16961/test/parallel/test-dns.js
-===================================================================
---- node-git.f607e16961.orig/test/parallel/test-dns.js
-+++ node-git.f607e16961/test/parallel/test-dns.js
-@@ -317,12 +317,3 @@ common.expectsError(() => {
-   type: TypeError
- });
- 
--{
--  dns.resolveMx('foo.onion', function(err) {
--    assert.deepStrictEqual(err.errno, 'ENOTFOUND');
--    assert.deepStrictEqual(err.code, 'ENOTFOUND');
--    assert.deepStrictEqual(err.syscall, 'queryMx');
--    assert.deepStrictEqual(err.hostname, 'foo.onion');
--    assert.deepStrictEqual(err.message, 'queryMx ENOTFOUND foo.onion');
--  });
--}
+   // because 2 ** 31 doesn't look right
+   // eslint-disable-next-line space-infix-ops
+   const Y2K38_mtime = 2**31;

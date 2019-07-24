@@ -1,17 +1,15 @@
-Index: node-git.62ac84b5f8/tools/install.py
-===================================================================
---- node-git.62ac84b5f8.orig/tools/install.py
-+++ node-git.62ac84b5f8/tools/install.py
-@@ -7,6 +7,7 @@ import errno
- import os
+--- a/tools/install.py
++++ b/tools/install.py
+@@ -7,6 +7,7 @@ import re
  import shutil
  import sys
+ from getmoduleversion import get_version
 +from distutils import sysconfig
  
  # set at init time
  node_prefix = '/usr/local' # PREFIX variable from Makefile
-@@ -80,7 +81,7 @@ def uninstall(paths, dst):
-     try_remove(path, dst)
+@@ -75,7 +76,7 @@ def install(paths, dst): map(lambda path
+ def uninstall(paths, dst): map(lambda path: try_remove(path, dst), paths)
  
  def npm_files(action):
 -  target_path = 'lib/node_modules/npm/'
@@ -19,25 +17,25 @@ Index: node-git.62ac84b5f8/tools/install.py
  
    # don't install npm if the target path is a symlink, it probably means
    # that a dev version of npm is installed there
-@@ -98,7 +99,7 @@ def npm_files(action):
+@@ -93,7 +94,7 @@ def npm_files(action):
    if action == uninstall:
      action([link_path], 'bin/npm')
    elif action == install:
 -    try_symlink('../lib/node_modules/npm/bin/npm-cli.js', link_path)
 +    try_symlink("../" + sysconfig.get_config_var("LIB") + '/node_modules/npm/bin/npm-cli.js',link_path)
    else:
-     assert 0  # unhandled action type
+     assert(0) # unhandled action type
  
-@@ -107,7 +108,7 @@ def npm_files(action):
+@@ -102,7 +103,7 @@ def npm_files(action):
    if action == uninstall:
      action([link_path], 'bin/npx')
    elif action == install:
 -    try_symlink('../lib/node_modules/npm/bin/npx-cli.js', link_path)
 +    try_symlink('../' + sysconfig.get_config_var("LIB") + '/node_modules/npm/bin/npx-cli.js', link_path)
    else:
-     assert 0 # unhandled action type
+     assert(0) # unhandled action type
  
-@@ -143,7 +144,7 @@ def files(action):
+@@ -138,7 +139,7 @@ def files(action):
      action([output_prefix + output_file], 'lib/' + output_file)
  
    if 'true' == variables.get('node_use_dtrace'):
@@ -46,11 +44,9 @@ Index: node-git.62ac84b5f8/tools/install.py
  
    # behave similarly for systemtap
    action(['src/node.stp'], 'share/systemtap/tapset/')
-Index: node-git.62ac84b5f8/lib/internal/modules/cjs/loader.js
-===================================================================
---- node-git.62ac84b5f8.orig/lib/internal/modules/cjs/loader.js
-+++ node-git.62ac84b5f8/lib/internal/modules/cjs/loader.js
-@@ -907,7 +907,7 @@ Module._initPaths = function() {
+--- a/lib/internal/modules/cjs/loader.js
++++ b/lib/internal/modules/cjs/loader.js
+@@ -790,7 +790,7 @@ Module._initPaths = function() {
    } else {
      prefixDir = path.resolve(process.execPath, '..', '..');
    }
