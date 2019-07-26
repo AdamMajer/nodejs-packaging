@@ -8,9 +8,11 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
---- a/Makefile
-+++ b/Makefile
-@@ -43,7 +43,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
+Index: node-git.62ac84b5f8/Makefile
+===================================================================
+--- node-git.62ac84b5f8.orig/Makefile
++++ node-git.62ac84b5f8/Makefile
+@@ -45,7 +45,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
  
@@ -19,10 +21,12 @@ modules for multiple versions of NodeJS
  NODE ?= ./$(NODE_EXE)
  NODE_G_EXE = node_g$(EXEEXT)
  NPM ?= ./deps/npm/bin/npm-cli.js
---- a/tools/install.py
-+++ b/tools/install.py
-@@ -76,7 +76,7 @@ def install(paths, dst): map(lambda path
- def uninstall(paths, dst): map(lambda path: try_remove(path, dst), paths)
+Index: node-git.62ac84b5f8/tools/install.py
+===================================================================
+--- node-git.62ac84b5f8.orig/tools/install.py
++++ node-git.62ac84b5f8/tools/install.py
+@@ -81,7 +81,7 @@ def uninstall(paths, dst):
+     try_remove(path, dst)
  
  def npm_files(action):
 -  target_path = sysconfig.get_config_var("LIB") + '/node_modules/npm/'
@@ -30,7 +34,7 @@ modules for multiple versions of NodeJS
  
    # don't install npm if the target path is a symlink, it probably means
    # that a dev version of npm is installed there
-@@ -90,20 +90,20 @@ def npm_files(action):
+@@ -95,20 +95,20 @@ def npm_files(action):
      action(paths, target_path + dirname[9:] + '/')
  
    # create/remove symlink
@@ -43,7 +47,7 @@ modules for multiple versions of NodeJS
 -    try_symlink("../" + sysconfig.get_config_var("LIB") + '/node_modules/npm/bin/npm-cli.js',link_path)
 +    try_symlink("../" + sysconfig.get_config_var("LIB") + '/node_modules/npm42/bin/npm-cli.js',link_path)
    else:
-     assert(0) # unhandled action type
+     assert 0  # unhandled action type
  
    # create/remove symlink
 -  link_path = abspath(install_path, 'bin/npx')
@@ -55,9 +59,9 @@ modules for multiple versions of NodeJS
 -    try_symlink('../' + sysconfig.get_config_var("LIB") + '/node_modules/npm/bin/npx-cli.js', link_path)
 +    try_symlink('../' + sysconfig.get_config_var("LIB") + '/node_modules/npm42/bin/npx-cli.js', link_path)
    else:
-     assert(0) # unhandled action type
+     assert 0 # unhandled action type
  
-@@ -117,7 +117,7 @@ def subdir_files(path, dest, action):
+@@ -122,7 +122,7 @@ def subdir_files(path, dest, action):
  
  def files(action):
    is_windows = sys.platform == 'win32'
@@ -66,7 +70,7 @@ modules for multiple versions of NodeJS
    output_prefix = 'out/Release/'
  
    if 'false' == variables.get('node_shared'):
-@@ -142,7 +142,7 @@ def files(action):
+@@ -147,7 +147,7 @@ def files(action):
      action(['out/Release/node.d'], sysconfig.get_config_var("LIB") + '/dtrace/node.d')
  
    # behave similarly for systemtap
@@ -75,7 +79,7 @@ modules for multiple versions of NodeJS
  
    action(['deps/v8/tools/gdbinit'], 'share/doc/node/')
    action(['deps/v8/tools/lldb_commands.py'], 'share/doc/node/')
-@@ -150,7 +150,7 @@ def files(action):
+@@ -155,7 +155,7 @@ def files(action):
    if 'freebsd' in sys.platform or 'openbsd' in sys.platform:
      action(['doc/node.1'], 'man/man1/')
    else:
@@ -84,7 +88,7 @@ modules for multiple versions of NodeJS
  
    if 'true' == variables.get('node_install_npm'): npm_files(action)
  
-@@ -174,28 +174,28 @@ def headers(action):
+@@ -181,28 +181,28 @@ def headers(action):
      'src/node_buffer.h',
      'src/node_object_wrap.h',
      'src/node_version.h',
@@ -121,8 +125,10 @@ modules for multiple versions of NodeJS
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
---- a/doc/node.1
-+++ b/doc/node.1
+Index: node-git.62ac84b5f8/doc/node.1
+===================================================================
+--- node-git.62ac84b5f8.orig/doc/node.1
++++ node-git.62ac84b5f8/doc/node.1
 @@ -30,24 +30,24 @@
  .Dt NODE 1
  .
@@ -152,8 +158,10 @@ modules for multiple versions of NodeJS
  .Op Fl -v8-options
  .
  .\"======================================================================
---- a/src/node.stp
-+++ b/src/node.stp
+Index: node-git.62ac84b5f8/src/node.stp
+===================================================================
+--- node-git.62ac84b5f8.orig/src/node.stp
++++ node-git.62ac84b5f8/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -226,10 +234,12 @@ modules for multiple versions of NodeJS
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
---- a/deps/npm/man/man1/npm.1
-+++ b/deps/npm/man/man1/npm.1
+Index: node-git.62ac84b5f8/deps/npm/man/man1/npm.1
+===================================================================
+--- node-git.62ac84b5f8.orig/deps/npm/man/man1/npm.1
++++ node-git.62ac84b5f8/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
- .TH "NPM" "1" "August 2018" "" ""
+ .TH "NPM" "1" "April 2019" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm42\fR \- javascript package manager
@@ -328,9 +338,11 @@ modules for multiple versions of NodeJS
  
  .RE
  
---- a/src/node_main.cc
-+++ b/src/node_main.cc
-@@ -119,6 +119,7 @@ int main(int argc, char* argv[]) {
+Index: node-git.62ac84b5f8/src/node_main.cc
+===================================================================
+--- node-git.62ac84b5f8.orig/src/node_main.cc
++++ node-git.62ac84b5f8/src/node_main.cc
+@@ -121,6 +121,7 @@ int main(int argc, char* argv[]) {
  #endif
    // Disable stdio buffering, it interacts poorly with printf()
    // calls elsewhere in the program (e.g., any logging from V8.)
@@ -338,8 +350,10 @@ modules for multiple versions of NodeJS
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
---- a/deps/npm/man/man1/npx.1
-+++ b/deps/npm/man/man1/npx.1
+Index: node-git.62ac84b5f8/deps/npm/man/man1/npx.1
+===================================================================
+--- node-git.62ac84b5f8.orig/deps/npm/man/man1/npx.1
++++ node-git.62ac84b5f8/deps/npm/man/man1/npx.1
 @@ -1,32 +1,32 @@
  .TH "NPX" "1" "April 2018" "npx@10.1.1" "User Commands"
  .SH "NAME"
@@ -423,11 +437,13 @@ modules for multiple versions of NodeJS
 +\fBnpm42\-config(7)\fP
  
  .RE
---- a/tools/test.py
-+++ b/tools/test.py
-@@ -915,7 +915,7 @@ class Context(object):
- 
-   def GetVm(self, arch, mode):
+Index: node-git.62ac84b5f8/tools/test.py
+===================================================================
+--- node-git.62ac84b5f8.orig/tools/test.py
++++ node-git.62ac84b5f8/tools/test.py
+@@ -935,7 +935,7 @@ class Context(object):
+     if self.vm is not None:
+       return self.vm
      if arch == 'none':
 -      name = 'out/Debug/node' if mode == 'debug' else 'out/Release/node'
 +      name = 'out/Debug/node' if mode == 'debug' else 'out/Release/node42'

@@ -20,10 +20,10 @@
 [ 4759s] E: nodejs12 no-return-in-nonvoid-function ../deps/v8/src/vm-state-inl.h:40
 [ 4759s] 
 
-Index: node-git.62ac84b5f8/deps/v8/src/compiler/effect-control-linearizer.cc
+Index: node-v12.7.0/deps/v8/src/compiler/effect-control-linearizer.cc
 ===================================================================
---- node-git.62ac84b5f8.orig/deps/v8/src/compiler/effect-control-linearizer.cc
-+++ node-git.62ac84b5f8/deps/v8/src/compiler/effect-control-linearizer.cc
+--- node-v12.7.0.orig/deps/v8/src/compiler/effect-control-linearizer.cc
++++ node-v12.7.0/deps/v8/src/compiler/effect-control-linearizer.cc
 @@ -4477,6 +4477,8 @@ Node* EffectControlLinearizer::BuildReve
      case kExternalBigUint64Array:
        UNREACHABLE();
@@ -33,10 +33,10 @@ Index: node-git.62ac84b5f8/deps/v8/src/compiler/effect-control-linearizer.cc
  }
  
  Node* EffectControlLinearizer::LowerLoadDataViewElement(Node* node) {
-Index: node-git.62ac84b5f8/deps/v8/src/compiler/js-heap-broker.cc
+Index: node-v12.7.0/deps/v8/src/compiler/js-heap-broker.cc
 ===================================================================
---- node-git.62ac84b5f8.orig/deps/v8/src/compiler/js-heap-broker.cc
-+++ node-git.62ac84b5f8/deps/v8/src/compiler/js-heap-broker.cc
+--- node-v12.7.0.orig/deps/v8/src/compiler/js-heap-broker.cc
++++ node-v12.7.0/deps/v8/src/compiler/js-heap-broker.cc
 @@ -2746,6 +2746,8 @@ MapRef NativeContextRef::GetInitialJSArr
      default:
        UNREACHABLE();
@@ -46,10 +46,10 @@ Index: node-git.62ac84b5f8/deps/v8/src/compiler/js-heap-broker.cc
  }
  
  base::Optional<JSFunctionRef> NativeContextRef::GetConstructorFunction(
-Index: node-git.62ac84b5f8/deps/v8/src/objects/js-list-format.cc
+Index: node-v12.7.0/deps/v8/src/objects/js-list-format.cc
 ===================================================================
---- node-git.62ac84b5f8.orig/deps/v8/src/objects/js-list-format.cc
-+++ node-git.62ac84b5f8/deps/v8/src/objects/js-list-format.cc
+--- node-v12.7.0.orig/deps/v8/src/objects/js-list-format.cc
++++ node-v12.7.0/deps/v8/src/objects/js-list-format.cc
 @@ -78,6 +78,8 @@ const char* GetIcuStyleString(JSListForm
      case JSListFormat::Type::COUNT:
        UNREACHABLE();
@@ -77,10 +77,10 @@ Index: node-git.62ac84b5f8/deps/v8/src/objects/js-list-format.cc
  }
  
  namespace {
-Index: node-git.62ac84b5f8/deps/v8/src/objects/js-relative-time-format.cc
+Index: node-v12.7.0/deps/v8/src/objects/js-relative-time-format.cc
 ===================================================================
---- node-git.62ac84b5f8.orig/deps/v8/src/objects/js-relative-time-format.cc
-+++ node-git.62ac84b5f8/deps/v8/src/objects/js-relative-time-format.cc
+--- node-v12.7.0.orig/deps/v8/src/objects/js-relative-time-format.cc
++++ node-v12.7.0/deps/v8/src/objects/js-relative-time-format.cc
 @@ -37,6 +37,8 @@ UDateRelativeDateTimeFormatterStyle getI
      case JSRelativeTimeFormat::Style::COUNT:
        UNREACHABLE();
@@ -108,10 +108,10 @@ Index: node-git.62ac84b5f8/deps/v8/src/objects/js-relative-time-format.cc
  }
  
  namespace {
-Index: node-git.62ac84b5f8/deps/v8/src/objects/js-collator.cc
+Index: node-v12.7.0/deps/v8/src/objects/js-collator.cc
 ===================================================================
---- node-git.62ac84b5f8.orig/deps/v8/src/objects/js-collator.cc
-+++ node-git.62ac84b5f8/deps/v8/src/objects/js-collator.cc
+--- node-v12.7.0.orig/deps/v8/src/objects/js-collator.cc
++++ node-v12.7.0/deps/v8/src/objects/js-collator.cc
 @@ -217,6 +217,8 @@ UColAttributeValue ToUColAttributeValue(
      case Intl::CaseFirst::kUndefined:
        return UCOL_OFF;
@@ -121,10 +121,10 @@ Index: node-git.62ac84b5f8/deps/v8/src/objects/js-collator.cc
  }
  
  void SetNumericOption(icu::Collator* icu_collator, bool numeric) {
-Index: node-git.62ac84b5f8/deps/v8/src/vm-state-inl.h
+Index: node-v12.7.0/deps/v8/src/vm-state-inl.h
 ===================================================================
---- node-git.62ac84b5f8.orig/deps/v8/src/vm-state-inl.h
-+++ node-git.62ac84b5f8/deps/v8/src/vm-state-inl.h
+--- node-v12.7.0.orig/deps/v8/src/vm-state-inl.h
++++ node-v12.7.0/deps/v8/src/vm-state-inl.h
 @@ -37,6 +37,7 @@ inline const char* StateToString(StateTa
      case IDLE:
        return "IDLE";

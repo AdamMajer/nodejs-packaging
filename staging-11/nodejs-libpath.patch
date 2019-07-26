@@ -1,6 +1,8 @@
---- a/tools/install.py
-+++ b/tools/install.py
-@@ -6,6 +6,7 @@ import os
+Index: node-git.f607e16961/tools/install.py
+===================================================================
+--- node-git.f607e16961.orig/tools/install.py
++++ node-git.f607e16961/tools/install.py
+@@ -7,6 +7,7 @@ import os
  import re
  import shutil
  import sys
@@ -8,8 +10,8 @@
  from getmoduleversion import get_version
  
  # set at init time
-@@ -75,7 +76,7 @@ def install(paths, dst): map(lambda path
- def uninstall(paths, dst): map(lambda path: try_remove(path, dst), paths)
+@@ -81,7 +82,7 @@ def uninstall(paths, dst):
+     try_remove(path, dst)
  
  def npm_files(action):
 -  target_path = 'lib/node_modules/npm/'
@@ -17,7 +19,7 @@
  
    # don't install npm if the target path is a symlink, it probably means
    # that a dev version of npm is installed there
-@@ -93,7 +94,7 @@ def npm_files(action):
+@@ -99,7 +100,7 @@ def npm_files(action):
    if action == uninstall:
      action([link_path], 'bin/npm')
    elif action == install:
@@ -26,7 +28,7 @@
    else:
      assert(0) # unhandled action type
  
-@@ -102,7 +103,7 @@ def npm_files(action):
+@@ -108,7 +109,7 @@ def npm_files(action):
    if action == uninstall:
      action([link_path], 'bin/npx')
    elif action == install:
@@ -35,7 +37,7 @@
    else:
      assert(0) # unhandled action type
  
-@@ -138,7 +139,7 @@ def files(action):
+@@ -144,7 +145,7 @@ def files(action):
      action([output_prefix + output_file], 'lib/' + output_file)
  
    if 'true' == variables.get('node_use_dtrace'):
@@ -44,9 +46,11 @@
  
    # behave similarly for systemtap
    action(['src/node.stp'], 'share/systemtap/tapset/')
---- a/lib/internal/modules/cjs/loader.js
-+++ b/lib/internal/modules/cjs/loader.js
-@@ -786,7 +786,7 @@ Module._initPaths = function() {
+Index: node-git.f607e16961/lib/internal/modules/cjs/loader.js
+===================================================================
+--- node-git.f607e16961.orig/lib/internal/modules/cjs/loader.js
++++ node-git.f607e16961/lib/internal/modules/cjs/loader.js
+@@ -907,7 +907,7 @@ Module._initPaths = function() {
    } else {
      prefixDir = path.resolve(process.execPath, '..', '..');
    }
