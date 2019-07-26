@@ -1,0 +1,4 @@
+#!/bin/bash
+
+exec find -L staging* nodejs* -samefile $1
+
