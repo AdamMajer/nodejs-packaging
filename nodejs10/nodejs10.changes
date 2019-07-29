@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jul 29 09:01:18 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2019-13173.patch: fix potential file overwrite via hardlink
+  in fstream.DirWriter() function (bsc#1140290, CVE-2019-13173)
+
+-------------------------------------------------------------------
 Wed May 29 15:39:40 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - New upstream LTS version 10.16.0
