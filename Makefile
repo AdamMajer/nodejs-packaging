@@ -38,6 +38,9 @@ status: ${TARGET_STAMPS} changelog.target
 	(cd $(MAIN_PRJ); osc status)
 	(cd $(STAGING_PRJ); osc status)
 
+released-only: ${RELEASED_TARGETS_STAMPS} changelog.target
+	(cd $(MAIN_PRJ); osc status)
+
 clean:
 	rm -f ${TARGET_STAMPS}
 
