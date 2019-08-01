@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Aug  1 15:01:02 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- New upstream LTS version 10.16.1
+  * deps: upgrade openssl sources to 1.1.1c (for SLE-12 based systems)
+  * stream: do not unconditionally call _read() on resume()
+  * worker: fix nullptr deref after MessagePort deser failure
+
+-------------------------------------------------------------------
 Mon Jul 29 09:01:18 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2019-13173.patch: fix potential file overwrite via hardlink
