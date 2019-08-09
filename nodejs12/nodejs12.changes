@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Fri Aug  9 14:40:09 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- Update to 12.8.0:
+  * crypto:
+    + The outputLength option is added to crypto.createHash
+    + The maxmem range is increased from 32 to 53 bits
+  * n-api: Added APIs for per-instance state management
+  * report: Network interfaces get included in the report
+  * src: v8.getHeapCodeStatistics() is now exported
+
+-------------------------------------------------------------------
 Wed Jul 24 10:44:10 UTC 2019 - Adam Majer <amajer@suse.com>
 
 - Update to 12.7.0:
