@@ -1,1 +1,0 @@
-../staging-10/update_npm_tarball.sh
