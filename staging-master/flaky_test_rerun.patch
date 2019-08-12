@@ -1,8 +1,8 @@
-Index: node-v10.15.3/tools/test.py
+Index: node-git.b4f0a18b5a/tools/test.py
 ===================================================================
---- node-v10.15.3.orig/tools/test.py
-+++ node-v10.15.3/tools/test.py
-@@ -539,6 +539,16 @@ class TestCase(object):
+--- node-git.b4f0a18b5a.orig/tools/test.py
++++ node-git.b4f0a18b5a/tools/test.py
+@@ -537,6 +537,16 @@ class TestCase(object):
                        self.context.store_unexpected_output)
  
    def Run(self):
@@ -18,4 +18,4 @@ Index: node-v10.15.3/tools/test.py
 +  def OriginalRun(self):
      try:
        result = self.RunCommand(self.GetCommand(), {
-         "TEST_THREAD_ID": "%d" % self.thread_id,
+         "TEST_SERIAL_ID": "%d" % self.serial_id,
