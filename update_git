@@ -3,7 +3,7 @@
 cd node
 git checkout origin/master
 git fetch origin
-for branch in $(git branch -r | grep origin\.\*staging) master
+for branch in $(git branch -r | grep origin\.\*staging) origin/master
 do
     echo "Updating $branch ...."
     git branch --track -f ${branch#origin/} $branch
