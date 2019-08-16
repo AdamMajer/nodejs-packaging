@@ -212,7 +212,7 @@ BuildRequires:  group(nobody)
 %if ! 0%{with intree_openssl}
 
 %if %node_version_number >= 8
-BuildRequires:  openssl-devel >= %{openssl_req_ver}
+BuildRequires:  pkgconfig(openssl) >= %{openssl_req_ver}
 %else # older node doesn't support OpenSSL 1.1
 
 %if 0%{?suse_version} >= 1330
