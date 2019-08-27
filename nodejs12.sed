@@ -1,12 +1,16 @@
 s/{{npm_version}}/6.10.2/g
-s/{{node_version}}/12.9.0/g
+s/{{node_version}}/12.9.1/g
 s/{{node_version_major}}/12/g
 s/{{exclusive_arch}}/%{ix86} x86_64 armv7hl aarch64 ppc64 ppc64le s390x/g
 
 #
 #
 # openssl version
-s/{{intree_openssl}}/0%{?suse_version} >= 1500 || 0%{?sle_version} >= 120400/
+#
+# Tumbleweed
+# SLE12 SP5+
+# SLE15 SP2+
+s/{{intree_openssl}}/0%{?suse_version} >= 1550 || (0%{?sle_version} >= 120500 \&\& 0%{?sle_version} < 150000) || 0%{?sle_version} >= 150200/
 #
 #
 # icu versions

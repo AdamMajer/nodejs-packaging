@@ -89,12 +89,12 @@ ${ALL_TARGETS}: changelog.target common.target
 	
 	# Verify that patches actually apply
 	if [ "$(findstring staging,$@)" != "staging" ]; then \
-		cd $D && quilt setup --fast *.spec && \
+		cd $D && quilt setup --fast -v *.spec && \
 		cd `find -maxdepth 1 -mindepth 1 -type d -name node\*` && quilt push -a --fuzz=0; \
 	else \
 		cd $D && find -maxdepth 1 -mindepth 1 -type d -name node-git\* -exec rm -rf {} \+ && \
 		TAR_SCM_TESTMODE=1 osc service disabledrun && \
-		quilt setup --fast *.spec && \
+		quilt setup --fast -v *.spec && \
 		cd `find -maxdepth 1 -mindepth 1 -type d -name node-git\*` && quilt push -a --fuzz=0; \
 	fi
 	touch $@.target
