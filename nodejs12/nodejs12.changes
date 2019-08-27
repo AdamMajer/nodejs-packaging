@@ -1,4 +1,26 @@
 -------------------------------------------------------------------
+Mon Aug 26 14:33:48 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- Update to 12.9.0:
+  * crypto: Added an oaepHash option to asymmetric encryption which
+    allows users to specify a hash function when using OAEP padding
+  * deps: Updated V8 to 7.6.303.29
+    + Improves the performance of various APIs such as JSON.parse
+      and methods called on frozen arrays.
+    + Adds the Promise.allSettled method.
+    + Improves support of BigInt in Intl methods.
+    + For more information: https://v8.dev/blog/v8-release-76
+  * fs: Added fs.writev, fs.writevSync and filehandle.writev
+    (promise version) methods.
+  * http: Added three properties to OutgoingMessage.prototype:
+    writableObjectMode, writableLength and writableHighWaterMark
+  * stream:
+    + Added an new property 'readableEnded' to readable streams.
+    + Added an new property 'writableEnded' to writable streams.
+
+- fix_ci_tests.patch: refreshed
+
+-------------------------------------------------------------------
 Fri Aug 16 14:33:44 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - Update to 12.8.1:

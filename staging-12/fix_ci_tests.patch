@@ -2,8 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
---- a/test/parallel/test-module-loading-globalpaths.js
-+++ b/test/parallel/test-module-loading-globalpaths.js
+Index: node-v12.9.0/test/parallel/test-module-loading-globalpaths.js
+===================================================================
+--- node-v12.9.0.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-v12.9.0/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -14,8 +16,10 @@ Summary: Fix CI unit tests framework for OBS building
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
---- a/test/parallel/test-tls-env-bad-extra-ca.js
-+++ b/test/parallel/test-tls-env-bad-extra-ca.js
+Index: node-v12.9.0/test/parallel/test-tls-env-bad-extra-ca.js
+===================================================================
+--- node-v12.9.0.orig/test/parallel/test-tls-env-bad-extra-ca.js
++++ node-v12.9.0/test/parallel/test-tls-env-bad-extra-ca.js
 @@ -36,7 +36,7 @@ fork(__filename, opts)
      // TODO(addaleax): Make `SafeGetenv` work like `process.env`
      // encoding-wise
@@ -25,10 +29,12 @@ Summary: Fix CI unit tests framework for OBS building
        assert(re.test(stderr), stderr);
      }
    }))
---- a/test/parallel/test-tls-passphrase.js
-+++ b/test/parallel/test-tls-passphrase.js
-@@ -221,7 +221,7 @@ server.listen(0, common.mustCall(functio
-   }, common.mustCall());
+Index: node-v12.9.0/test/parallel/test-tls-passphrase.js
+===================================================================
+--- node-v12.9.0.orig/test/parallel/test-tls-passphrase.js
++++ node-v12.9.0/test/parallel/test-tls-passphrase.js
+@@ -223,7 +223,7 @@ server.listen(0, common.mustCall(functio
+   }, onSecureConnect());
  })).unref();
  
 -const errMessagePassword = /bad decrypt/;
@@ -36,7 +42,7 @@ Summary: Fix CI unit tests framework for OBS building
  
  // Missing passphrase
  assert.throws(function() {
-@@ -251,7 +251,7 @@ assert.throws(function() {
+@@ -253,7 +253,7 @@ assert.throws(function() {
    });
  }, errMessagePassword);
  
@@ -45,8 +51,10 @@ Summary: Fix CI unit tests framework for OBS building
  
  // Invalid passphrase
  assert.throws(function() {
---- a/test/parallel/test-crypto-scrypt.js
-+++ b/test/parallel/test-crypto-scrypt.js
+Index: node-v12.9.0/test/parallel/test-crypto-scrypt.js
+===================================================================
+--- node-v12.9.0.orig/test/parallel/test-crypto-scrypt.js
++++ node-v12.9.0/test/parallel/test-crypto-scrypt.js
 @@ -169,8 +169,8 @@ for (const options of bad) {
  
  for (const options of toobig) {
@@ -58,8 +66,10 @@ Summary: Fix CI unit tests framework for OBS building
      type: Error,
    };
    common.expectsError(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
---- a/test/parallel/test-repl-envvars.js
-+++ b/test/parallel/test-repl-envvars.js
+Index: node-v12.9.0/test/parallel/test-repl-envvars.js
+===================================================================
+--- node-v12.9.0.orig/test/parallel/test-repl-envvars.js
++++ node-v12.9.0/test/parallel/test-repl-envvars.js
 @@ -2,12 +2,14 @@
  
  // Flags: --expose-internals
@@ -76,9 +86,11 @@ Summary: Fix CI unit tests framework for OBS building
  const tests = [
    {
      env: {},
---- a/test/common/index.mjs
-+++ b/test/common/index.mjs
-@@ -50,6 +50,7 @@ const {
+Index: node-v12.9.0/test/common/index.mjs
+===================================================================
+--- node-v12.9.0.orig/test/common/index.mjs
++++ node-v12.9.0/test/common/index.mjs
+@@ -45,6 +45,7 @@ const {
    expectsError,
    skipIfInspectorDisabled,
    skipIf32Bits,
@@ -86,7 +98,7 @@ Summary: Fix CI unit tests framework for OBS building
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
-@@ -96,6 +97,7 @@ export {
+@@ -91,6 +92,7 @@ export {
    expectsError,
    skipIfInspectorDisabled,
    skipIf32Bits,
@@ -94,8 +106,10 @@ Summary: Fix CI unit tests framework for OBS building
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
---- a/test/parallel/test-fs-utimes.js
-+++ b/test/parallel/test-fs-utimes.js
+Index: node-v12.9.0/test/parallel/test-fs-utimes.js
+===================================================================
+--- node-v12.9.0.orig/test/parallel/test-fs-utimes.js
++++ node-v12.9.0/test/parallel/test-fs-utimes.js
 @@ -145,7 +145,7 @@ const path = `${tmpdir.path}/test-utimes
  fs.writeFileSync(path, '');
  
@@ -105,9 +119,11 @@ Summary: Fix CI unit tests framework for OBS building
    const Y2K38_mtime = 2 ** 31;
    fs.utimesSync(path, Y2K38_mtime, Y2K38_mtime);
    const Y2K38_stats = fs.statSync(path);
---- a/Makefile
-+++ b/Makefile
-@@ -483,7 +483,7 @@ test-all-valgrind: test-build
+Index: node-v12.9.0/Makefile
+===================================================================
+--- node-v12.9.0.orig/Makefile
++++ node-v12.9.0/Makefile
+@@ -493,7 +493,7 @@ test-all-valgrind: test-build
  	$(PYTHON) tools/test.py $(PARALLEL_ARGS) --mode=debug,release --valgrind
  
  .PHONY: test-all-suites
@@ -116,7 +132,7 @@ Summary: Fix CI unit tests framework for OBS building
  	$(PYTHON) tools/test.py $(PARALLEL_ARGS) --mode=$(BUILDTYPE_LOWER) test/*
  
  CI_NATIVE_SUITES ?= addons js-native-api node-api
-@@ -695,11 +695,12 @@ apidocs_json = $(addprefix out/,$(apidoc
+@@ -705,11 +705,12 @@ apidocs_json = $(addprefix out/,$(apidoc
  apiassets = $(subst api_assets,api/assets,$(addprefix out/,$(wildcard doc/api_assets/*)))
  
  tools/doc/node_modules: tools/doc/package.json
@@ -134,8 +150,10 @@ Summary: Fix CI unit tests framework for OBS building
  
  .PHONY: doc-only
  doc-only: tools/doc/node_modules \
---- a/test/parallel/test-child-process-spawnsync-args.js
-+++ b/test/parallel/test-child-process-spawnsync-args.js
+Index: node-v12.9.0/test/parallel/test-child-process-spawnsync-args.js
+===================================================================
+--- node-v12.9.0.orig/test/parallel/test-child-process-spawnsync-args.js
++++ node-v12.9.0/test/parallel/test-child-process-spawnsync-args.js
 @@ -12,6 +12,8 @@ const tmpdir = require('../common/tmpdir
  const assert = require('assert');
  const { spawnSync } = require('child_process');
@@ -145,8 +163,10 @@ Summary: Fix CI unit tests framework for OBS building
  const command = common.isWindows ? 'cd' : 'pwd';
  const options = { cwd: tmpdir.path };
  
---- a/test/parallel/test-dns.js
-+++ b/test/parallel/test-dns.js
+Index: node-v12.9.0/test/parallel/test-dns.js
+===================================================================
+--- node-v12.9.0.orig/test/parallel/test-dns.js
++++ node-v12.9.0/test/parallel/test-dns.js
 @@ -320,16 +320,6 @@ common.expectsError(() => {
  });
  

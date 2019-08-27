@@ -194,7 +194,6 @@ BuildRequires:  gcc-c++
 %endif
 
 BuildRequires:  fdupes
-BuildRequires:  pkg-config
 BuildRequires:  procps
 BuildRequires:  xz
 BuildRequires:  zlib-devel
