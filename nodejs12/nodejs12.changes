@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Fri Sep  6 08:44:26 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- Update to 12.10.0:
+  * deps:
+    + update npm to 6.10.3
+  * fs:
+    + Add recursive option to rmdir()
+    + Allow passing true to emitClose option
+    + Add *timeNs properties to BigInt Stats objects
+  * net:
+    + Allow reading data into a static buffer
+
+- versioned.patch: refreshed
+
+-------------------------------------------------------------------
 Mon Aug 26 14:33:48 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - Update to 12.9.0:

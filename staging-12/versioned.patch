@@ -8,8 +8,10 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
---- a/Makefile
-+++ b/Makefile
+Index: node-v12.10.0/Makefile
+===================================================================
+--- node-v12.10.0.orig/Makefile
++++ node-v12.10.0/Makefile
 @@ -45,7 +45,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
@@ -19,8 +21,10 @@ modules for multiple versions of NodeJS
  NODE ?= ./$(NODE_EXE)
  NODE_G_EXE = node_g$(EXEEXT)
  NPM ?= ./deps/npm/bin/npm-cli.js
---- a/tools/install.py
-+++ b/tools/install.py
+Index: node-v12.10.0/tools/install.py
+===================================================================
+--- node-v12.10.0.orig/tools/install.py
++++ node-v12.10.0/tools/install.py
 @@ -81,7 +81,7 @@ def uninstall(paths, dst):
      try_remove(path, dst)
  
@@ -121,8 +125,10 @@ modules for multiple versions of NodeJS
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
---- a/doc/node.1
-+++ b/doc/node.1
+Index: node-v12.10.0/doc/node.1
+===================================================================
+--- node-v12.10.0.orig/doc/node.1
++++ node-v12.10.0/doc/node.1
 @@ -30,24 +30,24 @@
  .Dt NODE 1
  .
@@ -152,8 +158,10 @@ modules for multiple versions of NodeJS
  .Op Fl -v8-options
  .
  .\"======================================================================
---- a/src/node.stp
-+++ b/src/node.stp
+Index: node-v12.10.0/src/node.stp
+===================================================================
+--- node-v12.10.0.orig/src/node.stp
++++ node-v12.10.0/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -226,10 +234,12 @@ modules for multiple versions of NodeJS
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
---- a/deps/npm/man/man1/npm.1
-+++ b/deps/npm/man/man1/npm.1
+Index: node-v12.10.0/deps/npm/man/man1/npm.1
+===================================================================
+--- node-v12.10.0.orig/deps/npm/man/man1/npm.1
++++ node-v12.10.0/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
- .TH "NPM" "1" "July 2019" "" ""
+ .TH "NPM" "1" "August 2019" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm12\fR \- javascript package manager
@@ -328,8 +338,10 @@ modules for multiple versions of NodeJS
  
  .RE
  
---- a/node.gyp
-+++ b/node.gyp
+Index: node-v12.10.0/node.gyp
+===================================================================
+--- node-v12.10.0.orig/node.gyp
++++ node-v12.10.0/node.gyp
 @@ -21,8 +21,8 @@
      'node_use_openssl%': 'true',
      'node_shared_openssl%': 'false',
@@ -341,8 +353,10 @@ modules for multiple versions of NodeJS
      'node_intermediate_lib_type%': 'static_library',
      'library_files': [
        'lib/internal/bootstrap/environment.js',
---- a/src/node_main.cc
-+++ b/src/node_main.cc
+Index: node-v12.10.0/src/node_main.cc
+===================================================================
+--- node-v12.10.0.orig/src/node_main.cc
++++ node-v12.10.0/src/node_main.cc
 @@ -121,6 +121,7 @@ int main(int argc, char* argv[]) {
  #endif
    // Disable stdio buffering, it interacts poorly with printf()
@@ -351,8 +365,10 @@ modules for multiple versions of NodeJS
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
---- a/deps/npm/man/man1/npx.1
-+++ b/deps/npm/man/man1/npx.1
+Index: node-v12.10.0/deps/npm/man/man1/npx.1
+===================================================================
+--- node-v12.10.0.orig/deps/npm/man/man1/npx.1
++++ node-v12.10.0/deps/npm/man/man1/npx.1
 @@ -1,32 +1,32 @@
  .TH "NPX" "1" "April 2018" "npx@10.1.1" "User Commands"
  .SH "NAME"
@@ -436,8 +452,10 @@ modules for multiple versions of NodeJS
 +\fBnpm12\-config(7)\fP
  
  .RE
---- a/tools/test.py
-+++ b/tools/test.py
+Index: node-v12.10.0/tools/test.py
+===================================================================
+--- node-v12.10.0.orig/tools/test.py
++++ node-v12.10.0/tools/test.py
 @@ -883,7 +883,7 @@ class Context(object):
      if self.vm is not None:
        return self.vm
