@@ -17,6 +17,8 @@ Thu Sep 26 15:25:35 UTC 2019 - Adam Majer <adam.majer@suse.de>
   * util: Add encodeInto to TextEncoder
   * worker: The worker_thread module is now stable
 
+- versioned.patch: refreshed
+
 -------------------------------------------------------------------
 Wed Sep 18 13:44:55 UTC 2019 - Vítězslav Čížek <vcizek@suse.com>
 
