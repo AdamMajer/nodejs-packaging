@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Oct  2 11:45:25 UTC 2019 - Michel Normand <normand@linux.vnet.ibm.com>
+
+- Add _constraints for ppc64le to avoid build error
+
+-------------------------------------------------------------------
 Mon Jul 29 09:01:36 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2019-13173.patch: fix potential file overwrite via hardlink
