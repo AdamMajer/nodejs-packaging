@@ -137,7 +137,7 @@ Patch29:        openssl_1_0_2r.patch   # PATCH_FOR: 4
 Patch30:        http-keep-alive.patch  # PATCH_FOR: 4
 
 Patch31:        CVE-2019-13173.patch   # PATCH_FOR: 4, 6, 8, 10, 11
-Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8, 10, 12, master
+Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8, 10
 
 ## Patches specific to SUSE and openSUSE
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
