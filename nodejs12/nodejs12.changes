@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Mon Oct 14 11:42:48 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- Update to 12.11.1:
+  * build: fixed building
+  * deps: Updated small-icu data to support "unit" style in the
+    Intl.NumberFormat API
+
+- Remove unsupported 32-bit architectures
+- fix_ci_tests.patch: correct build with SUSE backport of KDF
+  patches to OpenSSL 1.1.1d
+
+-------------------------------------------------------------------
 Thu Sep 26 15:25:35 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - Update to 12.11.0:
