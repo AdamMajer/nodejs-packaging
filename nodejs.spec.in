@@ -369,7 +369,7 @@ tar Jxvf %{SOURCE11}
 %patch200 -p1
 
 # abnormalities from patching
-find -name configure.js.orig -delete
+find \( -name \*.js.orig -or -name \*.md.orig \) -delete
 
 %build
 # normalize shebang
@@ -394,10 +394,6 @@ find deps/cares -name *.[ch] -delete
 %endif
 
 find deps/zlib -name *.[ch] -delete
-
-# Annoying, over-repetitive patch updated just because lines in
-# documentation changes every version.
-find -name *.md.orig -delete
 
 # percent-configure pulls in something that confuses node's configure
 # script, so we'll do it thus:
