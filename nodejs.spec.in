@@ -137,8 +137,8 @@ Patch28:        openssl_1_0_2q.patch   # PATCH_FOR: 4
 Patch29:        openssl_1_0_2r.patch   # PATCH_FOR: 4
 Patch30:        http-keep-alive.patch  # PATCH_FOR: 4
 
-Patch31:        CVE-2019-13173.patch   # PATCH_FOR: 4, 6, 8, 10, 11
-Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8, 10
+Patch31:        CVE-2019-13173.patch   # PATCH_FOR: 4, 6, 8, =10
+Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8, =10
 
 ## Patches specific to SUSE and openSUSE
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
@@ -410,7 +410,7 @@ export CXX=%{?cpp_exec}
 
 ./configure \
     --prefix=%{_prefix} \
-%if 0%{with nodejs_lto} && %{node_version_number} >= 12
+%if 0%{?with nodejs_lto} && %{node_version_number} >= 12
     --enable-lto \
 %endif
 %if ! 0%{with intree_openssl}
