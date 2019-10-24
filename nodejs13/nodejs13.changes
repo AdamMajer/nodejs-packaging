@@ -1,0 +1,68 @@
+-------------------------------------------------------------------
+Wed Oct 23 13:18:43 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- Update to upstream 13.0.1:
+  * deps: Fixed a bug in npm 6.12.0 where warnings are emitted on
+    Node.js 13.x
+  * esm: Changed file extension resolution order of
+    --es-module-specifier-resolution=node to match that
+    of the CommonJS loader
+
+- Changes in version 13.0.0:
+  * assert:
+    + If the validation function passed to assert.throws() or
+      assert.rejects() returns a value other than true,
+      an assertion error will be thrown instead of the original
+      error to highlight the programming mistake
+    + If a constructor function is passed to validate the instance
+      of errors thrown in assert.throws() or assert.reject(),
+      an assertion error will be thrown instead of the original error
+  * child_process: ChildProcess._channel (DEP0129) is now
+    a Runtime deprecation
+  * console: The output console.timeEnd() and console.timeLog()
+    will now automatically select a suitable time unit instead
+    of always using milliseconds
+  * deps: The V8 engine was updated to version 7.8.
+  * domain: The domain's error handler is now executed with
+    the active domain set to the domain's parent to prevent
+    inner recursion
+  * fs:
+    + The undocumented method FSWatcher.prototype.start() was removed
+    + Calling the open() method on a ReadStream or WriteStream
+      now emits a runtime deprecation warning. This is an internal
+      method that should not be used by user code.
+    + fs.read/write, fs.readSync/writeSync and fd.read/write now
+      accept any safe integer as their offset parameter. This value
+      is no longer coerced.
+  * http:
+    + Aborted requests no longer emit the end or error events after aborted
+    + Data will no longer be emitted after a socket error
+    + The legacy HTTP parser (previously available under
+      the --http-parser=legacy flag) was removed
+    + host option for HTTP requests is now validated to be a string value
+    + The request.connection and response.connection properties
+      are now runtime deprecated. The equivalent request.socket
+      and response.socket should be used instead
+  * http, http2:
+    + The default server timeout was removed
+    + Brought 425 status code name into accordance with RFC 8470.
+      The name changed from "Unordered Collection" to "Too Early"
+  * lib: The error.errno property will now always be a number. To
+    get the string value, use error.code instead.
+  * module: module.createRequireFromPath() is deprecated. Use
+    module.createRequire() instead
+  * src: Changing the value of process.env.TZ will now clear
+    the tz cache. This affects the default time zone used by methods
+    such as Date.prototype.toString
+  * stream: The timing and behavior of streams was consolidated
+    for a number of edge cases. Please look at the individual commits
+    for more information.
+
+Complete changelogs are available at,
+https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V13.md
+
+-------------------------------------------------------------------
+Mon Oct 14 14:42:24 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- Create package
+

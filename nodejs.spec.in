@@ -119,7 +119,7 @@ Patch3:         fix_ci_tests.patch
 Patch4:         fix_ci_ssl_tests.patch # PATCH_FOR: 4
 Patch5:         gyp_to_python3.patch   # PATCH_FOR: 100
 Patch6:         icu_61_namespacefix.patch    # PATCH_FOR: 4, 6
-Patch7:         manual_configure.patch # PATCH_FOR: master, 12, 11, 10, 8
+Patch7:         manual_configure.patch # PATCH_FOR: master, 13, 12, 10, 8
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
 Patch10:        test-ca-bumps.patch    # PATCH_FOR: 4
 Patch11:        valgrind_fixes.patch   # PATCH_FOR: 10
@@ -148,11 +148,11 @@ Patch101:       nodejs-libpath.patch
 Patch102:       node-gyp-addon-gypi.patch
 # PATCH-FIX-SLE -- configure script uses Python check_output method
 # which isn't included in Python 2.6 (used in SLE 11).
-Patch103:       nodejs-sle11-python26-check_output.patch
+Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 4, 6, 10, 12
 # PATCH-FIX-OPENSUSE -- install user global npm packages to /usr/local
 # instead of /usr
 Patch104:       npm_search_paths.patch
-Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 6, 8, 10, 11, master
+Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 6, 8, 10
 
 Patch120:       flaky_test_rerun.patch
 
