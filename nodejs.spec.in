@@ -137,8 +137,8 @@ Patch28:        openssl_1_0_2q.patch   # PATCH_FOR: 4
 Patch29:        openssl_1_0_2r.patch   # PATCH_FOR: 4
 Patch30:        http-keep-alive.patch  # PATCH_FOR: 4
 
-Patch31:        CVE-2019-13173.patch   # PATCH_FOR: 4, 6, 8, =10
-Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8, =10
+Patch31:        CVE-2019-13173.patch   # PATCH_FOR: 4, 6, 8
+Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8
 
 ## Patches specific to SUSE and openSUSE
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
@@ -148,7 +148,7 @@ Patch101:       nodejs-libpath.patch
 Patch102:       node-gyp-addon-gypi.patch
 # PATCH-FIX-SLE -- configure script uses Python check_output method
 # which isn't included in Python 2.6 (used in SLE 11).
-Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 4, 6, 10, 12
+Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 4, 6, 8, 10, 12
 # PATCH-FIX-OPENSUSE -- install user global npm packages to /usr/local
 # instead of /usr
 Patch104:       npm_search_paths.patch
@@ -367,6 +367,9 @@ tar Jxvf %{SOURCE11}
 %patch105 -p1
 %patch120 -p1
 %patch200 -p1
+
+# remove backup files, if any
+find -name \*~ -print0 -delete
 
 # abnormalities from patching
 find \( -name \*.js.orig -or -name \*.md.orig \) -delete

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 24 14:34:22 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- New upstream LTS release 8.16.2:
+  * deps: update OpenSSL to 1.0.2s
+
+-------------------------------------------------------------------
 Wed Oct  2 10:13:11 UTC 2019 - Michel Normand <normand@linux.vnet.ibm.com>
 
 - Add _constraints for aarch64 & ppc64le to avoid build error
