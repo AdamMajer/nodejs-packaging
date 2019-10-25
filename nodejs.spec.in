@@ -163,6 +163,8 @@ Patch200:       versioned.patch
 BuildRequires:  binutils-gold
 %endif
 
+BuildRequires:  pkg-config
+
 # Node.js 4/6/7 requires GCC 4.8.5+.
 #
 # For Node.js 8.x, upstream requires GCC 4.9.4+, as GCC 4.8 may have
