@@ -1,7 +1,7 @@
 #
 # spec file for package nodejs-common
 #
-# Copyright (c) 2017 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2019 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -12,8 +12,9 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
+
 
 ###########################################################
 #
@@ -27,10 +28,10 @@
 Name:           nodejs-common
 Version:        3.0
 Release:        0
-License:        MIT
 Summary:        Common files for the NodeJS ecosystem
-Url:            https://github.com/AdamMajer/nodejs-packaging
+License:        MIT
 Group:          Development/Languages/NodeJS
+Url:            https://github.com/AdamMajer/nodejs-packaging
 Source1:        node.c
 Source2:        LICENSE
 Requires:       nodejs
@@ -47,12 +48,12 @@ while retaining the same codestream version.
 %prep
 %build
 cp %{S:2} .
-gcc ${RPM_OPT_FLAGS} -g -o node %{S:1}
+gcc ${RPM_OPT_FLAGS} -o node %{S:1}
 
 %install
-install -D -m 0755 %{S:1} %{buildroot}%{_bindir}/node
-ln -s node %{buildroot}%{_bindir}/npm
-ln -s node %{buildroot}%{_bindir}/npx
+install -D -m 0755 node %{buildroot}%{_bindir}/node
+ln node %{buildroot}%{_bindir}/npm
+ln node %{buildroot}%{_bindir}/npx
 
 %files
 %license LICENSE
@@ -61,4 +62,3 @@ ln -s node %{buildroot}%{_bindir}/npx
 %{_bindir}/npx
 
 %changelog
-
