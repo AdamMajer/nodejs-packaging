@@ -53,7 +53,7 @@ Index: node-v12.13.0/tools/install.py
 +    action([link_path], 'bin/npm12')
    elif action == install:
 -    try_symlink("../" + sysconfig.get_config_var("LIB") + '/node_modules/npm/bin/npm-cli.js',link_path)
-+    try_symlink("../" + sysconfig.get_config_var("LIBDIR") + '/node_modules/npm12/bin/npm-cli.js',link_path)
++    try_symlink(sysconfig.get_config_var("LIBDIR") + '/node_modules/npm12/bin/npm-cli.js',link_path)
    else:
      assert 0  # unhandled action type
  
@@ -65,7 +65,7 @@ Index: node-v12.13.0/tools/install.py
 +    action([link_path], 'bin/npx12')
    elif action == install:
 -    try_symlink('../' + sysconfig.get_config_var("LIB") + '/node_modules/npm/bin/npx-cli.js', link_path)
-+    try_symlink('../' + sysconfig.get_config_var("LIBDIR") + '/node_modules/npm12/bin/npx-cli.js', link_path)
++    try_symlink(sysconfig.get_config_var("LIBDIR") + '/node_modules/npm12/bin/npx-cli.js', link_path)
    else:
      assert 0 # unhandled action type
  
@@ -83,7 +83,7 @@ Index: node-v12.13.0/tools/install.py
  
    if 'true' == variables.get('node_use_dtrace'):
 -    action(['out/Release/node.d'], sysconfig.get_config_var("LIB") + '/dtrace/node.d')
-+    action(['out/Release/node.d'], '..' + sysconfig.get_config_var("LIBDIR") + '/dtrace/node.d')
++    action(['out/Release/node.d'], sysconfig.get_config_var("LIBDIR") + '/dtrace/node.d')
  
    # behave similarly for systemtap
 -  action(['src/node.stp'], 'share/systemtap/tapset/')
