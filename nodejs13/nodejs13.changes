@@ -1,4 +1,27 @@
 -------------------------------------------------------------------
+Fri Nov 22 15:11:15 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- Update to 13.2.0:
+  * addons: Deprecate one- and two-argument AtExit().
+    Use the three-argument variant of AtExit() or
+    AddEnvironmentCleanupHook() instead
+  * child_process,cluster: The serialization option is added that
+    allows child process IPC to use the V8 serialization API
+  * deps:
+    + Update V8 to 7.9
+    + Update npm to 6.13.1
+  * embedder:
+    + Exposes the ability to pass cli flags / options through an
+      API as embedder
+    + Allow adding linked bindings to Environment
+  * esm: Unflag --experimental-modules
+  * stream: Add writable.writableCorked property
+  * worker: Allow specifying resource limits
+  * v8: The Serialization API is now stable
+
+- versioned.patch, nodejs-libpath.patch: refreshed
+
+-------------------------------------------------------------------
 Mon Nov 11 12:13:47 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - Update to 13.1.0:
