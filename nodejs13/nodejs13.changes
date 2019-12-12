@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Thu Dec  5 15:10:32 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- Update to 13.3.0:
+  * fs: Reworked experimental recursive rmdir()
+  * http: Make maximum header size configurable per-stream or per-server
+  * http2:
+    + Make maximum tolerated rejected streams configurable
+    + Allow to configure maximum tolerated invalid frames
+  * wasi: Introduce initial WASI support
+
+-------------------------------------------------------------------
 Fri Nov 22 15:11:15 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - Update to 13.2.0:

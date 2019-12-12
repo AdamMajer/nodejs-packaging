@@ -1,4 +1,9 @@
 #!/bin/bash
 
-exec find -L staging* nodejs* -samefile $1
+echo
+echo ---- Links ----
+find -L staging* nodejs* -samefile $1
+echo
+echo ---- Stat  ----
+exec stat $1
 
