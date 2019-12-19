@@ -1,0 +1,34 @@
+ Message: 'ok 2834 sequential/test-worker-prof'
+ Arguments: ()
+ --- Logging error ---
+ Traceback (most recent call last):
+   File "/usr/lib64/python3.7/logging/__init__.py", line 1037, in emit
+     stream.write(msg + self.terminator)
+ TypeError: a bytes-like object is required, not 'str'
+ Call stack:
+   File "tools/test.py", line 1734, in <module>
+     sys.exit(Main())
+   File "tools/test.py", line 1710, in Main
+     if RunTestCases(cases_to_run, options.progress, options.j, options.flaky_tests):
+   File "tools/test.py", line 933, in RunTestCases
+     return progress.Run(tasks)
+   File "tools/test.py", line 141, in Run
+     self.RunSingle(False, 0)
+   File "tools/test.py", line 202, in RunSingle
+     self.HasRun(output)
+   File "tools/test.py", line 365, in HasRun
+     logger.info('  ---')
+ 
+Index: node-git.d8fc0ae50f/tools/test.py
+===================================================================
+--- node-git.d8fc0ae50f.orig/tools/test.py
++++ node-git.d8fc0ae50f/tools/test.py
+@@ -1544,7 +1544,7 @@ def Main():
+   logger.addHandler(ch)
+   logger.setLevel(logging.INFO)
+   if options.logfile:
+-    fh = logging.FileHandler(options.logfile, mode='wb')
++    fh = logging.FileHandler(options.logfile, encoding='utf-8', mode='wt')
+     logger.addHandler(fh)
+ 
+   workspace = abspath(join(dirname(sys.argv[0]), '..'))

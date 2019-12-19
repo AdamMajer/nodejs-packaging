@@ -1,4 +1,41 @@
 -------------------------------------------------------------------
+Thu Dec 19 14:05:11 UTC 2019 - Adam Majer <adam.majer@suse.de>
+
+- Update to 13.5.0:
+  * cli: add --trace-exit cli option
+  * http, https: increase server headers timeout
+  * readline:
+    + update ansi-regex
+    + promote _getCursorPos to public api
+  * repl: add completion preview
+  * util: add Set and map size to inspect output
+  * wasi: require CLI flag to require() wasi module
+
+- Changes in 13.4.0:
+  * deps:
+    + update npm to 6.13.4 fixing an arbitrary path overwrite
+    and access via "bin" field (bsc#1159352, CVE-2019-16777,
+    CVE-2019-16776, CVE-2019-16775)
+    + update uvwasi
+    + upgrade to libuv 1.34.0
+  * doc: docs deprecate http finished
+  * events: add captureRejection option
+  * http:
+    + add captureRejection support
+    + llhttp opt-in insecure HTTP header parsing
+  * http2: implement capture rection for 'request' and 'stream' events
+  * net: implement capture rejections for 'connection' event
+  * repl: support previews by eager evaluating input
+  * stream: add support for captureRejection option
+  * tls:
+    + implement capture rejections for 'secureConnection' event
+    + expose IETF name for current cipher suite
+  * worker: add argv constructor option
+
+- skip_no_console.patch, versioned.patch: refreshed
+- python3.patch: Fix building with Python3
+
+-------------------------------------------------------------------
 Thu Dec  5 15:10:32 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - Update to 13.3.0:

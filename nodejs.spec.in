@@ -115,6 +115,7 @@ Source20:       bash_output_helper.bash
 
 ## Patches not distribution specific
 Patch1:         8334.diff              # PATCH_FOR: 4
+Patch2:         python3.patch          # PATCH_FOR: master, 13
 Patch3:         fix_ci_tests.patch
 Patch4:         fix_ci_ssl_tests.patch # PATCH_FOR: 4
 Patch5:         gyp_to_python3.patch   # PATCH_FOR: 100
@@ -137,7 +138,7 @@ Patch28:        openssl_1_0_2q.patch   # PATCH_FOR: 4
 Patch29:        openssl_1_0_2r.patch   # PATCH_FOR: 4
 Patch30:        http-keep-alive.patch  # PATCH_FOR: 4
 
-Patch31:        CVE-2019-13173.patch   # PATCH_FOR: 4, 6, 8
+Patch31:        CVE-2019-13173.patch   # PATCH_FOR: 4, 6
 Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8
 
 ## Patches specific to SUSE and openSUSE
@@ -202,11 +203,16 @@ BuildRequires:  fdupes
 BuildRequires:  procps
 BuildRequires:  xz
 BuildRequires:  zlib-devel
+
+%if %node_version_number > 12
+BuildRequires:  python3
+%else
 %if 0%{?suse_version} >= 1500
 BuildRequires:  python2
 %else
 BuildRequires:  python
 %endif
+%endif  # python3
 
 %if 0%{?suse_version} >= 1500 && %{node_version_number} >= 10
 BuildRequires:  user(nobody)
@@ -302,6 +308,7 @@ Requires:       user(nobody)
 Requires:       group(nobody)
 %endif
 Recommends:     python2
+Recommends:     python3
 %else
 Recommends:     python
 %endif
@@ -334,6 +341,7 @@ tar Jxvf %{SOURCE11}
 %endif # node_version_number
 
 %patch1 -p1
+%patch2 -p1
 %patch3 -p1
 %if ! 0%{with intree_openssl}
 %patch4 -p1
