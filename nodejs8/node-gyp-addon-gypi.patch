@@ -72,7 +72,7 @@ Index: node-v8.17.0/deps/npm/node_modules/node-gyp/lib/configure.js
      var gypScript = path.resolve(__dirname, '..', 'gyp', 'gyp_main.py')
 -    var addonGypi = path.resolve(__dirname, '..', 'addon.gypi')
 +    var addon_gypi_file = gyp.opts.target || gyp.opts.nodedir ? 'addon.gypi' : 'addon-rpm.gypi'
-+    var addon_gypi = path.resolve(__dirname, '..', addon_gypi_file)
++    var addonGypi = path.resolve(__dirname, '..', addon_gypi_file)
      var commonGypi = path.resolve(nodeDir, 'include/node/common.gypi')
      fs.stat(commonGypi, function (err) {
        if (err) {
