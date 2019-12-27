@@ -78,6 +78,14 @@ ${ALL_TARGETS}: changelog.target common.target
 	test -x $D || osc co $D
 	cp common/* $D
 	cp $@/* $D
+
+	# Make sure we don't patch wrong version paths and values in paths and names
+	# bsc#1159812 as an example
+	cat $@/* |\
+	grep -a '^+ .*\(node\|npm\|npx\)\([0-9]\+\)' |\
+	sed -s 's,^.*\(node\|npm\|npx\)\([0-9]\+\).*$$,\2,' - |\
+	grep -vc ${NODEJS_VERSION} |\
+	grep -q '^0$$' || ( echo "Wrong node version found in patches $@" && false)
 	
 	# Parse spec file
 	sed -e 's,{{git_node}},$(GIT),' -f nodejs$(NODEJS_VERSION).sed -f nodejs_$(if $(findstring staging,$@),git,releases).sed nodejs.spec.in \
