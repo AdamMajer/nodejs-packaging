@@ -2,10 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-git.317fa3a757/test/parallel/test-module-loading-globalpaths.js
+Index: node-git.8a96d05ec7/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-git.317fa3a757.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-git.317fa3a757/test/parallel/test-module-loading-globalpaths.js
+--- node-git.8a96d05ec7.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-git.8a96d05ec7/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -16,10 +16,10 @@ Index: node-git.317fa3a757/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-git.317fa3a757/test/parallel/test-tls-env-bad-extra-ca.js
+Index: node-git.8a96d05ec7/test/parallel/test-tls-env-bad-extra-ca.js
 ===================================================================
---- node-git.317fa3a757.orig/test/parallel/test-tls-env-bad-extra-ca.js
-+++ node-git.317fa3a757/test/parallel/test-tls-env-bad-extra-ca.js
+--- node-git.8a96d05ec7.orig/test/parallel/test-tls-env-bad-extra-ca.js
++++ node-git.8a96d05ec7/test/parallel/test-tls-env-bad-extra-ca.js
 @@ -36,7 +36,7 @@ fork(__filename, opts)
      // TODO(addaleax): Make `SafeGetenv` work like `process.env`
      // encoding-wise
@@ -29,10 +29,10 @@ Index: node-git.317fa3a757/test/parallel/test-tls-env-bad-extra-ca.js
        assert(re.test(stderr), stderr);
      }
    }))
-Index: node-git.317fa3a757/test/parallel/test-tls-passphrase.js
+Index: node-git.8a96d05ec7/test/parallel/test-tls-passphrase.js
 ===================================================================
---- node-git.317fa3a757.orig/test/parallel/test-tls-passphrase.js
-+++ node-git.317fa3a757/test/parallel/test-tls-passphrase.js
+--- node-git.8a96d05ec7.orig/test/parallel/test-tls-passphrase.js
++++ node-git.8a96d05ec7/test/parallel/test-tls-passphrase.js
 @@ -223,7 +223,7 @@ server.listen(0, common.mustCall(functio
    }, onSecureConnect());
  })).unref();
@@ -51,10 +51,10 @@ Index: node-git.317fa3a757/test/parallel/test-tls-passphrase.js
  
  // Invalid passphrase
  assert.throws(function() {
-Index: node-git.317fa3a757/test/parallel/test-crypto-scrypt.js
+Index: node-git.8a96d05ec7/test/parallel/test-crypto-scrypt.js
 ===================================================================
---- node-git.317fa3a757.orig/test/parallel/test-crypto-scrypt.js
-+++ node-git.317fa3a757/test/parallel/test-crypto-scrypt.js
+--- node-git.8a96d05ec7.orig/test/parallel/test-crypto-scrypt.js
++++ node-git.8a96d05ec7/test/parallel/test-crypto-scrypt.js
 @@ -169,8 +169,8 @@ for (const options of bad) {
  
  for (const options of toobig) {
@@ -66,10 +66,10 @@ Index: node-git.317fa3a757/test/parallel/test-crypto-scrypt.js
      type: Error,
    };
    common.expectsError(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
-Index: node-git.317fa3a757/test/parallel/test-repl-envvars.js
+Index: node-git.8a96d05ec7/test/parallel/test-repl-envvars.js
 ===================================================================
---- node-git.317fa3a757.orig/test/parallel/test-repl-envvars.js
-+++ node-git.317fa3a757/test/parallel/test-repl-envvars.js
+--- node-git.8a96d05ec7.orig/test/parallel/test-repl-envvars.js
++++ node-git.8a96d05ec7/test/parallel/test-repl-envvars.js
 @@ -2,12 +2,14 @@
  
  // Flags: --expose-internals
@@ -86,11 +86,11 @@ Index: node-git.317fa3a757/test/parallel/test-repl-envvars.js
  const tests = [
    {
      env: {},
-Index: node-git.317fa3a757/test/common/index.mjs
+Index: node-git.8a96d05ec7/test/common/index.mjs
 ===================================================================
---- node-git.317fa3a757.orig/test/common/index.mjs
-+++ node-git.317fa3a757/test/common/index.mjs
-@@ -45,6 +45,7 @@ const {
+--- node-git.8a96d05ec7.orig/test/common/index.mjs
++++ node-git.8a96d05ec7/test/common/index.mjs
+@@ -44,6 +44,7 @@ const {
    expectsError,
    skipIfInspectorDisabled,
    skipIf32Bits,
@@ -98,7 +98,7 @@ Index: node-git.317fa3a757/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
-@@ -91,6 +92,7 @@ export {
+@@ -90,6 +91,7 @@ export {
    expectsError,
    skipIfInspectorDisabled,
    skipIf32Bits,
@@ -106,24 +106,11 @@ Index: node-git.317fa3a757/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
-Index: node-git.317fa3a757/test/parallel/test-fs-utimes.js
+Index: node-git.8a96d05ec7/Makefile
 ===================================================================
---- node-git.317fa3a757.orig/test/parallel/test-fs-utimes.js
-+++ node-git.317fa3a757/test/parallel/test-fs-utimes.js
-@@ -145,7 +145,7 @@ const path = `${tmpdir.path}/test-utimes
- fs.writeFileSync(path, '');
- 
- // Test Y2K38 for all platforms [except 'arm', 'OpenBSD' and 'SunOS']
--if (!process.arch.includes('arm') && !common.isOpenBSD && !common.isSunOS) {
-+if (!process.arch.includes('arm') && process.arch !== 's390' && !common.isOpenBSD && !common.isSunOS) {
-   const Y2K38_mtime = 2 ** 31;
-   fs.utimesSync(path, Y2K38_mtime, Y2K38_mtime);
-   const Y2K38_stats = fs.statSync(path);
-Index: node-git.317fa3a757/Makefile
-===================================================================
---- node-git.317fa3a757.orig/Makefile
-+++ node-git.317fa3a757/Makefile
-@@ -530,7 +530,7 @@ test-ci-js: | clear-stalled
+--- node-git.8a96d05ec7.orig/Makefile
++++ node-git.8a96d05ec7/Makefile
+@@ -524,7 +524,7 @@ test-ci-js: | clear-stalled
  .PHONY: test-ci
  # Related CI jobs: most CI tests, excluding node-test-commit-arm-fanned
  test-ci: LOGLEVEL := info
@@ -132,7 +119,7 @@ Index: node-git.317fa3a757/Makefile
  	out/Release/cctest --gtest_output=xml:out/junit/cctest.xml
  	$(PYTHON) tools/test.py $(PARALLEL_ARGS) -p tap --logfile test.tap \
  		--mode=$(BUILDTYPE_LOWER) --flaky-tests=$(FLAKY_TESTS) \
-@@ -705,7 +705,8 @@ apidocs_json = $(addprefix out/,$(apidoc
+@@ -698,7 +698,8 @@ apidocs_json = $(addprefix out/,$(apidoc
  apiassets = $(subst api_assets,api/assets,$(addprefix out/,$(wildcard doc/api_assets/*)))
  
  tools/doc/node_modules: tools/doc/package.json
