@@ -1,4 +1,4 @@
-s/{{npm_version}}/3.10.10/g
+s/{{npm_version}}/6.13.4/g
 s/{{node_version}}/6.17.1/g
 s/{{node_version_major}}/6/g
 s/{{arch_support}}/aarch64 ppc ppc64 ppc64le s390 s390x/g
@@ -28,3 +28,8 @@ s/{{min_nghttp2_version}}/1.31.0/g
 
 # Git staging directory
 s/{{git_branch}}/v6.x-staging/
+
+# New npm
+s,{{SOURCES_EXTRA}},# Update npm version \
+Source10:       npm.tar.xz,
+

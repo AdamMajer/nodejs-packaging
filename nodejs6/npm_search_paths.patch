@@ -1,29 +1,24 @@
-Index: node-v6.3.0/deps/npm/lib/config/core.js
+Index: node-v6.17.1/deps/npm/lib/config/core.js
 ===================================================================
---- node-v6.3.0.orig/deps/npm/lib/config/core.js
-+++ node-v6.3.0/deps/npm/lib/config/core.js
-@@ -151,16 +151,12 @@ function load_ (builtin, rc, cli, cb) {
+--- node-v6.17.1.orig/deps/npm/lib/config/core.js
++++ node-v6.17.1/deps/npm/lib/config/core.js
+@@ -151,11 +151,9 @@ function load_ (builtin, rc, cli, cb) {
      // Eg, `npm config get globalconfig --prefix ~/local` should
      // return `~/local/etc/npmrc`
      // annoying humans and their expectations!
 -    if (conf.get('prefix')) {
 -      var etc = path.resolve(conf.get('prefix'), 'etc')
-+      var etc = path.resolve("/etc/nodejs")
-       mkdirp(etc, function () {
-         defaults.globalconfig = path.resolve(etc, 'npmrc')
-         defaults.globalignorefile = path.resolve(etc, 'npmignore')
-         afterUserContinuation()
-       })
--    } else {
--      afterUserContinuation()
++      var etc = path.resolve('/etc/nodejs')
+       defaults.globalconfig = path.resolve(etc, 'npmrc')
+       defaults.globalignorefile = path.resolve(etc, 'npmignore')
 -    }
-   }
  
-   function afterUserContinuation () {
-Index: node-v6.3.0/deps/npm/lib/help-search.js
+     conf.addFile(conf.get('globalconfig'), 'global')
+ 
+Index: node-v6.17.1/deps/npm/lib/help-search.js
 ===================================================================
---- node-v6.3.0.orig/deps/npm/lib/help-search.js
-+++ node-v6.3.0/deps/npm/lib/help-search.js
+--- node-v6.17.1.orig/deps/npm/lib/help-search.js
++++ node-v6.17.1/deps/npm/lib/help-search.js
 @@ -18,7 +18,7 @@ function helpSearch (args, silent, cb) {
    }
    if (!args.length) return cb(helpSearch.usage)
@@ -33,10 +28,10 @@ Index: node-v6.3.0/deps/npm/lib/help-search.js
    return glob(docPath + '/*/*.md', function (er, files) {
      if (er) return cb(er)
      readFiles(files, function (er, data) {
-Index: node-v6.3.0/deps/npm/lib/config/defaults.js
+Index: node-v6.17.1/deps/npm/lib/config/defaults.js
 ===================================================================
---- node-v6.3.0.orig/deps/npm/lib/config/defaults.js
-+++ node-v6.3.0/deps/npm/lib/config/defaults.js
+--- node-v6.17.1.orig/deps/npm/lib/config/defaults.js
++++ node-v6.17.1/deps/npm/lib/config/defaults.js
 @@ -102,6 +102,11 @@ Object.defineProperty(exports, 'defaults
      if (process.env.DESTDIR) {
        globalPrefix = path.join(process.env.DESTDIR, globalPrefix)

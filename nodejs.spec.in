@@ -138,7 +138,7 @@ Patch28:        openssl_1_0_2q.patch   # PATCH_FOR: 4
 Patch29:        openssl_1_0_2r.patch   # PATCH_FOR: 4
 Patch30:        http-keep-alive.patch  # PATCH_FOR: 4
 
-Patch31:        CVE-2019-13173.patch   # PATCH_FOR: 4, 6
+Patch31:        CVE-2019-13173.patch   # PATCH_FOR: 4
 Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8
 
 ## Patches specific to SUSE and openSUSE
@@ -334,6 +334,12 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %setup -q -n node-v%{version}
 %else
 %setup -q -n node-%{version}
+%endif
+
+%if %{node_version_number} == 6
+# Update NPM
+rm -r deps/npm
+tar Jxvf %{SOURCE10}
 %endif
 
 %if %{node_version_number} >= 10
