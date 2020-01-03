@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jan  3 15:03:17 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- sle12_python3_compat.patch: Adds Python 3.4 to compatible
+  python versions allowing us to build with python3 on SLE-12
+
+-------------------------------------------------------------------
 Thu Dec 19 14:05:11 UTC 2019 - Adam Majer <adam.majer@suse.de>
 
 - Update to 13.5.0:

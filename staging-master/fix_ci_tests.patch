@@ -2,10 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-git.8a96d05ec7/test/parallel/test-module-loading-globalpaths.js
+Index: node-git.84b15ebf24/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-git.8a96d05ec7.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-git.8a96d05ec7/test/parallel/test-module-loading-globalpaths.js
+--- node-git.84b15ebf24.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-git.84b15ebf24/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -16,11 +16,11 @@ Index: node-git.8a96d05ec7/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-git.8a96d05ec7/test/parallel/test-tls-env-bad-extra-ca.js
+Index: node-git.84b15ebf24/test/parallel/test-tls-env-bad-extra-ca.js
 ===================================================================
---- node-git.8a96d05ec7.orig/test/parallel/test-tls-env-bad-extra-ca.js
-+++ node-git.8a96d05ec7/test/parallel/test-tls-env-bad-extra-ca.js
-@@ -36,7 +36,7 @@ fork(__filename, opts)
+--- node-git.84b15ebf24.orig/test/parallel/test-tls-env-bad-extra-ca.js
++++ node-git.84b15ebf24/test/parallel/test-tls-env-bad-extra-ca.js
+@@ -37,7 +37,7 @@ fork(__filename, opts)
      // TODO(addaleax): Make `SafeGetenv` work like `process.env`
      // encoding-wise
      if (!common.isWindows) {
@@ -29,10 +29,10 @@ Index: node-git.8a96d05ec7/test/parallel/test-tls-env-bad-extra-ca.js
        assert(re.test(stderr), stderr);
      }
    }))
-Index: node-git.8a96d05ec7/test/parallel/test-tls-passphrase.js
+Index: node-git.84b15ebf24/test/parallel/test-tls-passphrase.js
 ===================================================================
---- node-git.8a96d05ec7.orig/test/parallel/test-tls-passphrase.js
-+++ node-git.8a96d05ec7/test/parallel/test-tls-passphrase.js
+--- node-git.84b15ebf24.orig/test/parallel/test-tls-passphrase.js
++++ node-git.84b15ebf24/test/parallel/test-tls-passphrase.js
 @@ -223,7 +223,7 @@ server.listen(0, common.mustCall(functio
    }, onSecureConnect());
  })).unref();
@@ -51,10 +51,10 @@ Index: node-git.8a96d05ec7/test/parallel/test-tls-passphrase.js
  
  // Invalid passphrase
  assert.throws(function() {
-Index: node-git.8a96d05ec7/test/parallel/test-crypto-scrypt.js
+Index: node-git.84b15ebf24/test/parallel/test-crypto-scrypt.js
 ===================================================================
---- node-git.8a96d05ec7.orig/test/parallel/test-crypto-scrypt.js
-+++ node-git.8a96d05ec7/test/parallel/test-crypto-scrypt.js
+--- node-git.84b15ebf24.orig/test/parallel/test-crypto-scrypt.js
++++ node-git.84b15ebf24/test/parallel/test-crypto-scrypt.js
 @@ -169,8 +169,8 @@ for (const options of bad) {
  
  for (const options of toobig) {
@@ -63,13 +63,13 @@ Index: node-git.8a96d05ec7/test/parallel/test-crypto-scrypt.js
 -                        '(?:EVP_PBE_scrypt|scrypt_alg):memory limit exceeded'),
 +    message: new RegExp('(error:[^:]+:digital envelope routines:' +
 +                        '(?:EVP_PBE_scrypt|scrypt_alg):memory limit exceeded|Invalid scrypt parameter)'),
-     type: Error,
+     name: 'Error',
    };
-   common.expectsError(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
-Index: node-git.8a96d05ec7/test/parallel/test-repl-envvars.js
+   assert.throws(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
+Index: node-git.84b15ebf24/test/parallel/test-repl-envvars.js
 ===================================================================
---- node-git.8a96d05ec7.orig/test/parallel/test-repl-envvars.js
-+++ node-git.8a96d05ec7/test/parallel/test-repl-envvars.js
+--- node-git.84b15ebf24.orig/test/parallel/test-repl-envvars.js
++++ node-git.84b15ebf24/test/parallel/test-repl-envvars.js
 @@ -2,12 +2,14 @@
  
  // Flags: --expose-internals
@@ -86,10 +86,10 @@ Index: node-git.8a96d05ec7/test/parallel/test-repl-envvars.js
  const tests = [
    {
      env: {},
-Index: node-git.8a96d05ec7/test/common/index.mjs
+Index: node-git.84b15ebf24/test/common/index.mjs
 ===================================================================
---- node-git.8a96d05ec7.orig/test/common/index.mjs
-+++ node-git.8a96d05ec7/test/common/index.mjs
+--- node-git.84b15ebf24.orig/test/common/index.mjs
++++ node-git.84b15ebf24/test/common/index.mjs
 @@ -44,6 +44,7 @@ const {
    expectsError,
    skipIfInspectorDisabled,
@@ -106,10 +106,10 @@ Index: node-git.8a96d05ec7/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
-Index: node-git.8a96d05ec7/Makefile
+Index: node-git.84b15ebf24/Makefile
 ===================================================================
---- node-git.8a96d05ec7.orig/Makefile
-+++ node-git.8a96d05ec7/Makefile
+--- node-git.84b15ebf24.orig/Makefile
++++ node-git.84b15ebf24/Makefile
 @@ -524,7 +524,7 @@ test-ci-js: | clear-stalled
  .PHONY: test-ci
  # Related CI jobs: most CI tests, excluding node-test-commit-arm-fanned
