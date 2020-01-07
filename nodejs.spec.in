@@ -41,7 +41,16 @@ Release:        0
 %endif
 
 %bcond_with    valgrind_tests
+
+%if %{node_version_number} >= 12
 %bcond_without nodejs_lto
+%else
+%bcond_with nodejs_lto
+%endif
+
+%if !0%{?with nodejs_lto}
+%define _lto_cflags %{nil}
+%endif
 
 %if 0%{?suse_version} == 1110
 %define _libexecdir %{_exec_prefix}/lib
@@ -431,7 +440,7 @@ export CXX=%{?cpp_exec}
 
 ./configure \
     --prefix=%{_prefix} \
-%if 0%{?with nodejs_lto} && %{node_version_number} >= 12
+%if 0%{?with nodejs_lto}
     --enable-lto \
 %endif
 %if ! 0%{with intree_openssl}
