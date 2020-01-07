@@ -10,7 +10,7 @@
       </disk>
       <memory>
         <size unit="G">4</size>
-      </memory
+      </memory>
     </hardware>
   </overwrite>
 </constraints>
