@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jan  7 13:20:06 UTC 2020 - Guillaume GARDET <guillaume.gardet@opensuse.org>
+
+- Update _constraints for aarch64
+
+-------------------------------------------------------------------
 Tue Jan  7 13:12:10 UTC 2020 - Guillaume GARDET <guillaume.gardet@opensuse.org>
 
 - Really disable LTO when required (nodejs < 12)
