@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Thu Jan  9 10:43:41 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to 13.6.0:
+  * assert: Implement assert.match() and assert.doesNotMatch()
+  * events:
+    + Add EventEmitter.on to async iterate over events
+    + Allow monitoring error events
+  * fs: Allow overriding fs for streams
+  * perf_hooks: Move perf_hooks out of experimental
+  * repl: Implement ZSH-like reverse-i-search
+  * tls: Add PSK (pre-shared key) support
+
+- fix_ci_tests.patch: refreshed
+
+-------------------------------------------------------------------
 Tue Jan  7 13:12:10 UTC 2020 - Guillaume GARDET <guillaume.gardet@opensuse.org>
 
 - Really disable LTO when required (nodejs < 12)
