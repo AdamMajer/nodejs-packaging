@@ -429,6 +429,7 @@ find deps/zlib -name *.[ch] -delete
 # script, so we'll do it thus:
 export CFLAGS="%{optflags}"
 export CXXFLAGS="%{optflags} -Wno-class-memaccess -Wno-error=return-type"
+export LDFLAGS="%{?build_ldflags}"
 
 %if 0%{?cc_exec:1}
 export CC=%{?cc_exec}
