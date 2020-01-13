@@ -1,7 +1,7 @@
-Index: node-git.024b658831/test/parallel/test-console-clear.js
+Index: node-git.fff75645e9/test/parallel/test-console-clear.js
 ===================================================================
---- node-git.024b658831.orig/test/parallel/test-console-clear.js
-+++ node-git.024b658831/test/parallel/test-console-clear.js
+--- node-git.fff75645e9.orig/test/parallel/test-console-clear.js
++++ node-git.fff75645e9/test/parallel/test-console-clear.js
 @@ -18,5 +18,6 @@ function doTest(isTTY, check) {
  }
  
@@ -10,10 +10,10 @@ Index: node-git.024b658831/test/parallel/test-console-clear.js
 +if (process.env.TERM !== 'dumb')
 +	doTest(true, check);
  doTest(false, '');
-Index: node-git.024b658831/test/parallel/test-readline-position.js
+Index: node-git.fff75645e9/test/parallel/test-readline-position.js
 ===================================================================
---- node-git.024b658831.orig/test/parallel/test-readline-position.js
-+++ node-git.024b658831/test/parallel/test-readline-position.js
+--- node-git.fff75645e9.orig/test/parallel/test-readline-position.js
++++ node-git.fff75645e9/test/parallel/test-readline-position.js
 @@ -1,6 +1,6 @@
  // Flags: --expose-internals
  'use strict';
@@ -35,10 +35,10 @@ Index: node-git.024b658831/test/parallel/test-readline-position.js
  {
    const input = new PassThrough();
    const rl = readline.createInterface({
-Index: node-git.024b658831/test/parallel/test-readline-interface.js
+Index: node-git.fff75645e9/test/parallel/test-readline-interface.js
 ===================================================================
---- node-git.024b658831.orig/test/parallel/test-readline-interface.js
-+++ node-git.024b658831/test/parallel/test-readline-interface.js
+--- node-git.fff75645e9.orig/test/parallel/test-readline-interface.js
++++ node-git.fff75645e9/test/parallel/test-readline-interface.js
 @@ -29,6 +29,12 @@ const internalReadline = require('intern
  const EventEmitter = require('events').EventEmitter;
  const { Writable, Readable } = require('stream');
@@ -52,10 +52,10 @@ Index: node-git.024b658831/test/parallel/test-readline-interface.js
  class FakeInput extends EventEmitter {
    resume() {}
    pause() {}
-Index: node-git.024b658831/test/parallel/test-readline-undefined-columns.js
+Index: node-git.fff75645e9/test/parallel/test-readline-undefined-columns.js
 ===================================================================
---- node-git.024b658831.orig/test/parallel/test-readline-undefined-columns.js
-+++ node-git.024b658831/test/parallel/test-readline-undefined-columns.js
+--- node-git.fff75645e9.orig/test/parallel/test-readline-undefined-columns.js
++++ node-git.fff75645e9/test/parallel/test-readline-undefined-columns.js
 @@ -11,6 +11,12 @@ const readline = require('readline');
  const iStream = new PassThrough();
  const oStream = new PassThrough();
@@ -69,10 +69,10 @@ Index: node-git.024b658831/test/parallel/test-readline-undefined-columns.js
  readline.createInterface({
    terminal: true,
    input: iStream,
-Index: node-git.024b658831/test/parallel/test-readline.js
+Index: node-git.fff75645e9/test/parallel/test-readline.js
 ===================================================================
---- node-git.024b658831.orig/test/parallel/test-readline.js
-+++ node-git.024b658831/test/parallel/test-readline.js
+--- node-git.fff75645e9.orig/test/parallel/test-readline.js
++++ node-git.fff75645e9/test/parallel/test-readline.js
 @@ -4,6 +4,13 @@ const { PassThrough } = require('stream'
  const readline = require('readline');
  const assert = require('assert');
@@ -87,10 +87,10 @@ Index: node-git.024b658831/test/parallel/test-readline.js
  {
    const input = new PassThrough();
    const rl = readline.createInterface({
-Index: node-git.024b658831/test/parallel/test-repl-editor.js
+Index: node-git.fff75645e9/test/parallel/test-repl-editor.js
 ===================================================================
---- node-git.024b658831.orig/test/parallel/test-repl-editor.js
-+++ node-git.024b658831/test/parallel/test-repl-editor.js
+--- node-git.fff75645e9.orig/test/parallel/test-repl-editor.js
++++ node-git.fff75645e9/test/parallel/test-repl-editor.js
 @@ -1,6 +1,6 @@
  'use strict';
  
@@ -99,8 +99,8 @@ Index: node-git.024b658831/test/parallel/test-repl-editor.js
  const assert = require('assert');
  const repl = require('repl');
  const ArrayStream = require('../common/arraystream');
-@@ -12,6 +12,12 @@ const terminalCode = '\u001b[1G\u001b[0J
- const previewCode = (str, n) => ` // ${str}\x1B[${n}G\x1B[0K`;
+@@ -11,6 +11,12 @@ const ArrayStream = require('../common/a
+ const terminalCode = '\u001b[1G\u001b[0J> \u001b[3G';
  const terminalCodeRegex = new RegExp(terminalCode.replace(/\[/g, '\\['), 'g');
  
 +if (process.env.TERM == 'dumb')
@@ -112,10 +112,10 @@ Index: node-git.024b658831/test/parallel/test-repl-editor.js
  function run({ input, output, event, checkTerminalCodes = true }) {
    const stream = new ArrayStream();
    let found = '';
-Index: node-git.024b658831/test/parallel/test-repl-history-navigation.js
+Index: node-git.fff75645e9/test/parallel/test-repl-history-navigation.js
 ===================================================================
---- node-git.024b658831.orig/test/parallel/test-repl-history-navigation.js
-+++ node-git.024b658831/test/parallel/test-repl-history-navigation.js
+--- node-git.fff75645e9.orig/test/parallel/test-repl-history-navigation.js
++++ node-git.fff75645e9/test/parallel/test-repl-history-navigation.js
 @@ -10,6 +10,12 @@ const fs = require('fs');
  const path = require('path');
  const { inspect } = require('util');
@@ -129,10 +129,10 @@ Index: node-git.024b658831/test/parallel/test-repl-history-navigation.js
  const tmpdir = require('../common/tmpdir');
  tmpdir.refresh();
  
-Index: node-git.024b658831/test/parallel/test-repl-load-multiline.js
+Index: node-git.fff75645e9/test/parallel/test-repl-load-multiline.js
 ===================================================================
---- node-git.024b658831.orig/test/parallel/test-repl-load-multiline.js
-+++ node-git.024b658831/test/parallel/test-repl-load-multiline.js
+--- node-git.fff75645e9.orig/test/parallel/test-repl-load-multiline.js
++++ node-git.fff75645e9/test/parallel/test-repl-load-multiline.js
 @@ -1,10 +1,16 @@
  'use strict';
 -require('../common');
@@ -151,13 +151,13 @@ Index: node-git.024b658831/test/parallel/test-repl-load-multiline.js
  const command = `.load ${fixtures.path('repl-load-multiline.js')}`;
  const terminalCode = '\u001b[1G\u001b[0J \u001b[1G';
  const terminalCodeRegex = new RegExp(terminalCode.replace(/\[/g, '\\['), 'g');
-Index: node-git.024b658831/test/parallel/test-repl-persistent-history.js
+Index: node-git.fff75645e9/test/parallel/test-repl-persistent-history.js
 ===================================================================
---- node-git.024b658831.orig/test/parallel/test-repl-persistent-history.js
-+++ node-git.024b658831/test/parallel/test-repl-persistent-history.js
-@@ -11,6 +11,12 @@ const fs = require('fs');
- const path = require('path');
+--- node-git.fff75645e9.orig/test/parallel/test-repl-persistent-history.js
++++ node-git.fff75645e9/test/parallel/test-repl-persistent-history.js
+@@ -12,6 +12,12 @@ const path = require('path');
  const os = require('os');
+ const util = require('util');
  
 +if (process.env.TERM == 'dumb')
 +{
@@ -168,13 +168,13 @@ Index: node-git.024b658831/test/parallel/test-repl-persistent-history.js
  const tmpdir = require('../common/tmpdir');
  tmpdir.refresh();
  
-Index: node-git.024b658831/test/parallel/test-repl-programmatic-history.js
+Index: node-git.fff75645e9/test/parallel/test-repl-programmatic-history.js
 ===================================================================
---- node-git.024b658831.orig/test/parallel/test-repl-programmatic-history.js
-+++ node-git.024b658831/test/parallel/test-repl-programmatic-history.js
-@@ -9,6 +9,12 @@ const fs = require('fs');
- const path = require('path');
+--- node-git.fff75645e9.orig/test/parallel/test-repl-programmatic-history.js
++++ node-git.fff75645e9/test/parallel/test-repl-programmatic-history.js
+@@ -10,6 +10,12 @@ const path = require('path');
  const os = require('os');
+ const util = require('util');
  
 +if (process.env.TERM == 'dumb')
 +{
