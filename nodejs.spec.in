@@ -124,7 +124,6 @@ Source20:       bash_output_helper.bash
 
 ## Patches not distribution specific
 Patch1:         8334.diff              # PATCH_FOR: 4
-Patch2:         python3.patch          # PATCH_FOR: =13
 Patch3:         fix_ci_tests.patch
 Patch4:         fix_ci_ssl_tests.patch # PATCH_FOR: 4
 Patch5:         sle12_python3_compat.patch # PATCH_FOR: master, 13
@@ -356,7 +355,6 @@ tar Jxvf %{SOURCE11}
 %endif # node_version_number
 
 %patch1 -p1
-%patch2 -p1
 %patch3 -p1
 %if ! 0%{with intree_openssl}
 %patch4 -p1
