@@ -177,6 +177,7 @@ Patch200:       versioned.patch
 BuildRequires:  binutils-gold
 %endif
 
+BuildRequires:  /etc/services
 BuildRequires:  pkg-config
 
 # Node.js 4/6/7 requires GCC 4.8.5+.
