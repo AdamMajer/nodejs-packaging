@@ -149,6 +149,10 @@ Patch30:        http-keep-alive.patch  # PATCH_FOR: 4
 Patch31:        CVE-2019-13173.patch   # PATCH_FOR: 4
 Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8
 
+Patch33:        CVE-2019-15606.patch   # PATCH_FOR: 6, 8
+Patch34:        CVE-2019-15604.patch   # PATCH_FOR: 6, 8
+Patch35:        CVE-2019-15605.patch   # PATCH_FOR: 6, 8
+
 ## Patches specific to SUSE and openSUSE
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
 Patch101:       nodejs-libpath.patch
@@ -381,6 +385,9 @@ tar Jxvf %{SOURCE11}
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
+%patch33 -p1
+%patch34 -p1
+%patch35 -p1
 %patch101 -p1
 %patch102 -p1
 # Add check_output to configure script (not part of Python 2.6 in SLE11).
