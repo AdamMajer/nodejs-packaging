@@ -177,7 +177,6 @@ Patch200:       versioned.patch
 BuildRequires:  binutils-gold
 %endif
 
-BuildRequires:  /etc/services
 BuildRequires:  pkg-config
 
 # Node.js 4/6/7 requires GCC 4.8.5+.
@@ -219,6 +218,7 @@ BuildRequires:  zlib-devel
 
 %if %node_version_number > 12
 BuildRequires:  python3
+BuildRequires:  netcfg
 %else
 %if 0%{?suse_version} >= 1500
 BuildRequires:  python2
