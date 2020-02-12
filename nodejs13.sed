@@ -23,7 +23,7 @@ s/{{min_libcares2_version}}/1.10.0/g
 s/{{intree_nghttp2}}/0%{suse_version} >= 1550/g
 s/{{min_nghttp2_version}}/1.34.0/g
 
-s/{{git_branch}}/master/
+s/{{git_branch}}/v13.x-staging/
 
 # Extra Sources
 s,{{SOURCES_EXTRA}},# Only required to run unit tests in NodeJS 10+ \
