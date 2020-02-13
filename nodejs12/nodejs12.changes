@@ -25,6 +25,8 @@ Wed Feb 12 10:12:13 UTC 2020 - Adam Majer <adam.majer@suse.de>
   * wasi: Add new core module for WebAssebly System Interface as
     an experimental feature.
 
+- wasi_compile_flags.patch: fix header inclusions in uvwasi dependency
+
 -------------------------------------------------------------------
 Fri Feb  7 10:38:50 UTC 2020 - Adam Majer <adam.majer@suse.de>
 

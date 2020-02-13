@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb 12 14:04:27 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- wasi_compile_flags.patch: fix header inclusions in uvwasi dependency
+
+-------------------------------------------------------------------
 Fri Feb  7 13:07:04 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Update to 13.8.0:
