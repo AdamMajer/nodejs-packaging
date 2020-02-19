@@ -1,4 +1,22 @@
 -------------------------------------------------------------------
+Wed Feb 19 13:45:39 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to 13.9.0:
+  * async_hooks: add executionAsyncResource
+  * crypto:
+    + add crypto.diffieHellman
+    + add DH support to generateKeyPair and simplify DH groups
+    + add key type 'dh'
+  * test: skip keygen tests on arm systems
+  * perf_hooks: add property flags to GCPerformanceEntry
+  * process: report ArrayBuffer memory in memoryUsage()
+  * readline: make tab size configurable
+  * report: add support for Workers
+  * worker: add ability to take heap snapshot from parent thread
+
+- wasi_compile_flags.patch: upstreamed
+
+-------------------------------------------------------------------
 Wed Feb 12 14:04:27 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - wasi_compile_flags.patch: fix header inclusions in uvwasi dependency
