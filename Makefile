@@ -4,7 +4,7 @@ STAGING_PRJ ?= devel:languages:nodejs:staging
 
 
 RELEASED_TARGETS = $(shell ls -d nodejs? nodejs??)
-STAGING_TARGETS = $(shell ls -d staging-?? staging-?) staging-master
+STAGING_TARGETS = $(shell ls -d staging-??) staging-master
 ALL_TARGETS = ${RELEASED_TARGETS} ${STAGING_TARGETS}
 
 STAGING_TARGET_STAMPS := $(addsuffix .target,${STAGING_TARGETS})
