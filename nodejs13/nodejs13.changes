@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Tue Mar 10 17:11:13 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to 13.10.1:
+  * async_hooks: introduce async-context API
+  * stream: support passing generator functions into pipeline()
+  * tls: expose SSL_export_keying_material
+  * vm: implement vm.measureMemory() for per-context measurement
+
+- openssl_rand_regression.patch: upstreamed
+
+-------------------------------------------------------------------
 Mon Mar  2 09:43:10 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - openssl_rand_regression.patch: Add getrandom syscall definition
