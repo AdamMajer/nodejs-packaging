@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Thu Mar 12 11:30:33 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to 13.11.0:
+  * async_hooks: add sync enterWith to ALS
+  * cli: allow --jitless V8 flag in NODE_OPTIONS
+  * fs: return first folder made by mkdir recursive
+  * n-api: define release 6
+  * os: create a getter for kernel version
+  * wasi: add returnOnExit option
+
+-------------------------------------------------------------------
 Tue Mar 10 17:11:13 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Update to 13.10.1:
