@@ -3,6 +3,7 @@
     <conditions>
       <arch>aarch64</arch>
       <arch>ppc64le</arch>
+      <arch>ppc64</arch>
     </conditions>
     <hardware>
       <disk>
