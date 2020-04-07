@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Apr  7 11:26:00 UTC 2020 - Michel Normand <normand@linux.vnet.ibm.com>
+
+- Update _constraints for ppc64 (BE)
+
+-------------------------------------------------------------------
 Fri Feb  7 14:54:56 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2019-15604.patch: fixes a remotely triggerable assertion
