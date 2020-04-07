@@ -1,4 +1,17 @@
 -------------------------------------------------------------------
+Fri Mar 27 16:54:05 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to 13.12.0:
+  * deps:
+    + upgrade npm to 6.14.4 (Ruy Adorno) #32495
+    + update to uvwasi 0.0.6 (Colin Ihrig) #32309
+    + upgrade to libuv 1.35.0 (Colin Ihrig) #32204
+  * lib: add --disable-proto option to cli
+  * node_report:  move diagnostic reports to stable
+  * worker: allow URL in Worker constructor
+  * util: use a global symbol for util.promisify.custom
+
+-------------------------------------------------------------------
 Thu Mar 12 11:30:33 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Update to 13.11.0:
