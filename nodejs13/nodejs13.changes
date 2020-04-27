@@ -1,4 +1,27 @@
 -------------------------------------------------------------------
+Mon Apr 27 13:54:29 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to 13.13.0:
+  * fs:
+    + new overload is available for fs.readSync, which allows to
+      optionally pass any of the offset, length and position parameters
+    + add fs.readv (with sync and promisified versions). This function
+      takes an array of ArrayBufferView elements and will write
+      the data it reads sequentially to the buffers
+  * dns: Added the dns.ALL flag, that can be passed to dns.lookup()
+    with dns.V4MAPPED to return resolved IPv6 addresses as well
+    as IPv4 mapped IPv6 addresses
+  * http: default maximum HTTP header size was changed from 8KB to 16KB
+  * n-api: Calls to napi_call_threadsafe_function from the main thread
+    can now return the napi_would_deadlock status
+  * util: Added a new maxStrLength option to util.inspect with
+    Infinity being default.
+  * worker: Added support for passing a transferList along with
+    workerData to the Worker constructor
+
+- fix_ci_tests.patch: refreshed
+
+-------------------------------------------------------------------
 Fri Mar 27 16:54:05 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Update to 13.12.0:
