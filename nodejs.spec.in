@@ -568,6 +568,8 @@ export CC=%{?cc_exec}
 export CXX=%{?cpp_exec}
 %endif
 
+export NODE_TEST_NO_INTERNET=1
+
 ln addon-rpm.gypi deps/npm/node_modules/node-gyp/addon-rpm.gypi
 # Tarball doesn't have eslint package distributed, so disable some tests
 find test -name \*-eslint-\* -print -delete
