@@ -572,6 +572,7 @@ export CXX=%{?cpp_exec}
 %endif
 
 export NODE_TEST_NO_INTERNET=1
+find test \( -name \*.out -or -name \*.js \) -exec sed -i 's,Use `node ,Use `node%{node_version_number} ,' {} \;
 
 ln addon-rpm.gypi deps/npm/node_modules/node-gyp/addon-rpm.gypi
 # Tarball doesn't have eslint package distributed, so disable some tests
