@@ -154,6 +154,7 @@ Patch34:        CVE-2019-15604.patch   # PATCH_FOR: 6, 8
 Patch35:        CVE-2019-15605.patch   # PATCH_FOR: 6, 8
 
 ## Patches specific to SUSE and openSUSE
+Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, master
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
 Patch101:       nodejs-libpath.patch
 # PATCH-FIX-UPSTREAM -- use custom addon.gypi by default instead of
@@ -178,6 +179,7 @@ BuildRequires:  binutils-gold
 %endif
 
 BuildRequires:  pkg-config
+BuildRequires:  config(netcfg)
 
 # Node.js 4/6/7 requires GCC 4.8.5+.
 #
@@ -389,6 +391,7 @@ tar Jxvf %{SOURCE11}
 %patch33 -p1
 %patch34 -p1
 %patch35 -p1
+%patch100 -p1
 %patch101 -p1
 %patch102 -p1
 # Add check_output to configure script (not part of Python 2.6 in SLE11).

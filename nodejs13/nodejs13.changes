@@ -20,6 +20,7 @@ Mon Apr 27 13:54:29 UTC 2020 - Adam Majer <adam.majer@suse.de>
     workerData to the Worker constructor
 
 - fix_ci_tests.patch: refreshed
+- linker_lto_jobs.patch: serialize linker during build
 
 -------------------------------------------------------------------
 Fri Mar 27 16:54:05 UTC 2020 - Adam Majer <adam.majer@suse.de>
