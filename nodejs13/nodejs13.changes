@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Thu Apr 30 11:21:32 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to 13.14.0:
+  * async_hooks:
+   + Merge run and exit methods
+   + Prevent sync methods of async storage exiting outer context
+  * vm: Add importModuleDynamically option to compileFunction
+
+-------------------------------------------------------------------
 Mon Apr 27 13:54:29 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Update to 13.13.0:
