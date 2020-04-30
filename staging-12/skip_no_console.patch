@@ -185,3 +185,54 @@ Index: node-git.6ffe4ed3b5/test/parallel/test-repl-programmatic-history.js
  const tmpdir = require('../common/tmpdir');
  tmpdir.refresh();
  
+Index: node-git.6ffe4ed3b5/test/parallel/test-readline-tab-complete.js
+===================================================================
+--- node-git.6ffe4ed3b5.orig/test/parallel/test-readline-tab-complete.js
++++ node-git.6ffe4ed3b5/test/parallel/test-readline-tab-complete.js
+@@ -8,6 +8,12 @@ const assert = require('assert');
+ const EventEmitter = require('events').EventEmitter;
+ const { getStringWidth } = require('internal/util/inspect');
+ 
++if (process.env.TERM == 'dumb')
++{
++  common.skip('Skipping test - dumb console');
++  return;
++}
++
+ // This test verifies that the tab completion supports unicode and the writes
+ // are limited to the minimum.
+ [
+Index: node-git.6ffe4ed3b5/test/parallel/test-repl-preview.js
+===================================================================
+--- node-git.6ffe4ed3b5.orig/test/parallel/test-repl-preview.js
++++ node-git.6ffe4ed3b5/test/parallel/test-repl-preview.js
+@@ -6,6 +6,12 @@ const { REPLServer } = require('repl');
+ const { Stream } = require('stream');
+ const { inspect } = require('util');
+ 
++if (process.env.TERM == 'dumb')
++{
++  common.skip('Skipping test - dumb console');
++  return;
++}
++
+ common.skipIfInspectorDisabled();
+ 
+ const PROMPT = 'repl > ';
+Index: node-git.6ffe4ed3b5/test/parallel/test-repl-reverse-search.js
+===================================================================
+--- node-git.6ffe4ed3b5.orig/test/parallel/test-repl-reverse-search.js
++++ node-git.6ffe4ed3b5/test/parallel/test-repl-reverse-search.js
+@@ -10,6 +10,12 @@ const fs = require('fs');
+ const path = require('path');
+ const { inspect } = require('util');
+ 
++if (process.env.TERM == 'dumb')
++{
++  common.skip('Skipping test - dumb console');
++  return;
++}
++
+ common.allowGlobals('aaaa');
+ 
+ const tmpdir = require('../common/tmpdir');
