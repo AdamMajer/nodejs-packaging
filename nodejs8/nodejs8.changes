@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon May  4 12:28:16 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Reduce Requires to Recommends on nodejs8-devel when installing npm8
+
+-------------------------------------------------------------------
 Tue Apr  7 11:26:00 UTC 2020 - Michel Normand <normand@linux.vnet.ibm.com>
 
 - Update _constraints for ppc64 (BE)

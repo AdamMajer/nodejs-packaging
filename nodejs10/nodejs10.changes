@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon May  4 12:28:30 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Reduce Requires to Recommends on nodejs10-devel when installing npm10
+
+-------------------------------------------------------------------
 Mon Apr 27 13:02:42 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - New upstream LTS version 10.20.1:

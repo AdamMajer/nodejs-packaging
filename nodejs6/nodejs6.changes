@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon May  4 12:27:33 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Reduce Requires to Recommends on nodejs6-devel when installing npm6
+
+-------------------------------------------------------------------
 Fri Feb  7 15:11:56 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2019-15604.patch: fixes a remotely triggerable assertion
