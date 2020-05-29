@@ -168,7 +168,6 @@ Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 4, 6, 8, 
 Patch104:       npm_search_paths.patch
 Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 6, 8, 10
 Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, master
-Patch107:       icu-v67.patch             # PATCH_FOR: =12
 
 
 Patch120:       flaky_test_rerun.patch
@@ -416,7 +415,6 @@ tar Jxvf %{SOURCE11}
 %patch104 -p1
 %patch105 -p1
 %patch106 -p1
-%patch107 -p1
 %patch120 -p1
 %patch200 -p1
 
@@ -588,7 +586,9 @@ export CXX=%{?cpp_exec}
 %endif
 
 export NODE_TEST_NO_INTERNET=1
+%if %{node_version_number} >= 14
 find test \( -name \*.out -or -name \*.js \) -exec sed -i 's,Use `node ,Use `node%{node_version_number} ,' {} \;
+%endif
 
 ln addon-rpm.gypi deps/npm/node_modules/node-gyp/addon-rpm.gypi
 # Tarball doesn't have eslint package distributed, so disable some tests
