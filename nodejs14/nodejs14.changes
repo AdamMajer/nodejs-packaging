@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Fri May 29 10:46:58 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to version 14.3.0:
+  * repl: previews improvements with autocompletion
+  * it's now possible to use the await keyword outside of async functions,
+    with the --experimental-top-level-await flag
+
+- Changes in version 14.2.0:
+  * console: Support for console constructor groupIndentation options
+
+- skip_no_console.patch: refreshed
+- versioned.patch, fix_ci_tests.patch: refreshed
+
+-------------------------------------------------------------------
 Thu Apr 30 11:22:45 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Update to version 14.1.0:
