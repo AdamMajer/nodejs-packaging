@@ -152,6 +152,10 @@ Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8
 Patch33:        CVE-2019-15606.patch   # PATCH_FOR: 6, 8
 Patch34:        CVE-2019-15604.patch   # PATCH_FOR: 6, 8
 Patch35:        CVE-2019-15605.patch   # PATCH_FOR: 6, 8
+Patch36:        CVE-2020-8174.patch    # PATCH_FOR: 6, 8
+Patch37:        nghttp2_1.41.0.patch   # PATCH_FOR: 8
+Patch38:        CVE-2020-11080.patch   # PATCH_FOR: 8
+Patch39:        minimist.patch         # PATCH_FOR: 6, 8
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, master
@@ -405,6 +409,10 @@ tar Jxvf %{SOURCE11}
 %patch33 -p1
 %patch34 -p1
 %patch35 -p1
+%patch36 -p1
+%patch37 -p1
+%patch38 -p1
+%patch39 -p1
 %patch100 -p1
 %patch101 -p1
 %patch102 -p1

@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Jun  4 13:40:27 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2020-8174.patch: napi: fix various types of memory corruption
+  in napi_get_value_string_*() (CVE-2020-8174, bsc#1172443)
+- nghttp2_1.41.0.patch: deps: update nghttp2 to 1.41.0
+- CVE-2020-11080.patch: http2: fix HTTP/2 Large Settings Frame DoS
+  (CVE-2020-11080, bsc#1172442)
+- minimist.patch: Fixes a vulnerability in an npm component (bsc#1166916)
+
+-------------------------------------------------------------------
 Mon May  4 12:28:16 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Reduce Requires to Recommends on nodejs8-devel when installing npm8

@@ -1,5 +1,5 @@
 s/{{npm_version}}/6.13.6/g
-s/{{node_version}}/12.17.0/g
+s/{{node_version}}/12.18.0/g
 s/{{node_version_major}}/12/g
 s/{{exclusive_arch}}/x86_64 aarch64 ppc64 ppc64le s390x/g
 
@@ -14,7 +14,7 @@ s/{{intree_openssl}}/0%{?suse_version} >= 1550 || (0%{?sle_version} >= 120500 \&
 #
 #
 # icu versions
-s/{{intree_icu}}/0%{?suse_version} >= 1550/g
+s/{{intree_icu}}/0%{?suse_version} >= 1500/g
 s/{{min_icu_version}}/64/g
 #
 #

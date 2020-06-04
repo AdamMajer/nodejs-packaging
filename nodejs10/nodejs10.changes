@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Thu Jun  4 11:29:50 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- New upstream LTS version 10.21.0:
+  * napi: fix various types of memory corruption in napi_get_value_string_*()
+    (CVE-2020-8174, bsc#1172443)
+  * http2: fix HTTP/2 Large Settings Frame DoS
+    (CVE-2020-11080, bsc#1172442)
+  * deps: ICU-20958 Prevent SEGV_MAPERR in append
+    (CVE-2020-10531, bsc#1166844)
+
+-------------------------------------------------------------------
 Mon May  4 12:28:30 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Reduce Requires to Recommends on nodejs10-devel when installing npm10
@@ -10,7 +21,7 @@ Mon Apr 27 13:02:42 UTC 2020 - Adam Majer <adam.majer@suse.de>
   * buffer: add {read|write}Big[U]Int64{BE|LE} methods
   * build: macOS package notarization
   * deps:
-    + update npm to 6.14.3
+    + update npm to 6.14.3 (bsc#1166916, CVE-2020-7598)
     + upgrade openssl sources to 1.1.1e
     + upgrade to libuv 1.34.2
   * n-api:

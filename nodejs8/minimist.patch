@@ -1,0 +1,24 @@
+Index: node-v8.17.0/deps/npm/node_modules/minimist/index.js
+===================================================================
+--- node-v8.17.0.orig/deps/npm/node_modules/minimist/index.js
++++ node-v8.17.0/deps/npm/node_modules/minimist/index.js
+@@ -161,6 +161,7 @@ function setKey (obj, keys, value) {
+     var o = obj;
+     keys.slice(0,-1).forEach(function (key) {
+         if (o[key] === undefined) o[key] = {};
++        if (o[key] === {}.__proto__) o[key] = {};
+         o = o[key];
+     });
+     
+Index: node-v8.17.0/deps/npm/node_modules/rc/node_modules/minimist/index.js
+===================================================================
+--- node-v8.17.0.orig/deps/npm/node_modules/rc/node_modules/minimist/index.js
++++ node-v8.17.0/deps/npm/node_modules/rc/node_modules/minimist/index.js
+@@ -70,6 +70,7 @@ module.exports = function (args, opts) {
+         var o = obj;
+         keys.slice(0,-1).forEach(function (key) {
+             if (o[key] === undefined) o[key] = {};
++            if (o[key] === {}.__proto__) o[key] = {};
+             o = o[key];
+         });
+ 
