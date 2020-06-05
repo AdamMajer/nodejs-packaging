@@ -22,7 +22,7 @@ s/{{min_libcares2_version}}/1.10.0/g
 #
 # nghttp2 version
 s/{{intree_nghttp2}}/0%{suse_version} >= 1550/g
-s/{{min_nghttp2_version}}/1.39.2/g
+s/{{min_nghttp2_version}}/1.41.0/g
 
 # Git staging directory
 s/{{git_branch}}/v10.x-staging/
