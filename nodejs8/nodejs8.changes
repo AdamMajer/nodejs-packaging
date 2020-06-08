@@ -6,7 +6,8 @@ Thu Jun  4 13:40:27 UTC 2020 - Adam Majer <adam.majer@suse.de>
 - nghttp2_1.41.0.patch: deps: update nghttp2 to 1.41.0
 - CVE-2020-11080.patch: http2: fix HTTP/2 Large Settings Frame DoS
   (CVE-2020-11080, bsc#1172442)
-- minimist.patch: Fixes a vulnerability in an npm component (bsc#1166916)
+- minimist.patch: Fixes a vulnerability in an npm component
+  (CVE-2020-7598, bsc#1166916)
 
 -------------------------------------------------------------------
 Mon May  4 12:28:16 UTC 2020 - Adam Majer <adam.majer@suse.de>

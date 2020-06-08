@@ -3,7 +3,8 @@ Thu Jun  4 13:39:29 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2020-8174.patch: napi: fix various types of memory corruption
   in napi_get_value_string_*() (CVE-2020-8174, bsc#1172443)
-- minimist.patch: Fixes a vulnerability in an npm component (bsc#1166916)
+- minimist.patch: Fixes a vulnerability in an npm component
+  (CVE-2020-7598, bsc#1166916)
 
 -------------------------------------------------------------------
 Mon May  4 12:27:33 UTC 2020 - Adam Majer <adam.majer@suse.de>
