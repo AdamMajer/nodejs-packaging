@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jul  7 08:33:00 UTC 2020 - Guillaume GARDET <guillaume.gardet@opensuse.org>
+
+- Use GCC9 on aarch64 TW for nodejs<14- boo#1172686
+
+-------------------------------------------------------------------
 Tue Jun  9 10:35:06 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Add nodejs-default, npm-default and nodejs-devel-default subpackages

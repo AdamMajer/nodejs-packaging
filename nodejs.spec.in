@@ -223,6 +223,17 @@ BuildRequires:   gcc7-c++
 %endif
 %endif
 %endif
+
+# boo#1172686 - Build problems with gcc10 on aarch64
+%if 0%{?suse_version} > 1500
+%ifarch aarch64
+%if %node_version_number < 14
+BuildRequires:  gcc9-c++
+%define cc_exec  gcc-9
+%define cpp_exec g++-9
+%endif
+%endif
+%endif
 # compiler selection
 
 # No special version defined, use default.
