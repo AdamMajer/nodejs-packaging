@@ -8,10 +8,10 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-git.c095808e73/Makefile
+Index: node-git.0848f56cb3/Makefile
 ===================================================================
---- node-git.c095808e73.orig/Makefile
-+++ node-git.c095808e73/Makefile
+--- node-git.0848f56cb3.orig/Makefile
++++ node-git.0848f56cb3/Makefile
 @@ -46,7 +46,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
@@ -21,10 +21,10 @@ Index: node-git.c095808e73/Makefile
  NODE ?= ./$(NODE_EXE)
  NODE_G_EXE = node_g$(EXEEXT)
  NPM ?= ./deps/npm/bin/npm-cli.js
-Index: node-git.c095808e73/tools/install.py
+Index: node-git.0848f56cb3/tools/install.py
 ===================================================================
---- node-git.c095808e73.orig/tools/install.py
-+++ node-git.c095808e73/tools/install.py
+--- node-git.0848f56cb3.orig/tools/install.py
++++ node-git.0848f56cb3/tools/install.py
 @@ -81,34 +81,34 @@ def uninstall(paths, dst):
      try_remove(path, dst)
  
@@ -137,10 +137,10 @@ Index: node-git.c095808e73/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-git.c095808e73/doc/node.1
+Index: node-git.0848f56cb3/doc/node.1
 ===================================================================
---- node-git.c095808e73.orig/doc/node.1
-+++ node-git.c095808e73/doc/node.1
+--- node-git.0848f56cb3.orig/doc/node.1
++++ node-git.0848f56cb3/doc/node.1
 @@ -30,24 +30,24 @@
  .Dt NODE 1
  .
@@ -170,10 +170,10 @@ Index: node-git.c095808e73/doc/node.1
  .Op Fl -v8-options
  .
  .\"======================================================================
-Index: node-git.c095808e73/src/node.stp
+Index: node-git.0848f56cb3/src/node.stp
 ===================================================================
---- node-git.c095808e73.orig/src/node.stp
-+++ node-git.c095808e73/src/node.stp
+--- node-git.0848f56cb3.orig/src/node.stp
++++ node-git.0848f56cb3/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -246,12 +246,12 @@ Index: node-git.c095808e73/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-git.c095808e73/deps/npm/man/man1/npm.1
+Index: node-git.0848f56cb3/deps/npm/man/man1/npm.1
 ===================================================================
---- node-git.c095808e73.orig/deps/npm/man/man1/npm.1
-+++ node-git.c095808e73/deps/npm/man/man1/npm.1
+--- node-git.0848f56cb3.orig/deps/npm/man/man1/npm.1
++++ node-git.0848f56cb3/deps/npm/man/man1/npm.1
 @@ -1,6 +1,6 @@
- .TH "NPM" "1" "May 2020" "" ""
+ .TH "NPM" "1" "August 2020" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm42\fR \- javascript package manager
@@ -282,7 +282,7 @@ Index: node-git.c095808e73/deps/npm/man/man1/npm.1
  .SS Dependencies
  .P
  If a package references to another package with a git URL, npm depends
-@@ -87,19 +87,19 @@ Make a package\.json file\.  See npm hel
+@@ -86,19 +86,19 @@ Make a package\.json file\.  See npm hel
  link:
  For linking your current working code into Node's path, so that you
  don't have to reinstall every time you make a change\.  Use
@@ -305,7 +305,7 @@ Index: node-git.c095808e73/deps/npm/man/man1/npm.1
  
  .RE
  .SS Configuration
-@@ -172,14 +172,14 @@ i@izs\.me
+@@ -171,14 +171,14 @@ i@izs\.me
  .SS See Also
  .RS 0
  .IP \(bu 2
@@ -325,11 +325,11 @@ Index: node-git.c095808e73/deps/npm/man/man1/npm.1
 +npm42 help npmrc
  
  .RE
-Index: node-git.c095808e73/src/node_main.cc
+Index: node-git.0848f56cb3/src/node_main.cc
 ===================================================================
---- node-git.c095808e73.orig/src/node_main.cc
-+++ node-git.c095808e73/src/node_main.cc
-@@ -124,6 +124,7 @@ int main(int argc, char* argv[]) {
+--- node-git.0848f56cb3.orig/src/node_main.cc
++++ node-git.0848f56cb3/src/node_main.cc
+@@ -122,6 +122,7 @@ int main(int argc, char* argv[]) {
  #endif
    // Disable stdio buffering, it interacts poorly with printf()
    // calls elsewhere in the program (e.g., any logging from V8.)
@@ -337,12 +337,12 @@ Index: node-git.c095808e73/src/node_main.cc
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
-Index: node-git.c095808e73/deps/npm/man/man1/npx.1
+Index: node-git.0848f56cb3/deps/npm/man/man1/npx.1
 ===================================================================
---- node-git.c095808e73.orig/deps/npm/man/man1/npx.1
-+++ node-git.c095808e73/deps/npm/man/man1/npx.1
+--- node-git.0848f56cb3.orig/deps/npm/man/man1/npx.1
++++ node-git.0848f56cb3/deps/npm/man/man1/npx.1
 @@ -1,32 +1,32 @@
- .TH "NPX" "1" "January 2020" "npx@10.2.1" "User Commands"
+ .TH "NPX" "1" "July 2020" "npx@10.2.3" "User Commands"
  .SH "NAME"
 -\fBnpx\fR \- execute npm package binaries
 +\fBnpx42\fR \- execute npm package binaries
@@ -425,11 +425,11 @@ Index: node-git.c095808e73/deps/npm/man/man1/npx.1
  
  .RE
  
-Index: node-git.c095808e73/tools/test.py
+Index: node-git.0848f56cb3/tools/test.py
 ===================================================================
---- node-git.c095808e73.orig/tools/test.py
-+++ node-git.c095808e73/tools/test.py
-@@ -908,7 +908,7 @@ class Context(object):
+--- node-git.0848f56cb3.orig/tools/test.py
++++ node-git.0848f56cb3/tools/test.py
+@@ -933,7 +933,7 @@ class Context(object):
      if self.vm is not None:
        return self.vm
      if arch == 'none':
@@ -438,11 +438,11 @@ Index: node-git.c095808e73/tools/test.py
      else:
        name = 'out/%s.%s/node' % (arch, mode)
  
-Index: node-git.c095808e73/node.gyp
+Index: node-git.0848f56cb3/node.gyp
 ===================================================================
---- node-git.c095808e73.orig/node.gyp
-+++ node-git.c095808e73/node.gyp
-@@ -22,8 +22,8 @@
+--- node-git.0848f56cb3.orig/node.gyp
++++ node-git.0848f56cb3/node.gyp
+@@ -26,8 +26,8 @@
      'node_use_openssl%': 'true',
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',

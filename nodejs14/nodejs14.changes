@@ -18,6 +18,7 @@ Fri Aug 28 10:39:52 UTC 2020 - Adam Majer <adam.majer@suse.de>
   * n-api,src: provide asynchronous cleanup hooks (Anna Henningsen) #34572
 
 - versioned.patch: refreshed
+- linker_lto_jobs.patch: refreshed
 
 -------------------------------------------------------------------
 Mon Aug 10 16:38:15 UTC 2020 - Adam Majer <adam.majer@suse.de>
