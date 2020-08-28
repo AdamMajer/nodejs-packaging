@@ -6,7 +6,7 @@ Index: node-git.c095808e73/configure
  command -v python3.7 >/dev/null && exec python3.7 "$0" "$@"
  command -v python3.6 >/dev/null && exec python3.6 "$0" "$@"
  command -v python3.5 >/dev/null && exec python3.5 "$0" "$@"
-+comamnd -v python3.4 >/dev/null && exec python3.4 "$0" "$@"
++command -v python3.4 >/dev/null && exec python3.4 "$0" "$@"
  command -v python2.7 >/dev/null && exec python2.7 "$0" "$@"
  exec python "$0" "$@"
  ''' "$0" "$@"

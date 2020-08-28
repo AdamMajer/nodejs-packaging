@@ -1,4 +1,62 @@
 -------------------------------------------------------------------
+Fri Aug 28 10:39:52 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to version 14.9.0:
+  * build: set --v8-enable-object-print by default (Mary Marchini) #34705
+  * deps:
+    + upgrade to libuv 1.39.0 (cjihrig) #34915
+    + upgrade npm to 6.14.8 (Ruy Adorno) #34834
+    + V8: cherry-pick e06ace6b5cdb (Anna Henningsen) #34673
+  * n-api: handle weak no-finalizer refs correctly (Gabriel Schulhof) #34839
+  * tools: add debug entitlements for macOS 10.15+ (Gabriele Greco) #34378
+
+- Changes in version 14.8.0:
+  * async_hooks: add AsyncResource.bind utility (James M Snell) #34574
+  * deps: update to uvwasi 0.0.10 (Colin Ihrig) #34623
+  * module: unflag Top-Level Await (Myles Borins) #34558
+  * n-api: support type-tagging objects (Gabriel Schulhof) #28237
+  * n-api,src: provide asynchronous cleanup hooks (Anna Henningsen) #34572
+
+- versioned.patch: refreshed
+
+-------------------------------------------------------------------
+Mon Aug 10 16:38:15 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Explicitly add -fno-strict-aliasing to CFLAGS to fix compilation
+  on Aarch64 with gcc10 (bsc#1172686)
+
+-------------------------------------------------------------------
+Mon Aug  3 12:20:57 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to version 14.7.0:
+  * deps: upgrade npm to 6.14.7
+  * dgram: add IPv6 scope id suffix to received udp6 dgrams
+  * src:
+    + allow preventing SetPromiseRejectCallback #34387
+    + allow setting a dir for all diagnostic output #33584
+  * worker: make MessagePort inherit from EventTarget #34057
+  * zlib: switch to lazy init for zlib streams (Andrey Pechkurov) #34048
+
+-------------------------------------------------------------------
+Wed Jul 22 12:52:50 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to version 14.6.0:
+  * deps:
+    + upgrade to libuv 1.38.1
+    + upgrade npm to 6.14.6 fixing information leak through
+      log files (bsc#1173937, CVE-2020-15095)
+    + update V8 to 8.4.371.19
+  * module:
+    + doc only deprecation of module.parent
+    + package "imports" field
+  * src: allow embedders to disable esm loader
+  * tls: make 'createSecureContext' honor more options
+  * vm: add run-after-evaluate microtask mode
+  * worker: add option to track unmanaged file descriptors
+
+- versioned.patch - refreshed
+
+-------------------------------------------------------------------
 Thu Jul  2 20:51:30 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Update to version 14.5.0:
