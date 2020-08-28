@@ -38,6 +38,11 @@ Mon Aug  3 12:20:57 UTC 2020 - Adam Majer <adam.majer@suse.de>
   * zlib: switch to lazy init for zlib streams (Andrey Pechkurov) #34048
 
 -------------------------------------------------------------------
+Tue Jul 28 07:13:57 UTC 2020 - Dirk Mueller <dmueller@suse.com>
+
+- avoid rpmbuild warnings on if/else/endif constructs
+
+-------------------------------------------------------------------
 Wed Jul 22 12:52:50 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Update to version 14.6.0:
