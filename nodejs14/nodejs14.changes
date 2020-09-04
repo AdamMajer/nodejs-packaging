@@ -2,6 +2,7 @@
 Wed Sep  2 10:44:47 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - old_icu.patch: re-add support for ICU 65 from SLE15 SP2
+- fix_ci_tests.patch: move debug symbol strip for testing to the Makefile
 
 -------------------------------------------------------------------
 Fri Aug 28 10:39:52 UTC 2020 - Adam Majer <adam.majer@suse.de>
