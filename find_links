@@ -1,9 +1,95 @@
 #!/bin/bash
 
-echo
-echo ---- Links ----
-find -L staging* nodejs* -samefile $1
-echo
-echo ---- Stat  ----
-exec stat $1
+SEARCH_LOCATIONS="staging*/ nodejs*/"
+
+function ListStatus()
+{
+    echo
+    echo ---- Links ----
+    find -L $SEARCH_LOCATIONS -samefile $1
+    echo
+    echo ---- Orig file ----
+    find -L $SEARCH_LOCATIONS -samefile $1 -xtype f
+    echo
+    echo ---- Stat  ----
+    exec stat $1
+};
+
+function OrigFile()
+{
+    local LINK_FILE=$1
+    ORIG_FILE=$(find -L $SEARCH_LOCATIONS -samefile $LINK_FILE -xtype f)
+}
+
+function Disassociate()
+{
+    local LINK_FILE=$1
+    if [ "x" = "x"$1 ] || ! [ -L $LINK_FILE ]; then
+        echo "Can only break symlinks. $LINK_FILE is not a symlinks."
+        exit -1
+    fi
+
+    OrigFile $LINK_FILE
+
+    if [ "x" = "x$ORIG_FILE" ]; then
+        echo "Cannot find original file for $LINK_FILE"
+        exit -2;
+    fi
+
+    if [ -r $ORIG_FILE ]; then
+        echo "copy ${ORIG_FILE} -> ${LINK_FILE}"
+    fi
+}
+
+function DisassociateDir()
+{
+    DIR=$1
+
+    for file in $DIR/*; do
+        if [ -L $file ]; then
+            OrigFile $file
+            find -P $SEARCH_LOCATIONS -lname ../$file -exec rm {} \; -exec ln -s ../$ORIG_FILE {} \;
+        elif [ -f $file ]; then
+            find -P $SEARCH_LOCATIONS -lname ../$file -exec rm {} \; -exec cp $file {} \;
+        fi
+    done
+}
+
+
+MODE='v';
+FILENAME=$1
+
+while getopts "b:v:B" CMDOPT; do
+    case $CMDOPT in
+    ("b"):
+        if [ -d $OPTARG ]; then
+            DisassociateDir $OPTARG
+        else
+            Disassociate $OPTARG
+        fi
+        exit 0
+        ;;
+    ("B"):
+        exec find -L $SEARCH_LOCATIONS -type l
+        ;;
+    ("v"):
+        FILENAME=$OPTARG
+    esac
+done
+
+if [ "x$FILENAME" = "x" ]; then
+    echo " find_links [-bv] <filename>"
+    echo "   -b -- breaks links and making the <filename> a copy of the orignal"
+    echo "   -v -- displays status (default)"
+    echo
+    echo " find_links -b <directory>"
+    echo "   - breaks all links pointing *into* this directory"
+    echo
+    echo " find_links -B"
+    echo "   - finds broken symlinks"
+    echo
+    exit -1
+fi
+
+ListStatus $FILENAME
 
