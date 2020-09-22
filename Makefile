@@ -1,3 +1,4 @@
+SHELL=/bin/bash
 
 MAIN_PRJ ?= devel:languages:nodejs
 STAGING_PRJ ?= devel:languages:nodejs:staging
@@ -88,9 +89,14 @@ ${ALL_TARGETS}: changelog.target common.target
 	grep -q '^0$$' || ( echo "Wrong node version found in patches $@" && false)
 	
 	# Parse spec file
-	sed -e 's,{{git_node}},$(GIT),' -f nodejs$(NODEJS_VERSION).sed -f nodejs_$(if $(findstring staging,$@),git,releases).sed nodejs.spec.in \
+	sed -e 's,{{git_node}},$(GIT),' \
+		-f nodejs$(NODEJS_VERSION).sed \
+		-f nodejs_$(if $(findstring staging,$@),git,releases).sed \
+		-f <(./bundling.sh -M $(if $(findstring staging,$@),-g,) $(NODEJS_VERSION)) \
+		-f <(./bundling.sh -N $(if $(findstring staging,$@),-g,) $(NODEJS_VERSION)) \
+		nodejs.spec.in \
 		| perl patch.pl $@ > $D/nodejs$(NODEJS_VERSION).spec
-	
+
 	# Parse _service file, if staging
 	[ "$(findstring staging,$@)" != "staging" ] || \
 		sed -e 's,{{pwd}},$(PWD),' -f nodejs$(NODEJS_VERSION).sed _service.in > $D/_service
