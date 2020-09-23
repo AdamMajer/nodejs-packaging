@@ -33,3 +33,11 @@ s/{{git_branch}}/v6.x-staging/
 s,{{SOURCES_EXTRA}},# Update npm version \
 Source10:       npm.tar.xz,
 
+
+
+s/{{bundled_cares_version}}/1.10.1-DEV/g
+s/{{bundled_http_parser_version}}/2.9.3/g
+s/{{bundled_icu-small_version}}/58.2/g
+s/{{bundled_openssl_version}}/1.0.2r/g
+s/{{bundled_uv_version}}/1.16.1/g
+s/{{bundled_v8_version}}/5.1.281.111/g

@@ -1,5 +1,5 @@
 s/{{npm_version}}/6.14.8/g
-s/{{node_version}}/14.9.0/g
+s/{{node_version}}/14.11.0/g
 s/{{node_version_major}}/14/g
 s/{{exclusive_arch}}/x86_64 aarch64 ppc64 ppc64le s390x/g
 
@@ -29,3 +29,15 @@ s/{{git_branch}}/v14.x-staging/
 s,{{SOURCES_EXTRA}},# Only required to run unit tests in NodeJS 10+ \
 Source10:       update_npm_tarball.sh \
 Source11:       node_modules.tar.xz,
+
+
+
+s/{{bundled_brotli_version}}/1.0.9/g
+s/{{bundled_cares_version}}/1.16.0/g
+s/{{bundled_icu-small_version}}/67.1/g
+s/{{bundled_llhttp_version}}/2.1.2/g
+s/{{bundled_nghttp2_version}}/1.41.0/g
+s/{{bundled_openssl_version}}/1.1.1g/g
+s/{{bundled_uv_version}}/1.39.0/g
+s/{{bundled_uvwasi_version}}/0.0.10/g
+s/{{bundled_v8_version}}/8.4.371.19/g

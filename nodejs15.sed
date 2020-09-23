@@ -29,3 +29,17 @@ s/{{git_branch}}/v15.x-staging/
 s,{{SOURCES_EXTRA}},# Only required to run unit tests in NodeJS 10+ \
 Source10:       update_npm_tarball.sh \
 Source11:       node_modules.tar.xz,
+
+
+
+s/{{bundled_brotli_version}}/1.0.9/g
+s/{{bundled_cares_version}}/1.16.0/g
+s/{{bundled_icu-small_version}}/67.1/g
+s/{{bundled_llhttp_version}}/2.0.4/g
+s/{{bundled_nghttp2_version}}/1.41.0/g
+s/{{bundled_nghttp3_version}}/0.1.0-DEV/g
+s/{{bundled_ngtcp2_version}}/0.1.0-DEV/g
+s/{{bundled_openssl_version}}/1.1.1g/g
+s/{{bundled_uv_version}}/1.39.0/g
+s/{{bundled_uvwasi_version}}/0.0.11/g
+s/{{bundled_v8_version}}/8.4.371.19/g

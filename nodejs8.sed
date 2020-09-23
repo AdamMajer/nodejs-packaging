@@ -29,3 +29,13 @@ s/{{min_nghttp2_version}}/1.41.0/g
 
 # Git staging directory
 s/{{git_branch}}/v8.x-staging/
+
+
+
+s/{{bundled_cares_version}}/1.10.1-DEV/g
+s/{{bundled_http_parser_version}}/2.9.3/g
+s/{{bundled_icu-small_version}}/60.1/g
+s/{{bundled_nghttp2_version}}/1.41.0/g
+s/{{bundled_openssl_version}}/1.0.2s/g
+s/{{bundled_uv_version}}/1.23.2/g
+s/{{bundled_v8_version}}/6.2.414.78/g
