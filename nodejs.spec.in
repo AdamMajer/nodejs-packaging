@@ -282,7 +282,7 @@ BuildRequires:  openssl-devel >= %{openssl_req_ver}
 %if ! 0%{with intree_cares}
 BuildRequires:  pkgconfig(libcares) >= {{min_libcares2_version}}
 %else
-%{bundled cares  {{bundled_cares_version}}}
+%{bundled libcares2  {{bundled_cares_version}}}
 %endif
 
 %if ! 0%{with intree_icu}
@@ -332,10 +332,10 @@ ExclusiveArch:  {{exclusive_arch}}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %{bundled uvwasi {{bundled_uvwasi_version}}}
-%{bundled uv     {{bundled_uv_version}}}
+%{bundled libuv  {{bundled_uv_version}}}
 %{bundled v8     {{bundled_v8_version}}}
 %{bundled brotli {{bundled_brotli_version}}}
-%{bundled http_parser {{bundled_http_parser_version}}}
+%{bundled http-parser {{bundled_http_parser_version}}}
 %{bundled nghttp3 {{bundled_nghttp3_version}}}
 %{bundled llhttp  {{bundled_llhttp_version}}}
 %{bundled ngtcp2  {{bundled_ngtcp2_version}}}
