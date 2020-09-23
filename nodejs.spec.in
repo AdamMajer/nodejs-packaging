@@ -28,6 +28,15 @@ Name:           nodejs{{node_version_major}}
 Version:        {{node_version}}
 Release:        0
 
+# bundled ( "pkg", "version" )
+%define bundled() %{lua: \
+    local pkg=rpm.expand("%1"); \
+    local ver=rpm.expand("%2"); \
+    if (not(string.sub(ver, 0, 2) == '\{\{' and string.sub(ver, -2) == '\}\}' )) then \
+        print("Provides:  bundled(" .. pkg .. ") = " .. ver) \
+    end }
+
+
 %define node_version_number {{node_version_major}}
 
 %if %node_version_number >= 12
@@ -266,18 +275,26 @@ BuildRequires:  openssl-devel >= %{openssl_req_ver}
 %endif
 
 %endif
+%else
+%{bundled openssl {{bundled_openssl_version}}}
 %endif
 
 %if ! 0%{with intree_cares}
 BuildRequires:  pkgconfig(libcares) >= {{min_libcares2_version}}
+%else
+%{bundled cares  {{bundled_cares_version}}}
 %endif
 
 %if ! 0%{with intree_icu}
 BuildRequires:  pkgconfig(icu-i18n) >= {{min_icu_version}}
+%else
+%{bundled icu    {{bundled_icu-small_version}}}
 %endif
 
 %if ! 0%{with intree_nghttp2}
 BuildRequires: libnghttp2-devel >= {{min_nghttp2_version}}
+%else
+%{bundled nghttp2 {{bundled_nghttp2_version}}}
 %endif
 
 %if 0%{with valgrind_tests}
@@ -314,6 +331,17 @@ Requires:       openssl1
 ExclusiveArch:  {{exclusive_arch}}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
+%{bundled uvwasi {{bundled_uvwasi_version}}}
+%{bundled uv     {{bundled_uv_version}}}
+%{bundled v8     {{bundled_v8_version}}}
+%{bundled brotli {{bundled_brotli_version}}}
+%{bundled http_parser {{bundled_http_parser_version}}}
+%{bundled nghttp3 {{bundled_nghttp3_version}}}
+%{bundled llhttp  {{bundled_llhttp_version}}}
+%{bundled ngtcp2  {{bundled_ngtcp2_version}}}
+
+{{node_npm_bundles}}
+
 %description
 Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js
 uses an event-driven, non-blocking I/O model. Node.js has a package ecosystem
@@ -348,6 +376,7 @@ Recommends:     python3
 %else
 Recommends:     python
 %endif
+{{npm_npm_bundles}}
 
 %description -n npm{{node_version_major}}
 A package manager for Node.js that allows developers to install and
