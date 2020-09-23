@@ -331,6 +331,8 @@ Requires:       openssl1
 ExclusiveArch:  {{exclusive_arch}}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
+# NOTE: If version is not present (not replaced), it means it's not bundled and
+#       it will removed by the macro during rpm processing
 %{bundled uvwasi {{bundled_uvwasi_version}}}
 %{bundled libuv  {{bundled_uv_version}}}
 %{bundled v8     {{bundled_v8_version}}}

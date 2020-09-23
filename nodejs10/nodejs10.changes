@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Sep 18 07:00:58 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- New upstream LTS version 12.22.1:
+  * fs.realpath.native on may cause buffer overflow
+    (bsc#1176605, CVE-2020-8252)
+
+-------------------------------------------------------------------
 Fri Aug 21 15:20:46 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Strip debugging symbols prior to running unit tests. Some tests
