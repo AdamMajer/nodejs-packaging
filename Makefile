@@ -87,7 +87,10 @@ ${ALL_TARGETS}: changelog.target common.target
 	sed -s 's,^.*\(node\|npm\|npx\)\([0-9]\+\).*$$,\2,' - |\
 	grep -vc ${NODEJS_VERSION} |\
 	grep -q '^0$$' || ( echo "Wrong node version found in patches $@" && false)
-	
+
+	# (hack) make sure we unpack the sources
+	./bundling.sh -N $(if $(findstring staging,$@),-g,) $(NODEJS_VERSION) > /dev/null
+
 	# Parse spec file
 	sed -e 's,{{git_node}},$(GIT),' \
 		-f nodejs$(NODEJS_VERSION).sed \
@@ -111,5 +114,6 @@ ${ALL_TARGETS}: changelog.target common.target
 		quilt setup --fast -v *.spec && \
 		cd `find -maxdepth 1 -mindepth 1 -type d -name node-git\*` && quilt push -a --fuzz=0; \
 	fi
+
 	touch $@.target
 

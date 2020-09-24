@@ -165,6 +165,13 @@ function load_uvwasi_version
     fi
 }
 
+function load_npm_version
+{
+    if [ -f package.json ]; then
+        BUNDLED_VERSION=$(node -e "console.log(JSON.parse(fs.readFileSync('package.json')).version)")
+    fi
+}
+
 
 # arg $1 - bundle
 # returns:   $BUNDLED_VERSION = version detected upstream
@@ -179,13 +186,13 @@ function load_bundled_version
     BUNDLED_VERSION=""
 
     case $PKG in
-        (acorn|acorn-plugins|node-inspect|gtest|npm|zlib|histogram):
+        (acorn|acorn-plugins|node-inspect|gtest|zlib|histogram):
         # These are npm packages so handled elsewhere
         # or excluded, like gtest
         popd > /dev/null
         return
         ;;
-        (brotli|cares|http_parser|icu-small|nghttp2|nghttp3|openssl|uv|v8|llhttp|uvwasi|ngtcp2):
+        (brotli|cares|http_parser|icu-small|nghttp2|nghttp3|openssl|uv|v8|llhttp|uvwasi|ngtcp2|npm):
         load_${PKG}_version
         ;;
         (*):
@@ -202,13 +209,41 @@ function load_bundled_version
     fi
 }
 
-function push_node_dir
+function expand_tarball
 {
     if [ -z "$STAGING" ]; then
-        pushd devel:languages:nodejs/nodejs$NODE_VERSION/node-v$NODE_FULL_VERSION > /dev/null
+        pushd devel:languages:nodejs/nodejs$NODE_VERSION > /dev/null
+        tar Jxf node-v$NODE_FULL_VERSION.tar.xz
+        popd > /dev/null
     else
-        pushd devel:languages:nodejs:staging/nodejs$NODE_VERSION/node-git.*/ > /dev/null
+        pushd devel:languages:nodejs:staging/nodejs$NDOE_VERSION > /dev/null
+        for i in `ls -t node-git.*.tar`; do
+            tar Jxf $i
+            break
+        done
+        popd > /dev/null
     fi
+    
+}
+
+function push_node_dir
+{
+    local dir;
+    if [ -z "$STAGING" ]; then
+        dir=devel:languages:nodejs/nodejs$NODE_VERSION/node-v$NODE_FULL_VERSION
+    else
+        dir=devel:languages:nodejs:staging/nodejs$NODE_VERSION/node-git.*/
+    fi
+
+    if [ ! -d $dir ]; then
+        expand_tarball
+        if [ ! -d $dir ]; then
+            echo "Cannot untar the tarball" > /dev/stderr
+            exit 15
+        fi
+    fi
+
+    pushd $dir > /dev/null
 }
 
 function find_npm_packages
