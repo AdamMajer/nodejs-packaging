@@ -165,6 +165,7 @@ Patch36:        CVE-2020-8174.patch    # PATCH_FOR: 6, 8
 Patch37:        nghttp2_1.41.0.patch   # PATCH_FOR: 8
 Patch38:        CVE-2020-11080.patch   # PATCH_FOR: 8
 Patch39:        minimist.patch         # PATCH_FOR: 6, 8
+Patch40:        CVE-2020-15095.patch   # PATCH_FOR: 6, 8
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, master
@@ -366,7 +367,7 @@ Requires:       %{name} = %{version}
 Recommends:     %{name}-devel = %{version}
 Provides:       nodejs-npm = %{version}
 Obsoletes:      nodejs-npm < 4.0.0
-Provides:       npm(npm) = {{npm_version}}
+Provides:       npm(npm) = {{bundled_npm_version}}
 Provides:       npm = %{version}
 %if 0%{?suse_version} >= 1500
 %if %{node_version_number} >= 10
@@ -378,6 +379,7 @@ Recommends:     python3
 %else
 Recommends:     python
 %endif
+%{bundled npm {{bundled_npm_version}}}
 {{npm_npm_bundles}}
 
 %description -n npm{{node_version_major}}
@@ -447,6 +449,7 @@ tar Jxvf %{SOURCE11}
 %patch37 -p1
 %patch38 -p1
 %patch39 -p1
+%patch40 -p1
 %patch100 -p1
 %patch101 -p1
 %patch102 -p1

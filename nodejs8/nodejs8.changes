@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep 24 14:42:45 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2020-15095.patch: fix information leak through log files
+  (bsc#1173937, CVE-2020-15095)
+
+-------------------------------------------------------------------
 Mon Aug 10 16:38:00 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Explicitly add -fno-strict-aliasing to CFLAGS to fix compilation

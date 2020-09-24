@@ -1,4 +1,3 @@
-s/{{npm_version}}/6.13.6/g
 s/{{node_version}}/12.18.4/g
 s/{{node_version_major}}/12/g
 s/{{exclusive_arch}}/x86_64 aarch64 ppc64 ppc64le s390x/g
@@ -47,3 +46,4 @@ s/{{bundled_openssl_version}}/1.1.1g/g
 s/{{bundled_uv_version}}/1.38.0/g
 s/{{bundled_uvwasi_version}}/0.0.9/g
 s/{{bundled_v8_version}}/7.8.279.23/g
+s/{{bundled_npm_version}}/6.14.6/g

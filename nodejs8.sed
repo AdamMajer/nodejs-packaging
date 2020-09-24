@@ -1,4 +1,3 @@
-s/{{npm_version}}/6.13.4/g
 s/{{node_version}}/8.17.0/g
 s/{{node_version_major}}/8/g
 s/{{arch_support}}/aarch64 ppc ppc64 ppc64le s390 s390x/g
@@ -39,3 +38,4 @@ s/{{bundled_nghttp2_version}}/1.41.0/g
 s/{{bundled_openssl_version}}/1.0.2s/g
 s/{{bundled_uv_version}}/1.23.2/g
 s/{{bundled_v8_version}}/6.2.414.78/g
+s/{{bundled_npm_version}}/6.13.4/g
