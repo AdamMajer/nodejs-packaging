@@ -45,7 +45,7 @@ function save_current_version
         # append version to file
         echo "s/{{bundled_$1_version}}/$BUNDLED_VERSION/g" >> nodejs$NODE_VERSION.sed
     else
-        sed -i.bak -e "s,\\({{bundled_$1_version}}/\\).*$,\\1$BUNDLED_VERSION/g," nodejs$NODE_VERSION.sed
+        sed -i -e "s,\\({{bundled_$1_version}}/\\).*$,\\1$BUNDLED_VERSION/g," nodejs$NODE_VERSION.sed
     fi
 }
 
@@ -299,5 +299,18 @@ do
             echo " **> $bundle UPDATED   -- '$CURRENT_VERSION' -> '$BUNDLED_VERSION'"
             save_current_version $bundle
         fi
+done
+
+# detect and remove things that are no longer bundled (ugly, but no need for better here)
+BUNDLED_LIST=$(cat nodejs$NODE_VERSION.sed | grep '{{bundled_.*_version}}' | sed -e 's,s/{{bundled_\(.*\)_version}}/.*/g$,\1,')
+for bundle in $BUNDLED_LIST; do
+    for cur_bundle in $DEPS; do
+        if [ $cur_bundle = $bundle ]; then break; fi
+    done
+
+    if [ $cur_bundle != $bundle ]; then
+        echo "~~< $bundle REMOVED"
+        sed -i -e "/^s\\/{{bundled_${bundle}_version}}\\/.*\\/g$/ d" nodejs$NODE_VERSION.sed
+    fi
 done
 
