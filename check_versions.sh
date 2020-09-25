@@ -54,13 +54,16 @@ for i in $NODE_VERSIONS; do
 
 			# DL upstream package too, if directory exists
 			if [ -d devel:languages:nodejs/nodejs$ver ]; then
-				pushd devel:languages:nodejs/nodejs$ver
+				pushd devel:languages:nodejs/nodejs$ver > /dev/null
 				wget -q --show-progress $URL/node-v$upstream_ver.tar.xz
 				osc rm node-v$local_ver.tar.xz
 				osc add node-v$upstream_ver.tar.xz
 				[ -d node-v$local_ver ] && rm -r node-v$local_ver
-				popd
+				popd > /dev/null
 			fi
+
+			# Update bundled versions
+			./bundling.sh $ver
 		fi
 	fi
 done
