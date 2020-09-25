@@ -97,6 +97,7 @@ ${ALL_TARGETS}: changelog.target common.target
 		-f nodejs_$(if $(findstring staging,$@),git,releases).sed \
 		-f <(./bundling.sh -M $(if $(findstring staging,$@),-g,) $(NODEJS_VERSION)) \
 		-f <(./bundling.sh -N $(if $(findstring staging,$@),-g,) $(NODEJS_VERSION)) \
+		-e 's,^Provides:\s\+bundled.*{{bundled.*version}}$$,,' \
 		nodejs.spec.in \
 		| perl patch.pl $@ > $D/nodejs$(NODEJS_VERSION).spec
 

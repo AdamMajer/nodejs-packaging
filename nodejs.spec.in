@@ -28,15 +28,6 @@ Name:           nodejs{{node_version_major}}
 Version:        {{node_version}}
 Release:        0
 
-# bundled ( "pkg", "version" )
-%define bundled() %{lua: \
-    local pkg=rpm.expand("%1"); \
-    local ver=rpm.expand("%2"); \
-    if (not(string.sub(ver, 0, 2) == '\{\{' and string.sub(ver, -2) == '\}\}' )) then \
-        print("Provides:  bundled(" .. pkg .. ") = " .. ver) \
-    end }
-
-
 %define node_version_number {{node_version_major}}
 
 %if %node_version_number >= 12
@@ -277,25 +268,25 @@ BuildRequires:  openssl-devel >= %{openssl_req_ver}
 
 %endif
 %else
-%{bundled openssl {{bundled_openssl_version}}}
+Provides:       bundled(openssl) = {{bundled_openssl_version}}
 %endif
 
 %if ! 0%{with intree_cares}
 BuildRequires:  pkgconfig(libcares) >= {{min_libcares2_version}}
 %else
-%{bundled libcares2  {{bundled_cares_version}}}
+Provides:       bundled(libcares2) = {{bundled_cares_version}}
 %endif
 
 %if ! 0%{with intree_icu}
 BuildRequires:  pkgconfig(icu-i18n) >= {{min_icu_version}}
 %else
-%{bundled icu    {{bundled_icu-small_version}}}
+Provides:       bundled(icu) = {{bundled_icu-small_version}}
 %endif
 
 %if ! 0%{with intree_nghttp2}
 BuildRequires: libnghttp2-devel >= {{min_nghttp2_version}}
 %else
-%{bundled nghttp2 {{bundled_nghttp2_version}}}
+Provides:      bundled(nghttp2) = {{bundled_nghttp2_version}}
 %endif
 
 %if 0%{with valgrind_tests}
@@ -332,16 +323,14 @@ Requires:       openssl1
 ExclusiveArch:  {{exclusive_arch}}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
-# NOTE: If version is not present (not replaced), it means it's not bundled and
-#       it will removed by the macro during rpm processing
-%{bundled uvwasi {{bundled_uvwasi_version}}}
-%{bundled libuv  {{bundled_uv_version}}}
-%{bundled v8     {{bundled_v8_version}}}
-%{bundled brotli {{bundled_brotli_version}}}
-%{bundled http-parser {{bundled_http_parser_version}}}
-%{bundled nghttp3 {{bundled_nghttp3_version}}}
-%{bundled llhttp  {{bundled_llhttp_version}}}
-%{bundled ngtcp2  {{bundled_ngtcp2_version}}}
+Provides:       bundled(uvwasi) = {{bundled_uvwasi_version}}
+Provides:       bundled(libuv) = {{bundled_uv_version}}
+Provides:       bundled(v8) = {{bundled_v8_version}}
+Provides:       bundled(brotli) = {{bundled_brotli_version}}
+Provides:       bundled(http-parser) = {{bundled_http_parser_version}}
+Provides:       bundled(nghttp3) = {{bundled_nghttp3_version}}
+Provides:       bundled(llhttp) = {{bundled_llhttp_version}}
+Provides:       bundled(ngtcp2) = {{bundled_ngtcp2_version}}
 
 {{node_npm_bundles}}
 
@@ -379,7 +368,6 @@ Recommends:     python3
 %else
 Recommends:     python
 %endif
-%{bundled npm {{bundled_npm_version}}}
 {{npm_npm_bundles}}
 
 %description -n npm{{node_version_major}}
@@ -408,11 +396,11 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %if %{node_version_number} == 6
 # Update NPM
 rm -r deps/npm
-tar Jxvf %{SOURCE10}
+tar Jxf %{SOURCE10}
 %endif
 
 %if %{node_version_number} >= 10
-tar Jxvf %{SOURCE11}
+tar Jxf %{SOURCE11}
 %endif
 
 %patch1 -p1
