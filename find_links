@@ -38,6 +38,8 @@ function Disassociate()
 
     if [ -r $ORIG_FILE ]; then
         echo "copy ${ORIG_FILE} -> ${LINK_FILE}"
+        rm ${LINK_FILE}
+        cp ${ORIG_FILE} ${LINK_FILE}
     fi
 }
 
