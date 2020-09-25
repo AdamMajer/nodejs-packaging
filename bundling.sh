@@ -296,7 +296,7 @@ do
         elif [ "$CURRENT_VERSION" = "not bundled" ] && [ "x$BUNDLED_VERSION" = "x" ]; then
             true
         else
-            echo " --> $bundle UPDATED   -- '$CURRENT_VERSION' -> '$BUNDLED_VERSION'"
+            echo " **> $bundle UPDATED   -- '$CURRENT_VERSION' -> '$BUNDLED_VERSION'"
             save_current_version $bundle
         fi
 done
