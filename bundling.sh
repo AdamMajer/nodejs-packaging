@@ -13,7 +13,7 @@ done
 
 shift $(( $OPTIND - 1 ))
 
-if [ ${#@} -ne 1 ] || ! [[ "$1" =~ ^[0-9]+$ ]] || [ $1 -lt 6 ] || [ $1 -gt 42 ]; then
+if [ ${#@} -ne 1 ] || ! [[ "$1" =~ ^[0-9]+$ ]] || [ $1 -lt 4 ] || [ $1 -gt 42 ]; then
     echo " syntax:  bundling.sh [-M | -N] node_major_version"
     echo "    -M - sed substitutions for main node"
     echo "    -N - sed substitutions for npm"
@@ -186,7 +186,7 @@ function load_bundled_version
     BUNDLED_VERSION=""
 
     case $PKG in
-        (acorn|acorn-plugins|node-inspect|gtest|zlib|histogram):
+        (acorn|acorn-plugins|node-inspect|gtest|zlib|histogram|v8_inspector):
         # These are npm packages so handled elsewhere
         # or excluded, like gtest
         popd > /dev/null
