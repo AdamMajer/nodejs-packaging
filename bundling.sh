@@ -253,15 +253,15 @@ function find_npm_packages
     push_node_dir
     cd deps
     if [ "$MODE" = "npm" ]; then
-        PKGS=$(find -name package.json -path './npm/node_modules/*' -not -path '*/test/*')
+        PKGS=$(find -name package.json -path './npm/node_modules/*' -not -path '*/test/*' | sort)
     else
-        PKGS=$(find -name package.json -not -path './npm/*' -not -path './v8/*' -not -path '*/test/*')
+        PKGS=$(find -name package.json -not -path './npm/*' -not -path './v8/*' -not -path '*/test/*' | sort)
     fi
 
     for PKG in $PKGS; do
         node -e "v=JSON.parse(fs.readFileSync('$PKG').toString()); \
             if (v.name.length > 0) { \
-                let d=['Provides: bundled(node-', v.name, ') = ', v.version, '\\\\n']; \
+                let d=['Provides:       bundled(node-', v.name, ') = ', v.version, '\\\\n']; \
                 process.stdout.write(d.join('')); \
             } else { console.error('Error processing %s', '$PKG'); }"
     done
