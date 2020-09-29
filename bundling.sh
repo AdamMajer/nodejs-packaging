@@ -26,6 +26,11 @@ fi
 NODE_VERSION=$1
 PROCESSED_NPM_DEPS=
 
+if [ "x$NODE_VERSION" = "x" ]; then
+    echo "no node version";
+    exit -1
+fi
+
 ## KNOWN_BUNDLED="acorn acorn-plugins brotli cares histogram icu-small llhttp nghttp2"
 
 # arg $1 - bundle
@@ -216,9 +221,9 @@ function expand_tarball
         tar Jxf node-v$NODE_FULL_VERSION.tar.xz
         popd > /dev/null
     else
-        pushd devel:languages:nodejs:staging/nodejs$NDOE_VERSION > /dev/null
+        pushd devel:languages:nodejs:staging/nodejs$NODE_VERSION > /dev/null
         for i in `ls -t node-git.*.tar`; do
-            tar Jxf $i
+            tar xf $i
             break
         done
         popd > /dev/null
