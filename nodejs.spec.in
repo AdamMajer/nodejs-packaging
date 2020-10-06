@@ -284,13 +284,13 @@ Provides:       bundled(icu) = {{bundled_icu-small_version}}
 %endif
 
 %if ! 0%{with intree_nghttp2}
-BuildRequires: libnghttp2-devel >= {{min_nghttp2_version}}
+BuildRequires:  libnghttp2-devel >= {{min_nghttp2_version}}
 %else
-Provides:      bundled(nghttp2) = {{bundled_nghttp2_version}}
+Provides:       bundled(nghttp2) = {{bundled_nghttp2_version}}
 %endif
 
 %if 0%{with valgrind_tests}
-BuildRequires: valgrind
+BuildRequires:  valgrind
 %endif
 
 Requires(post): update-alternatives
