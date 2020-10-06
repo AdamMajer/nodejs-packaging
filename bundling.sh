@@ -2,6 +2,7 @@
 
 MODE="default"
 STAGING=
+NPM_BUNDLES_TO_PROVIDES_CMD=`pwd`/npm_bundle_to_provides.js
 
 while getopts "NMg" OPTION; do
     if   [ "$OPTION" = "N" ]; then MODE="node"
@@ -191,7 +192,7 @@ function load_bundled_version
     BUNDLED_VERSION=""
 
     case $PKG in
-        (acorn|acorn-plugins|node-inspect|gtest|zlib|histogram|v8_inspector):
+        (acorn|acorn-plugins|node-inspect|gtest|zlib|histogram|v8_inspector|cjs-module-lexer):
         # These are npm packages so handled elsewhere
         # or excluded, like gtest
         popd > /dev/null
@@ -258,18 +259,10 @@ function find_npm_packages
     push_node_dir
     cd deps
     if [ "$MODE" = "npm" ]; then
-        PKGS=$(find -name package.json -path './npm/node_modules/*' -not -path '*/test/*' | sort)
+        find -name package.json -path './npm/node_modules/*' -not -path '*/test/*' | $NPM_BUNDLES_TO_PROVIDES_CMD
     else
-        PKGS=$(find -name package.json -not -path './npm/*' -not -path './v8/*' -not -path '*/test/*' | sort)
+        find -name package.json -not -path './npm/*' -not -path './v8/*' -not -path '*/test/*' | $NPM_BUNDLES_TO_PROVIDES_CMD
     fi
-
-    for PKG in $PKGS; do
-        node -e "v=JSON.parse(fs.readFileSync('$PKG').toString()); \
-            if (v.name.length > 0) { \
-                let d=['Provides:       bundled(node-', v.name, ') = ', v.version, '\\\\n']; \
-                process.stdout.write(d.join('')); \
-            } else { console.error('Error processing %s', '$PKG'); }"
-    done
 
     popd > /dev/null
 }
