@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Oct  9 09:34:39 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- fix_ci_tests.patch: add support to SUSE's ECDH backport errors
+  in SLE's openssl
+
+-------------------------------------------------------------------
 Thu Sep 24 14:42:45 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2020-15095.patch: fix information leak through log files

@@ -2,10 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-v6.14.4/test/parallel/test-module-loading-globalpaths.js
+Index: node-v6.17.1/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-v6.14.4.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-v6.14.4/test/parallel/test-module-loading-globalpaths.js
+--- node-v6.17.1.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-v6.17.1/test/parallel/test-module-loading-globalpaths.js
 @@ -7,6 +7,9 @@ const fs = require('fs');
  const child_process = require('child_process');
  const pkgName = 'foo';
@@ -16,10 +16,10 @@ Index: node-v6.14.4/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-v6.14.4/test/parallel/test-dgram-multicast-set-interface-lo.js
+Index: node-v6.17.1/test/parallel/test-dgram-multicast-set-interface-lo.js
 ===================================================================
---- node-v6.14.4.orig/test/parallel/test-dgram-multicast-set-interface-lo.js
-+++ node-v6.14.4/test/parallel/test-dgram-multicast-set-interface-lo.js
+--- node-v6.17.1.orig/test/parallel/test-dgram-multicast-set-interface-lo.js
++++ node-v6.17.1/test/parallel/test-dgram-multicast-set-interface-lo.js
 @@ -4,6 +4,9 @@ const assert = require('assert');
  const dgram = require('dgram');
  const util = require('util');
@@ -30,10 +30,10 @@ Index: node-v6.14.4/test/parallel/test-dgram-multicast-set-interface-lo.js
  if (common.inFreeBSDJail) {
    common.skip('in a FreeBSD jail');
    return;
-Index: node-v6.14.4/test/parallel/test-tls-passphrase.js
+Index: node-v6.17.1/test/parallel/test-tls-passphrase.js
 ===================================================================
---- node-v6.14.4.orig/test/parallel/test-tls-passphrase.js
-+++ node-v6.14.4/test/parallel/test-tls-passphrase.js
+--- node-v6.17.1.orig/test/parallel/test-tls-passphrase.js
++++ node-v6.17.1/test/parallel/test-tls-passphrase.js
 @@ -200,7 +200,7 @@ server.listen(0, common.mustCall(functio
    }, common.mustCall());
  })).unref();
@@ -43,10 +43,10 @@ Index: node-v6.14.4/test/parallel/test-tls-passphrase.js
  
  // Missing passphrase
  assert.throws(function() {
-Index: node-v6.14.4/test/parallel/test-repl-envvars.js
+Index: node-v6.17.1/test/parallel/test-repl-envvars.js
 ===================================================================
---- node-v6.14.4.orig/test/parallel/test-repl-envvars.js
-+++ node-v6.14.4/test/parallel/test-repl-envvars.js
+--- node-v6.17.1.orig/test/parallel/test-repl-envvars.js
++++ node-v6.17.1/test/parallel/test-repl-envvars.js
 @@ -8,6 +8,9 @@ const REPL = require('internal/repl');
  const assert = require('assert');
  const inspect = require('util').inspect;
@@ -57,10 +57,10 @@ Index: node-v6.14.4/test/parallel/test-repl-envvars.js
  const tests = [
    {
      env: {},
-Index: node-v6.14.4/test/common/index.js
+Index: node-v6.17.1/test/common/index.js
 ===================================================================
---- node-v6.14.4.orig/test/common/index.js
-+++ node-v6.14.4/test/common/index.js
+--- node-v6.17.1.orig/test/common/index.js
++++ node-v6.17.1/test/common/index.js
 @@ -277,6 +277,8 @@ exports.spawnSyncPwd = function(options)
  };
  
@@ -70,3 +70,16 @@ Index: node-v6.14.4/test/common/index.js
    if (process.features.debug)
      ms = 2 * ms;
  
+Index: node-v6.17.1/test/parallel/test-crypto-dh.js
+===================================================================
+--- node-v6.17.1.orig/test/parallel/test-crypto-dh.js
++++ node-v6.17.1/test/parallel/test-crypto-dh.js
+@@ -79,7 +79,7 @@ const wrongBlockLength =
+ 
+ assert.throws(() => {
+   dh3.computeSecret('');
+-}, /^Error: Supplied key is too small$/);
++}, /^Error: Supplied key is too small|error:05066066:Diffie-Hellman routines:compute_key:invalid public key$/);
+ 
+ // Create a shared using a DH group.
+ const alice = crypto.createDiffieHellmanGroup('modp5');
