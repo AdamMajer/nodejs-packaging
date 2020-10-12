@@ -21,11 +21,11 @@ function readNpmPackageJsonPathsFromStdinAsPromise()
 
 function readAllNpmJsons(paths)
 {
-    let promises = paths.map(path => pathToNpmPackageJsonAsPromise(path));
+    let promises = paths.map(path => loadNpmPackageJsonAsPromise(path));
     return Promise.all(promises);
 }
 
-function pathToNpmPackageJsonAsPromise(path)
+function loadNpmPackageJsonAsPromise(path)
 {
     return new Promise((accepted, rejected) => {
         fs.readFile(path, 'utf8', (err, json_string) => {
