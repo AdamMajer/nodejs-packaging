@@ -1,6 +1,17 @@
 #!/bin/bash
 
-cd node
+# find the upstream directory, either in CWD/node or in ../node
+if [ -d node ] && [ -d node/.git ] ; then
+    pushd node
+elif [ -d ../node ] && [ -d ../node/.git ]; then
+    pushd ../node
+else
+    echo "Cannot find upstream node repository"
+    exit -1
+fi
+
+trap popd EXIT
+
 git checkout origin/master
 git fetch origin
 for branch in $(git branch -r | grep origin\.\*staging) origin/master
