@@ -88,6 +88,13 @@ ${ALL_TARGETS}: changelog.target common.target
 	grep -vc ${NODEJS_VERSION} |\
 	grep -q '^0$$' || ( echo "Wrong node version found in patches $@" && false)
 
+	if [ "$(findstring staging,$@)" == "staging" ]; then \
+		sed -e 's,{{pwd}},$(PWD),' -f nodejs$(NODEJS_VERSION).sed _service.in > $D/_service && \
+		cd $D && \
+		find -maxdepth 1 -mindepth 1 -type d -name node-git\* -exec rm -rf {} \+ && \
+		TAR_SCM_TESTMODE=1 osc service disabledrun; \
+	fi
+
 	# (hack) make sure we unpack the sources
 	./bundling.sh -N $(if $(findstring staging,$@),-g,) $(NODEJS_VERSION) > /dev/null
 
@@ -101,20 +108,12 @@ ${ALL_TARGETS}: changelog.target common.target
 		nodejs.spec.in \
 		| perl patch.pl $@ > $D/nodejs$(NODEJS_VERSION).spec
 
-	# Parse _service file, if staging
-	[ "$(findstring staging,$@)" != "staging" ] || \
-		sed -e 's,{{pwd}},$(PWD),' -f nodejs$(NODEJS_VERSION).sed _service.in > $D/_service
-	
 	# Verify that patches actually apply
-	if [ "$(findstring staging,$@)" != "staging" ]; then \
-		cd $D && quilt setup --fast -v *.spec && \
-		cd `find -maxdepth 1 -mindepth 1 -type d -name node\*` && quilt push -a --fuzz=0; \
-	else \
-		cd $D && find -maxdepth 1 -mindepth 1 -type d -name node-git\* -exec rm -rf {} \+ && \
-		TAR_SCM_TESTMODE=1 osc service disabledrun && \
+	cd $D && \
+		( ! test -f _service || ( osc service run set_version && mv _service*nodejs$(NODEJS_VERSION).spec nodejs$(NODEJS_VERSION).spec ) ) && \
 		quilt setup --fast -v *.spec && \
-		cd `find -maxdepth 1 -mindepth 1 -type d -name node-git\*` && quilt push -a --fuzz=0; \
-	fi
+		cd `find -maxdepth 1 -mindepth 1 -type d -name node-\*` && \
+		quilt push -a --fuzz=0
 
 	touch $@.target
 
