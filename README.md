@@ -63,10 +63,10 @@ current working directory. Then the workflow is simply to run `nodejs-packaging/
 that will fetch new node changes and setup all the `vX.Y-staging` branches.
 
 Dependencies you need installed are:
-    * obs-service-obs_scm
-    * obs-service-set_version
-    * obs-service-tar_scm
-    * obs-service-recompress
+* obs-service-obs_scm
+* obs-service-set_version
+* obs-service-tar_scm
+* obs-service-recompress
 
 You can find these in the `openSUSE:Tools` project on https://build.opensuse.org
 
@@ -77,60 +77,62 @@ How to update a version
 
 First, check if upstream has version updated by running,
 
-  ./check_versions.sh
+    ./check_versions.sh
 
 If you wish to update `nodeX` version only, then run
 
-  ./check_versions.sh -u nodeX
+    ./check_versions.sh -u nodeX
 
 This will update the OBS package with the new upstream version. To update
 the changelog,
 
-  cd nodeX
-  osc vc
-  cd ..
+    cd nodeX
+    osc vc
+    cd ..
 
 And now check if patches apply,
 
-  make clean
-  make nodeX
+    make clean
+    make nodeX
 
 If everything applies, you are good to go. If you need to refresh patches,
 you can do so in
 
-  cd devel:languages:nodejs/nodeX
-  [ fix the patches ]
+    cd devel:languages:nodejs/nodeX
+    [ fix the patches ]
+
 
 Then don't forget to copy the fixed patches back to `nodeX` directory of the
 nodejs-packaging folder.
 
-NOTE: Same patches can be symlinked together. To find which other patches are pointing
+*NOTE*: Same patches can be symlinked together. To find which other patches are pointing
 to modified patch (before you overwrite it ;), use the `find_links` script
 
-  ./find_links nodeX/patch_file.patch
+    ./find_links nodeX/patch_file.patch
 
 And this will display if this is a link, a file and whether other things point to it.
 If this is a link, you can break it (delete it and copy the original file there) or
 just run
 
-  ./find_links -b nodeX/patch_file.patch
+    ./find_links -b nodeX/patch_file.patch
+
 
 You can find broken links by
 
-  ./find_links -B
+    ./find_links -B
 
 Make sure that when you are changing these patches to keep same patches linked so you
 do not need to redo the same fix over and over again. The standard way NodeJS migrates
 patches is master -> latest staging -> next staging -> etc... You can limit your work
 duplication by just migrating the patch changes as upstream changes.
 
-NOTE: Some patchse cannot be migrated from one major version to another as they contain
+*NOTE*: Some patchse cannot be migrated from one major version to another as they contain
 version specific strings. Most notable of these are `node-gyp-addon-gypi.patch` and `versioned.patch`
 
 If you are not sure if you broke some patches by overwriting them, just do
 
-  make clean
-  make released-only
+    make clean
+    make released-only
 
 if everything applies, it's _probably_ ok.
 
