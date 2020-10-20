@@ -5,12 +5,12 @@ s/{{exclusive_arch}}/x86_64 aarch64 ppc64 ppc64le s390x/g
 #
 #
 # openssl version - need OpenSSL 1.1.1+
-s/{{intree_openssl}}/0%{?suse_version} >= 1550 || 0%{?sle_version} >= 120500/
+s/{{intree_openssl}}/0%{?suse_version} >= 1550 || 0%{?sle_version} >= 120400/
 #
 #
 # icu versions
 s/{{intree_icu}}/0%{?suse_version} >= 1330/g
-s/{{min_icu_version}}/63/g
+s/{{min_icu_version}}/65/g
 #
 #
 # libcares2 version

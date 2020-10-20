@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct 20 14:23:42 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Use SLE OpenSSL version with SP4+, and not just SP5+
+- Bump mininum ICU version to 65
+
+-------------------------------------------------------------------
 Fri Oct 16 11:54:33 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Update to version 14.14.0:
