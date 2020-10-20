@@ -32,14 +32,14 @@ Source11:       node_modules.tar.xz,
 
 
 s/{{bundled_brotli_version}}/1.0.9/g
-s/{{bundled_cares_version}}/1.16.0/g
+s/{{bundled_cares_version}}/1.16.1/g
 s/{{bundled_icu-small_version}}/67.1/g
-s/{{bundled_llhttp_version}}/2.0.4/g
+s/{{bundled_llhttp_version}}/2.1.3/g
 s/{{bundled_nghttp2_version}}/1.41.0/g
 s/{{bundled_nghttp3_version}}/0.1.0-DEV/g
 s/{{bundled_ngtcp2_version}}/0.1.0-DEV/g
 s/{{bundled_openssl_version}}/1.1.1g/g
-s/{{bundled_uv_version}}/1.39.0/g
+s/{{bundled_uv_version}}/1.40.0/g
 s/{{bundled_uvwasi_version}}/0.0.11/g
-s/{{bundled_v8_version}}/8.4.371.19/g
-s/{{bundled_npm_version}}/6.14.8/g
+s/{{bundled_v8_version}}/8.6.395.16/g
+s/{{bundled_npm_version}}/7.0.2/g
