@@ -1,5 +1,20 @@
 -------------------------------------------------------------------
+Thu Oct 22 11:43:13 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to 15.0.1:
+  * crypto: fix regression on randomFillSync
+        This fixes issue https://github.com/nodejs/node/issues/35722.
+  * deps: upgrade npm to 7.0.3 (Ruy Adorno) #35724
+
+- revert_cares_caa_reply_support.patch: temporarily revert upstream
+  patch since it requires an updated c-ares
+- old_icu.patch: update v8 sources to use old ICU version
+
+-------------------------------------------------------------------
 Tue Oct 20 18:33:10 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
-- Create package
+- Initial release 15.0.0. For complete list of changes since 14.x
+  codestream, see
+
+https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V15.md#15.0.0
 
