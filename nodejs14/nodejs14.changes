@@ -1,7 +1,14 @@
 -------------------------------------------------------------------
+Thu Oct 29 10:12:54 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to LTS version 14.15.0: (jsc#SLE-15774)
+  * no major changes
+  * test: reverts marking test-webcrypto-encrypt-decrypt-aes flaky
+
+-------------------------------------------------------------------
 Tue Oct 20 14:23:42 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
-- Use SLE OpenSSL version with SP4+, and not just SP5+
+- Use SLE OpenSSL version with 12-SP4+, and not just 12-SP5+
 - Bump mininum ICU version to 65
 
 -------------------------------------------------------------------
