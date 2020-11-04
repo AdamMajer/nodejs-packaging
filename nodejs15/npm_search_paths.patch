@@ -1,1 +1,32 @@
-../staging-15/npm_search_paths.patch
+Index: node-git.c8b950a7af/deps/npm/lib/help-search.js
+===================================================================
+--- node-git.c8b950a7af.orig/deps/npm/lib/help-search.js
++++ node-git.c8b950a7af/deps/npm/lib/help-search.js
+@@ -22,7 +22,7 @@ const helpSearch = async args => {
+     throw usage
+   }
+ 
+-  const docPath = path.resolve(__dirname, '..', 'docs/content')
++  const docPath = '/usr/share/doc/packages/nodejs';
+ 
+   // XXX: make glob return a promise and remove this wrapping
+   const files = await new Promise((res, rej) =>
+Index: node-git.c8b950a7af/deps/npm/lib/npm.js
+===================================================================
+--- node-git.c8b950a7af.orig/deps/npm/lib/npm.js
++++ node-git.c8b950a7af/deps/npm/lib/npm.js
+@@ -210,7 +210,13 @@ const npm = module.exports = new class e
+   }
+ 
+   get globalPrefix () {
+-    return this.config.globalPrefix
++    let prefix = this.config.globalPrefix
++
++    // don't poop all over distro territory - use /usr/local instead
++    if (prefix === '/usr')
++      return '/usr/local'
++
++    return prefix;
+   }
+ 
+   set globalPrefix (r) {

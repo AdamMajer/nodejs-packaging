@@ -41,5 +41,5 @@ s/{{bundled_ngtcp2_version}}/0.1.0-DEV/g
 s/{{bundled_openssl_version}}/1.1.1g/g
 s/{{bundled_uv_version}}/1.40.0/g
 s/{{bundled_uvwasi_version}}/0.0.11/g
-s/{{bundled_v8_version}}/8.4.371.19/g
-s/{{bundled_npm_version}}/6.14.8/g
+s/{{bundled_v8_version}}/8.6.395.17/g
+s/{{bundled_npm_version}}/7.0.7/g
