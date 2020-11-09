@@ -1,4 +1,23 @@
 -------------------------------------------------------------------
+Thu Nov  5 10:07:53 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to 15.1.0:
+  * deps: updated to 7.0.8
+  * child_process: add ChildProcess 'spawn' event
+  * dns: add setLocalAddress to Resolver
+  * http: report request start and end with diagnostics_channel
+  * http2: add updateSettings to both http2 servers
+  * lib: create diagnostics_channel module
+  * src: add --heapsnapshot-near-heap-limit option
+  * v8: implement v8.stopCoverage() and v8.takeCoverage()
+  * worker: add eventLoopUtilization()
+
+- fix_ci_tests.patch, npm_search_paths.patch, versioned.patch refreshed
+
+For details see
+https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V15.md#15.1.0
+
+-------------------------------------------------------------------
 Thu Oct 22 11:43:13 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Update to 15.0.1:

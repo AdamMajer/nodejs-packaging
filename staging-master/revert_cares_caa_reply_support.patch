@@ -1,1 +1,729 @@
-../nodejs15/revert_cares_caa_reply_support.patch
+commit 6f34498148612e8aa3537a9c865d2940cb9e8c7a
+Author: Danny Sonnenschein <my.card.god@web.de>
+Date:   Fri Oct 2 17:52:47 2020 +0200
+
+    net: add support for resolving DNS CAA records
+    
+    This adds support for DNS Certification Authority Authorization
+    (RFC 8659) to Node.js.
+    
+    PR-URL: https://github.com/nodejs/node/pull/35466
+    Fixes: https://github.com/nodejs/node/issues/19239
+    Refs: https://github.com/nodejs/node/issues/14713
+    Reviewed-By: Anna Henningsen <anna@addaleax.net>
+
+Index: node-git.eb24573987/deps/cares/cares.gyp
+===================================================================
+--- node-git.eb24573987.orig/deps/cares/cares.gyp
++++ node-git.eb24573987/deps/cares/cares.gyp
+@@ -75,7 +75,6 @@
+         'src/ares__parse_into_addrinfo.c',
+         'src/ares_parse_aaaa_reply.c',
+         'src/ares_parse_a_reply.c',
+-        'src/ares_parse_caa_reply.c',
+         'src/ares_parse_mx_reply.c',
+         'src/ares_parse_naptr_reply.c',
+         'src/ares_parse_ns_reply.c',
+Index: node-git.eb24573987/deps/cares/include/ares.h
+===================================================================
+--- node-git.eb24573987.orig/deps/cares/include/ares.h
++++ node-git.eb24573987/deps/cares/include/ares.h
+@@ -528,15 +528,6 @@ struct ares_addr6ttl {
+   int             ttl;
+ };
+ 
+-struct ares_caa_reply {
+-  struct ares_caa_reply  *next;
+-  int                     critical;
+-  unsigned char          *property;
+-  size_t                  plength;  /* plength excludes null termination */
+-  unsigned char          *value;
+-  size_t                  length;   /* length excludes null termination */
+-};
+-
+ struct ares_srv_reply {
+   struct ares_srv_reply  *next;
+   char                   *host;
+@@ -646,10 +637,6 @@ CARES_EXTERN int ares_parse_aaaa_reply(c
+                                        struct ares_addr6ttl *addrttls,
+                                        int *naddrttls);
+ 
+-CARES_EXTERN int ares_parse_caa_reply(const unsigned char* abuf,
+-				      int alen,
+-				      struct ares_caa_reply** caa_out);
+-
+ CARES_EXTERN int ares_parse_ptr_reply(const unsigned char *abuf,
+                                       int alen,
+                                       const void *addr,
+Index: node-git.eb24573987/deps/cares/include/nameser.h
+===================================================================
+--- node-git.eb24573987.orig/deps/cares/include/nameser.h
++++ node-git.eb24573987/deps/cares/include/nameser.h
+@@ -88,7 +88,6 @@ typedef enum __ns_type {
+     ns_t_maila = 254,       /* Transfer mail agent records. */
+     ns_t_any = 255,         /* Wildcard match. */
+     ns_t_zxfr = 256,        /* BIND-specific, nonstandard. */
+-    ns_t_caa = 257,         /* CA Authorization (RFC8659) */
+     ns_t_max = 65536
+ } ns_type;
+ 
+@@ -205,7 +204,6 @@ typedef enum __ns_rcode {
+ #define T_AXFR          ns_t_axfr
+ #define T_MAILB         ns_t_mailb
+ #define T_MAILA         ns_t_maila
+-#define T_CAA           ns_t_caa
+ #define T_ANY           ns_t_any
+ 
+ #endif /* HAVE_ARPA_NAMESER_COMPAT_H */
+Index: node-git.eb24573987/deps/cares/src/ares_data.c
+===================================================================
+--- node-git.eb24573987.orig/deps/cares/src/ares_data.c
++++ node-git.eb24573987/deps/cares/src/ares_data.c
+@@ -119,16 +119,6 @@ void ares_free_data(void *dataptr)
+             ares_free(ptr->data.soa_reply.hostmaster);
+           break;
+ 
+-        case ARES_DATATYPE_CAA_REPLY:
+- 
+-          if (ptr->data.caa_reply.next)
+-            next_data = ptr->data.caa_reply.next;
+-          if (ptr->data.caa_reply.property)
+-            ares_free(ptr->data.caa_reply.property);
+-          if (ptr->data.caa_reply.value)
+-            ares_free(ptr->data.caa_reply.value);
+-          break;
+-
+         default:
+           return;
+       }
+@@ -184,14 +174,6 @@ void *ares_malloc_data(ares_datatype typ
+         ptr->data.txt_reply.length = 0;
+         break;
+ 
+-      case ARES_DATATYPE_CAA_REPLY:
+-        ptr->data.caa_reply.next = NULL;
+-        ptr->data.caa_reply.plength = 0;
+-        ptr->data.caa_reply.property = NULL;
+-        ptr->data.caa_reply.length = 0;
+-        ptr->data.caa_reply.value = NULL;
+-        break;
+-
+       case ARES_DATATYPE_ADDR_NODE:
+         ptr->data.addr_node.next = NULL;
+         ptr->data.addr_node.family = 0;
+Index: node-git.eb24573987/deps/cares/src/ares_data.h
+===================================================================
+--- node-git.eb24573987.orig/deps/cares/src/ares_data.h
++++ node-git.eb24573987/deps/cares/src/ares_data.h
+@@ -30,7 +30,6 @@ typedef enum {
+   ARES_DATATYPE_OPTIONS,      /* struct ares_options   */
+ #endif
+   ARES_DATATYPE_ADDR_PORT_NODE, /* struct ares_addr_port_node - introduced in 1.11.0 */
+-  ARES_DATATYPE_CAA_REPLY,    /* struct ares_caa_reply   - introduced in 1.17 */
+   ARES_DATATYPE_LAST          /* not used              - introduced in 1.7.0 */
+ } ares_datatype;
+ 
+@@ -66,7 +65,6 @@ struct ares_data {
+     struct ares_mx_reply     mx_reply;
+     struct ares_naptr_reply  naptr_reply;
+     struct ares_soa_reply    soa_reply;
+-    struct ares_caa_reply    caa_reply;
+   } data;
+ };
+ 
+Index: node-git.eb24573987/deps/cares/src/ares_parse_caa_reply.c
+===================================================================
+--- node-git.eb24573987.orig/deps/cares/src/ares_parse_caa_reply.c
++++ /dev/null
+@@ -1,209 +0,0 @@
+-
+-/* Copyright 2020 by <danny.sonnenschein@platynum.ch>
+- *
+- * Permission to use, copy, modify, and distribute this
+- * software and its documentation for any purpose and without
+- * fee is hereby granted, provided that the above copyright
+- * notice appear in all copies and that both that copyright
+- * notice and this permission notice appear in supporting
+- * documentation, and that the name of M.I.T. not be used in
+- * advertising or publicity pertaining to distribution of the
+- * software without specific, written prior permission.
+- * M.I.T. makes no representations about the suitability of
+- * this software for any purpose.  It is provided "as is"
+- * without express or implied warranty.
+- */
+-
+-#include "ares_setup.h"
+-
+-#ifdef HAVE_NETINET_IN_H
+-#  include <netinet/in.h>
+-#endif
+-#ifdef HAVE_NETDB_H
+-#  include <netdb.h>
+-#endif
+-#ifdef HAVE_ARPA_INET_H
+-#  include <arpa/inet.h>
+-#endif
+-#ifdef HAVE_ARPA_NAMESER_H
+-#  include <arpa/nameser.h>
+-#else
+-#  include "nameser.h"
+-#endif
+-#ifdef HAVE_ARPA_NAMESER_COMPAT_H
+-#  include <arpa/nameser_compat.h>
+-#endif
+-
+-#ifdef HAVE_STRINGS_H
+-#  include <strings.h>
+-#endif
+-
+-#include "ares.h"
+-#include "ares_dns.h"
+-#include "ares_data.h"
+-#include "ares_private.h"
+-
+-#ifndef T_CAA
+-#  define T_CAA    257 /* Certification Authority Authorization */
+-#endif
+-
+-int
+-ares_parse_caa_reply (const unsigned char *abuf, int alen,
+-                      struct ares_caa_reply **caa_out)
+-{
+-  unsigned int qdcount, ancount, i;
+-  const unsigned char *aptr;
+-  const unsigned char *strptr;
+-  int status, rr_type, rr_class, rr_len;
+-  long len;
+-  char *hostname = NULL, *rr_name = NULL;
+-  struct ares_caa_reply *caa_head = NULL;
+-  struct ares_caa_reply *caa_last = NULL;
+-  struct ares_caa_reply *caa_curr;
+-
+-  /* Set *caa_out to NULL for all failure cases. */
+-  *caa_out = NULL;
+-
+-  /* Give up if abuf doesn't have room for a header. */
+-  if (alen < HFIXEDSZ)
+-    return ARES_EBADRESP;
+-
+-  /* Fetch the question and answer count from the header. */
+-  qdcount = DNS_HEADER_QDCOUNT (abuf);
+-  ancount = DNS_HEADER_ANCOUNT (abuf);
+-  if (qdcount != 1)
+-    return ARES_EBADRESP;
+-  if (ancount == 0)
+-    return ARES_ENODATA;
+-
+-  /* Expand the name from the question, and skip past the question. */
+-  aptr = abuf + HFIXEDSZ;
+-  status = ares_expand_name (aptr, abuf, alen, &hostname, &len);
+-  if (status != ARES_SUCCESS)
+-    return status;
+-
+-  if (aptr + len + QFIXEDSZ > abuf + alen)
+-    {
+-      ares_free (hostname);
+-      return ARES_EBADRESP;
+-    }
+-  aptr += len + QFIXEDSZ;
+-
+-  /* Examine each answer resource record (RR) in turn. */
+-  for (i = 0; i < ancount; i++)
+-    {
+-      /* Decode the RR up to the data field. */
+-      status = ares_expand_name (aptr, abuf, alen, &rr_name, &len);
+-      if (status != ARES_SUCCESS)
+-        {
+-          break;
+-        }
+-      aptr += len;
+-      if (aptr + RRFIXEDSZ > abuf + alen)
+-        {
+-          status = ARES_EBADRESP;
+-          break;
+-        }
+-      rr_type = DNS_RR_TYPE (aptr);
+-      rr_class = DNS_RR_CLASS (aptr);
+-      rr_len = DNS_RR_LEN (aptr);
+-      aptr += RRFIXEDSZ;
+-      if (aptr + rr_len > abuf + alen)
+-        {
+-          status = ARES_EBADRESP;
+-          break;
+-        }
+-
+-      /* Check if we are really looking at a CAA record */
+-      if ((rr_class == C_IN || rr_class == C_CHAOS) && rr_type == T_CAA)
+-        {
+-          strptr = aptr;
+-
+-          /* Allocate storage for this CAA answer appending it to the list */
+-          caa_curr = ares_malloc_data(ARES_DATATYPE_CAA_REPLY);
+-          if (!caa_curr)
+-            {
+-              status = ARES_ENOMEM;
+-              break;
+-            }
+-          if (caa_last)
+-            {
+-              caa_last->next = caa_curr;
+-            }
+-          else
+-            {
+-              caa_head = caa_curr;
+-            }
+-          caa_last = caa_curr;
+-          if (rr_len < 2)
+-            {
+-              status = ARES_EBADRESP;
+-              break;
+-            }
+-          caa_curr->critical = (int)*strptr++;  
+-          caa_curr->plength = (int)*strptr++;
+-          if (caa_curr->plength <= 0 || (int)caa_curr->plength >= rr_len - 2)
+-            {
+-              status = ARES_EBADRESP;
+-              break;
+-            }
+-          caa_curr->property = ares_malloc (caa_curr->plength + 1/* Including null byte */);
+-          if (caa_curr->property == NULL)
+-            {
+-              status = ARES_ENOMEM;
+-              break;
+-            }
+-          memcpy ((char *) caa_curr->property, strptr, caa_curr->plength);
+-          /* Make sure we NULL-terminate */
+-          caa_curr->property[caa_curr->plength] = 0;
+-          strptr += caa_curr->plength;
+-
+-          caa_curr->length = rr_len - caa_curr->plength - 2;
+-          if (caa_curr->length <= 0)
+-            {
+-              status = ARES_EBADRESP;
+-              break;
+-            }
+-          caa_curr->value = ares_malloc (caa_curr->length + 1/* Including null byte */);
+-          if (caa_curr->value == NULL)
+-            {
+-              status = ARES_ENOMEM;
+-              break;
+-            }
+-          memcpy ((char *) caa_curr->value, strptr, caa_curr->length);
+-          /* Make sure we NULL-terminate */
+-          caa_curr->value[caa_curr->length] = 0;
+-        }
+-
+-      /* Propagate any failures */
+-      if (status != ARES_SUCCESS)
+-        {
+-          break;
+-        }
+-
+-      /* Don't lose memory in the next iteration */
+-      ares_free (rr_name);
+-      rr_name = NULL;
+-
+-      /* Move on to the next record */
+-      aptr += rr_len;
+-    }
+-
+-  if (hostname)
+-    ares_free (hostname);
+-  if (rr_name)
+-    ares_free (rr_name);
+-
+-  /* clean up on error */
+-  if (status != ARES_SUCCESS)
+-    {
+-      if (caa_head)
+-        ares_free_data (caa_head);
+-      return status;
+-    }
+-
+-  /* everything looks fine, return the data */
+-  *caa_out = caa_head;
+-
+-  return ARES_SUCCESS;
+-}
+Index: node-git.eb24573987/doc/api/dns.md
+===================================================================
+--- node-git.eb24573987.orig/doc/api/dns.md
++++ node-git.eb24573987/doc/api/dns.md
+@@ -81,7 +81,6 @@ The following methods from the `dns` mod
+ * [`resolver.resolve4()`][`dns.resolve4()`]
+ * [`resolver.resolve6()`][`dns.resolve6()`]
+ * [`resolver.resolveAny()`][`dns.resolveAny()`]
+-* [`resolver.resolveCaa()`][`dns.resolveCaa()`]
+ * [`resolver.resolveCname()`][`dns.resolveCname()`]
+ * [`resolver.resolveMx()`][`dns.resolveMx()`]
+ * [`resolver.resolveNaptr()`][`dns.resolveNaptr()`]
+@@ -311,7 +310,6 @@ records. The type and structure of indiv
+ | `'A'`     | IPv4 addresses (default)       | {string}    | [`dns.resolve4()`][]     |
+ | `'AAAA'`  | IPv6 addresses                 | {string}    | [`dns.resolve6()`][]     |
+ | `'ANY'`   | any records                    | {Object}    | [`dns.resolveAny()`][]   |
+-| `'CAA'`   | CA authorization records       | {Object}    | [`dns.resolveCaa()`][]   |
+ | `'CNAME'` | canonical name records         | {string}    | [`dns.resolveCname()`][] |
+ | `'MX'`    | mail exchange records          | {Object}    | [`dns.resolveMx()`][]    |
+ | `'NAPTR'` | name authority pointer records | {Object}    | [`dns.resolveNaptr()`][] |
+@@ -437,22 +435,6 @@ Uses the DNS protocol to resolve `CNAME`
+ will contain an array of canonical name records available for the `hostname`
+ (e.g. `['bar.example.com']`).
+ 
+-## `dns.resolveCaa(hostname, callback)`
+-<!-- YAML
+-added: v15.0.0
+--->
+-
+-* `hostname` {string}
+-* `callback` {Function}
+-  * `err` {Error}
+-  * `records` {Object[]}
+-
+-Uses the DNS protocol to resolve `CAA` records for the `hostname`. The
+-`addresses` argument passed to the `callback` function
+-will contain an array of certification authority authorization records
+-available for the `hostname` (e.g. `[{critial: 0, iodef:
+-'mailto:pki@example.com'}, {critical: 128, issue: 'pki.example.com'}]`).
+-
+ ## `dns.resolveMx(hostname, callback)`
+ <!-- YAML
+ added: v0.1.27
+@@ -718,7 +700,6 @@ The following methods from the `dnsPromi
+ * [`resolver.resolve4()`][`dnsPromises.resolve4()`]
+ * [`resolver.resolve6()`][`dnsPromises.resolve6()`]
+ * [`resolver.resolveAny()`][`dnsPromises.resolveAny()`]
+-* [`resolver.resolveCaa()`][`dnsPromises.resolveCaa()`]
+ * [`resolver.resolveCname()`][`dnsPromises.resolveCname()`]
+ * [`resolver.resolveMx()`][`dnsPromises.resolveMx()`]
+ * [`resolver.resolveNaptr()`][`dnsPromises.resolveNaptr()`]
+@@ -860,7 +841,6 @@ based on `rrtype`:
+ | `'A'`     | IPv4 addresses (default)       | {string}    | [`dnsPromises.resolve4()`][]     |
+ | `'AAAA'`  | IPv6 addresses                 | {string}    | [`dnsPromises.resolve6()`][]     |
+ | `'ANY'`   | any records                    | {Object}    | [`dnsPromises.resolveAny()`][]   |
+-| `'CAA'`   | CA authorization records       | {Object}    | [`dnsPromises.resolveCaa()`][] |
+ | `'CNAME'` | canonical name records         | {string}    | [`dnsPromises.resolveCname()`][] |
+ | `'MX'`    | mail exchange records          | {Object}    | [`dnsPromises.resolveMx()`][]    |
+ | `'NAPTR'` | name authority pointer records | {Object}    | [`dnsPromises.resolveNaptr()`][] |
+@@ -950,19 +930,6 @@ Here is an example of the result object:
+     minttl: 60 } ]
+ ```
+ 
+-### `dnsPromises.resolveCaa(hostname)`
+-<!-- YAML
+-added: v15.0.0
+--->
+-
+-* `hostname` {string}
+-
+-Uses the DNS protocol to resolve `CAA` records for the `hostname`. On success,
+-the `Promise` is resolved with an array of objects containing available
+-certification authority authorization records available for the `hostname`
+-(e.g. `[{critial: 0, iodef: 'mailto:pki@example.com'},{critical: 128, issue:
+-'pki.example.com'}]`).
+-
+ ### `dnsPromises.resolveCname(hostname)`
+ <!-- YAML
+ added: v10.6.0
+@@ -1242,7 +1209,6 @@ uses. For instance, _they do not use the
+ [`dns.resolve4()`]: #dns_dns_resolve4_hostname_options_callback
+ [`dns.resolve6()`]: #dns_dns_resolve6_hostname_options_callback
+ [`dns.resolveAny()`]: #dns_dns_resolveany_hostname_callback
+-[`dns.resolveCaa()`]: #dns_dns_resolvecaa_hostname_callback
+ [`dns.resolveCname()`]: #dns_dns_resolvecname_hostname_callback
+ [`dns.resolveMx()`]: #dns_dns_resolvemx_hostname_callback
+ [`dns.resolveNaptr()`]: #dns_dns_resolvenaptr_hostname_callback
+@@ -1259,7 +1225,6 @@ uses. For instance, _they do not use the
+ [`dnsPromises.resolve4()`]: #dns_dnspromises_resolve4_hostname_options
+ [`dnsPromises.resolve6()`]: #dns_dnspromises_resolve6_hostname_options
+ [`dnsPromises.resolveAny()`]: #dns_dnspromises_resolveany_hostname
+-[`dnsPromises.resolveCaa()`]: #dns_dnspromises_resolvecaa_hostname
+ [`dnsPromises.resolveCname()`]: #dns_dnspromises_resolvecname_hostname
+ [`dnsPromises.resolveMx()`]: #dns_dnspromises_resolvemx_hostname
+ [`dnsPromises.resolveNaptr()`]: #dns_dnspromises_resolvenaptr_hostname
+Index: node-git.eb24573987/lib/dns.js
+===================================================================
+--- node-git.eb24573987.orig/lib/dns.js
++++ node-git.eb24573987/lib/dns.js
+@@ -236,7 +236,6 @@ const resolveMap = ObjectCreate(null);
+ Resolver.prototype.resolveAny = resolveMap.ANY = resolver('queryAny');
+ Resolver.prototype.resolve4 = resolveMap.A = resolver('queryA');
+ Resolver.prototype.resolve6 = resolveMap.AAAA = resolver('queryAaaa');
+-Resolver.prototype.resolveCaa = resolveMap.CAA = resolver('queryCaa');
+ Resolver.prototype.resolveCname = resolveMap.CNAME = resolver('queryCname');
+ Resolver.prototype.resolveMx = resolveMap.MX = resolver('queryMx');
+ Resolver.prototype.resolveNs = resolveMap.NS = resolver('queryNs');
+Index: node-git.eb24573987/lib/internal/dns/promises.js
+===================================================================
+--- node-git.eb24573987.orig/lib/internal/dns/promises.js
++++ node-git.eb24573987/lib/internal/dns/promises.js
+@@ -221,7 +221,6 @@ Resolver.prototype.setLocalAddress = Cal
+ Resolver.prototype.resolveAny = resolveMap.ANY = resolver('queryAny');
+ Resolver.prototype.resolve4 = resolveMap.A = resolver('queryA');
+ Resolver.prototype.resolve6 = resolveMap.AAAA = resolver('queryAaaa');
+-Resolver.prototype.resolveCaa = resolveMap.CAA = resolver('queryCaa');
+ Resolver.prototype.resolveCname = resolveMap.CNAME = resolver('queryCname');
+ Resolver.prototype.resolveMx = resolveMap.MX = resolver('queryMx');
+ Resolver.prototype.resolveNs = resolveMap.NS = resolver('queryNs');
+Index: node-git.eb24573987/lib/internal/dns/utils.js
+===================================================================
+--- node-git.eb24573987.orig/lib/internal/dns/utils.js
++++ node-git.eb24573987/lib/internal/dns/utils.js
+@@ -135,7 +135,6 @@ const resolverKeys = [
+   'resolve4',
+   'resolve6',
+   'resolveAny',
+-  'resolveCaa',
+   'resolveCname',
+   'resolveMx',
+   'resolveNaptr',
+Index: node-git.eb24573987/src/cares_wrap.cc
+===================================================================
+--- node-git.eb24573987.orig/src/cares_wrap.cc
++++ node-git.eb24573987/src/cares_wrap.cc
+@@ -51,10 +51,6 @@
+ # include <arpa/nameser.h>
+ #endif
+ 
+-#ifndef T_CAA
+-#  define T_CAA    257 /* Certification Authority Authorization */
+-#endif
+-
+ #if defined(__OpenBSD__)
+ # define AI_V4MAPPED 0
+ #endif
+@@ -887,43 +883,6 @@ int ParseMxReply(Environment* env,
+   return ARES_SUCCESS;
+ }
+ 
+-int ParseCaaReply(Environment* env,
+-                  const unsigned char* buf,
+-                  int len,
+-                  Local<Array> ret,
+-                  bool need_type = false) {
+-  HandleScope handle_scope(env->isolate());
+-  auto context = env->context();
+-
+-  struct ares_caa_reply* caa_start;
+-  int status = ares_parse_caa_reply(buf, len, &caa_start);
+-  if (status != ARES_SUCCESS) {
+-    return status;
+-  }
+-
+-  uint32_t offset = ret->Length();
+-  ares_caa_reply* current = caa_start;
+-  for (uint32_t i = 0; current != nullptr; ++i, current = current->next) {
+-    Local<Object> caa_record = Object::New(env->isolate());
+-
+-    caa_record->Set(context,
+-                    env->dns_critical_string(),
+-                    Integer::New(env->isolate(), current->critical)).Check();
+-    caa_record->Set(context,
+-                    OneByteString(env->isolate(), current->property),
+-                    OneByteString(env->isolate(), current->value)).Check();
+-    if (need_type)
+-      caa_record->Set(context,
+-                      env->type_string(),
+-                      env->dns_caa_string()).Check();
+-
+-    ret->Set(context, i + offset, caa_record).Check();
+-  }
+-
+-  ares_free_data(caa_start);
+-  return ARES_SUCCESS;
+-}
+-
+ int ParseTxtReply(Environment* env,
+                   const unsigned char* buf,
+                   int len,
+@@ -1387,13 +1346,6 @@ class QueryAnyWrap: public QueryWrap {
+     if (!soa_record.IsEmpty())
+       ret->Set(context, ret->Length(), soa_record).Check();
+ 
+-    /* Parse CAA records */
+-    status = ParseCaaReply(env(), buf, len, ret, true);
+-    if (status != ARES_SUCCESS && status != ARES_ENODATA) {
+-      ParseError(status);
+-      return;
+-    }
+-
+     CallOnComplete(ret);
+   }
+ };
+@@ -1490,36 +1442,6 @@ class QueryAaaaWrap: public QueryWrap {
+   }
+ };
+ 
+-class QueryCaaWrap: public QueryWrap {
+- public:
+-  QueryCaaWrap(ChannelWrap* channel, Local<Object> req_wrap_obj)
+-      : QueryWrap(channel, req_wrap_obj, "resolve6") {
+-  }
+-
+-  int Send(const char* name) override {
+-    AresQuery(name, ns_c_in, T_CAA);
+-    return 0;
+-  }
+-
+-  SET_NO_MEMORY_INFO()
+-  SET_MEMORY_INFO_NAME(QueryAaaaWrap)
+-  SET_SELF_SIZE(QueryAaaaWrap)
+-
+- protected:
+-  void Parse(unsigned char* buf, int len) override {
+-    HandleScope handle_scope(env()->isolate());
+-    Context::Scope context_scope(env()->context());
+-
+-    Local<Array> ret = Array::New(env()->isolate());
+-    int status = ParseCaaReply(env(), buf, len, ret);
+-    if (status != ARES_SUCCESS) {
+-      ParseError(status);
+-      return;
+-    }
+-
+-    this->CallOnComplete(ret);
+-  }
+-};
+ 
+ class QueryCnameWrap: public QueryWrap {
+  public:
+@@ -2381,7 +2303,6 @@ void Initialize(Local<Object> target,
+   env->SetProtoMethod(channel_wrap, "queryAny", Query<QueryAnyWrap>);
+   env->SetProtoMethod(channel_wrap, "queryA", Query<QueryAWrap>);
+   env->SetProtoMethod(channel_wrap, "queryAaaa", Query<QueryAaaaWrap>);
+-  env->SetProtoMethod(channel_wrap, "queryCaa", Query<QueryCaaWrap>);
+   env->SetProtoMethod(channel_wrap, "queryCname", Query<QueryCnameWrap>);
+   env->SetProtoMethod(channel_wrap, "queryMx", Query<QueryMxWrap>);
+   env->SetProtoMethod(channel_wrap, "queryNs", Query<QueryNsWrap>);
+Index: node-git.eb24573987/src/env.h
+===================================================================
+--- node-git.eb24573987.orig/src/env.h
++++ node-git.eb24573987/src/env.h
+@@ -218,8 +218,6 @@ constexpr size_t kFsStatsBufferLength =
+   V(divisor_length_string, "divisorLength")                                    \
+   V(dns_a_string, "A")                                                         \
+   V(dns_aaaa_string, "AAAA")                                                   \
+-  V(dns_caa_string, "CAA")                                                     \
+-  V(dns_critical_string, "critical")                                           \
+   V(dns_cname_string, "CNAME")                                                 \
+   V(dns_mx_string, "MX")                                                       \
+   V(dns_naptr_string, "NAPTR")                                                 \
+Index: node-git.eb24573987/test/common/dns.js
+===================================================================
+--- node-git.eb24573987.orig/test/common/dns.js
++++ node-git.eb24573987/test/common/dns.js
+@@ -13,8 +13,7 @@ const types = {
+   PTR: 12,
+   MX: 15,
+   TXT: 16,
+-  ANY: 255,
+-  CAA: 257
++  ANY: 255
+ };
+ 
+ const classes = {
+@@ -270,14 +269,6 @@ function writeDNSPacket(parsed) {
+         ]));
+         break;
+       }
+-      case 'CAA':
+-      {
+-        rdLengthBuf[0] = 5 + rr.issue.length + 2;
+-        buffers.push(Buffer.from([Number(rr.critical)]));
+-        buffers.push(Buffer.from([Number(5)]));
+-        buffers.push(Buffer.from('issue' + rr.issue));
+-        break;
+-      }
+       default:
+         throw new Error(`Unknown RR type ${rr.type}`);
+     }
+Index: node-git.eb24573987/test/common/internet.js
+===================================================================
+--- node-git.eb24573987.orig/test/common/internet.js
++++ node-git.eb24573987/test/common/internet.js
+@@ -30,8 +30,6 @@ const addresses = {
+   NAPTR_HOST: 'sip2sip.info',
+   // A host with SOA records registered
+   SOA_HOST: 'nodejs.org',
+-  // A host with CAA record registred
+-  CAA_HOST: 'google.com',
+   // A host with CNAME records registered
+   CNAME_HOST: 'blog.nodejs.org',
+   // A host with NS records registered
+Index: node-git.eb24573987/test/internet/test-dns.js
+===================================================================
+--- node-git.eb24573987.orig/test/internet/test-dns.js
++++ node-git.eb24573987/test/internet/test-dns.js
+@@ -399,45 +399,6 @@ TEST(function test_resolveSoa_failure(do
+   checkWrap(req);
+ });
+ 
+-TEST(async function test_resolveCaa(done) {
+-  function validateResult(result) {
+-    assert.ok(Array.isArray(result[0]));
+-    assert.strictEqual(result.length, 1);
+-    assert.strictEqual(typeof result[0].critical, 'number');
+-    assert.strictEqual(result[0].critical, 0);
+-    assert.strictEqual(result[0].issue, 'pki.goog');
+-  }
+-
+-  validateResult(await dnsPromises.resolveCaa(addresses.CAA_HOST));
+-
+-  const req = dns.resolveCaa(addresses.CAA_HOST, function(err, records) {
+-    assert.ifError(err);
+-    validateResult(records);
+-    done();
+-  });
+-
+-  checkWrap(req);
+-});
+-
+-TEST(function test_resolveCaa_failure(done) {
+-  dnsPromises.resolveTxt(addresses.INVALID_HOST)
+-    .then(common.mustNotCall())
+-    .catch(common.mustCall((err) => {
+-      assert.strictEqual(err.code, 'ENOTFOUND');
+-    }));
+-
+-  const req = dns.resolveCaa(addresses.INVALID_HOST, function(err, result) {
+-    assert.ok(err instanceof Error);
+-    assert.strictEqual(err.code, 'ENOTFOUND');
+-
+-    assert.strictEqual(result, undefined);
+-
+-    done();
+-  });
+-
+-  checkWrap(req);
+-});
+-
+ TEST(async function test_resolveCname(done) {
+   function validateResult(result) {
+     assert.ok(result.length > 0);
+Index: node-git.eb24573987/test/internet/test-trace-events-dns.js
+===================================================================
+--- node-git.eb24573987.orig/test/internet/test-trace-events-dns.js
++++ node-git.eb24573987/test/internet/test-trace-events-dns.js
+@@ -29,7 +29,6 @@ const tests = {
+   'resolveAny': 'dns.resolveAny("example.com", (err, res) => {});',
+   'resolve4': 'dns.resolve4("example.com", (err, res) => {});',
+   'resolve6': 'dns.resolve6("example.com", (err, res) => {});',
+-  'resolveCaa': 'dns.resolveCaa("example.com", (err, res) => {});',
+   'resolveCname': 'dns.resolveCname("example.com", (err, res) => {});',
+   'resolveMx': 'dns.resolveMx("example.com", (err, res) => {});',
+   'resolveNs': 'dns.resolveNs("example.com", (err, res) => {});',
+Index: node-git.eb24573987/test/parallel/test-dns-resolveany.js
+===================================================================
+--- node-git.eb24573987.orig/test/parallel/test-dns-resolveany.js
++++ node-git.eb24573987/test/parallel/test-dns-resolveany.js
+@@ -23,11 +23,6 @@ const answers = [
+     expire: 1800,
+     minttl: 60
+   },
+-  {
+-    type: 'CAA',
+-    critical: 128,
+-    issue: 'platynum.ch'
+-  }
+ ];
+ 
+ const server = dgram.createSocket('udp4');
