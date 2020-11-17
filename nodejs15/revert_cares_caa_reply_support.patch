@@ -12,10 +12,10 @@ Date:   Fri Oct 2 17:52:47 2020 +0200
     Refs: https://github.com/nodejs/node/issues/14713
     Reviewed-By: Anna Henningsen <anna@addaleax.net>
 
-Index: node-v15.0.1/deps/cares/cares.gyp
+Index: node-git.e6e64f7a21/deps/cares/cares.gyp
 ===================================================================
---- node-v15.0.1.orig/deps/cares/cares.gyp
-+++ node-v15.0.1/deps/cares/cares.gyp
+--- node-git.e6e64f7a21.orig/deps/cares/cares.gyp
++++ node-git.e6e64f7a21/deps/cares/cares.gyp
 @@ -75,7 +75,6 @@
          'src/ares__parse_into_addrinfo.c',
          'src/ares_parse_aaaa_reply.c',
@@ -24,10 +24,10 @@ Index: node-v15.0.1/deps/cares/cares.gyp
          'src/ares_parse_mx_reply.c',
          'src/ares_parse_naptr_reply.c',
          'src/ares_parse_ns_reply.c',
-Index: node-v15.0.1/deps/cares/include/ares.h
+Index: node-git.e6e64f7a21/deps/cares/include/ares.h
 ===================================================================
---- node-v15.0.1.orig/deps/cares/include/ares.h
-+++ node-v15.0.1/deps/cares/include/ares.h
+--- node-git.e6e64f7a21.orig/deps/cares/include/ares.h
++++ node-git.e6e64f7a21/deps/cares/include/ares.h
 @@ -528,15 +528,6 @@ struct ares_addr6ttl {
    int             ttl;
  };
@@ -55,10 +55,10 @@ Index: node-v15.0.1/deps/cares/include/ares.h
  CARES_EXTERN int ares_parse_ptr_reply(const unsigned char *abuf,
                                        int alen,
                                        const void *addr,
-Index: node-v15.0.1/deps/cares/include/nameser.h
+Index: node-git.e6e64f7a21/deps/cares/include/nameser.h
 ===================================================================
---- node-v15.0.1.orig/deps/cares/include/nameser.h
-+++ node-v15.0.1/deps/cares/include/nameser.h
+--- node-git.e6e64f7a21.orig/deps/cares/include/nameser.h
++++ node-git.e6e64f7a21/deps/cares/include/nameser.h
 @@ -88,7 +88,6 @@ typedef enum __ns_type {
      ns_t_maila = 254,       /* Transfer mail agent records. */
      ns_t_any = 255,         /* Wildcard match. */
@@ -75,10 +75,10 @@ Index: node-v15.0.1/deps/cares/include/nameser.h
  #define T_ANY           ns_t_any
  
  #endif /* HAVE_ARPA_NAMESER_COMPAT_H */
-Index: node-v15.0.1/deps/cares/src/ares_data.c
+Index: node-git.e6e64f7a21/deps/cares/src/ares_data.c
 ===================================================================
---- node-v15.0.1.orig/deps/cares/src/ares_data.c
-+++ node-v15.0.1/deps/cares/src/ares_data.c
+--- node-git.e6e64f7a21.orig/deps/cares/src/ares_data.c
++++ node-git.e6e64f7a21/deps/cares/src/ares_data.c
 @@ -119,16 +119,6 @@ void ares_free_data(void *dataptr)
              ares_free(ptr->data.soa_reply.hostmaster);
            break;
@@ -111,10 +111,10 @@ Index: node-v15.0.1/deps/cares/src/ares_data.c
        case ARES_DATATYPE_ADDR_NODE:
          ptr->data.addr_node.next = NULL;
          ptr->data.addr_node.family = 0;
-Index: node-v15.0.1/deps/cares/src/ares_data.h
+Index: node-git.e6e64f7a21/deps/cares/src/ares_data.h
 ===================================================================
---- node-v15.0.1.orig/deps/cares/src/ares_data.h
-+++ node-v15.0.1/deps/cares/src/ares_data.h
+--- node-git.e6e64f7a21.orig/deps/cares/src/ares_data.h
++++ node-git.e6e64f7a21/deps/cares/src/ares_data.h
 @@ -30,7 +30,6 @@ typedef enum {
    ARES_DATATYPE_OPTIONS,      /* struct ares_options   */
  #endif
@@ -131,9 +131,9 @@ Index: node-v15.0.1/deps/cares/src/ares_data.h
    } data;
  };
  
-Index: node-v15.0.1/deps/cares/src/ares_parse_caa_reply.c
+Index: node-git.e6e64f7a21/deps/cares/src/ares_parse_caa_reply.c
 ===================================================================
---- node-v15.0.1.orig/deps/cares/src/ares_parse_caa_reply.c
+--- node-git.e6e64f7a21.orig/deps/cares/src/ares_parse_caa_reply.c
 +++ /dev/null
 @@ -1,209 +0,0 @@
 -
@@ -345,10 +345,10 @@ Index: node-v15.0.1/deps/cares/src/ares_parse_caa_reply.c
 -
 -  return ARES_SUCCESS;
 -}
-Index: node-v15.0.1/doc/api/dns.md
+Index: node-git.e6e64f7a21/doc/api/dns.md
 ===================================================================
---- node-v15.0.1.orig/doc/api/dns.md
-+++ node-v15.0.1/doc/api/dns.md
+--- node-git.e6e64f7a21.orig/doc/api/dns.md
++++ node-git.e6e64f7a21/doc/api/dns.md
 @@ -81,7 +81,6 @@ The following methods from the `dns` mod
  * [`resolver.resolve4()`][`dns.resolve4()`]
  * [`resolver.resolve6()`][`dns.resolve6()`]
@@ -357,7 +357,7 @@ Index: node-v15.0.1/doc/api/dns.md
  * [`resolver.resolveCname()`][`dns.resolveCname()`]
  * [`resolver.resolveMx()`][`dns.resolveMx()`]
  * [`resolver.resolveNaptr()`][`dns.resolveNaptr()`]
-@@ -290,7 +289,6 @@ records. The type and structure of indiv
+@@ -311,7 +310,6 @@ records. The type and structure of indiv
  | `'A'`     | IPv4 addresses (default)       | {string}    | [`dns.resolve4()`][]     |
  | `'AAAA'`  | IPv6 addresses                 | {string}    | [`dns.resolve6()`][]     |
  | `'ANY'`   | any records                    | {Object}    | [`dns.resolveAny()`][]   |
@@ -365,7 +365,7 @@ Index: node-v15.0.1/doc/api/dns.md
  | `'CNAME'` | canonical name records         | {string}    | [`dns.resolveCname()`][] |
  | `'MX'`    | mail exchange records          | {Object}    | [`dns.resolveMx()`][]    |
  | `'NAPTR'` | name authority pointer records | {Object}    | [`dns.resolveNaptr()`][] |
-@@ -416,22 +414,6 @@ Uses the DNS protocol to resolve `CNAME`
+@@ -437,22 +435,6 @@ Uses the DNS protocol to resolve `CNAME`
  will contain an array of canonical name records available for the `hostname`
  (e.g. `['bar.example.com']`).
  
@@ -388,7 +388,7 @@ Index: node-v15.0.1/doc/api/dns.md
  ## `dns.resolveMx(hostname, callback)`
  <!-- YAML
  added: v0.1.27
-@@ -683,7 +665,6 @@ The following methods from the `dnsPromi
+@@ -718,7 +700,6 @@ The following methods from the `dnsPromi
  * [`resolver.resolve4()`][`dnsPromises.resolve4()`]
  * [`resolver.resolve6()`][`dnsPromises.resolve6()`]
  * [`resolver.resolveAny()`][`dnsPromises.resolveAny()`]
@@ -396,7 +396,7 @@ Index: node-v15.0.1/doc/api/dns.md
  * [`resolver.resolveCname()`][`dnsPromises.resolveCname()`]
  * [`resolver.resolveMx()`][`dnsPromises.resolveMx()`]
  * [`resolver.resolveNaptr()`][`dnsPromises.resolveNaptr()`]
-@@ -825,7 +806,6 @@ based on `rrtype`:
+@@ -860,7 +841,6 @@ based on `rrtype`:
  | `'A'`     | IPv4 addresses (default)       | {string}    | [`dnsPromises.resolve4()`][]     |
  | `'AAAA'`  | IPv6 addresses                 | {string}    | [`dnsPromises.resolve6()`][]     |
  | `'ANY'`   | any records                    | {Object}    | [`dnsPromises.resolveAny()`][]   |
@@ -404,11 +404,11 @@ Index: node-v15.0.1/doc/api/dns.md
  | `'CNAME'` | canonical name records         | {string}    | [`dnsPromises.resolveCname()`][] |
  | `'MX'`    | mail exchange records          | {Object}    | [`dnsPromises.resolveMx()`][]    |
  | `'NAPTR'` | name authority pointer records | {Object}    | [`dnsPromises.resolveNaptr()`][] |
-@@ -915,19 +895,6 @@ Here is an example of the result object:
+@@ -950,19 +930,6 @@ Here is an example of the result object:
      minttl: 60 } ]
  ```
  
--## `dnsPromises.resolveCaa(hostname)`
+-### `dnsPromises.resolveCaa(hostname)`
 -<!-- YAML
 -added: v15.0.0
 --->
@@ -424,7 +424,7 @@ Index: node-v15.0.1/doc/api/dns.md
  ### `dnsPromises.resolveCname(hostname)`
  <!-- YAML
  added: v10.6.0
-@@ -1207,7 +1174,6 @@ uses. For instance, _they do not use the
+@@ -1242,7 +1209,6 @@ uses. For instance, _they do not use the
  [`dns.resolve4()`]: #dns_dns_resolve4_hostname_options_callback
  [`dns.resolve6()`]: #dns_dns_resolve6_hostname_options_callback
  [`dns.resolveAny()`]: #dns_dns_resolveany_hostname_callback
@@ -432,7 +432,7 @@ Index: node-v15.0.1/doc/api/dns.md
  [`dns.resolveCname()`]: #dns_dns_resolvecname_hostname_callback
  [`dns.resolveMx()`]: #dns_dns_resolvemx_hostname_callback
  [`dns.resolveNaptr()`]: #dns_dns_resolvenaptr_hostname_callback
-@@ -1224,7 +1190,6 @@ uses. For instance, _they do not use the
+@@ -1259,7 +1225,6 @@ uses. For instance, _they do not use the
  [`dnsPromises.resolve4()`]: #dns_dnspromises_resolve4_hostname_options
  [`dnsPromises.resolve6()`]: #dns_dnspromises_resolve6_hostname_options
  [`dnsPromises.resolveAny()`]: #dns_dnspromises_resolveany_hostname
@@ -440,10 +440,10 @@ Index: node-v15.0.1/doc/api/dns.md
  [`dnsPromises.resolveCname()`]: #dns_dnspromises_resolvecname_hostname
  [`dnsPromises.resolveMx()`]: #dns_dnspromises_resolvemx_hostname
  [`dnsPromises.resolveNaptr()`]: #dns_dnspromises_resolvenaptr_hostname
-Index: node-v15.0.1/lib/dns.js
+Index: node-git.e6e64f7a21/lib/dns.js
 ===================================================================
---- node-v15.0.1.orig/lib/dns.js
-+++ node-v15.0.1/lib/dns.js
+--- node-git.e6e64f7a21.orig/lib/dns.js
++++ node-git.e6e64f7a21/lib/dns.js
 @@ -236,7 +236,6 @@ const resolveMap = ObjectCreate(null);
  Resolver.prototype.resolveAny = resolveMap.ANY = resolver('queryAny');
  Resolver.prototype.resolve4 = resolveMap.A = resolver('queryA');
@@ -452,11 +452,11 @@ Index: node-v15.0.1/lib/dns.js
  Resolver.prototype.resolveCname = resolveMap.CNAME = resolver('queryCname');
  Resolver.prototype.resolveMx = resolveMap.MX = resolver('queryMx');
  Resolver.prototype.resolveNs = resolveMap.NS = resolver('queryNs');
-Index: node-v15.0.1/lib/internal/dns/promises.js
+Index: node-git.e6e64f7a21/lib/internal/dns/promises.js
 ===================================================================
---- node-v15.0.1.orig/lib/internal/dns/promises.js
-+++ node-v15.0.1/lib/internal/dns/promises.js
-@@ -220,7 +220,6 @@ Resolver.prototype.setServers = Callback
+--- node-git.e6e64f7a21.orig/lib/internal/dns/promises.js
++++ node-git.e6e64f7a21/lib/internal/dns/promises.js
+@@ -221,7 +221,6 @@ Resolver.prototype.setLocalAddress = Cal
  Resolver.prototype.resolveAny = resolveMap.ANY = resolver('queryAny');
  Resolver.prototype.resolve4 = resolveMap.A = resolver('queryA');
  Resolver.prototype.resolve6 = resolveMap.AAAA = resolver('queryAaaa');
@@ -464,11 +464,11 @@ Index: node-v15.0.1/lib/internal/dns/promises.js
  Resolver.prototype.resolveCname = resolveMap.CNAME = resolver('queryCname');
  Resolver.prototype.resolveMx = resolveMap.MX = resolver('queryMx');
  Resolver.prototype.resolveNs = resolveMap.NS = resolver('queryNs');
-Index: node-v15.0.1/lib/internal/dns/utils.js
+Index: node-git.e6e64f7a21/lib/internal/dns/utils.js
 ===================================================================
---- node-v15.0.1.orig/lib/internal/dns/utils.js
-+++ node-v15.0.1/lib/internal/dns/utils.js
-@@ -123,7 +123,6 @@ const resolverKeys = [
+--- node-git.e6e64f7a21.orig/lib/internal/dns/utils.js
++++ node-git.e6e64f7a21/lib/internal/dns/utils.js
+@@ -135,7 +135,6 @@ const resolverKeys = [
    'resolve4',
    'resolve6',
    'resolveAny',
@@ -476,11 +476,11 @@ Index: node-v15.0.1/lib/internal/dns/utils.js
    'resolveCname',
    'resolveMx',
    'resolveNaptr',
-Index: node-v15.0.1/src/cares_wrap.cc
+Index: node-git.e6e64f7a21/src/cares_wrap.cc
 ===================================================================
---- node-v15.0.1.orig/src/cares_wrap.cc
-+++ node-v15.0.1/src/cares_wrap.cc
-@@ -50,10 +50,6 @@
+--- node-git.e6e64f7a21.orig/src/cares_wrap.cc
++++ node-git.e6e64f7a21/src/cares_wrap.cc
+@@ -51,10 +51,6 @@
  # include <arpa/nameser.h>
  #endif
  
@@ -491,7 +491,7 @@ Index: node-v15.0.1/src/cares_wrap.cc
  #if defined(__OpenBSD__)
  # define AI_V4MAPPED 0
  #endif
-@@ -886,43 +882,6 @@ int ParseMxReply(Environment* env,
+@@ -887,43 +883,6 @@ int ParseMxReply(Environment* env,
    return ARES_SUCCESS;
  }
  
@@ -535,7 +535,7 @@ Index: node-v15.0.1/src/cares_wrap.cc
  int ParseTxtReply(Environment* env,
                    const unsigned char* buf,
                    int len,
-@@ -1386,13 +1345,6 @@ class QueryAnyWrap: public QueryWrap {
+@@ -1387,13 +1346,6 @@ class QueryAnyWrap: public QueryWrap {
      if (!soa_record.IsEmpty())
        ret->Set(context, ret->Length(), soa_record).Check();
  
@@ -549,14 +549,14 @@ Index: node-v15.0.1/src/cares_wrap.cc
      CallOnComplete(ret);
    }
  };
-@@ -1489,36 +1441,6 @@ class QueryAaaaWrap: public QueryWrap {
+@@ -1490,37 +1442,6 @@ class QueryAaaaWrap: public QueryWrap {
    }
  };
  
 -class QueryCaaWrap: public QueryWrap {
 - public:
 -  QueryCaaWrap(ChannelWrap* channel, Local<Object> req_wrap_obj)
--      : QueryWrap(channel, req_wrap_obj, "resolve6") {
+-      : QueryWrap(channel, req_wrap_obj, "resolveCaa") {
 -  }
 -
 -  int Send(const char* name) override {
@@ -583,10 +583,11 @@ Index: node-v15.0.1/src/cares_wrap.cc
 -    this->CallOnComplete(ret);
 -  }
 -};
- 
+-
  class QueryCnameWrap: public QueryWrap {
   public:
-@@ -2316,7 +2238,6 @@ void Initialize(Local<Object> target,
+   QueryCnameWrap(ChannelWrap* channel, Local<Object> req_wrap_obj)
+@@ -2381,7 +2302,6 @@ void Initialize(Local<Object> target,
    env->SetProtoMethod(channel_wrap, "queryAny", Query<QueryAnyWrap>);
    env->SetProtoMethod(channel_wrap, "queryA", Query<QueryAWrap>);
    env->SetProtoMethod(channel_wrap, "queryAaaa", Query<QueryAaaaWrap>);
@@ -594,10 +595,10 @@ Index: node-v15.0.1/src/cares_wrap.cc
    env->SetProtoMethod(channel_wrap, "queryCname", Query<QueryCnameWrap>);
    env->SetProtoMethod(channel_wrap, "queryMx", Query<QueryMxWrap>);
    env->SetProtoMethod(channel_wrap, "queryNs", Query<QueryNsWrap>);
-Index: node-v15.0.1/src/env.h
+Index: node-git.e6e64f7a21/src/env.h
 ===================================================================
---- node-v15.0.1.orig/src/env.h
-+++ node-v15.0.1/src/env.h
+--- node-git.e6e64f7a21.orig/src/env.h
++++ node-git.e6e64f7a21/src/env.h
 @@ -218,8 +218,6 @@ constexpr size_t kFsStatsBufferLength =
    V(divisor_length_string, "divisorLength")                                    \
    V(dns_a_string, "A")                                                         \
@@ -607,10 +608,10 @@ Index: node-v15.0.1/src/env.h
    V(dns_cname_string, "CNAME")                                                 \
    V(dns_mx_string, "MX")                                                       \
    V(dns_naptr_string, "NAPTR")                                                 \
-Index: node-v15.0.1/test/common/dns.js
+Index: node-git.e6e64f7a21/test/common/dns.js
 ===================================================================
---- node-v15.0.1.orig/test/common/dns.js
-+++ node-v15.0.1/test/common/dns.js
+--- node-git.e6e64f7a21.orig/test/common/dns.js
++++ node-git.e6e64f7a21/test/common/dns.js
 @@ -13,8 +13,7 @@ const types = {
    PTR: 12,
    MX: 15,
@@ -636,10 +637,10 @@ Index: node-v15.0.1/test/common/dns.js
        default:
          throw new Error(`Unknown RR type ${rr.type}`);
      }
-Index: node-v15.0.1/test/common/internet.js
+Index: node-git.e6e64f7a21/test/common/internet.js
 ===================================================================
---- node-v15.0.1.orig/test/common/internet.js
-+++ node-v15.0.1/test/common/internet.js
+--- node-git.e6e64f7a21.orig/test/common/internet.js
++++ node-git.e6e64f7a21/test/common/internet.js
 @@ -30,8 +30,6 @@ const addresses = {
    NAPTR_HOST: 'sip2sip.info',
    // A host with SOA records registered
@@ -649,17 +650,18 @@ Index: node-v15.0.1/test/common/internet.js
    // A host with CNAME records registered
    CNAME_HOST: 'blog.nodejs.org',
    // A host with NS records registered
-Index: node-v15.0.1/test/internet/test-dns.js
+Index: node-git.e6e64f7a21/test/internet/test-dns.js
 ===================================================================
---- node-v15.0.1.orig/test/internet/test-dns.js
-+++ node-v15.0.1/test/internet/test-dns.js
-@@ -399,45 +399,6 @@ TEST(function test_resolveSoa_failure(do
+--- node-git.e6e64f7a21.orig/test/internet/test-dns.js
++++ node-git.e6e64f7a21/test/internet/test-dns.js
+@@ -399,46 +399,6 @@ TEST(function test_resolveSoa_failure(do
    checkWrap(req);
  });
  
 -TEST(async function test_resolveCaa(done) {
 -  function validateResult(result) {
--    assert.ok(Array.isArray(result[0]));
+-    assert.ok(Array.isArray(result),
+-              `expected array, got ${util.inspect(result)}`);
 -    assert.strictEqual(result.length, 1);
 -    assert.strictEqual(typeof result[0].critical, 'number');
 -    assert.strictEqual(result[0].critical, 0);
@@ -699,10 +701,10 @@ Index: node-v15.0.1/test/internet/test-dns.js
  TEST(async function test_resolveCname(done) {
    function validateResult(result) {
      assert.ok(result.length > 0);
-Index: node-v15.0.1/test/internet/test-trace-events-dns.js
+Index: node-git.e6e64f7a21/test/internet/test-trace-events-dns.js
 ===================================================================
---- node-v15.0.1.orig/test/internet/test-trace-events-dns.js
-+++ node-v15.0.1/test/internet/test-trace-events-dns.js
+--- node-git.e6e64f7a21.orig/test/internet/test-trace-events-dns.js
++++ node-git.e6e64f7a21/test/internet/test-trace-events-dns.js
 @@ -29,7 +29,6 @@ const tests = {
    'resolveAny': 'dns.resolveAny("example.com", (err, res) => {});',
    'resolve4': 'dns.resolve4("example.com", (err, res) => {});',
@@ -711,10 +713,10 @@ Index: node-v15.0.1/test/internet/test-trace-events-dns.js
    'resolveCname': 'dns.resolveCname("example.com", (err, res) => {});',
    'resolveMx': 'dns.resolveMx("example.com", (err, res) => {});',
    'resolveNs': 'dns.resolveNs("example.com", (err, res) => {});',
-Index: node-v15.0.1/test/parallel/test-dns-resolveany.js
+Index: node-git.e6e64f7a21/test/parallel/test-dns-resolveany.js
 ===================================================================
---- node-v15.0.1.orig/test/parallel/test-dns-resolveany.js
-+++ node-v15.0.1/test/parallel/test-dns-resolveany.js
+--- node-git.e6e64f7a21.orig/test/parallel/test-dns-resolveany.js
++++ node-git.e6e64f7a21/test/parallel/test-dns-resolveany.js
 @@ -23,11 +23,6 @@ const answers = [
      expire: 1800,
      minttl: 60

@@ -1,8 +1,22 @@
 -------------------------------------------------------------------
+Thu Nov 12 18:56:37 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update to 15.2.0:
+  * events:
+    +getEventListeners static
+  * fs:
+    + support abortsignal in writeFile
+    + add support for AbortSignal in readFile
+  * stream:
+    + fix thrown object reference
+
+revert_cares_caa_reply_support.patch: refreshed
+
+-------------------------------------------------------------------
 Thu Nov  5 10:07:53 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Update to 15.1.0:
-  * deps: updated to 7.0.8
+  * deps: npm updated to 7.0.8
   * child_process: add ChildProcess 'spawn' event
   * dns: add setLocalAddress to Resolver
   * http: report request start and end with diagnostics_channel
