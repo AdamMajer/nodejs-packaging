@@ -1,4 +1,4 @@
-s/{{node_version}}/12.19.0/g
+s/{{node_version}}/12.19.1/g
 s/{{node_version_major}}/12/g
 s/{{exclusive_arch}}/x86_64 aarch64 ppc64 ppc64le s390x/g
 

@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Thu Nov 19 11:41:48 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- New upstream LTS version 15.2.1:
+  * deps: Denial of Service through DNS request (High).
+  A Node.js application that allows an attacker to trigger a DNS
+  request for a host of their choice could trigger a Denial of Service
+  by getting the application to resolve a DNS record with
+  a larger number of responses (bsc#1178882, CVE-2020-8277)
+
+
+-------------------------------------------------------------------
 Thu Nov 12 18:56:37 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - Update to 15.2.0:
