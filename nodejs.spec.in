@@ -342,20 +342,21 @@ uses an event-driven, non-blocking I/O model. Node.js has a package ecosystem
 provided by npm.
 
 %package devel
-Summary:        Files needed for development of NodeJS platforms
+Summary:        Development headers for NodeJS {{node_version_major}}.x
 Group:          Development/Languages/NodeJS
 Provides:       nodejs-devel = %{version}
+Requires:       npm{{node_version_major}} = %{version}
 Requires:       %{name} = %{version}
 
 %description devel
-This package provides development headers for Node.js.
+This package provides development headers for Node.js needed for creation
+of binary modules.
 
 %package -n npm{{node_version_major}}
 Summary:        Package manager for Node.js
 Group:          Development/Languages/NodeJS
 Requires:       nodejs-common
-Requires:       %{name} = %{version}
-Recommends:     %{name}-devel = %{version}
+Requires:       nodejs{{node_version_major}} = %{version}
 Provides:       nodejs-npm = %{version}
 Obsoletes:      nodejs-npm < 4.0.0
 Provides:       npm(npm) = {{bundled_npm_version}}
@@ -364,13 +365,6 @@ Provides:       npm = %{version}
 %if %{node_version_number} >= 10
 Requires:       user(nobody)
 Requires:       group(nobody)
-%endif
-Recommends:     python3
-%else
-%if 0%{?suse_version} >= 1500
-Recommends:     python2
-%else
-Recommends:     python
 %endif
 %endif
 {{npm_npm_bundles}}
@@ -468,9 +462,9 @@ find \( -name \*.js.orig -or -name \*.md.orig \) -delete
 %build
 # normalize shebang
 %if %{node_version_number} >= 12
-find -name \*.py -perm -1 -type f -exec sed -i -e '1 s,^#!\s\?/usr/bin/env python\d*$,#!/usr/bin/python3,' -e '1 s,^#!\s\?/usr/bin/python$,#!/usr/bin/python3,' {} +
+find -type f -exec sed -i -e '1 s,^#!\s\?/usr/bin/env python\d*$,#!/usr/bin/python3,' -e '1 s,^#!\s\?/usr/bin/python$,#!/usr/bin/python3,' {} +
 %else
-find -name \*.py -perm -1 -type f -exec sed -i '1 s,^#!\s\?/usr/bin/env python$,#!/usr/bin/python,' {} +
+find -type f -exec sed -i '1 s,^#!\s\?/usr/bin/env python$,#!/usr/bin/python,' {} +
 %endif
 find deps/npm -type f -exec sed -i '1 s,^#!\s\?/usr/bin/env node$,#!/usr/bin/node%{node_version_number},' {} +
 find deps/npm -type f -exec sed -i '1 s,^#!\s\?/usr/bin/env \(bash\|sh\)\?$,#!/bin/bash,' {} +

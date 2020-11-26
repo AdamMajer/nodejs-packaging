@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Nov 23 16:06:15 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update Requires: so -devel requires npm
+- Rely on rpmbuild to define necessary python dependencies
+
+-------------------------------------------------------------------
 Thu Nov 19 11:42:09 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - New upstream LTS version 14.15.1:

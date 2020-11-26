@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Nov 23 16:06:45 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- Update Requires: so -devel requires npm
+- Rely on rpmbuild to define necessary python dependencies
+
+-------------------------------------------------------------------
 Fri Oct  9 09:34:39 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - fix_ci_tests.patch: add support to SUSE's ECDH backport errors
