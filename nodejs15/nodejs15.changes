@@ -1,7 +1,26 @@
 -------------------------------------------------------------------
+Mon Nov 30 19:45:55 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- openssl_binary_detection.patch: fixes unit tests on SLE12
+
+-------------------------------------------------------------------
+Thu Nov 26 06:02:11 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- New upstream version 15.3.0:
+  * dns: add a cancel() method to the promise Resolver
+  * events: add max listener warning for EventTarget
+  * http: add support for abortsignal to http.request
+  * http2: allow setting the local window size of a session
+  * lib: add throws option to fs.f/l/statSync
+  * path: add path/posix and path/win32 alias modules
+  * readline: add getPrompt to get the current prompt
+  * src: add loop idle time in diagnostic report
+  * util: add util/types alias module
+
+-------------------------------------------------------------------
 Thu Nov 19 11:41:48 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
-- New upstream LTS version 15.2.1:
+- New upstream version 15.2.1:
   * deps: Denial of Service through DNS request (High).
   A Node.js application that allows an attacker to trigger a DNS
   request for a host of their choice could trigger a Denial of Service
