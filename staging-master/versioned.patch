@@ -8,10 +8,10 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-git.ff28ab77a9/Makefile
+Index: node-git.5a637e9d36/Makefile
 ===================================================================
---- node-git.ff28ab77a9.orig/Makefile
-+++ node-git.ff28ab77a9/Makefile
+--- node-git.5a637e9d36.orig/Makefile
++++ node-git.5a637e9d36/Makefile
 @@ -46,7 +46,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
@@ -21,10 +21,10 @@ Index: node-git.ff28ab77a9/Makefile
  NODE ?= ./$(NODE_EXE)
  NODE_G_EXE = node_g$(EXEEXT)
  NPM ?= ./deps/npm/bin/npm-cli.js
-Index: node-git.ff28ab77a9/tools/install.py
+Index: node-git.5a637e9d36/tools/install.py
 ===================================================================
---- node-git.ff28ab77a9.orig/tools/install.py
-+++ node-git.ff28ab77a9/tools/install.py
+--- node-git.5a637e9d36.orig/tools/install.py
++++ node-git.5a637e9d36/tools/install.py
 @@ -81,34 +81,34 @@ def uninstall(paths, dst):
      try_remove(path, dst)
  
@@ -137,10 +137,10 @@ Index: node-git.ff28ab77a9/tools/install.py
  
  def run(args):
    global node_prefix, install_path, target_defaults, variables
-Index: node-git.ff28ab77a9/doc/node.1
+Index: node-git.5a637e9d36/doc/node.1
 ===================================================================
---- node-git.ff28ab77a9.orig/doc/node.1
-+++ node-git.ff28ab77a9/doc/node.1
+--- node-git.5a637e9d36.orig/doc/node.1
++++ node-git.5a637e9d36/doc/node.1
 @@ -30,24 +30,24 @@
  .Dt NODE 1
  .
@@ -170,10 +170,10 @@ Index: node-git.ff28ab77a9/doc/node.1
  .Op Fl -v8-options
  .
  .\"======================================================================
-Index: node-git.ff28ab77a9/src/node.stp
+Index: node-git.5a637e9d36/src/node.stp
 ===================================================================
---- node-git.ff28ab77a9.orig/src/node.stp
-+++ node-git.ff28ab77a9/src/node.stp
+--- node-git.5a637e9d36.orig/src/node.stp
++++ node-git.5a637e9d36/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -246,12 +246,12 @@ Index: node-git.ff28ab77a9/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-git.ff28ab77a9/deps/npm/man/man1/npm.1
+Index: node-git.5a637e9d36/deps/npm/man/man1/npm.1
 ===================================================================
---- node-git.ff28ab77a9.orig/deps/npm/man/man1/npm.1
-+++ node-git.ff28ab77a9/deps/npm/man/man1/npm.1
+--- node-git.5a637e9d36.orig/deps/npm/man/man1/npm.1
++++ node-git.5a637e9d36/deps/npm/man/man1/npm.1
 @@ -1,6 +1,6 @@
- .TH "NPM" "1" "November 2020" "" ""
+ .TH "NPM" "1" "December 2020" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm42\fR \- javascript package manager
@@ -325,10 +325,10 @@ Index: node-git.ff28ab77a9/deps/npm/man/man1/npm.1
 +npm42 help npmrc
  
  .RE
-Index: node-git.ff28ab77a9/src/node_main.cc
+Index: node-git.5a637e9d36/src/node_main.cc
 ===================================================================
---- node-git.ff28ab77a9.orig/src/node_main.cc
-+++ node-git.ff28ab77a9/src/node_main.cc
+--- node-git.5a637e9d36.orig/src/node_main.cc
++++ node-git.5a637e9d36/src/node_main.cc
 @@ -122,6 +122,7 @@ int main(int argc, char* argv[]) {
  #endif
    // Disable stdio buffering, it interacts poorly with printf()
@@ -337,10 +337,10 @@ Index: node-git.ff28ab77a9/src/node_main.cc
    setvbuf(stdout, nullptr, _IONBF, 0);
    setvbuf(stderr, nullptr, _IONBF, 0);
    return node::Start(argc, argv);
-Index: node-git.ff28ab77a9/tools/test.py
+Index: node-git.5a637e9d36/tools/test.py
 ===================================================================
---- node-git.ff28ab77a9.orig/tools/test.py
-+++ node-git.ff28ab77a9/tools/test.py
+--- node-git.5a637e9d36.orig/tools/test.py
++++ node-git.5a637e9d36/tools/test.py
 @@ -933,7 +933,7 @@ class Context(object):
      if self.vm is not None:
        return self.vm
@@ -350,10 +350,10 @@ Index: node-git.ff28ab77a9/tools/test.py
      else:
        name = 'out/%s.%s/node' % (arch, mode)
  
-Index: node-git.ff28ab77a9/node.gyp
+Index: node-git.5a637e9d36/node.gyp
 ===================================================================
---- node-git.ff28ab77a9.orig/node.gyp
-+++ node-git.ff28ab77a9/node.gyp
+--- node-git.5a637e9d36.orig/node.gyp
++++ node-git.5a637e9d36/node.gyp
 @@ -26,8 +26,8 @@
      'node_use_openssl%': 'true',
      'node_shared_openssl%': 'false',
@@ -365,10 +365,10 @@ Index: node-git.ff28ab77a9/node.gyp
      'node_intermediate_lib_type%': 'static_library',
      'node_builtin_modules_path%': '',
      'library_files': [
-Index: node-git.ff28ab77a9/deps/npm/man/man1/npx.1
+Index: node-git.5a637e9d36/deps/npm/man/man1/npx.1
 ===================================================================
---- node-git.ff28ab77a9.orig/deps/npm/man/man1/npx.1
-+++ node-git.ff28ab77a9/deps/npm/man/man1/npx.1
+--- node-git.5a637e9d36.orig/deps/npm/man/man1/npx.1
++++ node-git.5a637e9d36/deps/npm/man/man1/npx.1
 @@ -5,15 +5,15 @@
  .P
  .RS 2
