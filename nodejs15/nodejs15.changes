@@ -1,4 +1,21 @@
 -------------------------------------------------------------------
+Thu Dec 10 18:20:53 UTC 2020 - Adam Majer <adam.majer@suse.de>
+
+- New upstream version 15.4.0:
+  * child_processes: add AbortSignal support
+  * events:
+    + support signal in EventTarget
+    + graduate Event, EventTarget, AbortController
+  * http: enable call chaining with setHeader()
+  * module: add isPreloading indicator
+  * stream:
+    + support abort signal
+    + add FileHandle support to Read/WriteStream
+  * worker: add experimental BroadcastChannel
+
+- nodejs-libpath.patch: refreshed
+
+-------------------------------------------------------------------
 Mon Nov 30 19:45:55 UTC 2020 - Adam Majer <adam.majer@suse.de>
 
 - openssl_binary_detection.patch: fixes unit tests on SLE12
