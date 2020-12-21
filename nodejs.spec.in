@@ -175,7 +175,6 @@ Patch104:       npm_search_paths.patch
 Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 6, 8, 10
 Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, master
 Patch107:       old_icu.patch             # PATCH_FOR: 14, 15, master
-Patch108:       revert_cares_caa_reply_support.patch # PATCH_FOR: 15, master
 Patch109:       python3.patch             # PATCH_FOR: 12
 
 
@@ -457,7 +456,6 @@ tar Jxf %{SOURCE11}
 %patch105 -p1
 %patch106 -p1
 %patch107 -p1
-%patch108 -p1
 %patch109 -p1
 %patch120 -p1
 %patch200 -p1

@@ -1,7 +1,7 @@
-Index: node-git.ee749ba2c6/deps/npm/lib/help-search.js
+Index: node-git.2070d5b524/deps/npm/lib/help-search.js
 ===================================================================
---- node-git.ee749ba2c6.orig/deps/npm/lib/help-search.js
-+++ node-git.ee749ba2c6/deps/npm/lib/help-search.js
+--- node-git.2070d5b524.orig/deps/npm/lib/help-search.js
++++ node-git.2070d5b524/deps/npm/lib/help-search.js
 @@ -21,7 +21,7 @@ const helpSearch = async args => {
    if (!args.length)
      throw usage
@@ -9,13 +9,13 @@ Index: node-git.ee749ba2c6/deps/npm/lib/help-search.js
 -  const docPath = path.resolve(__dirname, '..', 'docs/content')
 +  const docPath = '/usr/share/doc/packages/nodejs';
  
-   // XXX: make glob return a promise and remove this wrapping
-   const files = await new Promise((res, rej) =>
-Index: node-git.ee749ba2c6/deps/npm/lib/npm.js
+   const files = await glob(`${docPath}/*/*.md`)
+   const data = await readFiles(files)
+Index: node-git.2070d5b524/deps/npm/lib/npm.js
 ===================================================================
---- node-git.ee749ba2c6.orig/deps/npm/lib/npm.js
-+++ node-git.ee749ba2c6/deps/npm/lib/npm.js
-@@ -211,7 +211,13 @@ const npm = module.exports = new class e
+--- node-git.2070d5b524.orig/deps/npm/lib/npm.js
++++ node-git.2070d5b524/deps/npm/lib/npm.js
+@@ -231,7 +231,13 @@ const npm = module.exports = new class e
    }
  
    get globalPrefix () {
