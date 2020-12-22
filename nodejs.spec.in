@@ -158,6 +158,7 @@ Patch37:        nghttp2_1.41.0.patch   # PATCH_FOR: 8
 Patch38:        CVE-2020-11080.patch   # PATCH_FOR: 8
 Patch39:        minimist.patch         # PATCH_FOR: 6, 8
 Patch40:        CVE-2020-15095.patch   # PATCH_FOR: 6, 8
+Patch41:        icu68.patch            # PATCH_FOR: 10
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, master
@@ -445,6 +446,7 @@ tar Jxf %{SOURCE11}
 %patch38 -p1
 %patch39 -p1
 %patch40 -p1
+%patch41 -p1
 %patch100 -p1
 %patch101 -p1
 %patch102 -p1
