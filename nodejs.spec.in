@@ -466,7 +466,7 @@ tar Jxf %{SOURCE11}
 find -name \*~ -print0 -delete
 
 # abnormalities from patching
-find \( -name \*.js.orig -or -name \*.md.orig \) -delete
+find \( -name \*.js.orig -or -name \*.md.orig -or -name \*.1.orig \) -delete
 
 %build
 # normalize shebang
