@@ -31,7 +31,7 @@ define nodejs_version
 endef
 
 CHANGELOG_TS := $(shell date)
-TARGET_CHANGELOGS := $(wildcard nodejs?/*.changes nodejs??/*.changes staging-*/*.changes)
+TARGET_CHANGELOGS := $(wildcard nodejs??/*.changes)
 
 all: status
 
