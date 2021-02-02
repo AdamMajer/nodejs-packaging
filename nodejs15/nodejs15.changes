@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Tue Feb  2 12:45:15 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- New upstream version 15.7.0:
+  * buffer:
+    + introduce Blob
+    + add base64url encoding option
+  * fs:
+    + allow position parameter to be a BigInt in read and
+      readSync (raisinten)
+  * http:
+    + attach request as res.req
+    + expose urlToHttpOptions utility
+
+-------------------------------------------------------------------
 Thu Jan 21 16:40:06 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - New upstream version 15.6.0:
