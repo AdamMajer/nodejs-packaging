@@ -1,4 +1,4 @@
-s/{{node_version}}/15.7.0/g
+s/{{node_version}}/15.8.0/g
 s/{{node_version_major}}/15/g
 s/{{exclusive_arch}}/x86_64 aarch64 ppc64 ppc64le s390x/g
 
@@ -36,10 +36,8 @@ s/{{bundled_cares_version}}/1.17.1/g
 s/{{bundled_icu-small_version}}/68.2/g
 s/{{bundled_llhttp_version}}/2.1.3/g
 s/{{bundled_nghttp2_version}}/1.42.0/g
-s/{{bundled_nghttp3_version}}/0.1.0-DEV/g
-s/{{bundled_ngtcp2_version}}/0.1.0-DEV/g
 s/{{bundled_openssl_version}}/1.1.1i/g
 s/{{bundled_uv_version}}/1.40.0/g
 s/{{bundled_uvwasi_version}}/0.0.11/g
 s/{{bundled_v8_version}}/8.6.395.17/g
-s/{{bundled_npm_version}}/7.4.3/g
+s/{{bundled_npm_version}}/7.5.1/g
