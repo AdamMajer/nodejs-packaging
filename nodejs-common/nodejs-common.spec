@@ -25,8 +25,8 @@
 #
 ###########################################################
 
-%define NODEJS_LTS      12
-%define NODEJS_CURRENT  14
+%define NODEJS_LTS      14
+%define NODEJS_CURRENT  15
 
 # logic for default version
 # OBSOLETE ARCHES
@@ -44,14 +44,22 @@
 # TW
 %if 0%{?suse_version} > 1500
 %define default_node_ver %NODEJS_CURRENT
-%endif
+
+%else
 
 # SLE-15 variants, variation based on SP
 %if 0%{?sle_version} >= 150000 && 0%{?sle_version} < 150200
 %define default_node_ver 10
+%else
+%if 0%{?sle_version} < 150300
+%define default_node_ver 12
+%else
+%define default_node_ver NODEJS_LTS
 %endif
-%if 0%{?sle_version} >= 150200
-%define default_node_ver %NODEJS_LTS
+# SLE-15 variants
+%endif
+
+# TW
 %endif
 
 # END - GENERAL ARCHES
@@ -111,6 +119,8 @@ the current architecture and codestream.
 %build
 cp %{S:2} .
 gcc ${RPM_OPT_FLAGS} -o node %{S:1}
+
+echo "Default Node version: " %{default_node_ver}
 
 %install
 install -D -m 0755 node %{buildroot}%{_bindir}/node
