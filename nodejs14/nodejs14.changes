@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Wed Feb 17 17:33:25 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- New upstream LTS version 14.15.5:
+  * deps: 
+    + upgrade npm to 6.14.11
+    + V8: backport dfcf1e86fac0 #37245
+    Note: Node.js is not believed to be vulnerable to CVE-2021-21148
+  * stream,zlib: do not use _stream_* anymore
+
+- relax OpenSSL cipher suite policies for unit tests
+ 
+-------------------------------------------------------------------
 Mon Jan  4 19:27:41 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - New upstream LTS version 14.15.4:
