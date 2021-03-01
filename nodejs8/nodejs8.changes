@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Feb 23 14:55:47 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2021-22884.patch: DNS rebinding in --inspect
+  (CVE-2021-22884, bsc#1182620)
+- CVE-2021-22883.patch: only backport unit test to make sure
+  we don't have regression here in the future.
+
+-------------------------------------------------------------------
 Mon Jan 11 15:49:21 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2020-8287.patch: HTTP Request Smuggling allow two copies of a

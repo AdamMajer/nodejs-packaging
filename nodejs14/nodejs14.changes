@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Feb 23 14:46:06 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- New upstream LTS version 14.16.0:
+  * CVE-2021-22883: HTTP2 'unknownProtocol' cause Denial of Service
+    by resource exhaustion (bsc#1182619)
+  * CVE-2021-22884: DNS rebinding in --inspect (bsc#1182620)
+
+-------------------------------------------------------------------
 Wed Feb 17 17:33:25 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - New upstream LTS version 14.15.5:
