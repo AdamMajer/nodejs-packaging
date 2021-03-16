@@ -1,7 +1,7 @@
 #
 # spec file for package nodejs-common
 #
-# Copyright (c) 2020 SUSE LLC
+# Copyright (c) 2021 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -54,7 +54,7 @@
 %if 0%{?sle_version} < 150300
 %define default_node_ver 12
 %else
-%define default_node_ver NODEJS_LTS
+%define default_node_ver %NODEJS_LTS
 %endif
 # SLE-15 variants
 %endif
@@ -66,12 +66,12 @@
 %endif
 
 Name:           nodejs-common
-Version:        4.0
+Version:        4.1
 Release:        0
 Summary:        Common files for the NodeJS ecosystem
 License:        MIT
 Group:          Development/Languages/NodeJS
-Url:            https://github.com/AdamMajer/nodejs-packaging
+URL:            https://github.com/AdamMajer/nodejs-packaging
 Source1:        node.c
 Source2:        LICENSE
 Requires:       nodejs
@@ -90,6 +90,7 @@ Summary:        Default version of nodejs
 Group:          Development/Languages/NodeJS
 Requires:       nodejs%{default_node_ver}
 Requires:       nodejs-common
+Provides:       nodejs = %default_node_ver
 
 %description -n nodejs-default
 Depends on the most current and recommended version of nodejs for
@@ -100,6 +101,7 @@ Summary:        Default version of npm
 Group:          Development/Languages/NodeJS
 Requires:       nodejs-default
 Requires:       npm%{default_node_ver}
+Provides:       npm = %default_node_ver
 
 %description -n npm-default
 Depends on the npm version associated with the current default
@@ -110,6 +112,7 @@ Summary:        Headers for default version of nodejs
 Group:          Development/Languages/NodeJS
 Requires:       nodejs%{default_node_ver}-devel
 Requires:       npm-default
+Provides:       nodejs-devel = %default_node_ver
 
 %description -n nodejs-devel-default
 Depends on the most current and up-to-date version of nodejs for
