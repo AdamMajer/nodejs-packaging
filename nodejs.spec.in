@@ -28,6 +28,10 @@ Name:           nodejs{{node_version_major}}
 Version:        {{node_version}}
 Release:        0
 
+# Double DWZ memory limits
+%define _dwz_low_mem_die_limit  20000000
+%define _dwz_max_die_limit     100000000
+
 %define node_version_number {{node_version_major}}
 
 %if %node_version_number >= 12
