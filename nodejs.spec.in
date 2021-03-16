@@ -162,6 +162,7 @@ Patch41:        icu68.patch            # PATCH_FOR: 10
 Patch42:        CVE-2020-8287.patch    # PATCH_FOR: 8
 Patch43:        CVE-2021-22884.patch   # PATCH_FOR: 8
 Patch44:        CVE-2021-22883.patch   # PATCH_FOR: 8
+Patch45:        limit_worker_stdio_memsize.patch # PATCH_FOR: 10
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, master
@@ -264,6 +265,9 @@ BuildRequires:  group(nobody)
 
 %if %node_version_number >= 8
 BuildRequires:  pkgconfig(openssl) >= %{openssl_req_ver}
+%if 0%{suse_version} > 1330
+BuildRequires:  libopenssl1_1-hmac
+%endif
 
 %if 0%{suse_version} >= 1330
 BuildRequires:  openssl >= %{openssl_req_ver}
@@ -453,6 +457,7 @@ tar Jxf %{SOURCE11}
 %patch42 -p1
 %patch43 -p1
 %patch44 -p1
+%patch45 -p1
 %patch100 -p1
 %patch101 -p1
 %patch102 -p1
