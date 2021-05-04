@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue May  4 19:42:21 UTC 2021 - Dirk Müller <dmueller@suse.com>
+
+- fix exclusivearch for nodejs 10
+
+-------------------------------------------------------------------
 Thu Apr 15 12:35:21 UTC 2021 - Guillaume GARDET <guillaume.gardet@opensuse.org>
 
 - Use older nodejs (10) for %{arm}
