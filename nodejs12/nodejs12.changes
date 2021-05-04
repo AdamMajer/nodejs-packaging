@@ -1,4 +1,23 @@
 -------------------------------------------------------------------
+Wed Apr  7 12:42:13 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- New upstream LTS version 12.22.1:
+  * CVE-2021-3450: OpenSSL - CA certificate check bypass with
+    X509_V_FLAG_X509_STRICT (High). (bsc#1183851)
+  * CVE-2021-3449: OpenSSL - NULL pointer deref in
+    signature_algorithms processing (High) (bsc#1183852)
+  * CVE-2020-7774: npm - Update y18n to fix Prototype-Pollution
+    (bsc#1184450)
+
+- Changes in LTS version 12.22.0:
+  * node-api: define version 8
+  * http: runtime deprecate legacy HTTP parser
+  * v8: implement v8.stopCoverage() and v8.takeCoverage()
+  * worker: add eventLoopUtilization()
+
+- versioned.patch: refreshed
+
+-------------------------------------------------------------------
 Tue Feb 23 14:48:43 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - New upstream LTS version 12.21.0:
