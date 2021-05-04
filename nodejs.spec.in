@@ -134,6 +134,7 @@ Patch5:         sle12_python3_compat.patch # PATCH_FOR: master, 13, 14, 15, 16
 Patch6:         icu_61_namespacefix.patch    # PATCH_FOR: 4, 6
 Patch7:         manual_configure.patch # PATCH_FOR: master, 14, 13, 12, 10, 8, 15, 16
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
+Patch9:         icu69.patch            # PATCH_FOR: 15
 Patch10:        test-ca-bumps.patch    # PATCH_FOR: 4
 Patch11:        valgrind_fixes.patch   # PATCH_FOR: 10
 Patch12:        openssl_1_1_1.patch    # PATCH_FOR: 8
@@ -430,6 +431,7 @@ tar Jxf %{SOURCE11}
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 %patch10 -p1
 %if 0%{with valgrind_tests}
 %patch11 -p1
