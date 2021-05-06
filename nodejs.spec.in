@@ -97,6 +97,8 @@ Release:        0
 %bcond_without gdb
 %endif
 
+%if %node_version_number < 16
+
 # No binutils_gold on SLE 12 GA (aarch64).
 %ifarch aarch64
 %if 0%{?sle_version} >= 120100 || 0%{?is_opensuse}
@@ -121,6 +123,11 @@ Release:        0
 
 %ifnarch aarch64 s390x s390
 %bcond_without binutils_gold
+%endif
+
+%else
+# don't use binutils_gold for nodejs >= 16
+%bcond_with    binutils_gold
 %endif
 
 %define git_node {{git_node}}
