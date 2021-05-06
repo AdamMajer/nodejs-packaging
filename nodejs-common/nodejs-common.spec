@@ -88,6 +88,7 @@ Group:          Development/Languages/NodeJS
 Requires:       nodejs%{default_node_ver}
 Requires:       nodejs-common
 Provides:       nodejs = %default_node_ver
+Provides:       nodejs(engine) = %default_node_ver
 
 %description -n nodejs-default
 Depends on the most current and recommended version of nodejs for
