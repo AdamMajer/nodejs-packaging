@@ -47,7 +47,14 @@ Release:        0
 %bcond_with    valgrind_tests
 
 %if %{node_version_number} >= 12
+
+# turn on LTO only on non-32bit arches
+%ifarch %{ix86} %{arm}
+%bcond_with nodejs_lto
+%else
 %bcond_without nodejs_lto
+%endif
+
 %else
 %bcond_with nodejs_lto
 %endif
@@ -184,7 +191,7 @@ Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 4, 6, 8, 
 Patch104:       npm_search_paths.patch
 Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 6, 8, 10
 Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, master, 16
-Patch107:       old_icu.patch             # PATCH_FOR: 14, 15, master, 16
+Patch107:       old_icu.patch             # PATCH_FOR: 14, 15
 Patch109:       python3.patch             # PATCH_FOR: 12
 
 
@@ -341,9 +348,9 @@ Requires:       nodejs-common
 Requires:       openssl1
 %endif
 
-# Building Node.js only makes sense on V8 architectures.
+%if %node_version_number < 16
 ExclusiveArch:  {{exclusive_arch}}
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+%endif
 
 Provides:       bundled(uvwasi) = {{bundled_uvwasi_version}}
 Provides:       bundled(libuv) = {{bundled_uv_version}}
@@ -513,16 +520,30 @@ find deps/cares -name *.[ch] -delete
 
 find deps/zlib -name *.[ch] -delete
 
-# percent-configure pulls in something that confuses node's configure
-# script, so we'll do it thus:
+cat > spec.build.config <<EOF
 export CFLAGS="%{optflags} -fno-strict-aliasing"
 export CXXFLAGS="%{optflags} -Wno-class-memaccess -Wno-error=return-type -fno-strict-aliasing"
 export LDFLAGS="%{?build_ldflags}"
+
+%if !0%{?with nodejs_lto}
+export LDFLAGS="\${LDFLAGS} -fno-lto"
+%endif
+
+%ifarch %{ix86} %{arm}
+# Reduce memory consumption on 32bit arches
+export CFLAGS="\${CFLAGS} -g1"
+export CXXFLAGS="\${CXXFLAGS} -g1"
+export LDFLAGS="\${LDFLAGS} -Wl,--reduce-memory-overhead"
+%endif
 
 %if 0%{?cc_exec:1}
 export CC=%{?cc_exec}
 export CXX=%{?cpp_exec}
 %endif
+
+EOF
+
+. ./spec.build.config
 
 # Node.js 4.x does not include the ICU database in the source tarball.
 %define has_small_icu %(test -d "deps/icu-small" && echo 1 || echo 0)
@@ -563,15 +584,7 @@ find doc/api -type f -exec chmod 0644 {} +
 
 %install
 . %{SOURCE20}
-
-export CFLAGS="%{optflags} -fno-strict-aliasing"
-export CXXFLAGS="%{optflags} -Wno-class-memaccess -Wno-error=return-type -fno-strict-aliasing"
-export LDFLAGS="%{?build_ldflags}"
-
-%if 0%{?cc_exec:1}
-export CC=%{?cc_exec}
-export CXX=%{?cpp_exec}
-%endif
+. ./spec.build.config
 
 decoupled_cmd %make_install %{?_smp_mflags}
 rm %{buildroot}%{_datadir}/doc/node/gdbinit
@@ -649,20 +662,15 @@ mkdir -p %{buildroot}%{_defaultlicensedir}
 %endif
 
 %check
-export CFLAGS="%{optflags} -fno-strict-aliasing"
-export CXXFLAGS="%{optflags} -Wno-class-memaccess -Wno-error=return-type -fno-strict-aliasing"
-export LDFLAGS="%{?build_ldflags}"
+. ./spec.build.config
 
 # Relax the crypto policies for the test-suite
 export OPENSSL_SYSTEM_CIPHERS_OVERRIDE=xyz_nonexistent_file
 export OPENSSL_CONF=''
 
-%if 0%{?cc_exec:1}
-export CC=%{?cc_exec}
-export CXX=%{?cpp_exec}
-%endif
-
+export CI_JS_SUITES=default
 export NODE_TEST_NO_INTERNET=1
+
 %if %{node_version_number} >= 12
 find test \( -name \*.out -or -name \*.js \) -exec sed -i 's,Use `node ,Use `node%{node_version_number} ,' {} \;
 %endif

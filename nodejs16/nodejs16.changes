@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May  5 11:21:13 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- New upstream version 16.1.0
+  fs: allow no-params fsPromises fileHandle read
+
+-------------------------------------------------------------------
 Tue May  4 12:00:35 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - New upstrean version 16.0.0:
