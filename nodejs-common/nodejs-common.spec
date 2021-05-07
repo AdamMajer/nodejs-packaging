@@ -31,7 +31,8 @@
 # SLE-12 variants
 %if 0%{?suse_version} < 1500
 %define default_node_ver %NODEJS_LTS
-%endif
+
+%else
 
 # TW
 %if 0%{?suse_version} > 1500
