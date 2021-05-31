@@ -284,11 +284,11 @@ BuildRequires:  group(nobody)
 
 %if %node_version_number >= 8
 BuildRequires:  pkgconfig(openssl) >= %{openssl_req_ver}
-%if 0%{suse_version} > 1330
+%if 0%{?suse_version} > 1330
 BuildRequires:  libopenssl1_1-hmac
 %endif
 
-%if 0%{suse_version} >= 1330
+%if 0%{?suse_version} >= 1330
 BuildRequires:  openssl >= %{openssl_req_ver}
 %else
 BuildRequires:  openssl-1_1 >= %{openssl_req_ver}
@@ -609,7 +609,7 @@ install -D -m 644 deps/npm/man/man1/npx.1 %{buildroot}%{_mandir}/man1/npx%{node_
 
 #node-gyp needs common.gypi too
 install -D -m 644 common.gypi \
-	%{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules/node-gyp/common.gypi
+        %{buildroot}%{_libdir}/node_modules/npm%{node_version_number}/node_modules/node-gyp/common.gypi
 #       %%{buildroot}%%{_datadir}/node/common.gypi
 # install addon-rpm.gypi
 install -D -m 644 addon-rpm.gypi \
