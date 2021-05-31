@@ -32,7 +32,7 @@ if [ "x$NODE_VERSION" = "x" ]; then
     exit -1
 fi
 
-## KNOWN_BUNDLED="acorn acorn-plugins brotli cares histogram icu-small llhttp nghttp2"
+## KNOWN_BUNDLED="acorn acorn-plugins brotli cares histogram icu-small llhttp nghttp2 ngtcp2"
 
 # arg $1 - bundle
 # returns:   $CURRENT_VERSION = version of currently saved bundle or "" if nothing
@@ -97,11 +97,13 @@ function load_icu-small_version
     extract_version_from_string_define source/common/unicode/uvernum.h '#define U_ICU_VERSION '
 }
 
+# merged into ngtcp2   
 function load_nghttp2_version
 {
     extract_version_from_string_define lib/includes/nghttp2/nghttp2ver.h 'NGHTTP2_VERSION '
 }
 
+# merged into ngtcp2 packages...
 function load_nghttp3_version
 {
     extract_version_from_string_define lib/includes/nghttp3/version.h 'NGHTTP3_VERSION '
@@ -109,7 +111,11 @@ function load_nghttp3_version
 
 function load_ngtcp2_version
 {
+    if [ -f ngtcp2/lib/includes/ngtcp2/version.h ]; then
+    extract_version_from_string_define ngtcp2/lib/includes/ngtcp2/version.h 'NGTCP2_VERSION '
+    else
     extract_version_from_string_define lib/includes/ngtcp2/version.h 'NGTCP2_VERSION '
+    fi
 }
 
 function load_openssl_version
