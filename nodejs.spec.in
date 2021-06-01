@@ -528,8 +528,12 @@ find deps/cares -name *.[ch] -delete
 find deps/zlib -name *.[ch] -delete
 
 cat > spec.build.config <<EOF
-export CFLAGS="%{optflags} -fno-strict-aliasing"
-export CXXFLAGS="%{optflags} -Wno-class-memaccess -Wno-error=return-type -fno-strict-aliasing"
+export CFLAGS="%{?build_cflags:%build_cflags}%{?!build_cflags:%optflags} -fno-strict-aliasing"
+# -Wno-class-memaccess is not available in gcc < 8 (= system compiler on Leap until at least 15.3 is gcc7)
+export CXXFLAGS="%{?build_cxxflags:%build_cxxflags}%{?!build_cxxflags:%optflags} -Wno-error=return-type -fno-strict-aliasing"
+%if 0%{?sle_version} > 150300
+export CXXFLAGS="${CXXFLAGS} -Wno-class-memaccess"
+%endif
 export LDFLAGS="%{?build_ldflags}"
 
 %if !0%{?with nodejs_lto}
