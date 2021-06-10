@@ -1,4 +1,20 @@
 -------------------------------------------------------------------
+Fri Jun  4 22:12:29 UTC 2021 - Dirk Müller <dmueller@suse.com>
+
+- update to 14.17.0:
+  * Experimental support for AbortController and AbortSignal
+  * Diagnostics channel (experimental module)
+  * UUID support in the crypto module
+  * update ICU to 68.1 
+  * upgrade to libuv 1.41.0
+- add Fix-build-with-icu-69.patch: fix build with icu 69
+
+-------------------------------------------------------------------
+Mon May 31 16:27:44 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- Use libalternatives instead of update-alternatives
+
+-------------------------------------------------------------------
 Wed Apr  7 12:35:34 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - New upstream LTS version 14.16.1:

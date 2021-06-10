@@ -1,4 +1,4 @@
-s/{{node_version}}/16.2.0/g
+s/{{node_version}}/16.3.0/g
 s/{{node_version_major}}/16/g
 s/{{exclusive_arch}}/%{arm} %{ix86} x86_64 aarch64 ppc64 ppc64le s390x/g
 
@@ -34,11 +34,11 @@ Source11:       node_modules.tar.xz,
 s/{{bundled_brotli_version}}/1.0.9/g
 s/{{bundled_cares_version}}/1.17.1/g
 s/{{bundled_icu-small_version}}/69.1/g
-s/{{bundled_llhttp_version}}/6.0.1/g
+s/{{bundled_llhttp_version}}/6.0.2/g
 s/{{bundled_nghttp2_version}}/1.42.0/g
 s/{{bundled_ngtcp2_version}}/0.1.0-DEV/g
 s/{{bundled_openssl_version}}/1.1.1k/g
 s/{{bundled_uv_version}}/1.41.0/g
 s/{{bundled_uvwasi_version}}/0.0.11/g
 s/{{bundled_v8_version}}/9.0.257.25/g
-s/{{bundled_npm_version}}/7.13.0/g
+s/{{bundled_npm_version}}/7.15.1/g
