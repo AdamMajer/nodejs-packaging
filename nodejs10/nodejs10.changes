@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon May 31 16:27:44 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- Use libalternatives instead of update-alternatives
+
+-------------------------------------------------------------------
 Wed Apr  7 14:25:13 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - New upstream LTS version 10.24.1:

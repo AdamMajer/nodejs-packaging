@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Jun 10 14:16:57 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- Fix-build-with-icu-69.patch: fix building with ICU 69
+
+-------------------------------------------------------------------
+Mon May 31 16:27:44 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- Use libalternatives instead of update-alternatives
+
+-------------------------------------------------------------------
 Wed Apr  7 12:42:13 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - New upstream LTS version 12.22.1:

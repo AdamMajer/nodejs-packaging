@@ -34,6 +34,12 @@ Release:        0
 
 %define node_version_number {{node_version_major}}
 
+%if 0%{?suse_version} > 1500
+%bcond_without libalternatives
+%else
+%bcond_with libalternatives
+%endif
+
 %if %node_version_number >= 12
 %define openssl_req_ver 1.1.1
 %else
@@ -199,6 +205,7 @@ Patch104:       npm_search_paths.patch
 Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 6, 8, 10
 Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, master, 16
 Patch107:       old_icu.patch             # PATCH_FOR: 14, 15
+Patch108:       Fix-build-with-icu-69.patch # PATCH_FOR: 12, 14
 Patch109:       python3.patch             # PATCH_FOR: 12
 
 
@@ -329,8 +336,14 @@ Provides:       bundled(nghttp2) = {{bundled_nghttp2_version}}
 BuildRequires:  valgrind
 %endif
 
-Requires(post): update-alternatives
+%if %{with libalternatives}
+Requires:       alts
+%else
 Requires(postun): update-alternatives
+%endif
+# either for update-alternatives, or their removal
+Requires(post): update-alternatives
+
 Recommends:     npm{{node_version_major}}
 
 #we need ABI virtual provides where SONAMEs aren't enough/not present so deps
@@ -489,6 +502,7 @@ tar Jxf %{SOURCE11}
 %patch105 -p1
 %patch106 -p1
 %patch107 -p1
+%patch108 -p1
 %patch109 -p1
 %patch120 -p1
 %patch200 -p1
@@ -651,6 +665,7 @@ find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number} -name "browse
 %fdupes %{buildroot}%{_includedir}/node%{node_version_number}
 
 # Update alternatives
+%if ! %{with libalternatives}
 mkdir -p %{buildroot}%{_sysconfdir}/alternatives
 ln -s -f node-default     %{buildroot}%{_sysconfdir}/alternatives/node-default
 ln -s -f node.1%{ext_man} %{buildroot}%{_sysconfdir}/alternatives/node.1%{ext_man}
@@ -666,6 +681,24 @@ ln -s -f npx.1%{ext_man}  %{buildroot}%{_sysconfdir}/alternatives/npx.1%{ext_man
 ln -s %{_sysconfdir}/alternatives/npx-default          %{buildroot}%{_bindir}/npx-default
 ln -s %{_sysconfdir}/alternatives/npx.1%{ext_man}      %{buildroot}%{_mandir}/man1/npx.1%{ext_man}
 %endif
+%endif
+
+# libalternatives - can always ship
+mkdir -p %{buildroot}%{_datadir}/libalternatives/{node,npm,npx};
+cat > %{buildroot}%{_datadir}/libalternatives/node/%{node_version_number}.conf <<EOF
+binary=%{_bindir}/node%{node_version_number}
+man=node%{node_version_number}.1
+EOF
+cat > %{buildroot}%{_datadir}/libalternatives/npm/%{node_version_number}.conf <<EOF
+binary=%{_bindir}/npm%{node_version_number}
+man=npm%{node_version_number}.1
+group=npm,npx
+EOF
+cat > %{buildroot}%{_datadir}/libalternatives/npx/%{node_version_number}.conf <<EOF
+binary=%{_bindir}/npx%{node_version_number}
+man=npx%{node_version_number}.1
+group=npm,npx
+EOF
 
 # We need to own license directory on old versions of SLE
 %if 0%{?suse_version} < 1500
@@ -709,12 +742,17 @@ make test-ci
 %doc AUTHORS *.md
 %doc deps/v8/tools/gdbinit
 %dir %{_libdir}/node_modules
+%dir %{_datadir}/libalternatives
+%dir %{_datadir}/libalternatives/node
+%{_datadir}/libalternatives/node/%{node_version_number}.conf
 %{_bindir}/node%{node_version_number}
 %{_mandir}/man1/node%{node_version_number}.1%{ext_man}
+%if ! 0%{with libalternatives}
 %ghost %{_bindir}/node-default
 %ghost %{_mandir}/man1/node.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/node-default
 %ghost %{_sysconfdir}/alternatives/node.1%{ext_man}
+%endif
 %exclude %{_libdir}/node_modules/npm%{node_version_number}
 # We need to own directory on old versions of SLE
 %if 0%{?suse_version} < 1500
@@ -723,21 +761,30 @@ make test-ci
 
 %files -n npm%{node_version_number}
 %defattr(-, root, root)
+%dir %{_datadir}/libalternatives
+%dir %{_datadir}/libalternatives/npm
+%dir %{_datadir}/libalternatives/npx
+%{_datadir}/libalternatives/npm/%{node_version_number}.conf
+%{_datadir}/libalternatives/npx/%{node_version_number}.conf
 %{_bindir}/npm%{node_version_number}
 %{_libdir}/node_modules/npm%{node_version_number}
 %{_mandir}/man1/npm%{node_version_number}.1%{ext_man}
+%if ! 0%{with libalternatives}
 %ghost %{_bindir}/npm-default
 %ghost %{_mandir}/man1/npm.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/npm-default
 %ghost %{_sysconfdir}/alternatives/npm.1%{ext_man}
+%endif
 
 %if %{node_version_number} >= 8
 %{_bindir}/npx%{node_version_number}
 %{_mandir}/man1/npx%{node_version_number}.1%{ext_man}
+%if ! %{with libalternatives}
 %ghost %{_bindir}/npx-default
 %ghost %{_mandir}/man1/npx.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/npx-default
 %ghost %{_sysconfdir}/alternatives/npx.1%{ext_man}
+%endif
 %endif
 
 %files devel
@@ -751,6 +798,16 @@ make test-ci
 %defattr(-,root,root)
 %doc doc/api
 
+%if %{with libalternatives}
+
+%post
+update-alternatives --remove node-default %{_bindir}/node%{node_version_number}
+
+%post -n npm%{node_version_number}
+update-alternatives --remove npm-default %{_bindir}/npm%{node_version_number}
+update-alternatives --remove npx-default %{_bindir}/npx%{node_version_number}
+
+%else
 %pre
 # remove files that are no longer owned but provided by update-alternatives
 if ! [ -L %{_mandir}/man1/node.1%{ext_man} ]; then
@@ -791,6 +848,7 @@ fi
 if [ ! -f %{_bindir}/npx%{node_version_number} ] ; then
     update-alternatives --remove npx-default %{_bindir}/npx%{node_version_number}
 fi
+%endif
 %endif
 
 %changelog

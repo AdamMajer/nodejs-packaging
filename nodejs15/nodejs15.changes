@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon May 31 16:27:44 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- Use libalternatives instead of update-alternatives
+
+-------------------------------------------------------------------
 Tue May  4 12:43:50 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - icu69.patch: fixes build issues with ICU69 (bsc#1185400)

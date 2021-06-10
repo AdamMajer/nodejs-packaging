@@ -28,6 +28,13 @@
 %define NODEJS_LTS      16
 %define NODEJS_CURRENT  16
 
+%if 0%{?suse_version} > 1500
+%bcond_without libalternatives
+%else
+%bcond_with libalternatives
+%endif
+
+
 # SLE-12 variants
 %if 0%{?suse_version} < 1500
 %define default_node_ver %NODEJS_LTS
@@ -78,6 +85,11 @@ Conflicts:      nodejs6 < 6.11.1
 Conflicts:      nodejs7 < 7.10.1
 Conflicts:      nodejs8 < 8.1.4
 BuildRequires:  gcc
+%if %{with libalternatives}
+BuildRequires:  libalternatives-devel
+%define libalternatives_cflags -DHAVE_LIBALTERNATIVES_H
+%define libalternatives_lflags -lalternatives
+%endif
 
 %description
 Common NodeJS files that allow recursive invocation of Node executable
@@ -120,7 +132,7 @@ the current architecture and codestream.
 %prep
 %build
 cp %{S:2} .
-gcc ${RPM_OPT_FLAGS} -o node %{S:1}
+gcc ${RPM_OPT_FLAGS} %?libalternatives_cflags -o node %{S:1} %?libalternatives_lflags
 
 echo "Default Node version: " %{default_node_ver}
 
