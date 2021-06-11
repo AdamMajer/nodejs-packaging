@@ -70,7 +70,10 @@ int main(int argc, char *argv[])
 	// if we want default version and not using update-alternatives
 	if (version == default_version)
 	{
-		return libalts_exec_default(argv);
+		// should not return, and if it does, it probably means
+		// we should fall back to using node-default fallback.
+		libalts_exec_default(argv);
+		fputs("Falling back to using -default symlink.\n", stderr);
 	}
 #endif
 
