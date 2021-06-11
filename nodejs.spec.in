@@ -359,7 +359,11 @@ Provides:       nodejs(engine) = %{version}
 # npm software, `env node` requires further help than only
 # update-alternatives can provide.
 Provides:       nodejs = %{version}
+%if %{with libalternatives}
+Requires:       nodejs-common >= 5.0
+%else
 Requires:       nodejs-common
+%endif
 
 # For SLE11, to be able to use the certificate store we need to have properly
 # symlinked certificates. The compatability symlinks are provided by the
@@ -402,7 +406,11 @@ of binary modules.
 %package -n npm{{node_version_major}}
 Summary:        Package manager for Node.js
 Group:          Development/Languages/NodeJS
+%if %{with libalternatives}
+Requires:       nodejs-common >= 5.0
+%else
 Requires:       nodejs-common
+%endif
 Requires:       nodejs{{node_version_major}} = %{version}
 Provides:       nodejs-npm = %{version}
 Obsoletes:      nodejs-npm < 4.0.0
@@ -502,7 +510,9 @@ tar Jxf %{SOURCE11}
 %patch105 -p1
 %patch106 -p1
 %patch107 -p1
+%if 0%{?suse_version} >= 1550
 %patch108 -p1
+%endif
 %patch109 -p1
 %patch120 -p1
 %patch200 -p1

@@ -71,7 +71,7 @@
 %endif
 
 Name:           nodejs-common
-Version:        4.1
+Version:        5.0
 Release:        0
 Summary:        Common files for the NodeJS ecosystem
 License:        MIT
