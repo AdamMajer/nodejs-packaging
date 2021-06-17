@@ -205,7 +205,7 @@ Patch104:       npm_search_paths.patch
 Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 6, 8, 10
 Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, master, 16
 Patch107:       old_icu.patch             # PATCH_FOR: 14, 15
-Patch108:       Fix-build-with-icu-69.patch # PATCH_FOR: 12, 14
+Patch108:       Fix-build-with-icu-69.patch # PATCH_FOR: 12
 Patch109:       python3.patch             # PATCH_FOR: 12
 
 
