@@ -576,12 +576,10 @@ export LDFLAGS="%{?build_ldflags}"
 export LDFLAGS="\${LDFLAGS} -fno-lto"
 %endif
 
-%ifarch %{ix86} %{arm}
-# Reduce memory consumption on 32bit arches
+# reduce disk space pressure
 export CFLAGS="\${CFLAGS} -g1"
 export CXXFLAGS="\${CXXFLAGS} -g1"
 export LDFLAGS="\${LDFLAGS} -Wl,--reduce-memory-overhead"
-%endif
 
 %if 0%{?cc_exec:1}
 export CC=%{?cc_exec}
