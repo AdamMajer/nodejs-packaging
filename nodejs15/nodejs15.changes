@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jun 21 05:01:32 UTC 2021 - Andreas Schneider <asn@cryptomilk.org>
+
+- Allow building for Fedora in the OBS
+
+-------------------------------------------------------------------
 Mon May 31 16:27:44 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - Use libalternatives instead of update-alternatives

@@ -24,6 +24,12 @@
 #
 ###########################################################
 
+# Fedora doesn't have rpm-config-SUSE which provides
+# ext_man in /usr/lib/rpm/macros.d/macros.obs
+%if 0%{?fedora_version}
+%define ext_man .gz
+%endif
+
 Name:           nodejs{{node_version_major}}
 Version:        {{node_version}}
 Release:        0
@@ -34,7 +40,7 @@ Release:        0
 
 %define node_version_number {{node_version_major}}
 
-%if 0%{?suse_version} > 1500
+%if 0%{?suse_version} > 1500 || 0%{?fedora_version}
 %bcond_without libalternatives
 %else
 %bcond_with libalternatives
@@ -219,7 +225,9 @@ BuildRequires:  binutils-gold
 %endif
 
 BuildRequires:  pkg-config
+%if 0%{?suse_version}
 BuildRequires:  config(netcfg)
+%endif
 
 # SLE-11 target only
 # Node.js 6 requires GCC 4.8.5+.
@@ -273,7 +281,11 @@ BuildRequires:  zlib-devel
 # Python dependencies
 %if %node_version_number >= 12
 BuildRequires:  python3
+
+%if 0%{?suse_version}
 BuildRequires:  netcfg
+%endif
+
 %else
 %if 0%{?suse_version} >= 1500
 BuildRequires:  python2
@@ -339,10 +351,10 @@ BuildRequires:  valgrind
 %if %{with libalternatives}
 Requires:       alts
 %else
-Requires(postun): update-alternatives
+Requires(postun): %{_sbindir}/update-alternatives
 %endif
 # either for update-alternatives, or their removal
-Requires(post): update-alternatives
+Requires(post): %{_sbindir}/update-alternatives
 
 Recommends:     npm{{node_version_major}}
 

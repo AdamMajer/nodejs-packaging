@@ -14,12 +14,12 @@ s/{{min_icu_version}}/68/g
 #
 #
 # libcares2 version
-s/{{intree_libcares2}}/0%{suse_version} >= 1330/g
+s/{{intree_libcares2}}/0%{?suse_version} >= 1330/g
 s/{{min_libcares2_version}}/1.17.0/g
 #
 #
 # nghttp2 version
-s/{{intree_nghttp2}}/0%{suse_version} >= 1550/g
+s/{{intree_nghttp2}}/0%{?suse_version} >= 1550/g
 s/{{min_nghttp2_version}}/1.41.0/g
 
 s/{{git_branch}}/v16.x-staging/
