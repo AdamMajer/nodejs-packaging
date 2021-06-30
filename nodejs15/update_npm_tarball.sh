@@ -1,1 +1,1 @@
-../staging-15/update_npm_tarball.sh
+../nodejs12/update_npm_tarball.sh

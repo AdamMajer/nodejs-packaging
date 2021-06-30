@@ -1,0 +1,1 @@
+../npm_bundle_to_provides.js
