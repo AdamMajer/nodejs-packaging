@@ -283,27 +283,15 @@ BuildRequires:  group(nobody)
 
 %if ! 0%{with intree_openssl}
 
-%if %node_version_number >= 8
 BuildRequires:  pkgconfig(openssl) >= %{openssl_req_ver}
-%if 0%{?suse_version} > 1330
-BuildRequires:  libopenssl1_1-hmac
-%endif
 
-%if 0%{?suse_version} >= 1330
+%if 0%{?suse_version} >= 1500 
 BuildRequires:  openssl >= %{openssl_req_ver}
+BuildRequires:  libopenssl1_1-hmac
 %else
 BuildRequires:  openssl-1_1 >= %{openssl_req_ver}
 %endif
 
-%else
-
-%if 0%{?suse_version} >= 1330
-BuildRequires:  libopenssl-1_0_0-devel
-%else
-BuildRequires:  openssl-devel >= %{openssl_req_ver}
-%endif
-
-%endif
 %else
 Provides:       bundled(openssl) = {{bundled_openssl_version}}
 %endif
@@ -441,12 +429,6 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 %setup -q -n node-v%{version}
 %else
 %setup -q -n node-%{version}
-%endif
-
-%if %{node_version_number} == 6
-# Update NPM
-rm -r deps/npm
-tar Jxf %{SOURCE10}
 %endif
 
 %if %{node_version_number} >= 10
@@ -610,9 +592,7 @@ find %{buildroot} -name \*.bak -print -delete
 
 # npm/npx man page
 install -D -m 644 deps/npm/man/man1/npm.1 %{buildroot}%{_mandir}/man1/npm%{node_version_number}.1
-%if %{node_version_number} >= 8
 install -D -m 644 deps/npm/man/man1/npx.1 %{buildroot}%{_mandir}/man1/npx%{node_version_number}.1
-%endif
 
 #node-gyp needs common.gypi too
 install -D -m 644 common.gypi \
@@ -664,12 +644,10 @@ ln -s %{_sysconfdir}/alternatives/node-default         %{buildroot}%{_bindir}/no
 ln -s %{_sysconfdir}/alternatives/node.1%{ext_man}     %{buildroot}%{_mandir}/man1/node.1%{ext_man}
 ln -s %{_sysconfdir}/alternatives/npm-default          %{buildroot}%{_bindir}/npm-default
 ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/man1/npm.1%{ext_man}
-%if %{node_version_number} >= 8
 ln -s -f npx-default      %{buildroot}%{_sysconfdir}/alternatives/npx-default
 ln -s -f npx.1%{ext_man}  %{buildroot}%{_sysconfdir}/alternatives/npx.1%{ext_man}
 ln -s %{_sysconfdir}/alternatives/npx-default          %{buildroot}%{_bindir}/npx-default
 ln -s %{_sysconfdir}/alternatives/npx.1%{ext_man}      %{buildroot}%{_mandir}/man1/npx.1%{ext_man}
-%endif
 %endif
 
 # libalternatives - can always ship
@@ -765,7 +743,6 @@ make test-ci
 %ghost %{_sysconfdir}/alternatives/npm.1%{ext_man}
 %endif
 
-%if %{node_version_number} >= 8
 %{_bindir}/npx%{node_version_number}
 %{_mandir}/man1/npx%{node_version_number}.1%{ext_man}
 %if ! %{with libalternatives}
@@ -773,7 +750,6 @@ make test-ci
 %ghost %{_mandir}/man1/npx.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/npx-default
 %ghost %{_sysconfdir}/alternatives/npx.1%{ext_man}
-%endif
 %endif
 
 %files devel
@@ -823,21 +799,16 @@ fi
 update-alternatives \
         --install %{_bindir}/npm-default npm-default %{_bindir}/npm%{node_version_number} %{node_version_number} \
         --slave %{_mandir}/man1/npm.1%{ext_man} npm.1%{ext_man} %{_mandir}/man1/npm%{node_version_number}.1%{ext_man}
-%if %{node_version_number} >= 8
 update-alternatives \
         --install %{_bindir}/npx-default npx-default %{_bindir}/npx%{node_version_number} %{node_version_number} \
         --slave %{_mandir}/man1/npx.1%{ext_man} npx.1%{ext_man} %{_mandir}/man1/npx%{node_version_number}.1%{ext_man}
-%endif
 
 %postun -n npm%{node_version_number}
 if [ ! -f %{_bindir}/npm%{node_version_number} ] ; then
     update-alternatives --remove npm-default %{_bindir}/npm%{node_version_number}
 fi
-%if %{node_version_number} >= 8
 if [ ! -f %{_bindir}/npx%{node_version_number} ] ; then
     update-alternatives --remove npx-default %{_bindir}/npx%{node_version_number}
 fi
-%endif
-%endif
 
 %changelog
