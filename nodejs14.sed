@@ -1,11 +1,10 @@
 s/{{node_version}}/14.17.1/g
 s/{{node_version_major}}/14/g
-s/{{exclusive_arch}}/x86_64 aarch64 ppc64 ppc64le s390x/g
 
 #
 #
 # openssl version - need OpenSSL 1.1.1+
-s/{{intree_openssl}}/0%{?suse_version} >= 1550 || 0%{?sle_version} >= 120400/
+s/{{intree_openssl}}/0%{?suse_version} >= 1500 || 0%{?sle_version} >= 120400/
 #
 #
 # icu versions
