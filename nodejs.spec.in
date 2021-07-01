@@ -109,39 +109,6 @@ Release:        0
 %bcond_without gdb
 %endif
 
-%if %node_version_number < 16
-
-# No binutils_gold on SLE 12 GA (aarch64).
-%ifarch aarch64
-%if 0%{?sle_version} >= 120100 || 0%{?is_opensuse}
-%bcond_without binutils_gold
-%else
-%bcond_with    binutils_gold
-%endif
-%endif
-
-# No binutils_gold on all versions of SLE 12 and Leap 42 (s390x).
-%ifarch s390x
-%if 0%{?suse_version} > 1320
-%bcond_without binutils_gold
-%else
-%bcond_with    binutils_gold
-%endif
-%endif
-
-%ifarch s390
-%bcond_with    binutils_gold
-%endif
-
-%ifnarch aarch64 s390x s390
-%bcond_without binutils_gold
-%endif
-
-%else
-# don't use binutils_gold for nodejs >= 16
-%bcond_with    binutils_gold
-%endif
-
 %define git_node {{git_node}}
 
 Summary:        Evented I/O for V8 JavaScript
@@ -201,10 +168,6 @@ Patch120:       flaky_test_rerun.patch
 
 # Use versioned binaries and paths
 Patch200:       versioned.patch
-
-%if 0%{with binutils_gold}
-BuildRequires:  binutils-gold
-%endif
 
 BuildRequires:  pkg-config
 %if 0%{?suse_version}
