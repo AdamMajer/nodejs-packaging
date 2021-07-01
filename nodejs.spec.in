@@ -153,42 +153,24 @@ Group:          Development/Languages/NodeJS
 Source20:       bash_output_helper.bash
 
 ## Patches not distribution specific
-Patch1:         8334.diff              # PATCH_FOR: 4
 Patch3:         fix_ci_tests.patch
-Patch4:         fix_ci_ssl_tests.patch # PATCH_FOR: 4
 Patch5:         sle12_python3_compat.patch # PATCH_FOR: master, 13, 14, 15, 16
-Patch6:         icu_61_namespacefix.patch    # PATCH_FOR: 4, 6
 Patch7:         manual_configure.patch # PATCH_FOR: master, 14, 13, 12, 10, 8, 15, 16
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
-Patch9:         icu69.patch            # PATCH_FOR: 15
-Patch10:        test-ca-bumps.patch    # PATCH_FOR: 4
 Patch11:        valgrind_fixes.patch   # PATCH_FOR: 10
 Patch12:        openssl_1_1_1.patch    # PATCH_FOR: 8
 Patch13:        openssl_binary_detection.patch  # PATCH_FOR: 10, 12, 14, 15, master, 16
 
-Patch20:        CVE-2018-12115.patch   # PATCH_FOR: 4
-Patch21:        openssl_1_0_2p.patch   # PATCH_FOR: 4
-Patch22:        CVE-2018-12123.patch   # PATCH_FOR: 4
-Patch23:        CVE-2018-12120.patch   # PATCH_FOR: 4
-Patch24:        CVE-2018-12116.patch   # PATCH_FOR: 4
-Patch25:        CVE-2018-12121.patch   # PATCH_FOR: 4
-Patch26:        max_header_size.patch  # PATCH_FOR: 4
-Patch27:        CVE-2018-12122.patch   # PATCH_FOR: 4
-Patch28:        openssl_1_0_2q.patch   # PATCH_FOR: 4
-Patch29:        openssl_1_0_2r.patch   # PATCH_FOR: 4
-Patch30:        http-keep-alive.patch  # PATCH_FOR: 4
-
-Patch31:        CVE-2019-13173.patch   # PATCH_FOR: 4
 Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8
 
-Patch33:        CVE-2019-15606.patch   # PATCH_FOR: 6, 8
-Patch34:        CVE-2019-15604.patch   # PATCH_FOR: 6, 8
-Patch35:        CVE-2019-15605.patch   # PATCH_FOR: 6, 8
-Patch36:        CVE-2020-8174.patch    # PATCH_FOR: 6, 8
+Patch33:        CVE-2019-15606.patch   # PATCH_FOR: 8
+Patch34:        CVE-2019-15604.patch   # PATCH_FOR: 8
+Patch35:        CVE-2019-15605.patch   # PATCH_FOR: 8
+Patch36:        CVE-2020-8174.patch    # PATCH_FOR: 8
 Patch37:        nghttp2_1.41.0.patch   # PATCH_FOR: 8
 Patch38:        CVE-2020-11080.patch   # PATCH_FOR: 8
-Patch39:        minimist.patch         # PATCH_FOR: 6, 8
-Patch40:        CVE-2020-15095.patch   # PATCH_FOR: 6, 8
+Patch39:        minimist.patch         # PATCH_FOR: 8
+Patch40:        CVE-2020-15095.patch   # PATCH_FOR: 8
 Patch41:        icu68.patch            # PATCH_FOR: 10
 Patch42:        CVE-2020-8287.patch    # PATCH_FOR: 8
 Patch43:        CVE-2021-22884.patch   # PATCH_FOR: 8
@@ -204,11 +186,11 @@ Patch101:       nodejs-libpath.patch
 Patch102:       node-gyp-addon-gypi.patch
 # PATCH-FIX-SLE -- configure script uses Python check_output method
 # which isn't included in Python 2.6 (used in SLE 11).
-Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 4, 6, 8, 10, 12
+Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 8, 10, 12
 # PATCH-FIX-OPENSUSE -- install user global npm packages to /usr/local
 # instead of /usr
 Patch104:       npm_search_paths.patch
-Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 6, 8, 10
+Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 8, 10
 Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, master, 16
 Patch107:       old_icu.patch             # PATCH_FOR: 14, 15
 Patch108:       Fix-build-with-icu-69.patch # PATCH_FOR: 12
@@ -384,8 +366,10 @@ Requires:       nodejs-common
 Requires:       openssl1
 %endif
 
-%if %node_version_number < 16
-ExclusiveArch:  {{exclusive_arch}}
+%if %node_version_number >= 12
+%ifarch s390
+ExclusiveArch:  not_buildable
+%endif
 %endif
 
 Provides:       bundled(uvwasi) = {{bundled_uvwasi_version}}
@@ -473,34 +457,15 @@ tar Jxf %{SOURCE11}
 tar Jxf %{SOURCE5} --directory=tools/gyp --strip-components=1
 %endif
 
-%patch1 -p1
 %patch3 -p1
-%if ! 0%{with intree_openssl}
-%patch4 -p1
-%endif
 %patch5 -p1
-%patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
-%patch10 -p1
 %if 0%{with valgrind_tests}
 %patch11 -p1
 %endif
 %patch12 -p1
 %patch13 -p1
-%patch20 -p1
-%patch21 -p1
-%patch22 -p1
-%patch23 -p1
-%patch24 -p1
-%patch25 -p1
-%patch26 -p1
-%patch27 -p1
-%patch28 -p1
-%patch29 -p1
-%patch30 -p1
-%patch31 -p1
 %patch32 -p1
 %patch33 -p1
 %patch34 -p1
