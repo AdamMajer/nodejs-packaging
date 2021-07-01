@@ -256,7 +256,11 @@ BuildRequires:  openssl-1_1 >= %{openssl_req_ver}
 %endif
 
 %else
+%if %node_version_number <= 12 && 0%{?suse_version} == 1315 && 0%{?sle_version} < 120400
 Provides:       bundled(openssl) = {{bundled_openssl_version}}
+%else
+BuildRequires:  bundled_openssl_should_not_be_required
+%endif
 %endif
 
 %if ! 0%{with intree_cares}
@@ -469,6 +473,10 @@ find deps/openssl -name *.[ch] -delete
 
 %if ! 0%{with intree_icu}
 rm -rf deps/icu-small
+%endif
+
+%if ! 0%{with intree_openssl}
+rm -rf deps/openssl
 %endif
 
 %if ! 0%{with intree_cares}
