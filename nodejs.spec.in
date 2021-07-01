@@ -469,6 +469,10 @@ tar Jxf %{SOURCE10}
 tar Jxf %{SOURCE11}
 %endif
 
+%if %{node_version_number} >= 16 && 0%{?suse_version} > 0 && 0%{?suse_version} < 1500
+tar Jxf %{SOURCE5} --directory=tools/gyp --strip-components=1
+%endif
+
 %patch1 -p1
 %patch3 -p1
 %if ! 0%{with intree_openssl}

@@ -25,7 +25,12 @@ s/{{min_nghttp2_version}}/1.41.0/g
 s/{{git_branch}}/v16.x-staging/
 
 # Extra Sources
-s,{{SOURCES_EXTRA}},# Only required to run unit tests in NodeJS 10+ \
+s,{{SOURCES_EXTRA}},\
+# Python 3.4 compatible node-gyp \
+### https://github.com/nodejs/node-gyp.git \
+### git archive v7.1.2 gyp/ | xz > node-gyp_7.1.2.tar.xz \
+Source5:        node-gyp_7.1.2.tar.xz \
+# Only required to run unit tests in NodeJS 10+ \
 Source10:       update_npm_tarball.sh \
 Source11:       node_modules.tar.xz,
 
