@@ -774,4 +774,6 @@ if [ ! -f %{_bindir}/npx%{node_version_number} ] ; then
     update-alternatives --remove npx-default %{_bindir}/npx%{node_version_number}
 fi
 
+%endif
+
 %changelog
