@@ -8,7 +8,7 @@ s/{{node_version_major}}/12/g
 # Tumbleweed
 # SLE12 SP5+
 # SLE15 SP2+
-s/{{intree_openssl}}/0%{?suse_version} >= 1550 || (0%{?sle_version} >= 120500 \&\& 0%{?sle_version} < 150000) || 0%{?sle_version} >= 150200/
+s/{{intree_openssl}}/0%{?suse_version} >= 1550 || (0%{?sle_version} >= 120400 \&\& 0%{?sle_version} < 150000) || 0%{?sle_version} >= 150200/
 #
 #
 # icu versions
