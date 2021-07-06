@@ -242,7 +242,7 @@ Index: node-v8.17.0/deps/npm/man/man1/npm.1
 --- node-v8.17.0.orig/deps/npm/man/man1/npm.1
 +++ node-v8.17.0/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
- .TH "NPM" "1" "December 2019" "" ""
+ .TH "NPM" "1" "July 2021" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm8\fR \- javascript package manager
@@ -280,8 +280,8 @@ Index: node-v8.17.0/deps/npm/man/man1/npm.1
  .SS Dependencies
  .P
  If a package references to another package with a git URL, npm depends
-@@ -57,7 +57,7 @@ the node\-gyp repository \fIhttps://gith
- the node\-gyp Wiki \fIhttps://github\.com/TooTallNate/node\-gyp/wiki\fR\|\.
+@@ -56,7 +56,7 @@ the node\-gyp repository \fIhttps://gith
+ the node\-gyp Wiki \fIhttps://github\.com/nodejs/node\-gyp/wiki\fR\|\.
  .SS Directories
  .P
 -See npm help \fBfolders\fP to learn about where npm puts stuff\.
@@ -289,7 +289,7 @@ Index: node-v8.17.0/deps/npm/man/man1/npm.1
  .P
  In particular, npm has two modes of operation:
  .RS 0
-@@ -82,24 +82,24 @@ following help topics:
+@@ -81,24 +81,24 @@ following help topics:
  .RS 0
  .IP \(bu 2
  json:
@@ -318,7 +318,7 @@ Index: node-v8.17.0/deps/npm/man/man1/npm.1
  
  .RE
  .SS Configuration
-@@ -135,7 +135,7 @@ lib/utils/config\-defs\.js\.  These must
+@@ -134,7 +134,7 @@ lib/utils/config\-defs\.js\.  These must
  
  .RE
  .P
@@ -327,7 +327,7 @@ Index: node-v8.17.0/deps/npm/man/man1/npm.1
  .SS Contributions
  .P
  Patches welcome!
-@@ -172,14 +172,14 @@ i@izs\.me
+@@ -171,14 +171,14 @@ i@izs\.me
  .SS See Also
  .RS 0
  .IP \(bu 2

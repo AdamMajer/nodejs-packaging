@@ -27,6 +27,12 @@ s/{{min_nghttp2_version}}/1.41.0/g
 # Git staging directory
 s/{{git_branch}}/v8.x-staging/
 
+# Extra Sources
+s,{{SOURCES_EXTRA}},\
+# npm upgrade. manpages generated manually \
+Source9:        https://github.com/npm/cli/archive/refs/tags/v6.14.13.tar.gz#/npm-v6.14.13.tar.gz \
+Source90:       npm_man.tar.xz \
+,
 
 
 s/{{bundled_cares_version}}/1.10.1-DEV/g

@@ -239,7 +239,7 @@ Index: node-v10.24.1/deps/npm/man/man1/npm.1
 --- node-v10.24.1.orig/deps/npm/man/man1/npm.1
 +++ node-v10.24.1/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
- .TH "NPM" "1" "March 2021" "" ""
+ .TH "NPM" "1" "July 2021" "" ""
  .SH "NAME"
 -\fBnpm\fR \- javascript package manager
 +\fBnpm10\fR \- javascript package manager

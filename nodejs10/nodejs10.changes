@@ -3,6 +3,10 @@ Tue Jul  6 11:46:10 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2021-22918.patch: patch libuv to fix out of bounds read (Medium)
   (bsc#1187973, CVE-2021-22918)
+- npm-v6.14.13.tar.gz: update to npm 6.14.13 fixing
+  * fixes ssri Regular Expression Denial of Service and
+    hosted-git-info Regular Expression Denial of Service
+    (bsc#1187976, bsc#1187977, CVE-2021-27290, CVE-2021-23362)
 
 -------------------------------------------------------------------
 Mon May 31 16:27:44 UTC 2021 - Adam Majer <adam.majer@suse.de>

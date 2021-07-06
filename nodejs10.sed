@@ -26,9 +26,14 @@ s/{{min_nghttp2_version}}/1.41.0/g
 s/{{git_branch}}/v10.x-staging/
 
 # Extra Sources
-s,{{SOURCES_EXTRA}},# Only required to run unit tests in NodeJS 10+ \
+s,{{SOURCES_EXTRA}},\
+# npm upgrade. manpage generated manually \
+Source9:        https://github.com/npm/cli/archive/refs/tags/v6.14.13.tar.gz#/npm-v6.14.13.tar.gz \
+Source90:       npm_man.tar.xz \
+# Only required to run unit tests in NodeJS 10+ \
 Source10:       update_npm_tarball.sh \
-Source11:       node_modules.tar.xz,
+Source11:       node_modules.tar.xz \
+,
 
 
 

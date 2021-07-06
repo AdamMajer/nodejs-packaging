@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Tue Jul  6 13:02:20 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- npm-v6.14.13.tar.gz: update to npm 6.14.13 fixing
+  * fixes ssri Regular Expression Denial of Service and
+    hosted-git-info Regular Expression Denial of Service
+    (bsc#1187976, bsc#1187977, CVE-2021-27290, CVE-2021-23362)
+  * fixes  y18n Prototype Pollution (bsc#1184450, CVE-2020-7774)
+  
+- CVE-2020-15095.patch, minimist.patch: obsoleted by above
+
+-------------------------------------------------------------------
 Tue Feb 23 14:55:47 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2021-22884.patch: DNS rebinding in --inspect
