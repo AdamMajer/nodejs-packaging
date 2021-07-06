@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul  6 11:46:10 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2021-22918.patch: patch libuv to fix out of bounds read (Medium)
+  (bsc#1187973, CVE-2021-22918)
+
+-------------------------------------------------------------------
 Mon May 31 16:27:44 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - Use libalternatives instead of update-alternatives
