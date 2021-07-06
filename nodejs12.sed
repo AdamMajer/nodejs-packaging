@@ -1,4 +1,4 @@
-s/{{node_version}}/12.22.1/g
+s/{{node_version}}/12.22.2/g
 s/{{node_version_major}}/12/g
 
 #
@@ -45,4 +45,4 @@ s/{{bundled_openssl_version}}/1.1.1k/g
 s/{{bundled_uv_version}}/1.40.0/g
 s/{{bundled_uvwasi_version}}/0.0.11/g
 s/{{bundled_v8_version}}/7.8.279.23/g
-s/{{bundled_npm_version}}/6.14.12/g
+s/{{bundled_npm_version}}/6.14.13/g
