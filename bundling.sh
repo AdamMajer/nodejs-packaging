@@ -18,7 +18,6 @@ if [ ${#@} -ne 1 ] || ! [[ "$1" =~ ^[0-9]+$ ]] || [ $1 -lt 4 ] || [ $1 -gt 42 ];
     echo " syntax:  bundling.sh [-M | -N] node_major_version"
     echo "    -M - sed substitutions for main node"
     echo "    -N - sed substitutions for npm"
-    echo "    -d - non-npm package bundled versions"
     echo "    -g - operate on staging diretories"
     echo "  eg. bundling.sh 10"
     exit -1
@@ -265,7 +264,7 @@ function find_npm_packages
     push_node_dir
     cd deps
     if [ "$MODE" = "npm" ]; then
-        find -name package.json -path './npm/node_modules/*' -not -path '*/test/*' | $NPM_BUNDLES_TO_PROVIDES_CMD
+        find -name package.json -path './npm/*' -regex '.*/node_modules/[^/]+/package.json' | $NPM_BUNDLES_TO_PROVIDES_CMD
     else
         find -name package.json -not -path './npm/*' -not -path './v8/*' -not -path '*/test/*' | $NPM_BUNDLES_TO_PROVIDES_CMD
     fi

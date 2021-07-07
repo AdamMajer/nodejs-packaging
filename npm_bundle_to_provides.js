@@ -35,7 +35,7 @@ function loadNpmPackageJsonAsPromise(path)
             }
 
             let json = JSON.parse(json_string);
-            if (json.name.length <= 0 || json.version.length <= 0) {
+            if (json.name === undefined || json.name.length <= 0 || json.version.length <= 0) {
                 rejected("Error processing " + path);
             }
             accepted(json);
