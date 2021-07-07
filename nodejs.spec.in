@@ -136,6 +136,7 @@ Patch35:        CVE-2019-15605.patch   # PATCH_FOR: 8
 Patch36:        CVE-2020-8174.patch    # PATCH_FOR: 8
 Patch37:        nghttp2_1.41.0.patch   # PATCH_FOR: 8
 Patch38:        CVE-2020-11080.patch   # PATCH_FOR: 8
+Patch39:        CVE-2020-8265.patch    # PATCH_FOR: 8
 Patch41:        icu68.patch            # PATCH_FOR: 10
 Patch42:        CVE-2020-8287.patch    # PATCH_FOR: 8
 Patch43:        CVE-2021-22884.patch   # PATCH_FOR: 8
@@ -427,6 +428,7 @@ tar Jxf %{SOURCE5} --directory=tools/gyp --strip-components=1
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
+%patch39 -p1
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul  7 12:52:49 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2020-8265.patch: Add a unit test for CVE-2020-8265 to make
+  sure we don't have it broken in the future.
+
+-------------------------------------------------------------------
 Tue Jul  6 13:02:20 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - npm-v6.14.13.tar.gz: update to npm 6.14.13 fixing

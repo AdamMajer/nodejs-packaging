@@ -42,4 +42,4 @@ s/{{bundled_nghttp2_version}}/1.41.0/g
 s/{{bundled_openssl_version}}/1.0.2s/g
 s/{{bundled_uv_version}}/1.23.2/g
 s/{{bundled_v8_version}}/6.2.414.78/g
-s/{{bundled_npm_version}}/6.13.4/g
+s/{{bundled_npm_version}}/6.14.13/g
