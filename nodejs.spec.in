@@ -162,7 +162,7 @@ Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, maste
 Patch107:       old_icu.patch             # PATCH_FOR: 14, 15
 Patch108:       Fix-build-with-icu-69.patch # PATCH_FOR: 12
 Patch109:       python3.patch             # PATCH_FOR: 12
-
+Patch110:       legacy_python.patch       # PATCH_FOR: 16, master
 
 Patch120:       flaky_test_rerun.patch
 
@@ -450,6 +450,7 @@ tar Jxf %{SOURCE5} --directory=tools/gyp --strip-components=1
 %patch108 -p1
 %endif
 %patch109 -p1
+%patch110 -p1
 %patch120 -p1
 %patch200 -p1
 
