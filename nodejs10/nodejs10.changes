@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Aug  4 16:30:09 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2021-22930.patch: http2: fixes use after free on close
+  in stream canceling (bsc#1188917, CVE-2021-22930)
+
+-------------------------------------------------------------------
 Tue Jul  6 11:46:10 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2021-22918.patch: patch libuv to fix out of bounds read (Medium)

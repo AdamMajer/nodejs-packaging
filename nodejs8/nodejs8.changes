@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Aug  4 16:29:06 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2021-22930.patch: http2: fixes use after free on close
+  in stream canceling (bsc#1188917, CVE-2021-22930)
+
+-------------------------------------------------------------------
 Wed Jul  7 12:52:49 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2020-8265.patch: Add a unit test for CVE-2020-8265 to make
