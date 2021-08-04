@@ -8,6 +8,7 @@ Mon Aug  2 12:15:43 UTC 2021 - Adam Majer <adam.majer@suse.de>
 - old_icu.patch: merged, removed
 - versioned.patch: updated
 - node_modules.tar.xz: refreshed
+- PR39011.patch: use localhost instead of remote for unit test
 
 -------------------------------------------------------------------
 Fri Jul  2 15:27:59 UTC 2021 - Adam Majer <adam.majer@suse.de>

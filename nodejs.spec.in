@@ -121,6 +121,7 @@ Source20:       bash_output_helper.bash
 
 ## Patches not distribution specific
 Patch3:         fix_ci_tests.patch
+Patch4:         PR39011.patch          # PATCH_FOR: 14
 Patch5:         sle12_python3_compat.patch # PATCH_FOR: master, 13, 14, 15, 16
 Patch7:         manual_configure.patch # PATCH_FOR: master, 14, 13, 12, 10, 8, 15, 16
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
@@ -159,7 +160,6 @@ Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 8, 10, 12
 Patch104:       npm_search_paths.patch
 Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 8, 10
 Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, master, 16
-Patch107:       old_icu.patch             # PATCH_FOR: 14, 15
 Patch108:       Fix-build-with-icu-69.patch # PATCH_FOR: 12
 Patch109:       python3.patch             # PATCH_FOR: 12
 Patch110:       legacy_python.patch       # PATCH_FOR: 16, master
@@ -413,6 +413,7 @@ tar Jxf %{SOURCE5} --directory=tools/gyp --strip-components=1
 %endif
 
 %patch3 -p1
+%patch4 -p1
 %patch5 -p1
 %patch7 -p1
 %patch8 -p1
@@ -445,7 +446,6 @@ tar Jxf %{SOURCE5} --directory=tools/gyp --strip-components=1
 %patch104 -p1
 %patch105 -p1
 %patch106 -p1
-%patch107 -p1
 %if 0%{?suse_version} >= 1550
 %patch108 -p1
 %endif
