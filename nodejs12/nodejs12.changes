@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Aug  9 12:54:28 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- z15-test-skip.patch: skip problematic test on s390x
+
+-------------------------------------------------------------------
 Wed Aug  4 16:21:05 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - update to 12.22.4:
