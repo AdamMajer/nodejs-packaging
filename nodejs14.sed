@@ -1,4 +1,4 @@
-s/{{node_version}}/14.17.4/g
+s/{{node_version}}/14.17.5/g
 s/{{node_version_major}}/14/g
 
 #
@@ -14,7 +14,7 @@ s/{{min_icu_version}}/65/g
 #
 # libcares2 version
 s/{{intree_libcares2}}/0%{?suse_version} >= 1330/g
-s/{{min_libcares2_version}}/1.10.0/g
+s/{{min_libcares2_version}}/1.17.0/g
 #
 #
 # nghttp2 version
@@ -31,7 +31,7 @@ Source11:       node_modules.tar.xz,
 
 
 s/{{bundled_brotli_version}}/1.0.9/g
-s/{{bundled_cares_version}}/1.17.1/g
+s/{{bundled_cares_version}}/1.17.2/g
 s/{{bundled_icu-small_version}}/69.1/g
 s/{{bundled_llhttp_version}}/2.1.3/g
 s/{{bundled_nghttp2_version}}/1.42.0/g
