@@ -79,7 +79,7 @@ Group:          Development/Languages/NodeJS
 URL:            https://github.com/AdamMajer/nodejs-packaging
 Source1:        node.c
 Source2:        LICENSE
-Requires:       nodejs
+Requires:       nodejs npm
 Conflicts:      nodejs4 < 4.8.4
 Conflicts:      nodejs6 < 6.11.1
 Conflicts:      nodejs7 < 7.10.1
