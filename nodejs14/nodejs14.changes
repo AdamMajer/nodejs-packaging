@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Nov 25 12:21:25 UTC 2021 - Guillaume GARDET <guillaume.gardet@opensuse.org>
+
+- Fix CXXFLAGS in Tumbleweed - boo#1192824
+
+-------------------------------------------------------------------
 Thu Aug 12 13:50:24 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - update to 14.17.5:
