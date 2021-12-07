@@ -1,4 +1,23 @@
 -------------------------------------------------------------------
+Fri Nov 26 12:40:52 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- update to 12.22.7:
+  * deps: update llhttp to 2.1.4
+  - HTTP Request Smuggling due to spaced in headers
+    (bsc#1191601, CVE-2021-22959)
+  - HTTP Request Smuggling when parsing the body
+    (bsc#1191602, CVE-2021-22960)
+
+- changes in 12.22.6:
+  * deps: upgrade npm to 6.14.15 which fixes a number of
+    security issues
+    (bsc#1190057, CVE-2021-37701, bsc#1190056, CVE-2021-37712,
+     bsc#1190055, CVE-2021-37713, bsc#1190054, CVE-2021-39134,
+     bsc#1190053, CVE-2021-39135)
+
+- versioned.patch: refreshed
+
+-------------------------------------------------------------------
 Thu Aug 12 13:19:17 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - update to 12.22.5:

@@ -197,7 +197,7 @@ function load_bundled_version
     BUNDLED_VERSION=""
 
     case $PKG in
-        (acorn|acorn-plugins|node-inspect|gtest|googletest|zlib|histogram|v8_inspector|cjs-module-lexer):
+        (acorn|acorn-plugins|node-inspect|gtest|googletest|zlib|histogram|v8_inspector|cjs-module-lexer|corepack):
         # These are npm packages so handled elsewhere
         # or excluded, like gtest
         popd > /dev/null

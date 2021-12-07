@@ -46,6 +46,12 @@ Release:        0
 %bcond_with libalternatives
 %endif
 
+%if %node_version_number >= 16
+%bcond_without corepack
+%else
+%bcond_with corepath
+%endif
+
 %if %node_version_number >= 12
 %define openssl_req_ver 1.1.1
 %else
@@ -167,9 +173,13 @@ Patch110:       legacy_python.patch       # PATCH_FOR: 16, master
 
 Patch120:       flaky_test_rerun.patch
 
+Patch130:       z15-test-skip.patch      # PATCH_FOR: 10, 12, 14
+Patch131:       40670.patch              # PATCH_FOR: 16
+Patch132:       test-skip-y2038-on-32bit-time_t.patch # PATCH_FOR: 16, 14, master
+Patch133:       rsa-pss-revert.patch     # PATCH_FOR: testing_only
+
 # Use versioned binaries and paths
 Patch200:       versioned.patch
-Patch201:       z15-test-skip.patch      # PATCH_FOR: 10, 12, 14
 
 BuildRequires:  pkg-config
 %if 0%{?suse_version}
@@ -227,7 +237,11 @@ BuildRequires:  zlib-devel
 
 # Python dependencies
 %if %node_version_number >= 12
-BuildRequires:  python3
+%if 0%{?suse_version} && 0%{?suse_version} < 1500
+BuildRequires:  python36
+%else
+BuildRequires:  python3 > 3.6.0
+%endif
 
 %if 0%{?suse_version}
 BuildRequires:  netcfg
@@ -381,6 +395,15 @@ Requires:       group(nobody)
 A package manager for Node.js that allows developers to install and
 publish packages to a package registry.
 
+%package -n corepack{{node_version_major}}
+Summary:        Helper bridge between NodeJS projects and their dependencies
+Group:          Development/Languages/NodeJS
+Requires:       nodejs-common >= 5.0
+
+%description -n corepack{{node_version_major}}
+Zero-runtime-dependency package acting as bridge between Node projects
+and their package managers.
+
 %package docs
 Summary:        Node.js API documentation
 Group:          Documentation/Other
@@ -410,13 +433,9 @@ tar Jxf %{SOURCE90} -C deps/npm
 tar Jxf %{SOURCE11}
 %endif
 
-%if %{node_version_number} >= 16 && 0%{?suse_version} > 0 && 0%{?suse_version} < 1500
-tar Jxf %{SOURCE5} --directory=tools/gyp --strip-components=1
-%endif
-
 %patch1 -p1
 %patch3 -p1
-%patch4 -p1
+# %patch4 -p1
 %patch5 -p1
 %patch7 -p1
 %patch8 -p1
@@ -453,8 +472,11 @@ tar Jxf %{SOURCE5} --directory=tools/gyp --strip-components=1
 %patch109 -p1
 %patch110 -p1
 %patch120 -p1
+%patch130 -p1
+%patch131 -p1
+%patch132 -p1
+%patch133 -p1
 %patch200 -p1
-%patch201 -p1
 
 # remove backup files, if any
 find -name \*~ -print0 -delete
@@ -495,10 +517,11 @@ find deps/cares -name *.[ch] -delete
 find deps/zlib -name *.[ch] -delete
 
 cat > spec.build.config <<EOF
+export PREFIX=/usr
 export CFLAGS="%{?build_cflags:%build_cflags}%{?!build_cflags:%optflags} -fno-strict-aliasing"
 # -Wno-class-memaccess is not available in gcc < 8 (= system compiler on Leap until at least 15.3 is gcc7)
 export CXXFLAGS="%{?build_cxxflags:%build_cxxflags}%{?!build_cxxflags:%optflags} -Wno-error=return-type -fno-strict-aliasing"
-%if 0%{?sle_version} > 150300
+%if 0%{?sle_version} > 150300 || 0%{?suse_version} > 1500
 export CXXFLAGS="${CXXFLAGS} -Wno-class-memaccess"
 %endif
 export LDFLAGS="%{?build_ldflags}"
@@ -730,6 +753,13 @@ make test-ci
 %ghost %{_mandir}/man1/npx.1%{ext_man}
 %ghost %{_sysconfdir}/alternatives/npx-default
 %ghost %{_sysconfdir}/alternatives/npx.1%{ext_man}
+%endif
+
+%if %{node_version_number} >= 16
+%files -n corepack%{node_version_number}
+%defattr(-, root, root)
+%{_bindir}/corepack%{node_version_number}
+%{_libdir}/node_modules/corepack%{node_version_number}
 %endif
 
 %files devel

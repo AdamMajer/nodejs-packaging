@@ -15,7 +15,7 @@ s/{{min_icu_version}}/57/g
 #
 # libcares2 version
 s/{{intree_libcares2}}/0%{suse_version} >= 1330/g
-s/{{min_libcares2_version}}/1.10.0/g
+s/{{min_libcares2_version}}/1.17.0/g
 #
 #
 # nghttp2 version
