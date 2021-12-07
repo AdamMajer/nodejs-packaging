@@ -109,7 +109,7 @@ Release:        0
 %bcond_without intree_nghttp2
 %endif
 
-%ifarch aarch64 ppc ppc64 ppc64le s390 s390x
+%ifnarch x86_64 %{ix86}
 %bcond_with    gdb
 %else
 %bcond_without gdb
