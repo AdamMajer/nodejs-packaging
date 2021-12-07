@@ -174,7 +174,6 @@ Patch110:       legacy_python.patch       # PATCH_FOR: 16, master
 Patch120:       flaky_test_rerun.patch
 
 Patch130:       z15-test-skip.patch      # PATCH_FOR: 10, 12, 14
-Patch131:       40670.patch              # PATCH_FOR: 16
 Patch132:       test-skip-y2038-on-32bit-time_t.patch # PATCH_FOR: 16, 14, master
 Patch133:       rsa-pss-revert.patch     # PATCH_FOR: testing_only
 
@@ -473,7 +472,6 @@ tar Jxf %{SOURCE11}
 %patch110 -p1
 %patch120 -p1
 %patch130 -p1
-%patch131 -p1
 %patch132 -p1
 %patch133 -p1
 %patch200 -p1
