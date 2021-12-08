@@ -138,14 +138,10 @@ echo "Default Node version: " %{default_node_ver}
 
 %install
 install -D -m 0755 node %{buildroot}%{_bindir}/node
-ln node %{buildroot}%{_bindir}/npm
-ln node %{buildroot}%{_bindir}/npx
 
 %files
 %license LICENSE
 %{_bindir}/node
-%{_bindir}/npm
-%{_bindir}/npx
 
 %files -n nodejs-default
 
