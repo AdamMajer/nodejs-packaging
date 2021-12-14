@@ -8,8 +8,8 @@ s/{{intree_openssl}}/0%{?suse_version} >= 1500 || 0%{?sle_version} >= 120400/
 #
 #
 # icu versions
-s/{{intree_icu}}/0%{?suse_version} >= 1550 /g
-s/{{min_icu_version}}/68/g
+s/{{intree_icu}}/0%{?suse_version} >= 1500 /g
+s/{{min_icu_version}}/69/g
 #
 #
 # libcares2 version
