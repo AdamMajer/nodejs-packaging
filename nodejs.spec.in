@@ -263,6 +263,12 @@ BuildRequires:  group(nobody)
 
 BuildRequires:  pkgconfig(openssl) >= %{openssl_req_ver}
 
+# require patched openssl library on SLES for nodejs16
+%if %node_version_number == 16 && 0%{?suse_version} <= 1500 && 0%{?suse_version}
+BuildRequires:  openssl-has-RSA_get0_pss_params
+Requires:       openssl-has-RSA_get0_pss_params
+%endif
+
 %if 0%{?suse_version} >= 1500 
 BuildRequires:  openssl >= %{openssl_req_ver}
 BuildRequires:  libopenssl1_1-hmac
