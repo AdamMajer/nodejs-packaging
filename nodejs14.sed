@@ -1,4 +1,4 @@
-s/{{node_version}}/14.18.1/g
+s/{{node_version}}/14.18.2/g
 s/{{node_version_major}}/14/g
 
 #
@@ -31,7 +31,7 @@ Source11:       node_modules.tar.xz,
 
 
 s/{{bundled_brotli_version}}/1.0.9/g
-s/{{bundled_cares_version}}/1.17.2/g
+s/{{bundled_cares_version}}/1.18.1/g
 s/{{bundled_icu-small_version}}/69.1/g
 s/{{bundled_llhttp_version}}/2.1.4/g
 s/{{bundled_nghttp2_version}}/1.42.0/g
