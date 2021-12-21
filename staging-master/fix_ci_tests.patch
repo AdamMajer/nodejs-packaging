@@ -2,10 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-git.12622c5f86/test/parallel/test-module-loading-globalpaths.js
+Index: node-v16.13.1/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-git.12622c5f86.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-git.12622c5f86/test/parallel/test-module-loading-globalpaths.js
+--- node-v16.13.1.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-v16.13.1/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -16,23 +16,10 @@ Index: node-git.12622c5f86/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-git.12622c5f86/test/parallel/test-tls-env-bad-extra-ca.js
+Index: node-v16.13.1/test/parallel/test-tls-passphrase.js
 ===================================================================
---- node-git.12622c5f86.orig/test/parallel/test-tls-env-bad-extra-ca.js
-+++ node-git.12622c5f86/test/parallel/test-tls-env-bad-extra-ca.js
-@@ -37,7 +37,7 @@ fork(__filename, opts)
-     // TODO(addaleax): Make `SafeGetenv` work like `process.env`
-     // encoding-wise
-     if (!common.isWindows) {
--      const re = /Warning: Ignoring extra certs from.*no-such-file-exists-🐢.* load failed:.*No such file or directory/;
-+      const re = /Warning: Ignoring extra certs from.*no-such-file-exists-.* load failed:.*/;
-       assert(re.test(stderr), stderr);
-     }
-   }))
-Index: node-git.12622c5f86/test/parallel/test-tls-passphrase.js
-===================================================================
---- node-git.12622c5f86.orig/test/parallel/test-tls-passphrase.js
-+++ node-git.12622c5f86/test/parallel/test-tls-passphrase.js
+--- node-v16.13.1.orig/test/parallel/test-tls-passphrase.js
++++ node-v16.13.1/test/parallel/test-tls-passphrase.js
 @@ -224,7 +224,7 @@ server.listen(0, common.mustCall(functio
  })).unref();
  
@@ -51,10 +38,10 @@ Index: node-git.12622c5f86/test/parallel/test-tls-passphrase.js
  
  // Invalid passphrase
  assert.throws(function() {
-Index: node-git.12622c5f86/test/parallel/test-repl-envvars.js
+Index: node-v16.13.1/test/parallel/test-repl-envvars.js
 ===================================================================
---- node-git.12622c5f86.orig/test/parallel/test-repl-envvars.js
-+++ node-git.12622c5f86/test/parallel/test-repl-envvars.js
+--- node-v16.13.1.orig/test/parallel/test-repl-envvars.js
++++ node-v16.13.1/test/parallel/test-repl-envvars.js
 @@ -2,7 +2,9 @@
  
  // Flags: --expose-internals
@@ -66,11 +53,11 @@ Index: node-git.12622c5f86/test/parallel/test-repl-envvars.js
  const stream = require('stream');
  const REPL = require('internal/repl');
  const assert = require('assert');
-Index: node-git.12622c5f86/test/common/index.mjs
+Index: node-v16.13.1/test/common/index.mjs
 ===================================================================
---- node-git.12622c5f86.orig/test/common/index.mjs
-+++ node-git.12622c5f86/test/common/index.mjs
-@@ -44,6 +44,7 @@ const {
+--- node-v16.13.1.orig/test/common/index.mjs
++++ node-v16.13.1/test/common/index.mjs
+@@ -42,6 +42,7 @@ const {
    expectsError,
    skipIfInspectorDisabled,
    skipIf32Bits,
@@ -78,7 +65,7 @@ Index: node-git.12622c5f86/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    getTTYfd,
-@@ -89,6 +90,7 @@ export {
+@@ -87,6 +88,7 @@ export {
    expectsError,
    skipIfInspectorDisabled,
    skipIf32Bits,
@@ -86,11 +73,11 @@ Index: node-git.12622c5f86/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    getTTYfd,
-Index: node-git.12622c5f86/Makefile
+Index: node-v16.13.1/Makefile
 ===================================================================
---- node-git.12622c5f86.orig/Makefile
-+++ node-git.12622c5f86/Makefile
-@@ -517,7 +517,8 @@ test-ci-js: | clear-stalled
+--- node-v16.13.1.orig/Makefile
++++ node-v16.13.1/Makefile
+@@ -508,7 +508,8 @@ test-ci-js: | clear-stalled
  .PHONY: test-ci
  # Related CI jobs: most CI tests, excluding node-test-commit-arm-fanned
  test-ci: LOGLEVEL := info
@@ -100,7 +87,7 @@ Index: node-git.12622c5f86/Makefile
  	out/Release/cctest --gtest_output=xml:out/junit/cctest.xml
  	$(PYTHON) tools/test.py $(PARALLEL_ARGS) -p tap --logfile test.tap \
  		--mode=$(BUILDTYPE_LOWER) --flaky-tests=$(FLAKY_TESTS) \
-@@ -695,7 +696,8 @@ apidocs_json = $(addprefix out/,$(apidoc
+@@ -684,7 +685,8 @@ apidocs_json = $(addprefix out/,$(apidoc
  apiassets = $(subst api_assets,api/assets,$(addprefix out/,$(wildcard doc/api_assets/*)))
  
  tools/doc/node_modules: tools/doc/package.json
@@ -110,16 +97,16 @@ Index: node-git.12622c5f86/Makefile
  		echo "Skipping tools/doc/node_modules (no crypto)"; \
  	else \
  		cd tools/doc && $(call available-node,$(run-npm-ci)) \
-Index: node-git.12622c5f86/test/parallel/test-crypto-dh.js
+Index: node-v16.13.1/test/parallel/test-crypto-dh.js
 ===================================================================
---- node-git.12622c5f86.orig/test/parallel/test-crypto-dh.js
-+++ node-git.12622c5f86/test/parallel/test-crypto-dh.js
-@@ -189,7 +189,7 @@ assert.throws(() => {
+--- node-v16.13.1.orig/test/parallel/test-crypto-dh.js
++++ node-v16.13.1/test/parallel/test-crypto-dh.js
+@@ -167,7 +167,7 @@ assert.throws(() => {
    dh3.computeSecret('');
  }, { message: common.hasOpenSSL3 ?
    'error:02800080:Diffie-Hellman routines::invalid secret' :
 -  'Supplied key is too small' });
 +  /Supplied key is too small|error:05066066:Diffie-Hellman routines:compute_key:invalid public key/ });
  
- // Create a shared using a DH group.
- const alice = crypto.createDiffieHellmanGroup('modp5');
+ // Invalid test: curve argument is undefined
+ assert.throws(

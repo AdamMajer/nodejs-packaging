@@ -1,21 +1,21 @@
-Index: node-git.f09c033faf/deps/npm/lib/help-search.js
+Index: node-git.113133badb/deps/npm/lib/commands/help-search.js
 ===================================================================
---- node-git.f09c033faf.orig/deps/npm/lib/help-search.js
-+++ node-git.f09c033faf/deps/npm/lib/help-search.js
-@@ -29,7 +29,7 @@ class HelpSearch extends BaseCommand {
-     if (!args.length)
-       return this.npm.output(this.usage)
+--- node-git.113133badb.orig/deps/npm/lib/commands/help-search.js
++++ node-git.113133badb/deps/npm/lib/commands/help-search.js
+@@ -17,7 +17,7 @@ class HelpSearch extends BaseCommand {
+       throw this.usageError()
+     }
  
--    const docPath = path.resolve(__dirname, '..', 'docs/content')
-+    const docPath = '/usr/share/doc/packages/nodejs' 
+-    const docPath = path.resolve(__dirname, '..', '..', 'docs/content')
++    const docPath = '/usr/share/doc/packages/nodejs'
      const files = await glob(`${docPath}/*/*.md`)
      const data = await this.readFiles(files)
      const results = await this.searchFiles(args, data, files)
-Index: node-git.f09c033faf/deps/npm/lib/npm.js
+Index: node-git.113133badb/deps/npm/lib/npm.js
 ===================================================================
---- node-git.f09c033faf.orig/deps/npm/lib/npm.js
-+++ node-git.f09c033faf/deps/npm/lib/npm.js
-@@ -236,7 +236,13 @@ const npm = module.exports = new class e
+--- node-git.113133badb.orig/deps/npm/lib/npm.js
++++ node-git.113133badb/deps/npm/lib/npm.js
+@@ -329,7 +329,13 @@ class Npm extends EventEmitter {
    }
  
    get globalPrefix () {

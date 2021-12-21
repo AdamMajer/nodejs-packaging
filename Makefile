@@ -92,7 +92,7 @@ ${ALL_TARGETS}: changelog.target common.target
 		sed -e 's,{{pwd}},$(PWD),' -f nodejs$(NODEJS_VERSION).sed _service.in > $D/_service && \
 		cd $D && \
 		find -maxdepth 1 -mindepth 1 -type d -name node-git\* -exec rm -rf {} \+ && \
-		TAR_SCM_TESTMODE=1 osc service disabledrun; \
+		TAR_SCM_TESTMODE=1 osc service manualrun; \
 	fi
 
 	# (hack) make sure we unpack the sources
@@ -110,7 +110,7 @@ ${ALL_TARGETS}: changelog.target common.target
 
 	# Verify that patches actually apply
 	cd $D && \
-		( ! test -f _service || ( osc service run set_version && mv _service*nodejs$(NODEJS_VERSION).spec nodejs$(NODEJS_VERSION).spec ) ) && \
+		( ! test -f _service || osc service manualrun set_version ) && \
 		quilt setup --fast -v *.spec && \
 		cd `find -maxdepth 1 -mindepth 1 -type d -name node-\*` && \
 		quilt push -a --fuzz=0
