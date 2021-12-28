@@ -556,7 +556,7 @@ export PREFIX=/usr
 export CFLAGS="%{?build_cflags:%build_cflags}%{?!build_cflags:%optflags} -fno-strict-aliasing"
 # -Wno-class-memaccess is not available in gcc < 8 (= system compiler on Leap until at least 15.3 is gcc7)
 export CXXFLAGS="%{?build_cxxflags:%build_cxxflags}%{?!build_cxxflags:%optflags} -Wno-error=return-type -fno-strict-aliasing"
-%if 0%{?sle_version} > 150300 || 0%{?suse_version} > 1500
+%if 0%{?sle_version} > 150300 || 0%{?suse_version} > 1500 || 0%{?fedora_version} >= 35
 export CXXFLAGS="\${CXXFLAGS} -Wno-class-memaccess"
 %endif
 export LDFLAGS="%{?build_ldflags}"
