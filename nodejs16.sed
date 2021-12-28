@@ -4,7 +4,7 @@ s/{{node_version_major}}/16/g
 #
 #
 # openssl version - need OpenSSL 1.1.1+
-s/{{intree_openssl}}/0%{?suse_version} >= 1500 || 0%{?sle_version} >= 120400/
+s/{{intree_openssl}}/0%{?suse_version} >= 1500 || 0%{?sle_version} >= 120400 || 0%{?fedora_version} >= 35/
 #
 #
 # icu versions
