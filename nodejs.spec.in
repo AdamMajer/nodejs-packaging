@@ -286,12 +286,20 @@ BuildRequires:  openssl-has-RSA_get0_pss_params
 Requires:       openssl-has-RSA_get0_pss_params
 %endif
 
-%if 0%{?suse_version} >= 1500 
+%if 0%{?suse_version}
+%if 0%{?suse_version} >= 1500
 BuildRequires:  openssl >= %{openssl_req_ver}
 %else
 BuildRequires:  openssl-1_1 >= %{openssl_req_ver}
 %endif
+
 BuildRequires:  libopenssl1_1-hmac
+# /suse_version
+%endif
+
+%if 0%{?fedora_version}
+BuildRequires:  openssl >= %{openssl_req_ver}
+%endif
 
 %else
 %if %node_version_number <= 12 && 0%{?suse_version} == 1315 && 0%{?sle_version} < 120400
