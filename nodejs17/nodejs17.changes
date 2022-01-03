@@ -1,0 +1,15 @@
+-------------------------------------------------------------------
+Mon Jan  3 19:04:23 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Initial package of version 17.3.0. For complete list of changes
+  since 16.x series, please see
+  https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V17.md#17.3.0
+
+- patches carried from 16.x series with some adaptations include
+  cares_public_headers.patch, fix_ci_tests.patch, flaky_test_rerun.patch,
+  legacy_python.patch, linker_lto_jobs.patch, manual_configure.patch,
+  node-gyp-addon-gypi.patch, nodejs-libpath.patch, npm_search_paths.patch,
+  openssl_binary_detection.patch, skip_no_console.patch,
+  sle12_python3_compat.patch, test-skip-y2038-on-32bit-time_t.patch,
+  versioned.patch
+
