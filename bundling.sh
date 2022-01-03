@@ -119,7 +119,9 @@ function load_ngtcp2_version
 
 function load_openssl_version
 {
-    if [ -f openssl/include/openssl/opensslv.h ]; then
+    if [ -f openssl/VERSION.dat ]; then
+        BUNDLED_VERSION=$(. ./openssl/VERSION.dat; echo "$MAJOR.$MINOR.$PATCH")
+    elif [ -f openssl/include/openssl/opensslv.h ]; then
         local VER=$(grep OPENSSL_VERSION_NUMBER openssl/include/openssl/opensslv.h | awk '{print $4}' | sed 's,L,,')
         BUNDLED_VERSION=$(node -e "a=$VER; l=a>>4&0xFF; l=(l>0) ? String.fromCodePoint(96+l):''; console.log((a>>4+8+8+8 & 0xFF) + '.' + (a>>4+8+8&0xFF) + '.' + (a>>4+8&0xFF) + l)")
     fi
