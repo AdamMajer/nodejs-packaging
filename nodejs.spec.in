@@ -210,6 +210,11 @@ BuildRequires:   gcc48-c++
 # Pick and stick with "latest" compiler at time of LTS release
 # for SLE-12:Update targets
 %if 0%{?suse_version} == 1315
+%if %node_version_number >= 17
+BuildRequires:   g++10-c++
+%define cc_exec  gcc-10
+%define cpp_exec g++-10
+%else
 %if %node_version_number >= 14
 BuildRequires:   gcc9-c++
 %define cc_exec  gcc-9
@@ -220,6 +225,15 @@ BuildRequires:   gcc7-c++
 %define cc_exec  gcc-7
 %define cpp_exec g++-7
 %endif
+%endif
+%endif
+%endif
+
+%if 0%{?suse_version} == 1500
+%if %node_version_number >= 17
+BuildRequires:   g++10-c++
+%define cc_exec  gcc-10
+%define cpp_exec g++-10
 %endif
 %endif
 # compiler selection
@@ -508,10 +522,6 @@ find deps/openssl -name *.[ch] -delete
 
 %if ! 0%{with intree_icu}
 rm -rf deps/icu-small
-%endif
-
-%if ! 0%{with intree_openssl}
-rm -rf deps/openssl
 %endif
 
 %if ! 0%{with intree_cares}
