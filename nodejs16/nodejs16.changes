@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan  4 12:17:19 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- rsa-pss-revert.patch: temporarily revert functionality requiring
+  newer openssl
+
+-------------------------------------------------------------------
 Tue Dec  7 16:42:18 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - Update to 16.13.1:

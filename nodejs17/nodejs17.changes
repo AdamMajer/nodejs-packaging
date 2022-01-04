@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jan  4 12:14:24 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- rsa-pss-revert.patch: temp revert functionality requiring newer openssl
+
+-------------------------------------------------------------------
 Mon Jan  3 19:04:23 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - Initial package of version 17.3.0. For complete list of changes
