@@ -4,21 +4,21 @@ s/{{node_version_major}}/16/g
 #
 #
 # openssl version - need OpenSSL 1.1.1+
-s/{{intree_openssl}}/0%{?suse_version} >= 1500 || 0%{?sle_version} >= 120400/
+s/{{intree_openssl}}/0%{?suse_version} >= 1500 || 0%{?sle_version} >= 120400 || 0%{?fedora_version} >= 35/
 #
 #
 # icu versions
-s/{{intree_icu}}/0%{?suse_version} >= 1500 /g
+s/{{intree_icu}}/0%{?suse_version} >= 1500 || 0%{?fedora_version} >= 35/g
 s/{{min_icu_version}}/69/g
 #
 #
 # libcares2 version
-s/{{intree_libcares2}}/0%{?suse_version} >= 1330/g
+s/{{intree_libcares2}}/0%{?suse_version} >= 1330 || 0%{?fedora_version} >= 35/g
 s/{{min_libcares2_version}}/1.17.0/g
 #
 #
 # nghttp2 version
-s/{{intree_nghttp2}}/0%{?suse_version} >= 1550/g
+s/{{intree_nghttp2}}/0%{?suse_version} >= 1550 || 0%{?fedora_version} >= 35/g
 s/{{min_nghttp2_version}}/1.41.0/g
 
 s/{{git_branch}}/v16.x-staging/
