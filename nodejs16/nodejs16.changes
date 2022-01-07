@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jan  5 20:50:19 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- fix_ci_tests.patch: fix tests on s390x
+
+-------------------------------------------------------------------
 Tue Jan  4 12:17:19 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - rsa-pss-revert.patch: temporarily revert functionality requiring
