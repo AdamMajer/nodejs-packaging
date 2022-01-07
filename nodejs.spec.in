@@ -184,6 +184,11 @@ Patch133:       rsa-pss-revert.patch     # PATCH_FOR: 16, 17
 Patch200:       versioned.patch
 
 BuildRequires:  pkg-config
+BuildRequires:  fdupes
+BuildRequires:  procps
+BuildRequires:  xz
+BuildRequires:  zlib-devel
+
 %if 0%{?suse_version}
 BuildRequires:  config(netcfg)
 %endif
@@ -200,12 +205,10 @@ BuildRequires:  config(netcfg)
 # GCC 5 is only available in the SUSE:SLE-11:SP4:Update repository (SDK).
 %if %node_version_number >= 8
 BuildRequires:   gcc5-c++
-%define cc_exec  gcc-5
-%define cpp_exec g++-5
+%define forced_gcc_version 5
 %else
 BuildRequires:   gcc48-c++
-%define cc_exec  gcc-4.8
-%define cpp_exec g++-4.8
+%define forced_gcc_version 4.8
 %endif
 %endif
 # sles == 11 block
@@ -215,18 +218,15 @@ BuildRequires:   gcc48-c++
 %if 0%{?suse_version} == 1315
 %if %node_version_number >= 17
 BuildRequires:   gcc10-c++
-%define cc_exec  gcc-10
-%define cpp_exec g++-10
+%define forced_gcc_version 10
 %else
 %if %node_version_number >= 14
 BuildRequires:   gcc9-c++
-%define cc_exec  gcc-9
-%define cpp_exec g++-9
+%define forced_gcc_version 9
 %else
 %if %node_version_number >= 8
 BuildRequires:   gcc7-c++
-%define cc_exec  gcc-7
-%define cpp_exec g++-7
+%define forced_gcc_version 7
 %endif
 %endif
 %endif
@@ -235,39 +235,37 @@ BuildRequires:   gcc7-c++
 %if 0%{?suse_version} == 1500
 %if %node_version_number >= 17
 BuildRequires:   gcc10-c++
-%define cc_exec  gcc-10
-%define cpp_exec g++-10
+%define forced_gcc_version 10
 %endif
 %endif
 # compiler selection
 
 # No special version defined, use default.
-%if ! 0%{?cc_exec:1}
+%if ! 0%{?forced_gcc_version:1}
 BuildRequires:  gcc-c++
 %endif
 
-BuildRequires:  fdupes
-BuildRequires:  procps
-BuildRequires:  xz
-BuildRequires:  zlib-devel
 
 # Python dependencies
-%if %node_version_number >= 12
+%if %node_version_number >= 16
+
 %if 0%{?suse_version} && 0%{?suse_version} < 1500
 BuildRequires:  python36
 %else
-BuildRequires:  python3 > 3.6.0
+BuildRequires:  python3
 %endif
 
-%if 0%{?suse_version}
-BuildRequires:  netcfg
-%endif
+%else
+%if %node_version_number >= 12
+BuildRequires:  python3
 
 %else
 %if 0%{?suse_version} >= 1500
 BuildRequires:  python2
 %else
 BuildRequires:  python
+%endif
+
 %endif
 %endif
 
@@ -548,7 +546,7 @@ export PREFIX=/usr
 export CFLAGS="%{?build_cflags:%build_cflags}%{?!build_cflags:%optflags} -fno-strict-aliasing"
 # -Wno-class-memaccess is not available in gcc < 8 (= system compiler on Leap until at least 15.3 is gcc7)
 export CXXFLAGS="%{?build_cxxflags:%build_cxxflags}%{?!build_cxxflags:%optflags} -Wno-error=return-type -fno-strict-aliasing"
-%if 0%{?sle_version} > 150300 || 0%{?suse_version} > 1500
+%if 0%{?forced_gcc_version} >= 8 || 0%{?suse_version} > 1500
 export CXXFLAGS="\${CXXFLAGS} -Wno-class-memaccess"
 %endif
 export LDFLAGS="%{?build_ldflags}"
@@ -562,9 +560,9 @@ export CFLAGS="\${CFLAGS} -g1"
 export CXXFLAGS="\${CXXFLAGS} -g1"
 export LDFLAGS="\${LDFLAGS} -Wl,--reduce-memory-overhead"
 
-%if 0%{?cc_exec:1}
-export CC=%{?cc_exec}
-export CXX=%{?cpp_exec}
+%if 0%{?forced_gcc_version:1}
+export CC=gcc-%{forced_gcc_version}
+export CXX=g++-%{forced_gcc_version}
 %endif
 
 EOF
