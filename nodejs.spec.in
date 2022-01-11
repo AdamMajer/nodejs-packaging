@@ -131,7 +131,6 @@ Source20:       bash_output_helper.bash
 ## Patches not distribution specific
 Patch1:         cares_public_headers.patch # PATCH_FOR: master, 12, 14, 16, 17
 Patch3:         fix_ci_tests.patch
-Patch4:         PR39011.patch          # PATCH_FOR: 14
 Patch5:         sle12_python3_compat.patch # PATCH_FOR: master, 13, 14, 15, 16, 17
 Patch7:         manual_configure.patch # PATCH_FOR: master, 14, 13, 12, 10, 8, 15, 16, 17
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
@@ -463,7 +462,6 @@ tar Jxf %{SOURCE11}
 
 %patch1 -p1
 %patch3 -p1
-# %patch4 -p1
 %patch5 -p1
 %patch7 -p1
 %patch8 -p1
