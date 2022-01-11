@@ -1,4 +1,4 @@
-s/{{node_version}}/17.3.0/g
+s/{{node_version}}/17.3.1/g
 s/{{node_version_major}}/17/g
 
 #

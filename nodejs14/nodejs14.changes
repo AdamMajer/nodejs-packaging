@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Tue Jan 11 18:50:33 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- update to 14.18.3:
+  Security update fixing the following issues:
+
+  * Improper handling of URI Subject Alternative Names (Medium)
+   (CVE-2021-44531, bsc#1194511)
+  * Certificate Verification Bypass via String Injection (Medium)
+   (CVE-2021-44532, bsc#1194512)
+  * Incorrect handling of certificate subject and issuer fields (Medium)
+   (CVE-2021-44533, bsc#1194513)
+  * Prototype pollution via console.table properties (Low)
+   (CVE-2022-21824, bsc#1194514)
+
+-------------------------------------------------------------------
 Thu Dec 16 19:32:37 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - update to 14.18.2:
@@ -51,6 +66,7 @@ Tue Nov  9 15:56:53 UTC 2021 - Adam Majer <adam.majer@suse.de>
 - test-skip-y2038-on-32bit-time_t.patch: fix test failure when
   64-bit time_t is used on 32-bit arches
 - refreshed patches: versioned.patch, flaky_test_rerun.patch
+- PR39011.patch: upstreamed
 
 -------------------------------------------------------------------
 Thu Aug 12 13:50:24 UTC 2021 - Adam Majer <adam.majer@suse.de>

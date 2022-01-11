@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Tue Jan 11 18:51:38 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- update to 12.22.9:
+  Security update fixing the following issues:
+
+  * Improper handling of URI Subject Alternative Names (Medium)
+   (CVE-2021-44531, bsc#1194511)
+  * Certificate Verification Bypass via String Injection (Medium)
+   (CVE-2021-44532, bsc#1194512)
+  * Incorrect handling of certificate subject and issuer fields (Medium)
+   (CVE-2021-44533, bsc#1194513)
+  * Prototype pollution via console.table properties (Low)
+   (CVE-2022-21824, bsc#1194514)
+
+-------------------------------------------------------------------
 Fri Jan  7 21:07:25 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - update to 12.22.8:
