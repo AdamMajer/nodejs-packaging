@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jan 12 10:25:55 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- z15-test-skip.patch: dropped, no longer required
+- fix_ci_tests.patch: update tests for z15
+
+-------------------------------------------------------------------
 Tue Jan 11 18:50:33 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - update to 14.18.3:
