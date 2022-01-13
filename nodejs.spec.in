@@ -154,6 +154,7 @@ Patch44:        CVE-2021-22883.patch   # PATCH_FOR: 8
 Patch45:        limit_worker_stdio_memsize.patch # PATCH_FOR: 10
 Patch46:        CVE-2021-22918.patch   # PATCH_FOR: 10
 Patch47:        CVE-2021-22930.patch   # PATCH_FOR: 8, 10
+Patch48:        CVE-2021-22939.patch   # PATCH_FOR: 10
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, master, 16, 17
@@ -175,7 +176,8 @@ Patch110:       legacy_python.patch       # PATCH_FOR: 16, master, 17
 
 Patch120:       flaky_test_rerun.patch
 
-Patch130:       z15-test-skip.patch      # PATCH_FOR: 10, 12, 14
+Patch125:       cares_172.patch            # PATCH_FOR: 10
+Patch130:       test_ssl_cert_fixups.patch # PATCH_FOR: 10
 Patch132:       test-skip-y2038-on-32bit-time_t.patch # PATCH_FOR: 16, 14, master, 17
 Patch133:       rsa-pss-revert.patch     # PATCH_FOR: 16, 17
 
@@ -485,6 +487,7 @@ tar Jxf %{SOURCE11}
 %patch45 -p1
 %patch46 -p1
 %patch47 -p1
+%patch48 -p1
 %patch100 -p1
 %patch101 -p1
 %patch102 -p1
@@ -498,6 +501,7 @@ tar Jxf %{SOURCE11}
 %patch109 -p1
 %patch110 -p1
 %patch120 -p1
+%patch125 -p1
 %patch130 -p1
 %patch132 -p1
 %if ! 0%{with openssl_RSA_get0_pss_params}

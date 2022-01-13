@@ -1,8 +1,20 @@
 -------------------------------------------------------------------
+Thu Jan 13 20:06:01 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- test_ssl_cert_fixups.patch: fixup SSL certificates in unit tests
+- fix_ci_tests.patch: updated for z15 zlib compression
+
+-------------------------------------------------------------------
+Fri Aug 13 10:11:36 UTC 2021 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2021-22939.patch: Incomplete validation of rejectUnauthorized parameter
+  (bsc#1189369, CVE-2021-22939)
+
+-------------------------------------------------------------------
 Tue Aug 10 13:45:14 UTC 2021 - Adam Majer <adam.majer@suse.de>
 
 - cares_172.patch: update c-ares to 1.17.2.
-  (bsc#1188881, CVE-2021-3672)
+  (bsc#1188881, bsc#1189370, CVE-2021-3672, CVE-2021-22931)
 
 -------------------------------------------------------------------
 Mon Aug  9 12:54:00 UTC 2021 - Adam Majer <adam.majer@suse.de>

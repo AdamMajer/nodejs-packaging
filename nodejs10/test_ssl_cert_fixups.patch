@@ -1,0 +1,303 @@
+Index: node-v10.24.1/test/fixtures/pass-cert.pem
+===================================================================
+--- node-v10.24.1.orig/test/fixtures/pass-cert.pem
++++ /dev/null
+@@ -1,12 +0,0 @@
+------BEGIN CERTIFICATE-----
+-MIIB2TCCAUICCQDQv9q5AAtoEzANBgkqhkiG9w0BAQUFADAxMQswCQYDVQQGEwJK
+-UDEOMAwGA1UECBMFVG9reW8xEjAQBgNVBAoUCW5vZGVqc19qcDAeFw0xMTExMjYx
+-NzA0MDhaFw0yMTExMjMxNzA0MDhaMDExCzAJBgNVBAYTAkpQMQ4wDAYDVQQIEwVU
+-b2t5bzESMBAGA1UEChQJbm9kZWpzX2pwMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCB
+-iQKBgQChmQeFwsaomtQbw9Nm55Dn6KSR9bkY8PDroQUeTNa90BlIbhGsKYm4l7bE
+-RaasFgOrkcQpk45fdDVYPjKxraZiGXXKjSIDYeDAIC/+CkwQKrejgCPmJs4gV4g+
+-npvwi1gVr2NAg7fkJOyEW2TDp4dsAD8qtG8Aml0C1hJXwFYmBwIDAQABMA0GCSqG
+-SIb3DQEBBQUAA4GBAGJYkr3VgHUZSyGrdUWeGKiKS4EY3D4ki8Luv9Jf/IpxJLbZ
+-NGaKUbXSVYSW3US0yR1+lsNvWchmc0wLsbNEHbIiS4BQPkqX7F8FCthM1gwRLQPa
+-Sofz3dRNFKDmivG9mdbQDPD/duft7Kn6E3JS5myYUJ0dRKeYfOXLXCY2pZpG
+------END CERTIFICATE-----
+Index: node-v10.24.1/test/fixtures/pass-csr.pem
+===================================================================
+--- node-v10.24.1.orig/test/fixtures/pass-csr.pem
++++ /dev/null
+@@ -1,10 +0,0 @@
+------BEGIN CERTIFICATE REQUEST-----
+-MIIBcDCB2gIBADAxMQswCQYDVQQGEwJKUDEOMAwGA1UECBMFVG9reW8xEjAQBgNV
+-BAoUCW5vZGVqc19qcDCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAoZkHhcLG
+-qJrUG8PTZueQ5+ikkfW5GPDw66EFHkzWvdAZSG4RrCmJuJe2xEWmrBYDq5HEKZOO
+-X3Q1WD4ysa2mYhl1yo0iA2HgwCAv/gpMECq3o4Aj5ibOIFeIPp6b8ItYFa9jQIO3
+-5CTshFtkw6eHbAA/KrRvAJpdAtYSV8BWJgcCAwEAAaAAMA0GCSqGSIb3DQEBBQUA
+-A4GBAC9g7s3rG6G7JSTUOizY1u9Ij6QM9Y6PqQthr4OJHa+Hln5FJQahpgJmA4kC
+-WYoWvBMBgFPFBCYAj0yMPohrlAwlbd9MADe4gg3lxuO9UxXDzp/lOVRBAEa4n5i+
+-Lw7VEiJtPha4NXgeNzxi5OyBJwxAOPFwsyCdR0SynlifTFHI
+------END CERTIFICATE REQUEST-----
+Index: node-v10.24.1/test/fixtures/pass-key.pem
+===================================================================
+--- node-v10.24.1.orig/test/fixtures/pass-key.pem
++++ /dev/null
+@@ -1,17 +0,0 @@
+------BEGIN ENCRYPTED PRIVATE KEY-----
+-MIICojAcBgoqhkiG9w0BDAEDMA4ECMeM7uTE/aoCAgIIAASCAoDIIO3VAz+gb7td
+-FSOwV/zshzjr7n54r6Jg6fFyeIRrE3tgobr0loPfZUadtd1uxGMFlf4WKqXdk9u/
+-Le2BCw34rTVCIlwritFHmcQ56xDKB5WTx+yuzxr97tmnFq00kTeHUcsPOb+eYU5B
+-2M0xWpYeEUP4iwQafUz6A6EOjSADYYpdgHHAzIY9VwECPkCqOJJti644OMNPUw8q
+-nvoESqwjAO1t2lymNUFk6zHg6FewiyCfjY6ucUCadbN74vUqKAJI45u7HQL8rxSf
+-95ncmjpHc+t7GUrQyzD68JaIGFN1Q8d09/ve3EOfoUoDGW+rE3hJ7oISeJfY3k7I
+-bBw6i0MO/ZfMs9wbmbMNDKzXQMolXfenK+KdD5Scp6eCeE14KqbQXuDoy+yA9CcZ
+-F87v4AyiY2o+A+cS56oY2R9Gc7uX51N8ZQGCuE/IEXeZbemV81br/EytJiZsXbPj
+-Kks1QkcsWnfsCUEeyF6IvIRXB70A4fuJ3+V9YoPoIawY18OoRPbMBBWkfMwEJIdB
+-2bW3joco0unImwRT6aXFghCnHOdXyQOMNtf1aCSDd/7o+Vac50Lwtuwpp7NsnUID
+-V9reIaEugHuM3PHbv3ygm8o3wb2VVRHgWV/wOReEtqLPhERyM1xfVs0y6xCGiE84
+-N4uEzAwSGDFgEYACoj7LrqrVVEeVbrD0Gul2/fq9HnKOk6E/tygrwusasyL5vtSX
+-ZH/DeKK2XKq70bSu+1eGA/A+SqySckBe4QgEO7Qyb9xWqZhbqDyLg/xCUfDscMyP
+-WWW6nN56LcWI7UOEfWJVLTFCBil5T4e2qA4BiJTNc8zwwOM0BIyqvnhlENGbwQBI
+-KuSCzKIh
+------END ENCRYPTED PRIVATE KEY-----
+Index: node-v10.24.1/test/fixtures/raw-key.pem
+===================================================================
+--- node-v10.24.1.orig/test/fixtures/raw-key.pem
++++ /dev/null
+@@ -1,15 +0,0 @@
+------BEGIN RSA PRIVATE KEY-----
+-MIICXAIBAAKBgQChmQeFwsaomtQbw9Nm55Dn6KSR9bkY8PDroQUeTNa90BlIbhGs
+-KYm4l7bERaasFgOrkcQpk45fdDVYPjKxraZiGXXKjSIDYeDAIC/+CkwQKrejgCPm
+-Js4gV4g+npvwi1gVr2NAg7fkJOyEW2TDp4dsAD8qtG8Aml0C1hJXwFYmBwIDAQAB
+-AoGAVgZpAsQVjVwe3kj5GSbc9Rfbw/fTeXuKRWWKm/67soA9dVli/wt9zU62dPW/
+-LIzrl0IZ8ygh+p6aZ0d1JTEUCPx7e0KocCmNg77i5AG0eK5i/KKjTWB4UGRDylfD
+-dnBXQc814bK+VB0mrcp46U/7tLGYkV2Kz/LiNpmxKwITS4ECQQDPoA6WIU87Eulq
+-OuVmJnFIQ2IR3SycVisO7TUq2MItq2U4BwsA3aQ4ehpP/uJdAfJEfwi2omRV5pGb
+-806pWkfPAkEAxz+igHS8tR11aLck71dD4BRBY7XZCUg6G4zmYYWsqj0yvM6c4Yn0
+-HRcrZqFvV/xuMFphWEmMBhrqLvgy66yUSQJBALkei4LeRid0sDswMhMHGaAFvG4T
+-FtB5n8CaTPpb854GoKP42521ANP+QnGq36dvsdPStDEqz20rvA4hPLSQs08CQCV8
+-eWxFikNg+XfsDQzilCiSZwMFcYHnjtckGSv75FJbFTKkhKuCMuVOOKIkeThKi8iZ
+-GHttyuRTKAASPjJM09ECQBrhlKJwYKuUDMp3qkLBgrXYqbFxZtkS2GeFMUfLcRlx
+-oMrTFEczz9lZ0huTuQYPeAAOY0Gd84mL0kQqTRTzNLs=
+------END RSA PRIVATE KEY-----
+Index: node-v10.24.1/test/parallel/test-tls-passphrase.js
+===================================================================
+--- node-v10.24.1.orig/test/parallel/test-tls-passphrase.js
++++ node-v10.24.1/test/parallel/test-tls-passphrase.js
+@@ -28,9 +28,9 @@ const assert = require('assert');
+ const tls = require('tls');
+ const fixtures = require('../common/fixtures');
+ 
+-const passKey = fixtures.readSync('pass-key.pem');
+-const rawKey = fixtures.readSync('raw-key.pem');
+-const cert = fixtures.readSync('pass-cert.pem');
++const passKey = fixtures.readKey('rsa_private_encrypted.pem');
++const rawKey = fixtures.readKey('rsa_private.pem');
++const cert = fixtures.readKey('rsa_cert.crt');
+ 
+ assert(Buffer.isBuffer(passKey));
+ assert(Buffer.isBuffer(cert));
+@@ -39,7 +39,7 @@ assert.strictEqual(typeof cert.toString(
+ 
+ const server = tls.Server({
+   key: passKey,
+-  passphrase: 'passphrase',
++  passphrase: 'password',
+   cert: cert,
+   ca: [cert],
+   requestCert: true,
+@@ -53,7 +53,7 @@ server.listen(0, common.mustCall(functio
+   tls.connect({
+     port: this.address().port,
+     key: passKey,
+-    passphrase: 'passphrase',
++    passphrase: 'password',
+     cert: cert,
+     rejectUnauthorized: false
+   }, common.mustCall());
+@@ -77,7 +77,7 @@ server.listen(0, common.mustCall(functio
+   tls.connect({
+     port: this.address().port,
+     key: [passKey],
+-    passphrase: 'passphrase',
++    passphrase: 'password',
+     cert: [cert],
+     rejectUnauthorized: false
+   }, common.mustCall());
+@@ -101,7 +101,7 @@ server.listen(0, common.mustCall(functio
+   tls.connect({
+     port: this.address().port,
+     key: passKey.toString(),
+-    passphrase: 'passphrase',
++    passphrase: 'password',
+     cert: cert.toString(),
+     rejectUnauthorized: false
+   }, common.mustCall());
+@@ -125,7 +125,7 @@ server.listen(0, common.mustCall(functio
+   tls.connect({
+     port: this.address().port,
+     key: [passKey.toString()],
+-    passphrase: 'passphrase',
++    passphrase: 'password',
+     cert: [cert.toString()],
+     rejectUnauthorized: false
+   }, common.mustCall());
+@@ -148,14 +148,14 @@ server.listen(0, common.mustCall(functio
+   // Object[]
+   tls.connect({
+     port: this.address().port,
+-    key: [{ pem: passKey, passphrase: 'passphrase' }],
++    key: [{ pem: passKey, passphrase: 'password' }],
+     cert: cert,
+     rejectUnauthorized: false
+   }, common.mustCall());
+ 
+   tls.connect({
+     port: this.address().port,
+-    key: [{ pem: passKey, passphrase: 'passphrase' }],
++    key: [{ pem: passKey, passphrase: 'password' }],
+     passphrase: 'ignored',
+     cert: cert,
+     rejectUnauthorized: false
+@@ -164,14 +164,14 @@ server.listen(0, common.mustCall(functio
+   tls.connect({
+     port: this.address().port,
+     key: [{ pem: passKey }],
+-    passphrase: 'passphrase',
++    passphrase: 'password',
+     cert: cert,
+     rejectUnauthorized: false
+   }, common.mustCall());
+ 
+   tls.connect({
+     port: this.address().port,
+-    key: [{ pem: passKey.toString(), passphrase: 'passphrase' }],
++    key: [{ pem: passKey.toString(), passphrase: 'password' }],
+     cert: cert,
+     rejectUnauthorized: false
+   }, common.mustCall());
+@@ -288,7 +288,7 @@ assert.throws(function() {
+   tls.connect({
+     port: server.address().port,
+     key: [{ pem: passKey, passphrase: 'invalid' }],
+-    passphrase: 'passphrase', // Valid but unused
++    passphrase: 'password', // Valid but unused
+     cert: cert,
+     rejectUnauthorized: false
+   });
+Index: node-v10.24.1/test/fixtures/keys/rsa_cert.crt
+===================================================================
+--- /dev/null
++++ node-v10.24.1/test/fixtures/keys/rsa_cert.crt
+@@ -0,0 +1,24 @@
++-----BEGIN CERTIFICATE-----
++MIIEADCCAuigAwIBAgIUbdhzx2BDd1HT3m93SUde7eCIk3MwDQYJKoZIhvcNAQEL
++BQAwgbAxCzAJBgNVBAYTAlVLMRQwEgYDVQQIDAtBY2tuYWNrIEx0ZDETMBEGA1UE
++BwwKUmh5cyBKb25lczEQMA4GA1UECgwHbm9kZS5qczEdMBsGA1UECwwUVGVzdCBU
++TFMgQ2VydGlmaWNhdGUxFDASBgNVBAsMC0VuZ2luZWVyaW5nMRIwEAYDVQQDDAls
++b2NhbGhvc3QxGzAZBgkqhkiG9w0BCQEWDGFsZXhAYXViLmRldjAeFw0yMjAxMTMx
++OTQ4MjVaFw0zNTA5MjIxOTQ4MjVaMIGwMQswCQYDVQQGEwJVSzEUMBIGA1UECAwL
++QWNrbmFjayBMdGQxEzARBgNVBAcMClJoeXMgSm9uZXMxEDAOBgNVBAoMB25vZGUu
++anMxHTAbBgNVBAsMFFRlc3QgVExTIENlcnRpZmljYXRlMRQwEgYDVQQLDAtFbmdp
++bmVlcmluZzESMBAGA1UEAwwJbG9jYWxob3N0MRswGQYJKoZIhvcNAQkBFgxhbGV4
++QGF1Yi5kZXYwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC33FiIiiex
++wLe/P8DZx5HsqFlmUO7/lvJ7necJVNwqdZ3ax5jpQB0p6uxfqeOvzcN3k5V7UFb/
++Am+nkSNZMAZhsWzCU2Z4Pjh50QYz3f0Hour7/yIGStOLyYY3hgLK2K8TbhgjQPhd
++kw9+QtKlpvbL8fLgONAoGrVOFnRQGcr70iFffsm79mgZhKVMgYiHPJqJgGHvCtkG
++g9zMgS7p63+Q3ZWedtFS2RhMX3uCBy/mH6EOlRCNBbRmA4xxNzyf5GQaki3T+Iz9
++tOMjdPP+CwV2LqEdylmBuik8vrfTb3qIHLKKBAI8lXN26wWtA3kN4L7NP+cbKlCR
++lqctvhmylLH1AgMBAAGjEDAOMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQELBQAD
++ggEBAA8zZj9aAsJSZ+tFOYYSbHwWAGViuW0zI8eKj9hU417GCqBwGx9g/Rb0pZG/
++b8BlH30JwW41vz/gLQlbjHHVKJOfQ3YByK/7/pAuDrzNy9jg3pbJFKbjkajkJrlt
++DldZIBe+BAJNVTreQDGzs7KYY8+m+3/zVyo4OuYwRpKxMoQH8dyIZ9O9Kp0r+GaD
++Pwr1Ta7976Y4ALULTUCxz1g5CG8pmXtC+B3tmVzdkB9KaiP/CFU/HtE4HcNZ8v6G
++JkgYgHKa2fMPhe2rz8dw9IDms+S/G9vq/ehD9OgGoWrk5wb7DzDyzs8RuGL69WZ7
++Ld1GdelWKK9RhPs29WU+uz1R4gw=
++-----END CERTIFICATE-----
+Index: node-v10.24.1/test/fixtures/keys/rsa_private.pem
+===================================================================
+--- /dev/null
++++ node-v10.24.1/test/fixtures/keys/rsa_private.pem
+@@ -0,0 +1,27 @@
++-----BEGIN RSA PRIVATE KEY-----
++MIIEpQIBAAKCAQEAt9xYiIonscC3vz/A2ceR7KhZZlDu/5bye53nCVTcKnWd2seY
++6UAdKersX6njr83Dd5OVe1BW/wJvp5EjWTAGYbFswlNmeD44edEGM939B6Lq+/8i
++BkrTi8mGN4YCytivE24YI0D4XZMPfkLSpab2y/Hy4DjQKBq1ThZ0UBnK+9IhX37J
++u/ZoGYSlTIGIhzyaiYBh7wrZBoPczIEu6et/kN2VnnbRUtkYTF97ggcv5h+hDpUQ
++jQW0ZgOMcTc8n+RkGpIt0/iM/bTjI3Tz/gsFdi6hHcpZgbopPL630296iByyigQC
++PJVzdusFrQN5DeC+zT/nGypQkZanLb4ZspSx9QIDAQABAoIBAQCS2erYu8gyoGPi
++3E/zYgQ6ishFAZWzDWSFubwD5wSm4SSAzvViL/RbO6kqS25xR569DmLRiHzD17VI
++mJMsNECUnPrqR2TL256OJZaXrNHh3I1lUwVhEzjeKMsL4/ys+d70XPXoiocVblVs
++moDXEIGEqa48ywPvVE3Fngeuxrsq3/GCVBNiwtt0YjAOZxmKEh31UZdHO+YI+wNF
++/Z8KQCPscN5HGlR0SIQOlqMANz49aKStrevdvjS1UcpabzDEkuK84g3saJhcpAhb
++pGFmAf5GTjkkhE0rE1qDF15dSqrKGfCFtOjUeK17SIEN7E322ChmTReZ1hYGfoSV
++cdFntUINAoGBAPFKL5QeJ6wZu8R/ru11wTG6sQA0Jub2hGccPXpbnPrT+3CACOLI
++JTCLy/xTKW3dqRHj/wZEe+jUw88w7jwGb1BkWr4BI8tDvY9jQLP1jyuLWRfrxXbp
++4Z0oeBBwBeCI/ZG7FIvdDTqWxn1aj3Tmh6s4ByqEdtwrrrJPcBUNl01fAoGBAMMR
++3RGE/ca6X6xz6kgUD6TtHVhiiRJK1jm/u+q0n7i/MBkeDgTZkHYS7lPc0yIdtqaI
++Plz5yzwHnAvuMrv8LSdkjwioig2yQa3tAij8kXxqs7wN5418DMV2s1OJBrPthYPs
++bv4im2iI8V63JQS4ZMYQbckq8ABYccTpOnxXDy0rAoGBAKkvzHa+QjERhjB9GyoT
++1FhLQIsVBmYSWrp1+cGO9V6HPxoeHJzvm+wTSf/uS/FmaINL6+j4Ii4a6gWgmJts
++I6cqBtqNsAx5vjQJczf8KdxthBYa0sXTrsfktXNJKUXMqIgDtp9vazQ2vozs8AQX
++FPAAhD3SzgkJdCBBRSTt97ZfAoGAWAziKpxLKL7LnL4dzDcx8JIPIuwnTxh0plCD
++dCffyLaT8WJ9lXbXHFTjOvt8WfPrlDP/Ylxmfkw5BbGZOP1VLGjZn2DkH9aMiwNm
++bDXFPdG0G3hzQovx/9fajiRV4DWghLHeT9wzJfZabRRiI0VQR472300AVEeX4vgb
++rDBn600CgYEAk7czBCT9rHn/PNwCa17hlTy88C4vXkwbz83Oa+aX5L4e5gw5lhcR
++2ZuZHLb2r6oMt9rlD7EIDItSs+u21LOXWPTAlazdnpYUyw/CzogM/PN+qNwMRXn5
++uXFFhmlP2mVg2EdELTahXch8kWqHaCSX53yvqCtRKu/j76V31TfQZGM=
++-----END RSA PRIVATE KEY-----
+Index: node-v10.24.1/test/fixtures/keys/rsa_private_encrypted.pem
+===================================================================
+--- /dev/null
++++ node-v10.24.1/test/fixtures/keys/rsa_private_encrypted.pem
+@@ -0,0 +1,30 @@
++-----BEGIN RSA PRIVATE KEY-----
++Proc-Type: 4,ENCRYPTED
++DEK-Info: AES-256-CBC,DB3D20E60E8FDC3356BD79712FF8EF7E
++
++K+vu0U3IFTJBBi6zW5Zng80O1jXq/ZmlOFs/j/SQpPwfW1Do9i/Dwa7ntBlTwrCm
++sd3IIPgu2ikfLwxvbxsZN540oCaCqaZ/bmmyzH3MyVDA9MllUu+X8+Q3ATzcYa9R
++U5XfF5DAXsSRnstCbmKagWVQpO0oX8k3ratfny6Ixq86Y82tK8+o5YiBFq1kqa+9
++4yat7IWQbqV5ifUtUPCHZwEqBt+WKazX05BqERjkckHdpfaDrBvSSPXTwoLm6uRR
++ktkUVpO4tHMZ4VlcTfFtpz8gdYYod0nM6vz26hvbESHSwztSgMhmKdsE5eqmYfgu
++F4WkEN4bqAiPjKK3jnUKPt/vg2oKYFQlVYFl9QnBjiRqcQTi3e9lwn1hI7uoMb6g
++HuaCc57JJHPN/ZLP3ts4ZxFbwUjTGioh5Zh6WozG3L3+Ujwq/sDrAskRyzdcuP7I
++Rs3oLbHY03OHyg8IbxR5Iu89l6FLqnR45yvbxXtZ7ImGOPM5Z9pB1CzDhGDx2F6g
++J/Kf/7ZF2DmYUVbVKDfESEDhRfuMAVzhasDPTRqipSA5QvJVQY+J/6QDPrNNmHVB
++4e4ouHIDWERUf0t1Be7THvP3X8OJozj2HApzqa5ZCaJDo8eaL8TCD5uH75ID5URJ
++VscGHaUXT8/sxfHi1x8BibW5W5J/akFsnrnJU/1BZgGznIxjf5tKfHGppSIVdlKP
++3ghYNmEIFPNJ6cxuUA0D2IOV4uO3FTCU6seIzvJhYkmXnticcZYGtmGxXKrodtzS
++J1YuaNkkO/YRZah285lQ6QCIhCFo4Oa4ILjgoTQISuw7nQj5ESyncauzLUBXKX0c
++XDUej64KNTvVF9UXdG48fYvNmSZWCnTye4UmPu17FmwpVra38U+EdoLyWyMIAI5t
++rP6Hhgc9BxOo41Im9QpTcAPfKAknP8Rbm3ACJG5T9FKq/c29d1E//eFR6SL51e/a
++yWdCgJN/FJOAX60+erPwoVoRFEttAeDPkklgFGdc8F4LIYAig9gEZ92ykFFz3fWz
++jIcUVLrL+IokFbPVUBoMihqVyMQsWH+5Qq9wjxf6EDIf0BVtm9U4BJoOkPStFIfF
++Kof7OVv7izyL8R/GIil9VQs9ftwkIUPeXx2Hw0bE3HJ3C8K4+mbLg3tKhGnBDU5Z
++Xm5mLHoCRBa3ZRFWZtigX7POszdLAzftYo8o65Be4OtPS+tQAORk9gHsXATv7dDB
++OGw61x5KA55LHVHhWaRvu3J8E7nhxw0q/HskyZhDC+Y+Xs6vmQSb4nO4ET4NYX1P
++m3PMdgGoqRDJ2jZw4eoQdRKCM0EHSepSAYpO1tcAXhPZS4ITogoRgPpVgOebEQUL
++nKNeNu/BxMSH/IH15jjDLF3TiEoguF9xdTaCxIBzE1SFpVO0u9m9vXpWdPThVgsb
++VcEI487p7v9iImP3BYPT8ZYvytC26EH0hyOrwhahTvTb4vXghkLIyvPUg1lZHc6e
++aPHb2AzYAHLnp/ehDQGKWrCOJ1JE2vBv8ZkLa+XZo7YASXBRZitPOMlvykEyzxmR
++QAmNhKGvFmeM2mmHAp0aC03rgF3lxNsXQ1CyfEdq3UV9ReSnttq8gtrJfCwxV+wY
++-----END RSA PRIVATE KEY-----
+Index: node-v10.24.1/test/fixtures/keys/rsa_cert.cnf
+===================================================================
+--- /dev/null
++++ node-v10.24.1/test/fixtures/keys/rsa_cert.cnf
+@@ -0,0 +1,23 @@
++[ req ]
++days                   = 99999
++distinguished_name     = req_distinguished_name
++attributes             = req_attributes
++prompt                 = no
++x509_extensions        = v3_ca
++
++[ req_distinguished_name ]
++C                      = UK
++ST                     = Acknack Ltd
++L                      = Rhys Jones
++O                      = node.js
++0.OU                   = Test TLS Certificate
++1.OU                   = Engineering
++CN                     = localhost
++emailAddress           = alex@aub.dev
++
++[ req_attributes ]
++
++[ v3_ca ]
++basicConstraints = CA:TRUE
++
++[ x509_extensions ] 
