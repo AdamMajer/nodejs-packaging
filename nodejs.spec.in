@@ -155,6 +155,8 @@ Patch45:        limit_worker_stdio_memsize.patch # PATCH_FOR: 10
 Patch46:        CVE-2021-22918.patch   # PATCH_FOR: 10
 Patch47:        CVE-2021-22930.patch   # PATCH_FOR: 8, 10
 Patch48:        CVE-2021-22939.patch   # PATCH_FOR: 10
+Patch49:        CVE-2022-21824.patch   # PATCH_FOR: 10, 8
+Patch50:        CVE-2021-44532.patch   # PATCH_FOR: 10, 8
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, master, 16, 17
@@ -280,7 +282,7 @@ BuildRequires:  group(nobody)
 BuildRequires:  pkgconfig(openssl) >= %{openssl_req_ver}
 
 # require patched openssl library on SLES for nodejs16
-%if %node_version_number >= 16 && 0%{?suse_version} <= 1500 && 0%{?suse_version} && 0%{with openssl_RSA_get0_pss_params}
+%if %node_version_number >= 16 && 0%{?suse_version} <= 1500 && 0%{?suse_version} && %{pkg_vcmp openssl-1_1 < '1.1.1e' } && 0%{with openssl_RSA_get0_pss_params}
 BuildRequires:  openssl-has-RSA_get0_pss_params
 Requires:       openssl-has-RSA_get0_pss_params
 %endif
@@ -488,6 +490,8 @@ tar Jxf %{SOURCE11}
 %patch46 -p1
 %patch47 -p1
 %patch48 -p1
+%patch49 -p1
+%patch50 -p1
 %patch100 -p1
 %patch101 -p1
 %patch102 -p1
