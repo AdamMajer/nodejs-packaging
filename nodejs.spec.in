@@ -49,12 +49,6 @@ Release:        0
 %bcond_with libalternatives
 %endif
 
-%if %node_version_number >= 16
-%bcond_without corepack
-%else
-%bcond_with corepath
-%endif
-
 %if %node_version_number >= 12
 %define openssl_req_ver 1.1.1
 %else
@@ -155,8 +149,8 @@ Patch45:        limit_worker_stdio_memsize.patch # PATCH_FOR: 10
 Patch46:        CVE-2021-22918.patch   # PATCH_FOR: 10
 Patch47:        CVE-2021-22930.patch   # PATCH_FOR: 8, 10
 Patch48:        CVE-2021-22939.patch   # PATCH_FOR: 10
-Patch49:        CVE-2022-21824.patch   # PATCH_FOR: 10, 8
-Patch50:        CVE-2021-44532.patch   # PATCH_FOR: 10, 8
+Patch49:        CVE-2022-21824.patch   # PATCH_FOR: 10
+Patch50:        CVE-2021-3807.patch    # PATCH_FOR: 10, 8
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, master, 16, 17
@@ -179,7 +173,7 @@ Patch110:       legacy_python.patch       # PATCH_FOR: 16, master, 17
 Patch120:       flaky_test_rerun.patch
 
 Patch125:       cares_172.patch            # PATCH_FOR: 10
-Patch130:       test_ssl_cert_fixups.patch # PATCH_FOR: 10
+Patch130:       test_ssl_cert_fixups.patch # PATCH_FOR: 10, 8
 Patch132:       test-skip-y2038-on-32bit-time_t.patch # PATCH_FOR: 16, 14, master, 17
 Patch133:       rsa-pss-revert.patch     # PATCH_FOR: 16, 17
 

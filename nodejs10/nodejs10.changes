@@ -1,4 +1,23 @@
 -------------------------------------------------------------------
+Tue Feb 15 12:57:03 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- npm-v6.14.16.tar.gz: update to npm 6.14.16 fixing
+  * CVE-2021-23343 - ReDoS via splitDeviceRe, splitTailRe and
+    splitPathRe (bsc#1192153)
+  * CVE-2021-23343 - node-tar: Insufficient symlink protection
+    allowing arbitrary file creation and overwrite (bsc#1191963)
+  * CVE-2021-32804 - node-tar: Insufficient absolute path sanitization
+    allowing arbitrary file creation and overwrite (bsc#1191962)
+  * CVE-2021-3918 - json-schema is vulnerable to Improperly
+    Controlled Modification of Object Prototype Attributes (bsc#1192696)
+
+- CVE-2021-3807.patch: node-ansi-regex: Regular expression
+  denial of service (ReDoS) matching ANSI escape codes
+  (bsc#1192154, CVE-2021-3807)
+- CVE-2022-21824.patch: fix prototype pollution via console.table
+  (bsc#1194514, CVE-2022-21824)
+
+-------------------------------------------------------------------
 Thu Jan 13 20:06:01 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - test_ssl_cert_fixups.patch: fixup SSL certificates in unit tests

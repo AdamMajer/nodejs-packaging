@@ -173,3 +173,16 @@ Index: node-v8.17.0/test/parallel/test-crypto-dh.js
  
  // Create a shared using a DH group.
  const alice = crypto.createDiffieHellmanGroup('modp5');
+Index: node-v8.17.0/test/parallel/test-zlib-dictionary-fail.js
+===================================================================
+--- node-v8.17.0.orig/test/parallel/test-zlib-dictionary-fail.js
++++ node-v8.17.0/test/parallel/test-zlib-dictionary-fail.js
+@@ -53,7 +53,7 @@ const input = Buffer.from([0x78, 0xBB, 0
+   stream.on('error', common.mustCall(function(err) {
+     // It's not possible to separate invalid dict and invalid data when using
+     // the raw format
+-    assert(/invalid/.test(err.message));
++    assert(/(invalid|Operation-Ending-Supplemental Code is 0x12)/.test(err.message));
+   }));
+ 
+   stream.write(input);

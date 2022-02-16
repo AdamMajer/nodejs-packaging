@@ -30,7 +30,7 @@ s/{{git_branch}}/v8.x-staging/
 # Extra Sources
 s,{{SOURCES_EXTRA}},\
 # npm upgrade. manpages generated manually \
-Source9:        https://github.com/npm/cli/archive/refs/tags/v6.14.13.tar.gz#/npm-v6.14.13.tar.gz \
+Source9:        https://github.com/npm/cli/archive/refs/tags/v6.14.16.tar.gz#/npm-v6.14.16.tar.gz \
 Source90:       npm_man.tar.xz \
 ,
 
