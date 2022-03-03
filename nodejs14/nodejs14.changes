@@ -1,4 +1,26 @@
 -------------------------------------------------------------------
+Wed Feb 16 16:12:01 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- update to 14.19.0:
+  * crypto: make FIPS related options always available
+  * deps: deps: upgrade npm to 6.14.16
+    + CVE-2021-23343 - ReDoS via splitDeviceRe, splitTailRe and
+      splitPathRe (bsc#1192153)
+    + CVE-2021-32803 - node-tar: Insufficient symlink protection
+      allowing arbitrary file creation and overwrite (bsc#1191963)
+    + CVE-2021-32804 - node-tar: Insufficient absolute path sanitization
+      allowing arbitrary file creation and overwrite (bsc#1191962)
+    + CVE-2021-3918 - json-schema is vulnerable to Improperly
+      Controlled Modification of Object Prototype Attributes (bsc#1192696)
+  * module: support pattern trailers
+  * src: make napi_create_reference accept symbol
+
+- CVE-2021-3807.patch: node-ansi-regex: Regular expression
+  denial of service (ReDoS) matching ANSI escape codes
+  (bsc#1192154, CVE-2021-3807)
+- versioned.patch, nodejs-libpath.patch: refreshed
+
+-------------------------------------------------------------------
 Wed Jan 12 10:25:55 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - z15-test-skip.patch: dropped, no longer required

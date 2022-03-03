@@ -4,7 +4,7 @@ Tue Feb 15 12:57:03 UTC 2022 - Adam Majer <adam.majer@suse.de>
 - npm-v6.14.16.tar.gz: update to npm 6.14.16 fixing
   * CVE-2021-23343 - ReDoS via splitDeviceRe, splitTailRe and
     splitPathRe (bsc#1192153)
-  * CVE-2021-23343 - node-tar: Insufficient symlink protection
+  * CVE-2021-32803 - node-tar: Insufficient symlink protection
     allowing arbitrary file creation and overwrite (bsc#1191963)
   * CVE-2021-32804 - node-tar: Insufficient absolute path sanitization
     allowing arbitrary file creation and overwrite (bsc#1191962)

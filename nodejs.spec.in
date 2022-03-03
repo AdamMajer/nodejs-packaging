@@ -124,6 +124,7 @@ Source20:       bash_output_helper.bash
 
 ## Patches not distribution specific
 Patch1:         cares_public_headers.patch # PATCH_FOR: master, 12, 14, 16, 17
+Patch2:         gcc12-fix.patch        # PATCH_FOR: 17
 Patch3:         fix_ci_tests.patch
 Patch5:         sle12_python3_compat.patch # PATCH_FOR: master, 13, 14, 15, 16, 17
 Patch7:         manual_configure.patch # PATCH_FOR: master, 14, 13, 12, 10, 8, 15, 16, 17
@@ -150,7 +151,7 @@ Patch46:        CVE-2021-22918.patch   # PATCH_FOR: 10
 Patch47:        CVE-2021-22930.patch   # PATCH_FOR: 8, 10
 Patch48:        CVE-2021-22939.patch   # PATCH_FOR: 10
 Patch49:        CVE-2022-21824.patch   # PATCH_FOR: 10
-Patch50:        CVE-2021-3807.patch    # PATCH_FOR: 10, 8
+Patch50:        CVE-2021-3807.patch    # PATCH_FOR: 10, 8, 12, 14
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, master, 16, 17
@@ -459,6 +460,7 @@ tar Jxf %{SOURCE11}
 %endif
 
 %patch1 -p1
+%patch2 -p1
 %patch3 -p1
 %patch5 -p1
 %patch7 -p1
@@ -798,7 +800,7 @@ make test-ci
 %ghost %{_sysconfdir}/alternatives/npx.1%{ext_man}
 %endif
 
-%if %{node_version_number} >= 16
+%if %{node_version_number} >= 14
 %files -n corepack%{node_version_number}
 %defattr(-, root, root)
 %{_bindir}/corepack%{node_version_number}

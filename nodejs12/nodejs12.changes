@@ -1,4 +1,26 @@
 -------------------------------------------------------------------
+Wed Feb 16 13:50:40 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- update to 12.22.10
+  * Upgrade npm to 6.14.16
+    + CVE-2021-23343 - ReDoS via splitDeviceRe, splitTailRe and
+      splitPathRe (bsc#1192153)
+    + CVE-2021-32803 - node-tar: Insufficient symlink protection
+      allowing arbitrary file creation and overwrite (bsc#1191963)
+    + CVE-2021-32804 - node-tar: Insufficient absolute path sanitization
+      allowing arbitrary file creation and overwrite (bsc#1191962)
+    + CVE-2021-3918 - json-schema is vulnerable to Improperly
+      Controlled Modification of Object Prototype Attributes (bsc#1192696)
+  * Updated ICU time zone data
+
+- CVE-2021-3807.patch: node-ansi-regex: Regular expression
+  denial of service (ReDoS) matching ANSI escape codes
+  (bsc#1192154, CVE-2021-3807)
+- versioned.patch: refreshed
+- z15-test-skip.patch: dropped
+- fix_ci_tests.patch: fix tests on z15
+
+-------------------------------------------------------------------
 Tue Jan 11 18:51:38 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - update to 12.22.9:

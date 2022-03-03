@@ -2,10 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-v14.18.3/test/parallel/test-module-loading-globalpaths.js
+Index: node-v14.19.0/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-v14.18.3.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-v14.18.3/test/parallel/test-module-loading-globalpaths.js
+--- node-v14.19.0.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-v14.19.0/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -16,10 +16,10 @@ Index: node-v14.18.3/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-v14.18.3/test/parallel/test-tls-env-bad-extra-ca.js
+Index: node-v14.19.0/test/parallel/test-tls-env-bad-extra-ca.js
 ===================================================================
---- node-v14.18.3.orig/test/parallel/test-tls-env-bad-extra-ca.js
-+++ node-v14.18.3/test/parallel/test-tls-env-bad-extra-ca.js
+--- node-v14.19.0.orig/test/parallel/test-tls-env-bad-extra-ca.js
++++ node-v14.19.0/test/parallel/test-tls-env-bad-extra-ca.js
 @@ -37,7 +37,7 @@ fork(__filename, opts)
      // TODO(addaleax): Make `SafeGetenv` work like `process.env`
      // encoding-wise
@@ -29,10 +29,10 @@ Index: node-v14.18.3/test/parallel/test-tls-env-bad-extra-ca.js
        assert(re.test(stderr), stderr);
      }
    }))
-Index: node-v14.18.3/test/parallel/test-tls-passphrase.js
+Index: node-v14.19.0/test/parallel/test-tls-passphrase.js
 ===================================================================
---- node-v14.18.3.orig/test/parallel/test-tls-passphrase.js
-+++ node-v14.18.3/test/parallel/test-tls-passphrase.js
+--- node-v14.19.0.orig/test/parallel/test-tls-passphrase.js
++++ node-v14.19.0/test/parallel/test-tls-passphrase.js
 @@ -223,7 +223,7 @@ server.listen(0, common.mustCall(functio
    }, onSecureConnect());
  })).unref();
@@ -51,10 +51,10 @@ Index: node-v14.18.3/test/parallel/test-tls-passphrase.js
  
  // Invalid passphrase
  assert.throws(function() {
-Index: node-v14.18.3/test/parallel/test-crypto-scrypt.js
+Index: node-v14.19.0/test/parallel/test-crypto-scrypt.js
 ===================================================================
---- node-v14.18.3.orig/test/parallel/test-crypto-scrypt.js
-+++ node-v14.18.3/test/parallel/test-crypto-scrypt.js
+--- node-v14.19.0.orig/test/parallel/test-crypto-scrypt.js
++++ node-v14.19.0/test/parallel/test-crypto-scrypt.js
 @@ -168,8 +168,8 @@ for (const options of bad) {
  
  for (const options of toobig) {
@@ -66,10 +66,10 @@ Index: node-v14.18.3/test/parallel/test-crypto-scrypt.js
      name: 'Error',
    };
    assert.throws(() => crypto.scrypt('pass', 'salt', 1, options, () => {}),
-Index: node-v14.18.3/test/parallel/test-repl-envvars.js
+Index: node-v14.19.0/test/parallel/test-repl-envvars.js
 ===================================================================
---- node-v14.18.3.orig/test/parallel/test-repl-envvars.js
-+++ node-v14.18.3/test/parallel/test-repl-envvars.js
+--- node-v14.19.0.orig/test/parallel/test-repl-envvars.js
++++ node-v14.19.0/test/parallel/test-repl-envvars.js
 @@ -2,12 +2,14 @@
  
  // Flags: --expose-internals
@@ -86,10 +86,10 @@ Index: node-v14.18.3/test/parallel/test-repl-envvars.js
  const tests = [
    {
      env: {},
-Index: node-v14.18.3/test/common/index.mjs
+Index: node-v14.19.0/test/common/index.mjs
 ===================================================================
---- node-v14.18.3.orig/test/common/index.mjs
-+++ node-v14.18.3/test/common/index.mjs
+--- node-v14.19.0.orig/test/common/index.mjs
++++ node-v14.19.0/test/common/index.mjs
 @@ -43,6 +43,7 @@ const {
    expectsError,
    skipIfInspectorDisabled,
@@ -106,10 +106,10 @@ Index: node-v14.18.3/test/common/index.mjs
    getArrayBufferViews,
    getBufferSources,
    disableCrashOnUnhandledRejection,
-Index: node-v14.18.3/Makefile
+Index: node-v14.19.0/Makefile
 ===================================================================
---- node-v14.18.3.orig/Makefile
-+++ node-v14.18.3/Makefile
+--- node-v14.19.0.orig/Makefile
++++ node-v14.19.0/Makefile
 @@ -506,7 +506,8 @@ test-ci-js: | clear-stalled
  .PHONY: test-ci
  # Related CI jobs: most CI tests, excluding node-test-commit-arm-fanned
@@ -130,10 +130,10 @@ Index: node-v14.18.3/Makefile
  		echo "Skipping tools/doc/node_modules (no crypto)"; \
  	else \
  		cd tools/doc && $(call available-node,$(run-npm-ci)) \
-Index: node-v14.18.3/test/parallel/test-crypto-dh.js
+Index: node-v14.19.0/test/parallel/test-crypto-dh.js
 ===================================================================
---- node-v14.18.3.orig/test/parallel/test-crypto-dh.js
-+++ node-v14.18.3/test/parallel/test-crypto-dh.js
+--- node-v14.19.0.orig/test/parallel/test-crypto-dh.js
++++ node-v14.19.0/test/parallel/test-crypto-dh.js
 @@ -171,7 +171,7 @@ const wrongBlockLength = {
  
  assert.throws(() => {
@@ -143,10 +143,10 @@ Index: node-v14.18.3/test/parallel/test-crypto-dh.js
  
  // Create a shared using a DH group.
  const alice = crypto.createDiffieHellmanGroup('modp5');
-Index: node-v14.18.3/test/parallel/test-zlib-dictionary-fail.js
+Index: node-v14.19.0/test/parallel/test-zlib-dictionary-fail.js
 ===================================================================
---- node-v14.18.3.orig/test/parallel/test-zlib-dictionary-fail.js
-+++ node-v14.18.3/test/parallel/test-zlib-dictionary-fail.js
+--- node-v14.19.0.orig/test/parallel/test-zlib-dictionary-fail.js
++++ node-v14.19.0/test/parallel/test-zlib-dictionary-fail.js
 @@ -53,7 +53,7 @@ const input = Buffer.from([0x78, 0xBB, 0
    stream.on('error', common.mustCall(function(err) {
      // It's not possible to separate invalid dict and invalid data when using
@@ -156,10 +156,10 @@ Index: node-v14.18.3/test/parallel/test-zlib-dictionary-fail.js
    }));
  
    stream.write(input);
-Index: node-v14.18.3/test/parallel/test-zlib-from-string.js
+Index: node-v14.19.0/test/parallel/test-zlib-from-string.js
 ===================================================================
---- node-v14.18.3.orig/test/parallel/test-zlib-from-string.js
-+++ node-v14.18.3/test/parallel/test-zlib-from-string.js
+--- node-v14.19.0.orig/test/parallel/test-zlib-from-string.js
++++ node-v14.19.0/test/parallel/test-zlib-from-string.js
 @@ -55,7 +55,9 @@ const expectedBase64Gzip = 'H4sIAAAAAAAA
                             'sHnHNzRtagj5AQAA';
  
@@ -171,10 +171,10 @@ Index: node-v14.18.3/test/parallel/test-zlib-from-string.js
  }));
  
  zlib.gzip(inputString, common.mustCall((err, buffer) => {
-Index: node-v14.18.3/test/parallel/test-zlib-flush-drain-longblock.js
+Index: node-v14.19.0/test/parallel/test-zlib-flush-drain-longblock.js
 ===================================================================
---- node-v14.18.3.orig/test/parallel/test-zlib-flush-drain-longblock.js
-+++ node-v14.18.3/test/parallel/test-zlib-flush-drain-longblock.js
+--- node-v14.19.0.orig/test/parallel/test-zlib-flush-drain-longblock.js
++++ node-v14.19.0/test/parallel/test-zlib-flush-drain-longblock.js
 @@ -16,7 +16,7 @@ zipper.write('A'.repeat(17000));
  zipper.flush();
  
@@ -184,3 +184,16 @@ Index: node-v14.18.3/test/parallel/test-zlib-flush-drain-longblock.js
    received += d.length;
  }, 2));
  
+Index: node-v14.19.0/test/parallel/test-corepack-yarn-install.js
+===================================================================
+--- node-v14.19.0.orig/test/parallel/test-corepack-yarn-install.js
++++ node-v14.19.0/test/parallel/test-corepack-yarn-install.js
+@@ -2,6 +2,8 @@
+ const common = require('../common');
+ if (!common.hasCrypto)
+   common.skip('missing crypto');
++if (!!process.env.NODE_TEST_NO_INTERNET)
++  common.skip('skip network test');
+ 
+ const path = require('path');
+ const exec = require('child_process').exec;
