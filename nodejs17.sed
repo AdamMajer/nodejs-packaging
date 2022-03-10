@@ -1,4 +1,4 @@
-s/{{node_version}}/17.6.0/g
+s/{{node_version}}/17.7.0/g
 s/{{node_version_major}}/17/g
 
 #
@@ -38,10 +38,10 @@ s/{{bundled_brotli_version}}/1.0.9/g
 s/{{bundled_cares_version}}/1.18.1/g
 s/{{bundled_icu-small_version}}/70.1/g
 s/{{bundled_llhttp_version}}/6.0.4/g
-s/{{bundled_nghttp2_version}}/1.45.1/g
+s/{{bundled_nghttp2_version}}/1.47.0/g
 s/{{bundled_ngtcp2_version}}/0.1.0-DEV/g
 s/{{bundled_openssl_version}}/3.0.1/g
 s/{{bundled_uv_version}}/1.43.0/g
 s/{{bundled_uvwasi_version}}/0.0.12/g
 s/{{bundled_v8_version}}/9.6.180.15/g
-s/{{bundled_npm_version}}/8.5.1/g
+s/{{bundled_npm_version}}/8.5.2/g
