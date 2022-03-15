@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Mar 15 13:29:20 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- 42342.patch: fix expired certificates in unit tests 
+
+-------------------------------------------------------------------
 Thu Feb 17 12:31:36 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - update to LTS release 16.14.0:
