@@ -284,9 +284,11 @@ BuildRequires:  group(nobody)
 BuildRequires:  pkgconfig(openssl) >= %{openssl_req_ver}
 
 # require patched openssl library on SLES for nodejs16
-%if %node_version_number >= 16 && 0%{?suse_version} <= 1500 && 0%{?suse_version} && %{pkg_vcmp openssl-1_1 < '1.1.1e' } && 0%{with openssl_RSA_get0_pss_params}
+%if 0%{?suse_version}
+%if %node_version_number >= 16 && 0%{suse_version} <= 1500 && %{pkg_vcmp openssl-1_1 < '1.1.1e' } && 0%{with openssl_RSA_get0_pss_params}
 BuildRequires:  openssl-has-RSA_get0_pss_params
 Requires:       openssl-has-RSA_get0_pss_params
+%endif
 %endif
 
 %if 0%{?suse_version}
@@ -379,7 +381,7 @@ ExclusiveArch:  not_buildable
 Provides:       bundled(uvwasi) = {{bundled_uvwasi_version}}
 Provides:       bundled(libuv) = {{bundled_uv_version}}
 Provides:       bundled(v8) = {{bundled_v8_version}}
-%if {{intree_brotli}}
+%if %{with intree_brotli}
 Provides:       bundled(brotli) = {{bundled_brotli_version}}
 %else
 BuildRequires:  pkgconfig(libbrotlidec)
