@@ -79,7 +79,7 @@ Group:          Development/Languages/NodeJS
 URL:            https://github.com/AdamMajer/nodejs-packaging
 Source1:        node.c
 Source2:        LICENSE
-Requires:       nodejs npm
+Requires:       nodejs
 Conflicts:      nodejs4 < 4.8.4
 Conflicts:      nodejs6 < 6.11.1
 Conflicts:      nodejs7 < 7.10.1
@@ -138,14 +138,10 @@ echo "Default Node version: " %{default_node_ver}
 
 %install
 install -D -m 0755 node %{buildroot}%{_bindir}/node
-ln node %{buildroot}%{_bindir}/npm
-ln node %{buildroot}%{_bindir}/npx
 
 %files
 %license LICENSE
 %{_bindir}/node
-%{_bindir}/npm
-%{_bindir}/npx
 
 %files -n nodejs-default
 
