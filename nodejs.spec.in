@@ -106,6 +106,12 @@ Release:        0
 %bcond_without intree_nghttp2
 %endif
 
+%if {{intree_brotli}}
+%bcond_with    intree_brotli
+%else
+%bcond_without intree_brotli
+%endif
+
 %ifnarch x86_64 %{ix86}
 %bcond_with    gdb
 %else
@@ -373,7 +379,11 @@ ExclusiveArch:  not_buildable
 Provides:       bundled(uvwasi) = {{bundled_uvwasi_version}}
 Provides:       bundled(libuv) = {{bundled_uv_version}}
 Provides:       bundled(v8) = {{bundled_v8_version}}
+%if {{intree_brotli}}
 Provides:       bundled(brotli) = {{bundled_brotli_version}}
+%else
+BuildRequires:  pkgconfig(libbrotlidec)
+%endif
 Provides:       bundled(http-parser) = {{bundled_http_parser_version}}
 Provides:       bundled(nghttp3) = {{bundled_nghttp3_version}}
 Provides:       bundled(llhttp) = {{bundled_llhttp_version}}
@@ -606,6 +616,9 @@ EOF
 %endif
 %if ! 0%{with intree_nghttp2}
     --shared-nghttp2 \
+%endif
+%if ! 0%{with intree_brotli}
+    --shared-brotli \
 %endif
 %if 0%{with gdb}
     --gdb \
