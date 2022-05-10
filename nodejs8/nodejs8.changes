@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Wed Apr 20 11:00:47 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2021-44906.patch: fix prototype pollution in npm dependency
+  (bsc#1198247, CVE-2021-44906)
+- CVE-2021-44907.patch: fix insuficient sanitation in npm dependency
+  (bsc#1197283, CVE-2021-44907)
+- CVE-2022-0235.patch: fix passing of cookie data and sensitive headers
+  to different hostnames in node-fetch-npm (bsc#1194819, CVE-2022-0235)
+
+-------------------------------------------------------------------
 Tue Feb 15 15:11:29 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - npm-v6.14.16.tar.gz: update to npm 6.14.16 fixing

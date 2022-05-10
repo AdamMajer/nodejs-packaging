@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Wed Apr 20 11:00:47 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+Update to 14.19.1:
+  * deps: upgrade openssl sources to 1.1.1n (bsc#1196877,  CVE-2022-0778)
+    Infinite loop in BN_mod_sqrt() reachable when parsing certificates
+    More details at https://www.openssl.org/news/secadv/20220315.txt
+
+- CVE-2021-44906.patch: fix prototype pollution in npm dependency
+  (bsc#1198247, CVE-2021-44906)
+- CVE-2021-44907.patch: fix insuficient sanitation in npm dependency
+  (bsc#1197283, CVE-2021-44907)
+- CVE-2022-0235.patch: fix passing of cookie data and sensitive headers
+  to different hostnames in node-fetch-npm (bsc#1194819, CVE-2022-0235)
+
+-------------------------------------------------------------------
 Wed Feb 16 16:12:01 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - update to 14.19.0:

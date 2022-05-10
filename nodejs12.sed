@@ -1,4 +1,4 @@
-s/{{node_version}}/12.22.10/g
+s/{{node_version}}/12.22.12/g
 s/{{node_version_major}}/12/g
 
 #
@@ -25,6 +25,10 @@ s/{{min_libcares2_version}}/1.17.0/g
 s/{{intree_nghttp2}}/0%{suse_version} >= 1550/g
 s/{{min_nghttp2_version}}/1.41.0/g
 
+# brotli version
+s/{{intree_brotli}}/0%{suse_version} >= 1550/g
+
+
 # Git staging directory
 s/{{git_branch}}/v12.x-staging/
 
@@ -41,7 +45,7 @@ s/{{bundled_http_parser_version}}/2.9.4/g
 s/{{bundled_icu-small_version}}/67.1/g
 s/{{bundled_llhttp_version}}/2.1.4/g
 s/{{bundled_nghttp2_version}}/1.41.0/g
-s/{{bundled_openssl_version}}/1.1.1m/g
+s/{{bundled_openssl_version}}/1.1.1n/g
 s/{{bundled_uv_version}}/1.40.0/g
 s/{{bundled_uvwasi_version}}/0.0.11/g
 s/{{bundled_v8_version}}/7.8.279.23/g

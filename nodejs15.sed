@@ -23,7 +23,7 @@ s/{{intree_nghttp2}}/0%{?suse_version} >= 1550/g
 s/{{min_nghttp2_version}}/1.41.0/g
 
 # brotli version
-s/{{intree_brotli}}/0%{suse_version} >= 1550/g
+s/{{intree_brotli}}/0%{?suse_version} >= 1550/g
 
 s/{{git_branch}}/v15.x-staging/
 

@@ -158,6 +158,10 @@ Patch47:        CVE-2021-22930.patch   # PATCH_FOR: 8, 10
 Patch48:        CVE-2021-22939.patch   # PATCH_FOR: 10
 Patch49:        CVE-2022-21824.patch   # PATCH_FOR: 10
 Patch50:        CVE-2021-3807.patch    # PATCH_FOR: 10, 8, 12, 14
+Patch51:        CVE-2021-44906.patch   # PATCH_FOR: 8, 10, 12, 14
+Patch52:        CVE-2021-44907.patch   # PATCH_FOR: 8, 10, 12, 14
+Patch53:        CVE-2022-0235.patch    # PATCH_FOR: 8, 10, 12, 14
+Patch54:        CVE-2021-22940.patch   # PATCH_FOR: 10
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, master, 16, 17
@@ -501,6 +505,10 @@ tar Jxf %{SOURCE11}
 %patch48 -p1
 %patch49 -p1
 %patch50 -p1
+%patch51 -p1
+%patch52 -p1
+%patch53 -p1
+%patch54 -p1
 %patch100 -p1
 %patch101 -p1
 %patch102 -p1
@@ -522,6 +530,12 @@ tar Jxf %{SOURCE11}
 %endif
 %patch134 -p1
 %patch200 -p1
+
+%if %{node_version_number} <= 14
+# minimist security update - patch50
+rm -r deps/npm/node_modules/mkdirp/node_modules/minimist
+rmdir ./deps/npm/node_modules/mkdirp/node_modules
+%endif
 
 # remove backup files, if any
 find -name \*~ -print0 -delete
