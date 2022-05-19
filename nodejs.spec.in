@@ -129,15 +129,15 @@ Group:          Development/Languages/NodeJS
 Source20:       bash_output_helper.bash
 
 ## Patches not distribution specific
-Patch1:         cares_public_headers.patch # PATCH_FOR: master, 12, 14, 16, 17
+Patch1:         cares_public_headers.patch # PATCH_FOR: master, 12, 14, 16, 17, 18
 Patch2:         gcc12-fix.patch        # PATCH_FOR: 17
 Patch3:         fix_ci_tests.patch
-Patch5:         sle12_python3_compat.patch # PATCH_FOR: master, 13, 14, 15, 16, 17
-Patch7:         manual_configure.patch # PATCH_FOR: master, 14, 13, 12, 10, 8, 15, 16, 17
+Patch5:         sle12_python3_compat.patch # PATCH_FOR: master, 13, 14, 15, 16, 17, 18
+Patch7:         manual_configure.patch # PATCH_FOR: master, 14, 13, 12, 10, 8, 15, 16, 17, 18
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
 Patch11:        valgrind_fixes.patch   # PATCH_FOR: 10
 Patch12:        openssl_1_1_1.patch    # PATCH_FOR: 8
-Patch13:        openssl_binary_detection.patch  # PATCH_FOR: 10, 12, 14, 15, master, 16, 17
+Patch13:        openssl_binary_detection.patch  # PATCH_FOR: 10, 12, 14, 15, master, 16, 17, 18
 
 Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8
 
@@ -164,7 +164,7 @@ Patch53:        CVE-2022-0235.patch    # PATCH_FOR: 8, 10, 12, 14
 Patch54:        CVE-2021-22940.patch   # PATCH_FOR: 10
 
 ## Patches specific to SUSE and openSUSE
-Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, master, 16, 17
+Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, master, 16, 17, 18
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
 Patch101:       nodejs-libpath.patch
 # PATCH-FIX-UPSTREAM -- use custom addon.gypi by default instead of
@@ -177,16 +177,16 @@ Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 8, 10, 12
 # instead of /usr
 Patch104:       npm_search_paths.patch
 Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 8, 10
-Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, master, 16, 17
+Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, master, 16, 17, 18
 Patch109:       python3.patch             # PATCH_FOR: 12
-Patch110:       legacy_python.patch       # PATCH_FOR: 16, master, 17
+Patch110:       legacy_python.patch       # PATCH_FOR: 16, master, 17, 18
 
 Patch120:       flaky_test_rerun.patch
 
 Patch125:       cares_172.patch            # PATCH_FOR: 10
 Patch130:       test_ssl_cert_fixups.patch # PATCH_FOR: 10, 8
-Patch132:       test-skip-y2038-on-32bit-time_t.patch # PATCH_FOR: 16, 14, master, 17
-Patch133:       rsa-pss-revert.patch     # PATCH_FOR: 16, 17
+Patch132:       test-skip-y2038-on-32bit-time_t.patch # PATCH_FOR: 16, 14, master, 17, 18
+Patch133:       rsa-pss-revert.patch     # PATCH_FOR: 16, 17, 18
 Patch134:       42342.patch              # PATCH_FOR: 17
 
 # Use versioned binaries and paths

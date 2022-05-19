@@ -1,0 +1,8 @@
+-------------------------------------------------------------------
+Thu May 19 15:01:09 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Initial packaging of Nodejs 18.2.0. For detailed changes
+  since previous versions, see
+
+  https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V18.md#18.2.0
+

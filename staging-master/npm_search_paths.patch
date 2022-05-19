@@ -1,21 +1,21 @@
-Index: node-git.113133badb/deps/npm/lib/commands/help-search.js
+Index: node-v18.2.0/deps/npm/lib/commands/help-search.js
 ===================================================================
---- node-git.113133badb.orig/deps/npm/lib/commands/help-search.js
-+++ node-git.113133badb/deps/npm/lib/commands/help-search.js
-@@ -17,7 +17,7 @@ class HelpSearch extends BaseCommand {
+--- node-v18.2.0.orig/deps/npm/lib/commands/help-search.js
++++ node-v18.2.0/deps/npm/lib/commands/help-search.js
+@@ -20,7 +20,7 @@ class HelpSearch extends BaseCommand {
        throw this.usageError()
      }
  
 -    const docPath = path.resolve(__dirname, '..', '..', 'docs/content')
 +    const docPath = '/usr/share/doc/packages/nodejs'
-     const files = await glob(`${docPath}/*/*.md`)
+     const files = await glob(`${globify(docPath)}/*/*.md`)
      const data = await this.readFiles(files)
      const results = await this.searchFiles(args, data, files)
-Index: node-git.113133badb/deps/npm/lib/npm.js
+Index: node-v18.2.0/deps/npm/lib/npm.js
 ===================================================================
---- node-git.113133badb.orig/deps/npm/lib/npm.js
-+++ node-git.113133badb/deps/npm/lib/npm.js
-@@ -329,7 +329,13 @@ class Npm extends EventEmitter {
+--- node-v18.2.0.orig/deps/npm/lib/npm.js
++++ node-v18.2.0/deps/npm/lib/npm.js
+@@ -383,7 +383,13 @@ class Npm extends EventEmitter {
    }
  
    get globalPrefix () {
