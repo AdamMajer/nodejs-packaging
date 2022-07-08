@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jun 28 13:06:23 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Update to Nodejs 18.4.0. For detailed changes see,
+  https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V18.md#18.4.0
+- refreshed: versioned.patch, linker_lto_jobs.patch, nodejs-libpath.patch
+
+-------------------------------------------------------------------
 Thu May 19 15:01:09 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - Initial packaging of Nodejs 18.2.0. For detailed changes

@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Jun 28 14:09:54 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Update to 14.19.3:
+  * Upgrade npm to v6.14.17
+- obsoleted and removed: CVE-2021-3807.patch, CVE-2021-44906.patch
+- refreshed: versioned.patch
+
+-------------------------------------------------------------------
 Wed Apr 20 11:00:47 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 Update to 14.19.1:

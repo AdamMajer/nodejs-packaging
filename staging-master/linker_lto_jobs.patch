@@ -3,18 +3,27 @@ is run serially over these binaries instead of in parallel.
 OBS workers run out of memory as each executable seems to require
 upward of 5G RAM
 
-Index: node-v14.9.0/node.gyp
+Index: node-v18.4.0/node.gyp
 ===================================================================
---- node-v14.9.0.orig/node.gyp
-+++ node-v14.9.0/node.gyp
-@@ -1258,20 +1258,21 @@
-       'target_name': 'embedtest',
-       'type': 'executable',
+--- node-v18.4.0.orig/node.gyp
++++ node-v18.4.0/node.gyp
+@@ -1145,6 +1145,7 @@
+         'node_dtrace_header',
+         'node_dtrace_ustack',
+         'node_dtrace_provider',
++        'fuzz_url',
+       ],
+       'includes': [
+         'node.gypi'
+@@ -1190,6 +1191,7 @@
+         'node_dtrace_header',
+         'node_dtrace_ustack',
+         'node_dtrace_provider',
++        'fuzz_env',
+       ],
  
-       'dependencies': [
-         '<(node_lib_target_name)',
-         'deps/histogram/histogram.gyp:histogram',
-         'deps/uvwasi/uvwasi.gyp:uvwasi',
+       'includes': [
+@@ -1288,6 +1290,7 @@
          'node_dtrace_header',
          'node_dtrace_ustack',
          'node_dtrace_provider',
@@ -22,54 +31,11 @@ Index: node-v14.9.0/node.gyp
        ],
  
        'includes': [
-         'node.gypi'
-       ],
- 
-       'include_dirs': [
-         'src',
-         'tools/msvs/genfiles',
-         'deps/v8/include',
-@@ -1317,20 +1318,21 @@
-     # So generate_code_cache -> mkcodecache -> node_lib_base,
-     #    node_lib -> node_lib_base & generate_code_cache
-     {
-       'target_name': 'mkcodecache',
-       'type': 'executable',
- 
-       'dependencies': [
+@@ -1357,6 +1360,7 @@
          '<(node_lib_target_name)',
          'deps/histogram/histogram.gyp:histogram',
          'deps/uvwasi/uvwasi.gyp:uvwasi',
-+        'embedtest',
++        'embedtest'
        ],
  
        'includes': [
-         'node.gypi'
-       ],
- 
-       'include_dirs': [
-         'src',
-         'tools/msvs/genfiles',
-         'deps/v8/include',
-@@ -1372,20 +1374,21 @@
-       ],
-     }, # mkcodecache
-     {
-       'target_name': 'node_mksnapshot',
-       'type': 'executable',
- 
-       'dependencies': [
-         '<(node_lib_target_name)',
-         'deps/histogram/histogram.gyp:histogram',
-         'deps/uvwasi/uvwasi.gyp:uvwasi',
-+        'mkcodecache'
-       ],
- 
-       'includes': [
-         'node.gypi'
-       ],
- 
-       'include_dirs': [
-         'src',
-         'tools/msvs/genfiles',
-         'deps/v8/include',
