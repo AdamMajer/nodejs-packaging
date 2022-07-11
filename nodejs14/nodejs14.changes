@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Mon Jul 11 12:13:21 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Update to 14.20.0:
+  * http: stricter Transfer-Encoding and header separator parsing
+    (bsc#1201325, bsc#1201326, bsc#1201327,
+     CVE-2022-32213, CVE-2022-32214, CVE-2022-32215)
+  * src: fix IPv4 validation in inspector_socket
+    (bsc#1201328, CVE-2022-32212)
+
+-------------------------------------------------------------------
 Tue Jun 28 14:09:54 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - Update to 14.19.3:
