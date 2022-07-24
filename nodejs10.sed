@@ -43,10 +43,10 @@ Source11:       node_modules.tar.xz \
 
 s/{{bundled_brotli_version}}/1.0.7/g
 s/{{bundled_cares_version}}/1.17.0/g
-s/{{bundled_http_parser_version}}/2.9.4/g
 s/{{bundled_icu-small_version}}/64.2/g
 s/{{bundled_nghttp2_version}}/1.41.0/g
 s/{{bundled_openssl_version}}/1.1.1k/g
 s/{{bundled_uv_version}}/1.34.2/g
 s/{{bundled_v8_version}}/6.8.275.32/g
 s/{{bundled_npm_version}}/6.14.16/g
+s/{{bundled_llhttp_version}}/2.1.5/g
