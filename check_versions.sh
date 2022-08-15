@@ -33,6 +33,10 @@ fi
 
 for i in $NODE_VERSIONS; do
 	ver=${i:6}
+	if [ $ver -lt 14 ]; then
+		echo "Skipping old versions $ver.x"
+		continue
+	fi
 	echo "Checking version for Node $ver.x"
 
 	URL="https://nodejs.org/dist/latest-v$ver.x/"
