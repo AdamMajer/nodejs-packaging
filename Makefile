@@ -1,8 +1,9 @@
 SHELL=/bin/bash
 
-MAIN_PRJ ?= devel:languages:nodejs
-STAGING_PRJ ?= devel:languages:nodejs:staging
-
+# Project separator, so you can use different separator than :
+PS = $(shell (grep '^\s*project_separator\s*=' ~/.oscrc || echo "project_separator=:") | sed -e 's,^\s*project_separator\s*=\s*\(\S\+\)\s*$$',\\1,)
+MAIN_PRJ ?= $(subst :,$(PS),devel:languages:nodejs)
+STAGING_PRJ ?= $(subst :,$(PS),devel:languages:nodejs:staging)
 
 RELEASED_TARGETS = $(shell ls -d nodejs? nodejs??)
 STAGING_TARGETS = $(shell ls -d staging-??) staging-master
