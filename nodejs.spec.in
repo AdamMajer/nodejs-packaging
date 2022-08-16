@@ -640,6 +640,9 @@ EOF
     --gdb \
 %endif
     --without-dtrace \
+%if %{node_version_number} >= 16 && (0%{?suse_version} > 1550 || 0%{?sle_version} >= 150400)
+    --openssl-default-cipher-list=PROFILE=SYSTEM \
+%endif
     --openssl-use-def-ca-store
 
 decoupled_cmd make %{?_smp_mflags}
