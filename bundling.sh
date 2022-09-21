@@ -67,6 +67,14 @@ function extract_version_from_string_define
     fi
 }
 
+function load_base64_version
+{
+    if [ -f base64/CMakeLists.txt ]; then
+        BUNDLED_VERSION=$(grep 'project(base64' base64/CMakeLists.txt | awk '{print $5}')
+        BUNDLED_VERSION=${BUNDLED_VERSION%)}
+    fi
+}
+
 function load_brotli_version
 {
     if [ -f c/common/version.h ]; then
@@ -205,7 +213,7 @@ function load_bundled_version
         popd > /dev/null
         return
         ;;
-        (brotli|cares|http_parser|icu-small|nghttp2|nghttp3|openssl|uv|v8|llhttp|uvwasi|ngtcp2|npm):
+        (brotli|cares|http_parser|icu-small|nghttp2|nghttp3|openssl|uv|v8|llhttp|uvwasi|ngtcp2|npm|base64):
         load_${PKG}_version
         ;;
         (*):

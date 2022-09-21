@@ -5,7 +5,8 @@ Mon Jul 18 15:34:12 UTC 2022 - Adam Majer <adam.majer@suse.de>
   (bsc#1188917, bsc#1189368, CVE-2021-22930, CVE-2021-22940)
 - CVE-2022-32213.patch: backport llhttp http parser fixes
   (bsc#1201325, bsc#1201326, bsc#1201327, CVE-2022-32213,
-   CVE-2022-32214, CVE-2022-32215)
+   CVE-2022-32214, CVE-2022-32215, bsc#1191602, CVE-2021-22960,
+   bsc#1191601, CVE-2021-22959)
 - CVE-2022-32212.patch: fix IPv4 validation in inspector_socket
   (bsc#1201328, CVE-2022-32212)
 

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jul 25 15:14:32 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2022-32212.patch: fix IPv4 validation in inspector_socket
+  (bsc#1201328, CVE-2022-32212)
+
+-------------------------------------------------------------------
 Wed Apr 20 11:00:47 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2021-44906.patch: fix prototype pollution in npm dependency
