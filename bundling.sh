@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. ./osc_project_sep.sh
+
 MODE="default"
 STAGING=
 NPM_BUNDLES_TO_PROVIDES_CMD=`pwd`/npm_bundle_to_provides.js
@@ -233,11 +235,11 @@ function load_bundled_version
 function expand_tarball
 {
     if [ -z "$STAGING" ]; then
-        pushd devel:languages:nodejs/nodejs$NODE_VERSION > /dev/null
+        pushd devel${PS}languages${PS}nodejs/nodejs$NODE_VERSION > /dev/null
         tar Jxf node-v$NODE_FULL_VERSION.tar.xz
         popd > /dev/null
     else
-        pushd devel:languages:nodejs:staging/nodejs$NODE_VERSION > /dev/null
+        pushd devel${PS}languages${PS}nodejs${PS}staging/nodejs$NODE_VERSION > /dev/null
         for i in `ls -t node-git.*.tar`; do
             tar xf $i
             break
@@ -251,9 +253,9 @@ function push_node_dir
 {
     local dir;
     if [ -z "$STAGING" ]; then
-        dir=devel:languages:nodejs/nodejs$NODE_VERSION/node-v$NODE_FULL_VERSION
+        dir=devel${PS}languages${PS}nodejs/nodejs$NODE_VERSION/node-v$NODE_FULL_VERSION
     else
-        dir=devel:languages:nodejs:staging/nodejs$NODE_VERSION/node-git.*/
+        dir=devel${PS}languages${PS}nodejs${PS}staging/nodejs$NODE_VERSION/node-git.*/
     fi
 
     if [ ! -d $dir ]; then

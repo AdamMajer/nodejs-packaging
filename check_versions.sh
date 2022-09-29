@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. ./osc_project_sep.sh
+
 UPDATE=
 NODE_VERSIONS=
 
@@ -57,8 +59,8 @@ for i in $NODE_VERSIONS; do
 			sed -i -e "s,^s/{{node_version}}.*/g$,s/{{node_version}}/$upstream_ver/g," nodejs$ver.sed
 
 			# DL upstream package too, if directory exists
-			if [ -d devel:languages:nodejs/nodejs$ver ]; then
-				pushd devel:languages:nodejs/nodejs$ver > /dev/null
+			if [ -d devel${PS}languages${PS}nodejs/nodejs$ver ]; then
+				pushd devel${PS}languages${PS}nodejs/nodejs$ver > /dev/null
 				wget -q --show-progress $URL/node-v$upstream_ver.tar.xz
 				osc rm node-v$local_ver.tar.xz
 				osc add node-v$upstream_ver.tar.xz
