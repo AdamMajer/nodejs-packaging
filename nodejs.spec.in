@@ -870,11 +870,9 @@ make test-ci
 %files devel
 %defattr(-, root, root)
 %{_includedir}/node%{node_version_number}
-%if %{node_version_number} < 18
 %dir %{_datadir}/systemtap
 %dir %{_datadir}/systemtap/tapset
 %{_datadir}/systemtap/tapset/node%{node_version_number}.stp
-%endif
 
 %files docs
 %defattr(-,root,root)
