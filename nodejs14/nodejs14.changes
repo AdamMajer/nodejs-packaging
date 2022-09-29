@@ -1,4 +1,17 @@
 -------------------------------------------------------------------
+Mon Sep 26 14:35:44 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Update to 14.20.1:
+  * deps: update llhttp to 2.1.6:
+    + CVE-2022-32213 bypass via obs-fold mechanic (bsc#1201325)
+    + Incorrect Parsing of Header Fields (CVE-2022-35256, bsc#1203832)
+
+-------------------------------------------------------------------
+Sat Sep 17 10:35:31 UTC 2022 - Bruno Pitrus <brunopitrus@hotmail.com>
+
+- Skip test-fs-utimes-y2K38.js on armv6hl as well as armv7hl.
+
+-------------------------------------------------------------------
 Mon Jul 11 12:13:21 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - Update to 14.20.0:

@@ -163,6 +163,7 @@ Patch53:        CVE-2022-0235.patch    # PATCH_FOR: 8, 10, 12, 14
 Patch55:        CVE-2022-32213.patch   # PATCH_FOR: 12, 10, 8
 Patch56:        CVE-2022-32212.patch   # PATCH_FOR: 12, 10, 8
 Patch57:        openssl_update.patch   # PATCH_FOR: 12
+Patch58:        CVE-2022-35256.patch   # PATCH_FOR: 12, 10, 8
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, master, 16, 18
@@ -515,6 +516,7 @@ tar Jxf %{SOURCE11}
 %patch55 -p1
 %patch56 -p1
 %patch57 -p1
+%patch58 -p1
 %patch100 -p1
 %patch101 -p1
 %patch102 -p1
