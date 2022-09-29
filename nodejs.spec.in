@@ -773,8 +773,10 @@ find test \( -name \*.out -or -name \*.js \) -exec sed -i 's,Use `node ,Use `nod
 ln addon-rpm.gypi deps/npm/node_modules/node-gyp/addon-rpm.gypi
 # Tarball doesn't have eslint package distributed, so disable some tests
 find test -name \*-eslint-\* -print -delete
-# No documentation is generated, don't bother checking it
-# rm test/doctool/test-make-doc.js
+# No documentation is generated, don't bother checking it, and check broken on older nodejs
+%if %{node_version_number} <= 10
+rm test/doctool/test-make-doc.js
+%endif
 # DNS lookup doesn't work in build root
 rm test/parallel/test-dns-cancel-reverse-lookup.js \
    test/parallel/test-dns-resolveany.js

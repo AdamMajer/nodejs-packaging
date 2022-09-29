@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep 29 11:59:41 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2022-35256.patch: update llhttp to 2.1.6
+    + fixes CVE-2022-32213 bypass via obs-fold mechanic (bsc#1201325)
+    + fixes incorrect parsing of header fields (CVE-2022-35256, bsc#1203832)
+
+-------------------------------------------------------------------
 Mon Jul 18 15:34:12 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2021-22930.patch: backports http2 fixes
