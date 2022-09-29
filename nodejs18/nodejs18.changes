@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Sep 29 13:58:09 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Update to NodeJS 18.10.0:
+  * deps: upgrade npm to 8.19.2
+  * http: throw error on content-length mismatch
+  * stream: add ReadableByteStream.tee()
+
+- openssl3_fixups.patch: upstreamed and removed
+
+-------------------------------------------------------------------
 Mon Sep 26 13:13:39 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - Update to Nodejs 18.9.1:

@@ -195,7 +195,6 @@ Patch200:       versioned.patch
 
 Patch301:       undici_5.8.1.patch       # PATCH_FOR: 16
 Patch302:       undici_5.8.2.patch       # PATCH_FOR: 16
-Patch303:       openssl3_fixups.patch    # PATCH_FOR: 18, master
 Patch304:       new_python3.patch        # PATCH_FOR: 18, master
 
 BuildRequires:  pkg-config
@@ -540,7 +539,6 @@ tar Jxf %{SOURCE11}
 
 %patch301 -p1
 %patch302 -p1
-%patch303 -p1
 %patch304 -p1
 
 %if %{node_version_number} <= 12
