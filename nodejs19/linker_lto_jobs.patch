@@ -3,35 +3,35 @@ is run serially over these binaries instead of in parallel.
 OBS workers run out of memory as each executable seems to require
 upward of 5G RAM
 
-Index: node-v18.4.0/node.gyp
+Index: node-v19.0.0/node.gyp
 ===================================================================
---- node-v18.4.0.orig/node.gyp
-+++ node-v18.4.0/node.gyp
-@@ -1145,6 +1145,7 @@
-         'node_dtrace_header',
-         'node_dtrace_ustack',
-         'node_dtrace_provider',
+--- node-v19.0.0.orig/node.gyp
++++ node-v19.0.0/node.gyp
+@@ -922,6 +922,7 @@
+         '<(node_lib_target_name)',
+         'deps/histogram/histogram.gyp:histogram',
+         'deps/uvwasi/uvwasi.gyp:uvwasi',
 +        'fuzz_url',
        ],
        'includes': [
          'node.gypi'
-@@ -1190,6 +1191,7 @@
-         'node_dtrace_header',
-         'node_dtrace_ustack',
-         'node_dtrace_provider',
+@@ -965,6 +966,7 @@
+         'deps/googletest/googletest.gyp:gtest_main',
+         'deps/histogram/histogram.gyp:histogram',
+         'deps/uvwasi/uvwasi.gyp:uvwasi',
 +        'fuzz_env',
        ],
  
        'includes': [
-@@ -1288,6 +1290,7 @@
-         'node_dtrace_header',
-         'node_dtrace_ustack',
-         'node_dtrace_provider',
+@@ -1062,6 +1064,7 @@
+         '<(node_lib_target_name)',
+         'deps/histogram/histogram.gyp:histogram',
+         'deps/uvwasi/uvwasi.gyp:uvwasi',
 +        'cctest',
        ],
  
        'includes': [
-@@ -1357,6 +1360,7 @@
+@@ -1131,6 +1134,7 @@
          '<(node_lib_target_name)',
          'deps/histogram/histogram.gyp:histogram',
          'deps/uvwasi/uvwasi.gyp:uvwasi',
