@@ -554,7 +554,7 @@ find -name \*~ -print0 -delete
 find \( -name \*.js.orig -or -name \*.md.orig -or -name \*.1.orig \) -delete
 
 # downgrade node-gyp to last version that supports python 3.4 for SLE12
-%if 0%{?use_version} && 0%{?suse_version} < 1500
+%if 0%{?suse_version} && 0%{?suse_version} < 1500
 rm -r  deps/npm/node_modules/node-gyp
 mkdir deps/npm/node_modules/node-gyp
 tar -C deps/npm/node_modules/node-gyp Jxf %{SOURCE5}
