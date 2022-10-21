@@ -649,7 +649,9 @@ EOF
 %if 0%{with gdb}
     --gdb \
 %endif
+%if %{node_version_number} < 19
     --without-dtrace \
+%endif
 %if %{node_version_number} >= 16 && (0%{?suse_version} > 1550 || 0%{?sle_version} >= 150400)
     --openssl-default-cipher-list=PROFILE=SYSTEM \
 %endif
@@ -886,9 +888,11 @@ make test-ci
 %files devel
 %defattr(-, root, root)
 %{_includedir}/node%{node_version_number}
+%if %{node_version_number} < 19
 %dir %{_datadir}/systemtap
 %dir %{_datadir}/systemtap/tapset
 %{_datadir}/systemtap/tapset/node%{node_version_number}.stp
+%endif
 
 %files docs
 %defattr(-,root,root)
