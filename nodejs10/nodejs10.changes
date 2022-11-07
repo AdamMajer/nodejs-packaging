@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Nov  7 09:06:39 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2022-43548.patch:
+  * inspector: DNS rebinding in --inspect via invalid octal IP
+    (bsc#1205119, CVE-2022-43548)
+
+-------------------------------------------------------------------
 Thu Sep 29 11:59:41 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2022-35256.patch: update llhttp to 2.1.6

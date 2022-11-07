@@ -165,6 +165,7 @@ Patch55:        CVE-2022-32213.patch   # PATCH_FOR: 12, 10, 8
 Patch56:        CVE-2022-32212.patch   # PATCH_FOR: 12, 10, 8
 Patch57:        openssl_update.patch   # PATCH_FOR: 12
 Patch58:        CVE-2022-35256.patch   # PATCH_FOR: 12, 10, 8
+Patch59:        CVE-2022-43548.patch   # PATCH_FOR: 12, 10, 8
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, 16, 18, 19, master
@@ -517,6 +518,7 @@ tar Jxf %{SOURCE11}
 %patch56 -p1
 %patch57 -p1
 %patch58 -p1
+%patch59 -p1
 %patch100 -p1
 %patch101 -p1
 %patch102 -p1
@@ -552,14 +554,6 @@ find -name \*~ -print0 -delete
 
 # abnormalities from patching
 find \( -name \*.js.orig -or -name \*.md.orig -or -name \*.1.orig \) -delete
-
-# downgrade node-gyp to last version that supports python 3.4 for SLE12
-%if 0%{?suse_version} && 0%{?suse_version} < 1500
-rm -r  deps/npm/node_modules/node-gyp
-mkdir deps/npm/node_modules/node-gyp
-tar -C deps/npm/node_modules/node-gyp Jxf %{SOURCE5}
-%endif
-
 
 %build
 # normalize shebang
