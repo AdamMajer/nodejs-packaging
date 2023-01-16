@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Dec 23 11:31:12 UTC 2022 - Guillaume GARDET <guillaume.gardet@opensuse.org>
+
+- Update _constraints:
+  * Less RAM for aarch64 and 32-bit arm
+  * Use 'asimdrdm' cpu flag to use aarch64 workers where tests
+    are more stable
+
+-------------------------------------------------------------------
 Mon Nov  7 09:05:57 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2022-43548.patch:

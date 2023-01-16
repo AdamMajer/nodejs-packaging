@@ -7,6 +7,14 @@ Sat Dec 31 20:54:09 UTC 2022 - Adam Majer <adam.majer@suse.de>
 - systemtap.patch: upstreamed, removed
 
 -------------------------------------------------------------------
+Fri Dec 23 11:31:12 UTC 2022 - Guillaume GARDET <guillaume.gardet@opensuse.org>
+
+- Update _constraints:
+  * Less RAM for aarch64 and 32-bit arm
+  * Use 'asimdrdm' cpu flag to use aarch64 workers where tests
+    are more stable
+
+-------------------------------------------------------------------
 Tue Nov 29 16:34:55 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - sle12_python3_compat.patch: only apply for older SLE12 codestreams
