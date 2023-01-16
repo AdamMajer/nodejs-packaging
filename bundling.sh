@@ -137,6 +137,13 @@ function load_openssl_version
     fi
 }
 
+function load_simdutf_version
+{
+    if [ -f simdutf.h ]; then
+        BUNDLED_VERSION=$(grep 'define SIMDUTF_VERSION' simdutf.h | awk '{print $3}')
+    fi
+}
+
 function load_uv_version
 {
     F=include/uv/version.h
@@ -215,7 +222,7 @@ function load_bundled_version
         popd > /dev/null
         return
         ;;
-        (brotli|cares|http_parser|icu-small|nghttp2|nghttp3|openssl|uv|v8|llhttp|uvwasi|ngtcp2|npm|base64):
+        (brotli|cares|http_parser|icu-small|nghttp2|nghttp3|openssl|uv|v8|llhttp|uvwasi|ngtcp2|npm|base64|simdutf):
         load_${PKG}_version
         ;;
         (*):

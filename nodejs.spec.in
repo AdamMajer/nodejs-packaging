@@ -130,7 +130,6 @@ Source20:       bash_output_helper.bash
 
 ## Patches not distribution specific
 Patch1:         cares_public_headers.patch # PATCH_FOR: 12, 14, 16, 18, 19, master
-Patch2:         systemtap.patch # PATCH_FOR: 16
 Patch3:         fix_ci_tests.patch
 Patch5:         sle12_python3_compat.patch # PATCH_FOR: 13, 14, 15, 16, 18, 19, master
 Patch7:         manual_configure.patch # PATCH_FOR: 14, 13, 12, 10, 8, 15, 16, 18, 19, master
@@ -195,7 +194,6 @@ Patch133:       rsa-pss-revert.patch     # PATCH_FOR: 16, 18
 # Use versioned binaries and paths
 Patch200:       versioned.patch
 
-Patch304:       new_python3.patch        # PATCH_FOR: 18, 19, master
 Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, master
 
 BuildRequires:  pkg-config
@@ -266,6 +264,7 @@ BuildRequires:  gcc-c++
 
 %if 0%{?suse_version} && 0%{?suse_version} < 1500
 BuildRequires:  python36
+%define forced_python_version 3.6m
 %else
 BuildRequires:  python3
 %endif
@@ -291,7 +290,8 @@ BuildRequires:  group(nobody)
 
 %if ! 0%{with intree_openssl}
 
-BuildRequires:  pkgconfig(openssl) >= %{openssl_req_ver}
+BuildRequires:  libopenssl-1_1-devel
+#BuildRequires:  (pkgconfig(openssl) >= %{openssl_req_ver} and pkgconfig(openssl) < 3.0)
 
 # require patched openssl library on SLES for nodejs16
 %if 0%{?suse_version} && "%{pkg_version openssl-1_1}" != "~~~"
@@ -302,11 +302,11 @@ Requires:       openssl-has-RSA_get0_pss_params
 %endif
 
 %if 0%{?suse_version}
-%if 0%{?suse_version} >= 1500
-BuildRequires:  openssl >= %{openssl_req_ver}
-%else
+#%if 0%{?suse_version} >= 1500
+#iBuildRequires:  openssl >= %{openssl_req_ver}
+#%else
 BuildRequires:  openssl-1_1 >= %{openssl_req_ver}
-%endif
+#%endif
 
 BuildRequires:  libopenssl1_1-hmac
 # /suse_version
@@ -400,6 +400,8 @@ Provides:       bundled(http-parser) = {{bundled_http_parser_version}}
 Provides:       bundled(nghttp3) = {{bundled_nghttp3_version}}
 Provides:       bundled(llhttp) = {{bundled_llhttp_version}}
 Provides:       bundled(ngtcp2) = {{bundled_ngtcp2_version}}
+Provides:       bundled(base64) = {{bundled_base64_version}}
+Provides:       bundled(simdutf) = {{bundled_simdutf_version}}
 
 {{node_npm_bundles}}
 
@@ -474,18 +476,29 @@ echo "`grep node-v%{version}.tar.xz %{S:1} | head -n1 | cut -c1-64`  %{S:0}" | s
 
 %if %{node_version_number} <= 10
 rm -r deps/npm/*
-tar zxf %{SOURCE9} -C deps/npm --strip-components=1
-tar Jxf %{SOURCE90} -C deps/npm
+pushd deps/npm
+tar zxf %{SOURCE9} --strip-components=1
+tar Jxf %{SOURCE90}
 %endif
 
 %if %{node_version_number} >= 10
 tar Jxf %{SOURCE11}
 %endif
 
+# downgrade node-gyp to last version that supports python 3.4 for SLE12
+%if 0%{?suse_version} && 0%{?suse_version} < 1500 && 0%{node_version_number} >= 16
+rm -r  deps/npm/node_modules/node-gyp
+mkdir deps/npm/node_modules/node-gyp
+pushd deps/npm/node_modules/node-gyp
+tar Jxf %{SOURCE5}
+popd
+%endif
+
 %patch1 -p1
-%patch2 -p1
 %patch3 -p1
+%if %{node_version_number} <= 12 && 0%{?suse_version} < 1500
 %patch5 -p1
+%endif
 %patch7 -p1
 %patch8 -p1
 %if 0%{with valgrind_tests}
@@ -540,7 +553,6 @@ tar Jxf %{SOURCE11}
 %endif
 %patch200 -p1
 
-%patch304 -p1
 %patch305 -p1
 
 %if %{node_version_number} <= 12
@@ -555,12 +567,6 @@ find -name \*~ -print0 -delete
 # abnormalities from patching
 find \( -name \*.js.orig -or -name \*.md.orig -or -name \*.1.orig \) -delete
 
-# downgrade node-gyp to last version that supports python 3.4 for SLE12
-%if 0%{?suse_version} && 0%{?suse_version} < 1500 && 0%{node_version_number} > 16
-rm -r  deps/npm/node_modules/node-gyp
-mkdir deps/npm/node_modules/node-gyp
-tar -C deps/npm/node_modules/node-gyp Jxf %{SOURCE5}
-%endif
 
 
 %build
@@ -772,6 +778,12 @@ export NODE_TEST_NO_INTERNET=1
 find test \( -name \*.out -or -name \*.js \) -exec sed -i 's,Use `node ,Use `node%{node_version_number} ,' {} \;
 %endif
 
+# Update the python3 executable name to point at forced python version
+# needed to fix build on SLE12 SP5
+%if 0%{?forced_python_version:1}
+sed -i -e "s,'python3','python%{forced_python_version}'," test/parallel/test-child-process-set-blocking.js
+%endif
+
 ln addon-rpm.gypi deps/npm/node_modules/node-gyp/addon-rpm.gypi
 # Tarball doesn't have eslint package distributed, so disable some tests
 find test -name \*-eslint-\* -print -delete
@@ -834,6 +846,7 @@ make test-ci
 %files
 %defattr(-, root, root)
 %license LICENSE
+%doc doc/changelogs/CHANGELOG_V%{node_version_number}.md
 %doc AUTHORS *.md
 %doc deps/v8/tools/gdbinit
 %dir %{_libdir}/node_modules

@@ -1,4 +1,51 @@
 -------------------------------------------------------------------
+Mon Jan 16 14:36:50 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- Update to version 19.4.0:
+  * buffer: add buffer.isUtf8 for utf8 validation
+  * http: improved timeout defaults handling
+  * net: add autoSelectFamily global getter and setter
+  * os: add availableParallelism()
+  * util: add fast path for text-decoder fatal flag
+
+-------------------------------------------------------------------
+Mon Dec 19 01:30:30 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Update to version 19.3.0:
+  * deps : npm updates to 9.2.0
+  * build: disable v8 snapshot compression by default
+  * net: add autoSelectFamily and autoSelectFamilyAttemptTimeout options
+
+- temporarily require openssl 1.1.1 to build on TW
+- versioned.patch: refreshed
+
+-------------------------------------------------------------------
+Wed Dec  7 04:11:51 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Update to version 19.2.0:
+  * buffer: introduce `File` class
+  * deps: update V8 to 10.8.168.20
+  * doc: deprecate use of invalid ports in `url.parse`
+  * util: add fast path for utf8 encoding
+
+For details, see CHANGELOG_V19.md
+
+-------------------------------------------------------------------
+Thu Nov 17 12:05:45 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Update to version 19.1.0:
+  * test: Support function mocking on Node.js test runner
+  * fs.watch recursive support on Linux
+  * util: add MIME utilities
+
+- new_python3.patch, icu721_fixes.patch: upstreamed
+
+-------------------------------------------------------------------
+Thu Nov 10 08:19:06 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- icu721_fixes.patch: fixes compatibility with ICU 72.1 (bsc#1205236)
+
+-------------------------------------------------------------------
 Mon Nov  7 14:00:54 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - Fix migration to openssl-3 (bsc#1205042)

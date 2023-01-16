@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sat Dec 31 20:46:10 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Update to 14.21.2:
+  * http2: fix memory leak when nghttp2 hd threshold is reached
+
+-------------------------------------------------------------------
 Mon Nov  7 09:02:23 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - Update to 14.21.1:

@@ -1,9 +1,29 @@
 -------------------------------------------------------------------
+Sat Dec 31 20:54:09 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Update to LTS version 16.19.0:
+  * dgram: add dgram send queue info
+  * cli: add --watch
+- systemtap.patch: upstreamed, removed
+
+-------------------------------------------------------------------
+Tue Nov 29 16:34:55 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- sle12_python3_compat.patch: only apply for older SLE12 codestreams
+  where Python 3.6 is not available. Still worlaround for bsc#1205568
+
+-------------------------------------------------------------------
+Wed Nov 23 16:51:08 UTC 2022 - Adam Majer <adam.majer@suse.de>
+
+- Workaround bug on SLE12SP5 during source unpack (bsc#1205568)
+
+-------------------------------------------------------------------
 Mon Nov  7 09:04:49 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - Update to LTS versino 16.18.1:
   * inspector: DNS rebinding in --inspect via invalid octal IP
     (bsc#1205119, CVE-2022-43548)
+- Replace node-gyp for SLE12 with python 3.4 compatible gyp
 
 -------------------------------------------------------------------
 Thu Oct 13 08:29:08 UTC 2022 - Adam Majer <adam.majer@suse.de>
