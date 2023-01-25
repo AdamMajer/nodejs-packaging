@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jan 25 12:01:55 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- Use default openssl again and do not force openssl 1.1.1
+- _constraints: reset aarch64 memory requirements back to original
+  otherwise some unit tests can fail
+
+-------------------------------------------------------------------
 Mon Jan 16 14:36:50 UTC 2023 - Adam Majer <adam.majer@suse.de>
 
 - Update to version 19.4.0:
