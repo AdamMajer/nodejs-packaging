@@ -1,4 +1,4 @@
-s/{{node_version}}/19.4.0/g
+s/{{node_version}}/19.5.0/g
 s/{{node_version_major}}/19/g
 
 #
@@ -9,7 +9,7 @@ s/{{intree_openssl}}/0%{?suse_version} >= 1500 || 0%{?sle_version} >= 120400 || 
 #
 # icu versions
 s/{{intree_icu}}/0%{?suse_version} >= 1330 || 0%{?fedora_version} >= 35/g
-s/{{min_icu_version}}/69/g
+s/{{min_icu_version}}/71/g
 #
 #
 # libcares2 version
@@ -46,6 +46,6 @@ s/{{bundled_openssl_version}}/3.0.7/g
 s/{{bundled_uv_version}}/1.44.2/g
 s/{{bundled_uvwasi_version}}/0.0.14/g
 s/{{bundled_v8_version}}/10.8.168.25/g
-s/{{bundled_npm_version}}/9.2.0/g
+s/{{bundled_npm_version}}/9.3.1/g
 s/{{bundled_base64_version}}/0.5.0/g
-s/{{bundled_simdutf_version}}/2.0.9/g
+s/{{bundled_simdutf_version}}/3.1.0/g

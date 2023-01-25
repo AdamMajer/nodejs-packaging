@@ -140,7 +140,7 @@ function load_openssl_version
 function load_simdutf_version
 {
     if [ -f simdutf.h ]; then
-        BUNDLED_VERSION=$(grep 'define SIMDUTF_VERSION' simdutf.h | awk '{print $3}')
+        BUNDLED_VERSION=$(grep 'define SIMDUTF_VERSION' simdutf.h | awk '{print $3}' | sed 's,",,g')
     fi
 }
 
