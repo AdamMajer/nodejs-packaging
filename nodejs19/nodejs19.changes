@@ -7,6 +7,8 @@ Wed Jan 25 15:13:49 UTC 2023 - Adam Majer <adam.majer@suse.de>
   * stream: implement finished() for ReadableStream and WritableStream
 
 - npm_search_paths.patch, linker_lto_jobs.patch: refreshed
+- sysctl.patch: don't try to execute sysctl
+- s390.patch: fix unit test on s390 with patched zlib
 
 -------------------------------------------------------------------
 Wed Jan 25 12:01:55 UTC 2023 - Adam Majer <adam.majer@suse.de>

@@ -195,6 +195,8 @@ Patch133:       rsa-pss-revert.patch     # PATCH_FOR: 16, 18
 Patch200:       versioned.patch
 
 Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, master
+Patch306:       sysctl.patch  # PATCH_FOR: 19, master
+Patch307:       s390.patch    # PATCH_FOR: 18, 19, master
 
 BuildRequires:  pkg-config
 BuildRequires:  fdupes
@@ -563,6 +565,8 @@ popd
 %patch200 -p1
 
 %patch305 -p1
+%patch306 -p1
+%patch307 -p1
 
 %if %{node_version_number} <= 12
 # minimist security update - patch50
