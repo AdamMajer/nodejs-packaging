@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Fri Feb  3 11:43:02 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- Update to NodeJS 18.14.0 LTS:
+  * deps:
+    + update npm to 9.2.0
+  * http:
+    + join authorization headers
+    + improved timeout defaults handling
+  * stream:
+    + implement finished() for ReadableStream and WritableStream
+
+- refreshed patches: linker_lto_jobs.patch, npm_search_paths.patch,
+  versioned.patch
+
+-------------------------------------------------------------------
 Wed Feb  1 07:58:26 UTC 2023 - Dominique Leuenberger <dimstar@opensuse.org>
 
 - Do not use pkg_vcmp to decide BuildDependencies: this works based

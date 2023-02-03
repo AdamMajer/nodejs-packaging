@@ -1,4 +1,4 @@
-s/{{node_version}}/18.13.0/g
+s/{{node_version}}/18.14.0/g
 s/{{node_version_major}}/18/g
 
 #
@@ -44,7 +44,8 @@ s/{{bundled_nghttp2_version}}/1.51.0/g
 s/{{bundled_ngtcp2_version}}/0.8.1/g
 s/{{bundled_openssl_version}}/3.0.7/g
 s/{{bundled_uv_version}}/1.44.2/g
-s/{{bundled_uvwasi_version}}/0.0.13/g
+s/{{bundled_uvwasi_version}}/0.0.14/g
 s/{{bundled_v8_version}}/10.2.154.23/g
-s/{{bundled_npm_version}}/8.19.3/g
+s/{{bundled_npm_version}}/9.3.1/g
 s/{{bundled_base64_version}}/0.5.0/g
+s/{{bundled_simdutf_version}}/3.1.0/g
