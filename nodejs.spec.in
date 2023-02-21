@@ -196,6 +196,7 @@ Patch200:       versioned.patch
 
 Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, master
 Patch307:       s390.patch    # PATCH_FOR: 18
+Patch308:       node-gyp-config.patch      # PATCH_FOR: 19
 
 BuildRequires:  pkg-config
 BuildRequires:  fdupes
@@ -494,12 +495,16 @@ tar Jxf %{SOURCE11}
 %endif
 
 # downgrade node-gyp to last version that supports python 3.4 for SLE12
-%if 0%{?suse_version} && 0%{?suse_version} < 1500 && 0%{node_version_number} >= 16
+%if 0%{?suse_version} && 0%{?suse_version} < 1500 && %{node_version_number} >= 16
 rm -r  deps/npm/node_modules/node-gyp
 mkdir deps/npm/node_modules/node-gyp
 pushd deps/npm/node_modules/node-gyp
 tar Jxf %{SOURCE5}
 popd
+
+%if %{node_version_number} >= 19
+%patch308 -p1
+%endif
 %endif
 
 %patch1 -p1

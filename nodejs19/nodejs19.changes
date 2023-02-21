@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb 21 15:40:11 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- node-gyp_7.1.2.tar.xz: added dependencies
+- node-gyp-config.patch: allows gyp 7.1.2 to run with node 19.x
+
+-------------------------------------------------------------------
 Fri Feb  3 11:44:55 UTC 2023 - Adam Majer <adam.majer@suse.de>
 
 - Update to version 19.6.0:
