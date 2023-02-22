@@ -69,6 +69,11 @@ function extract_version_from_string_define
     fi
 }
 
+function load_ada_version
+{
+    extract_version_from_string_define ada.h "define ADA_VERSION"
+}
+
 function load_base64_version
 {
     if [ -f base64/CMakeLists.txt ]; then
@@ -216,13 +221,13 @@ function load_bundled_version
     BUNDLED_VERSION=""
 
     case $PKG in
-        (acorn|acorn-plugins|node-inspect|gtest|googletest|zlib|histogram|v8_inspector|cjs-module-lexer|corepack|undici):
+        (acorn|acorn-plugins|node-inspect|gtest|googletest|zlib|histogram|v8_inspector|cjs-module-lexer|corepack|undici|postject):
         # These are npm packages so handled elsewhere
         # or excluded, like gtest
         popd > /dev/null
         return
         ;;
-        (brotli|cares|http_parser|icu-small|nghttp2|nghttp3|openssl|uv|v8|llhttp|uvwasi|ngtcp2|npm|base64|simdutf):
+        (ada|brotli|cares|http_parser|icu-small|nghttp2|nghttp3|openssl|uv|v8|llhttp|uvwasi|ngtcp2|npm|base64|simdutf):
         load_${PKG}_version
         ;;
         (*):

@@ -1,10 +1,26 @@
 -------------------------------------------------------------------
+Wed Feb 22 13:42:36 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- Update to LTS version 16.19.1:
+  * fixes permissions policies can be bypassed via process.mainModule
+    (bsc#1208481, CVE-2023-23918)
+  * fixes insecure loading of ICU data through ICU_DATA environment
+    variable (bsc#1208487, CVE-2023-23920)
+  * fixes OpenSSL error handling issues in nodejs crypto library
+    (bsc#1208483, CVE-2023-23919)
+  * updates undici to v5.19.1
+    + Fetch API in Node.js did not protect against CRLF injection in host headers
+    + Regular Expression Denial of Service in Headers in Node.js fetch API
+    (bsc#1208413, bsc#1208485, CVE-2023-24807, CVE-2023-23936)
+
+-------------------------------------------------------------------
 Sat Dec 31 20:54:09 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - Update to LTS version 16.19.0:
   * dgram: add dgram send queue info
   * cli: add --watch
 - systemtap.patch: upstreamed, removed
+- versioned.patch: refreshed
 
 -------------------------------------------------------------------
 Fri Dec 23 11:31:12 UTC 2022 - Guillaume GARDET <guillaume.gardet@opensuse.org>

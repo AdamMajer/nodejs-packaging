@@ -158,13 +158,14 @@ Patch48:        CVE-2021-22939.patch   # PATCH_FOR: 10
 Patch49:        CVE-2022-21824.patch   # PATCH_FOR: 10
 Patch50:        CVE-2021-3807.patch    # PATCH_FOR: 10, 8, 12
 Patch51:        CVE-2021-44906.patch   # PATCH_FOR: 8, 10, 12
-Patch52:        CVE-2021-44907.patch   # PATCH_FOR: 8, 10, 12, 14
+Patch52:        CVE-2021-44907.patch   # PATCH_FOR: 8, 10, 12
 Patch53:        CVE-2022-0235.patch    # PATCH_FOR: 8, 10, 12, 14
 Patch55:        CVE-2022-32213.patch   # PATCH_FOR: 12, 10, 8
 Patch56:        CVE-2022-32212.patch   # PATCH_FOR: 12, 10, 8
 Patch57:        openssl_update.patch   # PATCH_FOR: 12
 Patch58:        CVE-2022-35256.patch   # PATCH_FOR: 12, 10, 8
 Patch59:        CVE-2022-43548.patch   # PATCH_FOR: 12, 10, 8
+Patch60:        CVE-2023-23920.patch   # PATCH_FOR: 12, 10, 8
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, 16, 18, 19, master
@@ -196,6 +197,7 @@ Patch200:       versioned.patch
 
 Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, master
 Patch307:       s390.patch    # PATCH_FOR: 18
+Patch309:       sysctl.patch  # PATCH_FOR: 18
 Patch308:       node-gyp-config.patch      # PATCH_FOR: 19
 
 BuildRequires:  pkg-config
@@ -262,7 +264,7 @@ BuildRequires:  gcc-c++
 
 
 # Python dependencies
-%if %node_version_number >= 16
+%if %node_version_number >= 14
 
 %if 0%{?suse_version} && 0%{?suse_version} < 1500
 BuildRequires:  python36
@@ -294,14 +296,6 @@ BuildRequires:  group(nobody)
 %if ! 0%{with intree_openssl}
 
 BuildRequires:  pkgconfig(openssl) >= %{openssl_req_ver}
-
-# require patched openssl library on SLES for nodejs16
-%if 0%{?suse_version} && "%{pkg_version openssl-1_1}" != "~~~"
-%if %node_version_number >= 16 && 0%{suse_version} <= 1500 && %{pkg_vcmp openssl-1_1 < '1.1.1e' } && 0%{with openssl_RSA_get0_pss_params}
-BuildRequires:  openssl-has-RSA_get0_pss_params
-Requires:       openssl-has-RSA_get0_pss_params
-%endif
-%endif
 
 %if 0%{?suse_version}
 
@@ -411,6 +405,8 @@ Provides:       bundled(llhttp) = {{bundled_llhttp_version}}
 Provides:       bundled(ngtcp2) = {{bundled_ngtcp2_version}}
 Provides:       bundled(base64) = {{bundled_base64_version}}
 Provides:       bundled(simdutf) = {{bundled_simdutf_version}}
+# bundled url-ada parser, not ada
+Provides:       bundled(ada) = {{bundled_ada_version}}
 
 {{node_npm_bundles}}
 
@@ -488,6 +484,7 @@ rm -r deps/npm/*
 pushd deps/npm
 tar zxf %{SOURCE9} --strip-components=1
 tar Jxf %{SOURCE90}
+popd
 %endif
 
 %if %{node_version_number} >= 10
@@ -545,6 +542,7 @@ popd
 %patch57 -p1
 %patch58 -p1
 %patch59 -p1
+%patch60 -p1
 %patch100 -p1
 %patch101 -p1
 %patch102 -p1
@@ -568,8 +566,9 @@ popd
 
 %patch305 -p1
 %patch307 -p1
+%patch309 -p1
 
-%if %{node_version_number} <= 12
+%if %{node_version_number} == 12
 # minimist security update - patch50
 rm -r deps/npm/node_modules/mkdirp/node_modules/minimist
 rmdir ./deps/npm/node_modules/mkdirp/node_modules

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb 22 11:02:22 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2023-23920.patch: fixes insecure loading of ICU data
+  through ICU_DATA environment variable (bsc#1208487, CVE-2023-23920)
+
+-------------------------------------------------------------------
 Mon Nov  7 09:06:39 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2022-43548.patch:

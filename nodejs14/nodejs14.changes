@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Tue Feb 21 16:36:46 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- Update to 14.21.3:
+  * fixes permissions policies can be bypassed via process.mainModule
+    (bsc#1208481, CVE-2023-23918)
+  * fixes insecure loading of ICU data through ICU_DATA environment
+    variable (bsc#1208487, CVE-2023-23920)
+  * deps: update npm to 6.14.18
+    + CVE-2021-44907.patch: upstreamed and removed
+- BR: python 3.6
+
+-------------------------------------------------------------------
 Sat Dec 31 20:46:10 UTC 2022 - Adam Majer <adam.majer@suse.de>
 
 - Update to 14.21.2:
