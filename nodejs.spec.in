@@ -196,8 +196,6 @@ Patch133:       rsa-pss-revert.patch     # PATCH_FOR: 16, 18
 Patch200:       versioned.patch
 
 Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, master
-Patch307:       s390.patch    # PATCH_FOR: 18
-Patch309:       sysctl.patch  # PATCH_FOR: 18
 Patch308:       node-gyp-config.patch      # PATCH_FOR: 19
 
 BuildRequires:  pkg-config
@@ -350,7 +348,7 @@ BuildRequires:  valgrind
 %endif
 
 %if %{with libalternatives}
-Requires:       alts
+Suggests:       alts
 %else
 Requires(postun): %{_sbindir}/update-alternatives
 %endif
@@ -565,8 +563,6 @@ popd
 %patch200 -p1
 
 %patch305 -p1
-%patch307 -p1
-%patch309 -p1
 
 %if %{node_version_number} == 12
 # minimist security update - patch50
