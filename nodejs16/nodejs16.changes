@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Wed Apr 12 09:12:32 UTC 2023 - Adam Majer <adam.majer@suse.de> - 16.20.0
+
+- Update to LTS version 16.20.0
+  * deps:
+    + update undici to 5.20.0
+    + update c-ares to 1.19.0
+    + upgrade npm to 8.19.4
+
+- legacy_python.patch, versioned.patch: refreshed
+
+-------------------------------------------------------------------
 Wed Feb 22 13:42:36 UTC 2023 - Adam Majer <adam.majer@suse.de>
 
 - Update to LTS version 16.19.1:
