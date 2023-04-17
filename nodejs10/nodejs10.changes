@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr 13 14:24:48 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2022-25881.patch: http-cache-semantics(npm): Don't use regex 
+  to trim whitespace (bsc#1208744, CVE-2022-25881)
+
+-------------------------------------------------------------------
 Wed Feb 22 11:02:22 UTC 2023 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2023-23920.patch: fixes insecure loading of ICU data
