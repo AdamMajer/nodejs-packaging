@@ -129,14 +129,14 @@ Group:          Development/Languages/NodeJS
 Source20:       bash_output_helper.bash
 
 ## Patches not distribution specific
-Patch1:         cares_public_headers.patch # PATCH_FOR: 12, 14, 16, 18, 19, master
+Patch1:         cares_public_headers.patch # PATCH_FOR: 12, 14, 16, 18, 19, 20, master
 Patch3:         fix_ci_tests.patch
-Patch5:         sle12_python3_compat.patch # PATCH_FOR: 13, 14, 15, 16, 18, 19, master
-Patch7:         manual_configure.patch # PATCH_FOR: 14, 13, 12, 10, 8, 15, 16, 18, 19, master
+Patch5:         sle12_python3_compat.patch # PATCH_FOR: 13, 14, 15, 16, 18, 19, 20, master
+Patch7:         manual_configure.patch # PATCH_FOR: 14, 13, 12, 10, 8, 15, 16, 18, 19, 20, master
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
 Patch11:        valgrind_fixes.patch   # PATCH_FOR: 10
 Patch12:        openssl_1_1_1.patch    # PATCH_FOR: 8
-Patch13:        openssl_binary_detection.patch  # PATCH_FOR: 10, 12, 14, 15, 16, 18, 19, master
+Patch13:        openssl_binary_detection.patch  # PATCH_FOR: 10, 12, 14, 15, 16, 18, 19, 20, master
 
 Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8
 
@@ -169,7 +169,7 @@ Patch60:        CVE-2023-23920.patch   # PATCH_FOR: 12, 10, 8
 Patch61:        CVE-2022-25881.patch   # PATCH_FOR: 14, 12, 10, 8
 
 ## Patches specific to SUSE and openSUSE
-Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, 16, 18, 19, master
+Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, 16, 18, 19, 20, master
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
 Patch101:       nodejs-libpath.patch
 # PATCH-FIX-UPSTREAM -- use custom addon.gypi by default instead of
@@ -182,22 +182,25 @@ Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 8, 10, 12
 # instead of /usr
 Patch104:       npm_search_paths.patch
 Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 8, 10
-Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, 16, 18, 19, master
+Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, 16, 18, 19, 20, master
 Patch109:       python3.patch             # PATCH_FOR: 12
-Patch110:       legacy_python.patch       # PATCH_FOR: 16, 18, 19, master
+Patch110:       legacy_python.patch       # PATCH_FOR: 16, 18, 19, 20, master
 
 Patch120:       flaky_test_rerun.patch
 
 Patch125:       cares_172.patch            # PATCH_FOR: 10
 Patch130:       test_ssl_cert_fixups.patch # PATCH_FOR: 10, 8
-Patch132:       test-skip-y2038-on-32bit-time_t.patch # PATCH_FOR: 14, 16, 18, 19, master
+Patch132:       test-skip-y2038-on-32bit-time_t.patch # PATCH_FOR: 14, 16, 18, 19, 20, master
 Patch133:       rsa-pss-revert.patch     # PATCH_FOR: 16, 18
 
 # Use versioned binaries and paths
 Patch200:       versioned.patch
 
-Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, master
-Patch308:       node-gyp-config.patch      # PATCH_FOR: 19
+Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, 20, master
+Patch308:       node-gyp-config.patch      # PATCH_FOR: 19, 20
+Patch309:       gcc13.patch                # PATCH_FOR: 20, master
+Patch310:       openssl3_1-adapt_tests.patch # PATCH_FOR: 20, master
+Patch311:       z13.patch                  # PATCH_FOR: 20, master
 
 BuildRequires:  pkg-config
 BuildRequires:  fdupes
@@ -565,6 +568,9 @@ popd
 %patch200 -p1
 
 %patch305 -p1
+%patch309 -p1
+%patch310 -p1
+%patch311 -p1
 
 %if %{node_version_number} == 12
 # minimist security update - patch50
@@ -787,6 +793,10 @@ export NODE_TEST_NO_INTERNET=1
 
 %if %{node_version_number} >= 12
 find test \( -name \*.out -or -name \*.js \) -exec sed -i 's,Use `node ,Use `node%{node_version_number} ,' {} \;
+%endif
+
+%if %{node_version_number} >= 20
+rm test/parallel/test-strace-openat-openssl.js
 %endif
 
 # Update the python3 executable name to point at forced python version

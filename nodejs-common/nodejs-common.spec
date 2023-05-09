@@ -26,7 +26,7 @@
 ###########################################################
 
 %define NODEJS_LTS      18
-%define NODEJS_CURRENT  19
+%define NODEJS_CURRENT  20
 
 %if 0%{?suse_version} > 1500 || 0%{?fedora_version}
 %bcond_without libalternatives
