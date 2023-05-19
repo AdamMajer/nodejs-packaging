@@ -65,7 +65,7 @@ function save_current_version
 function extract_version_from_string_define
 {
     if [ -f $1 ]; then
-        BUNDLED_VERSION=$(grep "$2" $1 | awk '{print $3}' | sed -e 's,",,g')
+        BUNDLED_VERSION=$(grep "$2" $1 | awk '{print $3}' | sed -e 's,"\W*,,g')
     fi
 }
 
@@ -221,7 +221,7 @@ function load_bundled_version
     BUNDLED_VERSION=""
 
     case $PKG in
-        (acorn|acorn-plugins|node-inspect|gtest|googletest|zlib|histogram|v8_inspector|cjs-module-lexer|corepack|undici|postject):
+        (acorn|acorn-plugins|node-inspect|gtest|googletest|zlib|histogram|v8_inspector|cjs-module-lexer|corepack|undici|postject|minimatch):
         # These are npm packages so handled elsewhere
         # or excluded, like gtest
         popd > /dev/null
@@ -290,7 +290,7 @@ function find_npm_packages
     if [ "$MODE" = "npm" ]; then
         find -name package.json -path './npm/*' -regex '.*/node_modules/[^/]+/package.json' | $NPM_BUNDLES_TO_PROVIDES_CMD
     else
-        find -name package.json -not -path './npm/*' -not -path './v8/*' -not -path '*/test/*' | $NPM_BUNDLES_TO_PROVIDES_CMD
+        find -name package.json -not -path './npm/*' -not -path './v8/*' -not -path '*/test/*' -not -path '*/dist/*' | $NPM_BUNDLES_TO_PROVIDES_CMD
     fi
 
     popd > /dev/null
