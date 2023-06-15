@@ -1,7 +1,7 @@
 #
 # spec file for package nodejs-common
 #
-# Copyright (c) 2021 SUSE LLC
+# Copyright (c) 2023 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -34,18 +34,12 @@
 %bcond_with libalternatives
 %endif
 
-
 # SLE-12 variants
 %if 0%{?suse_version} < 1500
-%define default_node_ver %NODEJS_LTS
+%define default_node_ver 16
+%endif
 
-%else
-
-# TW
-%if 0%{?suse_version} > 1500
-%define default_node_ver %NODEJS_CURRENT
-
-%else
+%if 0%{?suse_version} == 1500
 
 # SLE-15 variants, variation based on SP
 %if 0%{?sle_version} >= 150000 && 0%{?sle_version} < 150200
@@ -65,17 +59,28 @@
 %endif
 
 %if 0%{?sle_version} >= 150500 && 0%{?sle_version} < 150600
-%define default_node_ver %NODEJS_LTS
+%define default_node_ver 18
+%endif
+
+%if 0%{?sle_version} >= 150600 && 0%{?sle_version} < 150700
+%define default_node_ver 20
 %endif
 
 # SLE-15 variants
 %endif
 
+%if 0%{?suse_version} == 1600
+# ALP variants
+%define default_node_ver 20
+%endif
+
 # TW
+%if 0%{?suse_version} >= 1699
+%define default_node_ver %NODEJS_CURRENT
 %endif
 
 Name:           nodejs-common
-Version:        5.1
+Version:        6.0
 Release:        0
 Summary:        Common files for the NodeJS ecosystem
 License:        MIT
@@ -134,6 +139,7 @@ Depends on the most current and up-to-date version of nodejs for
 the current architecture and codestream.
 
 %prep
+
 %build
 cp %{S:2} .
 gcc ${RPM_OPT_FLAGS} %?libalternatives_cflags -o node %{S:1} %?libalternatives_lflags
