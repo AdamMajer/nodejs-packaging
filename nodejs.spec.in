@@ -199,7 +199,6 @@ Patch200:       versioned.patch
 Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, 20, master
 Patch308:       node-gyp-config.patch      # PATCH_FOR: 19, 20
 Patch309:       gcc13.patch                # PATCH_FOR: 20, master
-Patch310:       openssl3_1-adapt_tests.patch # PATCH_FOR: 20, master
 Patch311:       z13.patch                  # PATCH_FOR: 20, master
 
 BuildRequires:  pkg-config
@@ -569,7 +568,6 @@ popd
 
 %patch305 -p1
 %patch309 -p1
-%patch310 -p1
 %patch311 -p1
 
 %if %{node_version_number} == 12
