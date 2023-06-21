@@ -4,3 +4,4 @@
 *.tmp
 .swp
 .go.*
+devel*languages*nodejs*
