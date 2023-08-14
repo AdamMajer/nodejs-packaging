@@ -1,4 +1,24 @@
 -------------------------------------------------------------------
+Fri Aug 11 12:08:00 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+  * CVE-2023-32002.patch:
+    + fixes policies can be bypassed via Module._load
+    + fixes policies can be bypassed by module.constructor.createRequire
+      (CVE-2023-32002, CVE-2023-32006, bsc#1214150, bsc#1214156)
+  * CVE-2023-32559.patch: Policies can be bypassed via
+    process.binding (CVE-2023-32559, bsc#1214154)
+
+-------------------------------------------------------------------
+Fri Aug  4 14:51:10 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2023-30581.patch: fixes mainModule.__proto__ Bypass
+  Experimental Policy Mechanism (CVE-2023-30581, bsc#1212574)
+- CVE-2023-30589.patch: HTTP Request Smuggling via empty headers
+  separated by CR (CVE-2023-30589, bsc#1212582)
+- CVE-2023-30590.patch: DiffieHellman does not generate keys
+   after setting a private key (CVE-2023-30590, bsc#1212583)
+
+-------------------------------------------------------------------
 Thu Apr 13 14:24:48 UTC 2023 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2022-25881.patch: http-cache-semantics(npm): Don't use regex
