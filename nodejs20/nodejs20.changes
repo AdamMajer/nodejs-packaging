@@ -1,4 +1,63 @@
 -------------------------------------------------------------------
+Thu Aug 10 13:51:20 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- Update to version 20.5.1:
+  * (CVE-2023-32002, bsc#1214150): Policies can be bypassed
+     via Module._load (High)
+  * (CVE-2023-32558, bsc#1214155): process.binding() can bypass
+     the permission model through path traversal (High)
+  * (CVE-2023-32004, bsc#1214152): Permission model can be bypassed
+     by specifying a path traversal sequence in a Buffer (High)
+  * (CVE-2023-32006, bsc#1214156): Policies can be bypassed
+     by module.constructor.createRequire (Medium)
+  * (CVE-2023-32559, bsc#1214154): Policies can be bypassed
+     via process.binding (Medium)
+  * (CVE-2023-32005, bsc#1214153): fs.statfs can bypass
+     the permission model (Low)
+  * (CVE-2023-32003, bsc#1214151): fs.mkdtemp() and fs.mkdtempSync()
+     can bypass the permission model (Low)
+- Changes in 20.5.0:
+  * events: allow safely adding listener to abortSignal
+  * fs: add a fast-path for readFileSync utf-8
+  * test_runner: add shards support
+- Changes in 20.4.0:
+  * tls: add ALPNCallback server option for dynamic ALPN negotiation
+  * adds support for ECMAScript Explicit Resource Management
+  * adds Mock Timer support to test module
+
+For details see,
+https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V20.md#20.5.1
+
+versioned.patch: refreshed
+
+-------------------------------------------------------------------
+Wed Jun 21 11:24:39 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- Update to version 20.3.1 (security fixes only). The following
+  CVEs are fixed in this release:
+  * (CVE-2023-30581, bsc#1212574): mainModule.__proto__ Bypass
+    Experimental Policy Mechanism (High)
+  * (CVE-2023-30584, bsc#1212575): Path Traversal Bypass in
+    Experimental Permission Model (High)
+  * (CVE-2023-30587, bsc#1212576): Bypass of Experimental
+    Permission Model via Node.js Inspector (High)
+  * (CVE-2023-30582, bsc#1212577): Inadequate Permission Model
+    Allows Unauthorized File Watching (Medium)
+  * (CVE-2023-30583, bsc#1212578): Bypass of Experimental
+    Permission Model via fs.openAsBlob() (Medium)
+  * (CVE-2023-30585, bsc#1212579): Privilege escalation via
+    Malicious Registry Key manipulation during Node.js
+    installer repair process (Medium)
+  * (CVE-2023-30586, bsc#1212580): Bypass of Experimental
+    Permission Model via Arbitrary OpenSSL Engines (Medium)
+  * (CVE-2023-30588, bsc#1212581): Process interuption due to invalid
+    Public Key information in x509 certificates (Medium)
+  * (CVE-2023-30589, bsc#1212582): HTTP Request Smuggling via
+    Empty headers separated by CR (Medium)
+  * (CVE-2023-30590, bsc#1212583): DiffieHellman does not
+    generate keys after setting a private key (Medium)
+
+-------------------------------------------------------------------
 Thu Jun 15 11:25:18 UTC 2023 - Adam Majer <adam.majer@suse.de>
 
 - Update to version 20.3.0:
