@@ -171,8 +171,8 @@ Patch62:        CVE-2023-23918.patch   # PATCH_FOR: 12
 Patch63:        CVE-2023-30581.patch   # PATCH_FOR: 14, 12
 Patch64:        CVE-2023-30589.patch   # PATCH_FOR: 14, 12
 Patch65:        CVE-2023-30590.patch   # PATCH_FOR: 14, 12
-Patch66:        CVE-2023-32559.patch   # PATCH_FOR: 14
-Patch67:        CVE-2023-32002.patch   # PATCH_FOR: 14
+Patch66:        CVE-2023-32559.patch   # PATCH_FOR: 14, 12
+Patch67:        CVE-2023-32002.patch   # PATCH_FOR: 14, 12
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, 16, 18, 19, 20, master
