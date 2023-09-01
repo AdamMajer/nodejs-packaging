@@ -8,7 +8,7 @@ s/{{intree_openssl}}/0%{?suse_version} >= 1500 || 0%{?sle_version} >= 120400 || 
 #
 #
 # icu versions
-s/{{intree_icu}}/0%{?suse_version} >= 1330 || 0%{?fedora_version} >= 35/g
+s/{{intree_icu}}/0%{?sle_version} != 150600 \&\& ( 0%{?suse_version} >= 1330 || 0%{?fedora_version} >= 35 )/g
 s/{{min_icu_version}}/71/g
 #
 #
