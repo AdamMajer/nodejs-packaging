@@ -35,7 +35,7 @@ fi
 
 for i in $NODE_VERSIONS; do
 	ver=${i:6}
-	if [ $ver -lt 16 ]; then
+	if [ $ver -lt 18 ]; then
 		echo "Skipping old versions $ver.x"
 		continue
 	fi
