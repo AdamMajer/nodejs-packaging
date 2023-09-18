@@ -1,4 +1,26 @@
 -------------------------------------------------------------------
+Mon Sep 18 10:08:42 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- Update to 20.6.1:
+  * f0ff63fbc32ea55f3d92c5c89fdb91ec47786859.patch: removed, upstreamed
+
+-------------------------------------------------------------------
+Fri Sep  8 10:46:20 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- f0ff63fbc32ea55f3d92c5c89fdb91ec47786859.patch: fixes issues with
+  Angular and other software that tries to load ECM modules in
+  somewhat circular fashion ending up with multiple executions.
+
+-------------------------------------------------------------------
+Tue Sep  5 09:29:49 UTC 2023 - Adam Majer <adam.majer@suse.de> - 20.6.0
+
+- Update to 20.6.0:
+  * add support for .env files to configure envrionment variables
+  * import.meta.resolve unflagged
+  * deps: npm updated to 9.8.1
+- nodejs.keyring: updated to include current upstream releasers
+
+-------------------------------------------------------------------
 Fri Aug 25 14:34:21 UTC 2023 - Adam Majer <adam.majer@suse.de>
 
 - Temporarily bundle ICU for SLE15 SP6 (jsc#PED-4819)
