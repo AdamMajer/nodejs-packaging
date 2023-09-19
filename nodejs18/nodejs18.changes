@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Tue Sep 19 14:05:45 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- Update to LTS version 18.18.0
+  * build: sync libuv header change
+  * deps: add missing thread-common.c in uv.gyp
+  * deps: upgrade to libuv 1.46.0
+  * doc: add atlowChemi to collaborators
+  * esm: add `--import` flag
+  * events: allow safely adding listener to abortSignal
+  * fs, stream: initial `Symbol.dispose` and `Symbol.asyncDispose` support
+  * net: add autoSelectFamily global getter and setter
+  * url: add value argument to has and delete methods
+- versioned.patch: refreshed
+
+-------------------------------------------------------------------
 Thu Aug 10 14:08:36 UTC 2023 - Adam Majer <adam.majer@suse.de>
 
 - Update to LTS version 18.17.1 (security fixes). The following CVE

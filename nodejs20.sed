@@ -1,4 +1,4 @@
-s/{{node_version}}/20.6.1/g
+s/{{node_version}}/20.7.0/g
 s/{{node_version_major}}/20/g
 
 #
@@ -8,7 +8,7 @@ s/{{intree_openssl}}/0%{?suse_version} >= 1500 || 0%{?sle_version} >= 120400 || 
 #
 #
 # icu versions
-s/{{intree_icu}}/0%{?sle_version} != 150600 \&\& ( 0%{?suse_version} >= 1330 || 0%{?fedora_version} >= 35 )/g
+s/{{intree_icu}}/0%{?suse_version} >= 1330 || 0%{?fedora_version} >= 35/g
 s/{{min_icu_version}}/71/g
 #
 #
@@ -46,7 +46,7 @@ s/{{bundled_openssl_version}}/3.0.10/g
 s/{{bundled_uv_version}}/1.46.0/g
 s/{{bundled_uvwasi_version}}/0.0.18/g
 s/{{bundled_v8_version}}/11.3.244.8/g
-s/{{bundled_npm_version}}/9.8.1/g
+s/{{bundled_npm_version}}/10.1.0/g
 s/{{bundled_base64_version}}/0.5.0/g
 s/{{bundled_simdutf_version}}/3.2.17/g
 s/{{bundled_ada_version}}/2.6.0/g
