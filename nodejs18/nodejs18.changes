@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Oct 11 08:54:20 UTC 2023 - Adam Majer <adam.majer@suse.de> - 18.18.1
+
+- Update to LTS version 18.18.1
+  * deps: libuv update in 18.18.0 broke webpack's thread-loader.
+    This update should fix this.
+
+-------------------------------------------------------------------
 Tue Sep 19 14:05:45 UTC 2023 - Adam Majer <adam.majer@suse.de>
 
 - Update to LTS version 18.18.0
