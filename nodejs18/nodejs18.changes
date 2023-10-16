@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Oct 16 10:09:43 UTC 2023 - Adam Majer <adam.majer@suse.de> - 18.18.2
+
+- Security update to version 18.18.2
+  * (CVE-2023-44487, bsc#1216190): nghttp2 Security Release
+  * (CVE-2023-45143, bsc#1216205): undici Security Release
+  * (CVE-2023-38552, bsc#1216272): Integrity checks according to policies can be circumvented
+  * (CVE-2023-39333, bsc#1216273): Code injection via WebAssembly export names
+
+-------------------------------------------------------------------
 Wed Oct 11 08:54:20 UTC 2023 - Adam Majer <adam.majer@suse.de> - 18.18.1
 
 - Update to LTS version 18.18.1
