@@ -9,6 +9,8 @@ Mon Oct 16 09:28:06 UTC 2023 - Adam Majer <adam.majer@suse.de> - 20.8.1
   * (CVE-2023-38552, bsc#1216272): Integrity checks according to policies can be circumvented
   * (CVE-2023-39333, bsc#1216273): Code injection via WebAssembly export names
 
+- fix_ci_tests.patch: refreshed
+
 -------------------------------------------------------------------
 Thu Oct  5 13:45:41 UTC 2023 - Adam Majer <adam.majer@suse.de> - 20.8.0
 
