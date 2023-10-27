@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Oct 25 10:48:27 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2023-44487.patch: nghttp2 Security Release (CVE-2023-44487, bsc#1216190)
+- nodejs.keyring: include new releaser keys
+- newicu_test_fixup.patch: workaround whitespaces funnies in
+  some icu versions
+
+-------------------------------------------------------------------
 Thu Apr 13 14:24:48 UTC 2023 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2022-25881.patch: http-cache-semantics(npm): Don't use regex 

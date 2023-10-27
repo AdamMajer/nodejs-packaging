@@ -1,0 +1,31 @@
+commit 3b73aa416f5903d2464d0cbed0377889a23de5cb
+Author: Michaël Zasso <targos@protonmail.com>
+Date:   Tue Oct 25 16:13:17 2022 +0200
+
+    deps: update ICU to 72.1
+    
+    Refs: https://github.com/unicode-org/icu/releases/tag/release-72-1
+    PR-URL: https://github.com/nodejs/node/pull/45068
+    Reviewed-By: Richard Lau <rlau@redhat.com>
+    Reviewed-By: Mohammed Keyvanzadeh <mohammadkeyvanzade94@gmail.com>
+    Reviewed-By: Steven R Loomis <srloomis@us.ibm.com>
+    Reviewed-By: James M Snell <jasnell@gmail.com>
+    Reviewed-By: Tobias Nießen <tniessen@tnie.de>
+
+Index: node-v14.21.3/test/parallel/test-intl.js
+===================================================================
+--- node-v14.21.3.orig/test/parallel/test-intl.js
++++ node-v14.21.3/test/parallel/test-intl.js
+@@ -97,7 +97,11 @@ if (!common.hasIntl) {
+   // Test format
+   {
+     const localeString = date0.toLocaleString(['en'], optsGMT);
+-    assert.strictEqual(localeString, '1/1/1970, 12:00:00 AM');
++    if (Number(process.versions.cldr) >= 42) {
++      assert.strictEqual(localeString, '1/1/1970, 12:00:00 AM');
++    } else {
++      assert.strictEqual(localeString, '1/1/1970, 12:00:00 AM');
++    }
+   }
+   // number format
+   {

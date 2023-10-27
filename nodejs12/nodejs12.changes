@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Tue Oct 24 15:45:11 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2023-38552.patch: Integrity checks according to policies
+  can be circumvented (CVE-2023-38552, bsc#1216272)
+- CVE-2023-44487.patch: nghttp2 Security Release (CVE-2023-44487, bsc#1216190)
+- nodejs.keyring: include new releaser keys
+- newicu_test_fixup.patch: workaround whitespaces funnies in
+  some icu versions
+
+-------------------------------------------------------------------
 Thu Aug 17 14:58:33 UTC 2023 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2023-30581.patch: fixes mainModule.__proto__ Bypass

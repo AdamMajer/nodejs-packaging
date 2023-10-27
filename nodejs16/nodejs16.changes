@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Tue Oct 17 11:52:34 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2023-38552.patch: Integrity checks according to policies
+  can be circumvented (CVE-2023-38552, bsc#1216272)
+- CVE-2023-39333.patch, wasm-fixture.tar.gz: Code injection via
+  WebAssembly export names (CVE-2023-39333, bsc#1216273)
+- CVE-2023-44487.patch: nghttp2 Security Release (CVE-2023-44487, bsc#1216190)
+- CVE-2023-45143.patch: undici Security Release (CVE-2023-45143, bsc#1216205)
+- nodejs.keyring: include new releaser keys
+
+-------------------------------------------------------------------
 Thu Aug 10 14:33:17 UTC 2023 - Adam Majer <adam.majer@suse.de>
 
 - Update to LTS version 16.20.2 (security fixes). The following CVE
