@@ -210,7 +210,7 @@ Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, 20, 21, master
 Patch308:       node-gyp-config.patch      # PATCH_FOR: 19, 20, 21
 Patch309:       gcc13.patch                # PATCH_FOR: 20, 21, master
 Patch310:       newicu_test_fixup.patch    # PATCH_FOR: 14, 12, 10
-Patch311:       nodejs20-zlib-1.3.patch    # PATCH_FOR: 20, 21, master
+Patch311:       nodejs20-zlib-1.3.patch    # PATCH_FOR: 20
 
 BuildRequires:  pkg-config
 BuildRequires:  fdupes
