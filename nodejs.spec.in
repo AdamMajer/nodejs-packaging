@@ -49,6 +49,11 @@ Release:        0
 %bcond_with libalternatives
 %endif
 
+# nodejs20+ is not for SLE12
+%if %{node_version_number} >= 20 && 0%{?suse_version} > 0 && 0%{?suse_version} < 1500
+ExclusiveArch do_not_build
+%endif
+
 %if %node_version_number >= 12
 %define openssl_req_ver 1.1.1
 %else

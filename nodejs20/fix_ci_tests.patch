@@ -96,3 +96,15 @@ Index: node-v20.10.0/test/parallel/test-crypto-dh.js
    }
  }
  
+Index: node-v20.10.0/test/parallel/test-node-output-errors.mjs
+===================================================================
+--- node-v20.10.0.orig/test/parallel/test-node-output-errors.mjs
++++ node-v20.10.0/test/parallel/test-node-output-errors.mjs
+@@ -28,6 +28,7 @@ describe('errors output', { concurrency:
+       .replaceAll(/\/(\w)/g, '*$1')
+       .replaceAll('*test*', '*')
+       .replaceAll('*fixtures*errors*', '*')
++      .replace(/`node\d+ --/, '`node --')
+       .replaceAll('file:**', 'file:*/');
+   }
+ 
