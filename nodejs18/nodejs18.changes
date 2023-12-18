@@ -1,4 +1,20 @@
 -------------------------------------------------------------------
+Mon Dec 18 10:03:02 UTC 2023 - Adam Majer <adam.majer@suse.de> - 18.19.0
+
+- Update to LTS version 18.19.0
+  * deps: npm updates to 10.x
+  * esm:
+    + Leverage loaders when resolving subsequent loaders
+    + import.meta.resolve unflagged
+    + --experimental-default-type flag to flip module defaults
+
+For details, see
+https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V18.md
+
+- node-gyp-addon-gypi.patch, fix_ci_tests.patch,
+  versioned.patch: refreshed
+
+-------------------------------------------------------------------
 Mon Oct 16 10:09:43 UTC 2023 - Adam Majer <adam.majer@suse.de> - 18.18.2
 
 - Security update to version 18.18.2
