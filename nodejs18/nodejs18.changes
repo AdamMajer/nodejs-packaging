@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Dec 19 12:23:09 UTC 2023 - Adam Majer <adam.majer@suse.de>
+
+- sle12-node-gyp-addon-gypi.patch: added variant of node-gyp-addon-gypi.patch
+  for SLE12 compatibility. node-gyp-addon-gypi.patch is for SLE15+
+
+-------------------------------------------------------------------
 Mon Dec 18 10:03:02 UTC 2023 - Adam Majer <adam.majer@suse.de> - 18.19.0
 
 - Update to LTS version 18.19.0

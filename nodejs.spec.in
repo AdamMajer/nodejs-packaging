@@ -190,6 +190,7 @@ Patch101:       nodejs-libpath.patch
 # PATCH-FIX-UPSTREAM -- use custom addon.gypi by default instead of
 # downloading node source
 Patch102:       node-gyp-addon-gypi.patch
+Patch1020:      sle12-node-gyp-addon-gypi.patch # PATCH_FOR: 18
 # PATCH-FIX-SLE -- configure script uses Python check_output method
 # which isn't included in Python 2.6 (used in SLE 11).
 Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 8, 10, 12
@@ -521,6 +522,8 @@ popd
 
 %if %{node_version_number} >= 19
 %patch308 -p1
+%else
+%patch1020 -p1
 %endif
 %endif
 
@@ -576,7 +579,9 @@ popd
 %patch71 -p1
 %patch100 -p1
 %patch101 -p1
+%if 0%{?suse_version} >= 1500 || 0%{?suse_version} == 0
 %patch102 -p1
+%endif
 # Add check_output to configure script (not part of Python 2.6 in SLE11).
 %if 0%{?suse_version} == 1110
 %patch103 -p1
