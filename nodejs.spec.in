@@ -216,6 +216,7 @@ Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, 20, 21, master
 Patch308:       node-gyp-config.patch      # PATCH_FOR: 19, 20, 21
 Patch309:       gcc13.patch                # PATCH_FOR: 20, 21, master
 Patch310:       newicu_test_fixup.patch    # PATCH_FOR: 14, 12, 10
+Patch311:       c-ares-fixes.patch         # PATCH_FOR: 20, 21, master
 
 BuildRequires:  pkg-config
 BuildRequires:  fdupes
@@ -422,6 +423,7 @@ Provides:       bundled(llhttp) = {{bundled_llhttp_version}}
 Provides:       bundled(ngtcp2) = {{bundled_ngtcp2_version}}
 Provides:       bundled(base64) = {{bundled_base64_version}}
 Provides:       bundled(simdutf) = {{bundled_simdutf_version}}
+Provides:       bundled(simdjson) = {{bundled_simdjson_version}}
 # bundled url-ada parser, not ada
 Provides:       bundled(ada) = {{bundled_ada_version}}
 
@@ -603,6 +605,7 @@ popd
 %patch305 -p1
 %patch309 -p1
 %patch310 -p1
+%patch311 -p1
 
 %if %{node_version_number} == 12
 # minimist security update - patch50

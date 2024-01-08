@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jan  2 16:14:58 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- c-ares-fixes.patch: fixes unit tests for new c-ares
+
+-------------------------------------------------------------------
 Thu Nov 23 08:02:58 UTC 2023 - Adam Majer <adam.majer@suse.de> - 20.10.0
 
 - Update to 20.10.0:

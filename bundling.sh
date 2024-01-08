@@ -149,6 +149,13 @@ function load_simdutf_version
     fi
 }
 
+function load_simdjson_version
+{
+    if [ -f simdjson.h ]; then
+        BUNDLED_VERSION=$(grep 'define SIMDJSON_VERSION' simdjson.h | awk '{print $3}' | sed 's,",,g')
+    fi
+}
+
 function load_uv_version
 {
     F=include/uv/version.h
@@ -227,7 +234,7 @@ function load_bundled_version
         popd > /dev/null
         return
         ;;
-        (ada|brotli|cares|http_parser|icu-small|nghttp2|nghttp3|openssl|uv|v8|llhttp|uvwasi|ngtcp2|npm|base64|simdutf):
+        (ada|brotli|cares|http_parser|icu-small|nghttp2|nghttp3|openssl|uv|v8|llhttp|uvwasi|ngtcp2|npm|base64|simdutf|simdjson):
         load_${PKG}_version
         ;;
         (*):
