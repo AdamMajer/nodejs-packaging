@@ -802,6 +802,12 @@ ln -s -f npx-default      %{buildroot}%{_sysconfdir}/alternatives/npx-default
 ln -s -f npx.1%{ext_man}  %{buildroot}%{_sysconfdir}/alternatives/npx.1%{ext_man}
 ln -s %{_sysconfdir}/alternatives/npx-default          %{buildroot}%{_bindir}/npx-default
 ln -s %{_sysconfdir}/alternatives/npx.1%{ext_man}      %{buildroot}%{_mandir}/man1/npx.1%{ext_man}
+%if %{node_version_number} >= 14
+ln -s -f corepack-default      %{buildroot}%{_sysconfdir}/alternatives/corepack-default
+ln -s -f corepack.1%{ext_man}  %{buildroot}%{_sysconfdir}/alternatives/corepack.1%{ext_man}
+ln -s %{_sysconfdir}/alternatives/corepack-default          %{buildroot}%{_bindir}/corepack-default
+ln -s %{_sysconfdir}/alternatives/corepack.1%{ext_man}      %{buildroot}%{_mandir}/man1/corepack.1%{ext_man}
+%endif
 %endif
 
 # libalternatives - can always ship
@@ -820,6 +826,13 @@ binary=%{_bindir}/npx%{node_version_number}
 man=npx%{node_version_number}.1
 group=npm,npx
 EOF
+%if %{node_version_number} >= 14
+mkdir -p %{buildroot}%{_datadir}/libalternatives/corepack;
+cat > %{buildroot}%{_datadir}/libalternatives/corepack/%{node_version_number}.conf <<EOF
+binary=%{_bindir}/corepack%{node_version_number}
+man=corepack%{node_version_number}.1
+EOF
+%endif
 
 # We need to own license directory on old versions of SLE
 %if 0%{?suse_version} < 1500
@@ -965,6 +978,12 @@ make test-ci
 %defattr(-, root, root)
 %{_bindir}/corepack%{node_version_number}
 %{_libdir}/node_modules/corepack%{node_version_number}
+%if ! %{with libalternatives}
+%ghost %{_bindir}/corepack-default
+%ghost %{_mandir}/man1/corepack.1%{ext_man}
+%ghost %{_sysconfdir}/alternatives/corepack-default
+%ghost %{_sysconfdir}/alternatives/corepack.1%{ext_man}
+%endif
 %endif
 
 %files devel
@@ -988,6 +1007,11 @@ update-alternatives --remove node-default %{_bindir}/node%{node_version_number}
 %post -n npm%{node_version_number}
 update-alternatives --remove npm-default %{_bindir}/npm%{node_version_number}
 update-alternatives --remove npx-default %{_bindir}/npx%{node_version_number}
+
+%if %{node_version_number} >= 14
+%post -n corepack%{node_version_number}
+update-alternatives --remove corepack-default %{_bindir}/corepack%{node_version_number}
+%endif
 
 %else
 %pre
@@ -1027,6 +1051,24 @@ fi
 if [ ! -f %{_bindir}/npx%{node_version_number} ] ; then
     update-alternatives --remove npx-default %{_bindir}/npx%{node_version_number}
 fi
+
+%if %{node_version_number} >= 14
+%pre -n corepack%{node_version_number}
+# remove files that are no longer owned but provided by update-alternatives
+if ! [ -L %{_mandir}/man1/corepack.1%{ext_man} ]; then
+    rm -f %{_mandir}/man1/corepack.1%{ext_man}
+fi
+
+%post -n corepack%{node_version_number}
+update-alternatives \
+        --install %{_bindir}/corepack-default corepack-default %{_bindir}/corepack%{node_version_number} %{node_version_number} \
+        --slave %{_mandir}/man1/corepack.1%{ext_man} corepack.1%{ext_man} %{_mandir}/man1/corepack%{node_version_number}.1%{ext_man}
+
+%postun -n corepack%{node_version_number}
+if [ ! -f %{_bindir}/corepack%{node_version_number} ] ; then
+    update-alternatives --remove corepack-default %{_bindir}/corepack%{node_version_number}
+fi
+%endif
 
 %endif
 

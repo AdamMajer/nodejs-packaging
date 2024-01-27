@@ -25,6 +25,10 @@ Mon Feb 12 14:51:32 UTC 2024 - Adam Majer <adam.majer@suse.de>
   * Support configurable snapshot through --build-snapshot-config flag
 
 - fix_ci_tests.patch: refreshed
+-------------------------------------------------------------------
+Sat Jan 27 10:09:34 UTC 2024 - xtex <xtexchooser@duck.com>
+
+- Add libalternative config for corepack
 
 -------------------------------------------------------------------
 Mon Jan  8 15:02:53 UTC 2024 - Adam Majer <adam.majer@suse.de>
