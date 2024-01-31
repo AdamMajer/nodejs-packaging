@@ -1,7 +1,7 @@
 SHELL=/bin/bash
 
 # Project separator, so you can use different separator than :
-PS = $(shell (grep '^\s*project_separator\s*=' ~/.oscrc || echo "project_separator=:") | sed -e 's,^\s*project_separator\s*=\s*\(\S\+\)\s*$$',\\1,)
+PS := $(shell bash -c 'source osc_project_sep.sh && echo -n $$PS')
 MAIN_PRJ ?= $(subst :,$(PS),devel:languages:nodejs)
 STAGING_PRJ ?= $(subst :,$(PS),devel:languages:nodejs:staging)
 
