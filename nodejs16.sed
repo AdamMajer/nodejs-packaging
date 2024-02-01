@@ -34,7 +34,7 @@ s,{{SOURCES_EXTRA}},\
 Source5:        node-gyp_7.1.2.tar.xz \
 # Only required to run unit tests in NodeJS 10+ \
 Source10:       update_npm_tarball.sh \
-Source11:       node_modules.tar.xz, \
+Source11:       node_modules.tar.xz \
 Source12:       wasm-fixtures.tar.gz,
 
 
