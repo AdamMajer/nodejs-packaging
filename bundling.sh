@@ -85,8 +85,17 @@ function load_base64_version
 function load_brotli_version
 {
     if [ -f c/common/version.h ]; then
-        local VER=$(grep BROTLI_VERSION c/common/version.h | awk '{print $3}')
-        BUNDLED_VERSION=$(node -e "a=$VER; console.log((a >> 24) + '.' + ((a >> 16)&0xFF) + '.' + (a & 0xFF))")
+        local cnt=$(grep -c 'BROTLI_VERSION' c/common/version.h)
+        if [ $cnt -eq 1 ]; then
+            local VER=$(grep BROTLI_VERSION c/common/version.h | awk '{print $3}')
+            BUNDLED_VERSION=$(node -e "a=$VER; console.log((a >> 24) + '.' + ((a >> 16)&0xFF) + '.' + (a & 0xFF))")
+        elif [ $cnt -gt 1 ]; then
+            local MAJOR=$(grep 'define BROTLI_VERSION_MAJOR' c/common/version.h | awk '{print $3}')
+            local MINOR=$(grep 'define BROTLI_VERSION_MINOR' c/common/version.h | awk '{print $3}')
+            local PATCH=$(grep 'define BROTLI_VERSION_PATCH' c/common/version.h | awk '{print $3}')
+
+            BUNDLED_VERSION="$MAJOR.$MINOR.$PATCH"
+        fi
     fi
 }
 
@@ -153,6 +162,8 @@ function load_simdjson_version
 {
     if [ -f simdjson.h ]; then
         BUNDLED_VERSION=$(grep 'define SIMDJSON_VERSION' simdjson.h | awk '{print $3}' | sed 's,",,g')
+    else
+        BUNDLED_VERSION='{{nothing}}'
     fi
 }
 
