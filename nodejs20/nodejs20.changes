@@ -11,7 +11,7 @@ Fri Feb 16 16:04:46 UTC 2024 - Adam Majer <adam.majer@suse.de>
   * (CVE-2024-21890, bsc#1219999) - Improper handling of wildcards in --allow-fs-read and --allow-fs-write (Medium)
   * (CVE-2024-22025, bsc#1220014) - Denial of Service by resource exhaustion in fetch() brotli decoding - (Medium)
   * undici version 5.28.3 (CVE-2024-24758, bsc#1220017)
-  * libuv version 1.48.0 (CVE-2024-24806, bsc#1219724)
+  * libuv version 1.48.0 (CVE-2024-24806, bsc#1220053)
 
 -------------------------------------------------------------------
 Mon Feb 12 14:27:04 UTC 2024 - Adam Majer <adam.majer@suse.de>

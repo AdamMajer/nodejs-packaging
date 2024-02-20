@@ -7,7 +7,7 @@ Fri Feb 16 16:08:22 UTC 2024 - Adam Majer <adam.majer@suse.de>
   * (CVE-2023-46809, bsc#1219997) - Node.js is vulnerable to the Marvin Attack (timing variant of the Bleichenbacher attack against PKCS#1 v1.5 padding) - (Medium)
   * (CVE-2024-22025, bsc#1220014) - Denial of Service by resource exhaustion in fetch() brotli decoding - (Medium)
   * undici version 5.28.3 (CVE-2024-24758, bsc#1220017)
-  * libuv version 1.48.0 (CVE-2024-24806, bsc#1219724)
+  * libuv version 1.48.0 (CVE-2024-24806, bsc#1220053)
 
 -------------------------------------------------------------------
 Tue Dec 19 12:23:09 UTC 2023 - Adam Majer <adam.majer@suse.de>
