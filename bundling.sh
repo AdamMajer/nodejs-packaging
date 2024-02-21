@@ -48,7 +48,9 @@ function load_current_version
 
 function save_current_version
 {
-    if [ "$CURRENT_VERSION" = "not bundled" ]; then
+    if [ "x$BUNDLED_VERSION" == "xnot bundled" ]; then
+        sed -i -e "s,^s/{{bundled_$1_version}}/.*$,," nodejs$NODE_VERSION.sed
+    elif [ "x$CURRENT_VERSION" = "xnot bundled" ]; then
         # append version to file
         echo "s/{{bundled_$1_version}}/$BUNDLED_VERSION/g" >> nodejs$NODE_VERSION.sed
     else
@@ -163,7 +165,7 @@ function load_simdjson_version
     if [ -f simdjson.h ]; then
         BUNDLED_VERSION=$(grep 'define SIMDJSON_VERSION' simdjson.h | awk '{print $3}' | sed 's,",,g')
     else
-        BUNDLED_VERSION='{{nothing}}'
+        BUNDLED_VERSION='not bundled'
     fi
 }
 
