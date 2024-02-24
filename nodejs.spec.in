@@ -782,15 +782,15 @@ find %{buildroot}%{_libdir}/node_modules/npm%{node_version_number} -name "browse
 mkdir -p %{buildroot}%{_sysconfdir}/alternatives
 ln -s -f node-default     %{buildroot}%{_sysconfdir}/alternatives/node-default
 ln -s -f node.1%{ext_man} %{buildroot}%{_sysconfdir}/alternatives/node.1%{ext_man}
-ln -s -f npm-default      %{buildroot}%{_sysconfdir}/alternatives/npm-default
+ln -s -f npm      %{buildroot}%{_sysconfdir}/alternatives/npm
 ln -s -f npm.1%{ext_man}  %{buildroot}%{_sysconfdir}/alternatives/npm.1%{ext_man}
 ln -s %{_sysconfdir}/alternatives/node-default         %{buildroot}%{_bindir}/node-default
 ln -s %{_sysconfdir}/alternatives/node.1%{ext_man}     %{buildroot}%{_mandir}/man1/node.1%{ext_man}
-ln -s %{_sysconfdir}/alternatives/npm-default          %{buildroot}%{_bindir}/npm-default
+ln -s %{_sysconfdir}/alternatives/npm          %{buildroot}%{_bindir}/npm
 ln -s %{_sysconfdir}/alternatives/npm.1%{ext_man}      %{buildroot}%{_mandir}/man1/npm.1%{ext_man}
-ln -s -f npx-default      %{buildroot}%{_sysconfdir}/alternatives/npx-default
+ln -s -f npx      %{buildroot}%{_sysconfdir}/alternatives/npx
 ln -s -f npx.1%{ext_man}  %{buildroot}%{_sysconfdir}/alternatives/npx.1%{ext_man}
-ln -s %{_sysconfdir}/alternatives/npx-default          %{buildroot}%{_bindir}/npx-default
+ln -s %{_sysconfdir}/alternatives/npx          %{buildroot}%{_bindir}/npx
 ln -s %{_sysconfdir}/alternatives/npx.1%{ext_man}      %{buildroot}%{_mandir}/man1/npx.1%{ext_man}
 %endif
 
@@ -935,18 +935,18 @@ make test-ci
 %{_libdir}/node_modules/npm%{node_version_number}
 %{_mandir}/man1/npm%{node_version_number}.1%{ext_man}
 %if ! 0%{with libalternatives}
-%ghost %{_bindir}/npm-default
+%ghost %{_bindir}/npm
 %ghost %{_mandir}/man1/npm.1%{ext_man}
-%ghost %{_sysconfdir}/alternatives/npm-default
+%ghost %{_sysconfdir}/alternatives/npm
 %ghost %{_sysconfdir}/alternatives/npm.1%{ext_man}
 %endif
 
 %{_bindir}/npx%{node_version_number}
 %{_mandir}/man1/npx%{node_version_number}.1%{ext_man}
 %if ! %{with libalternatives}
-%ghost %{_bindir}/npx-default
+%ghost %{_bindir}/npx
 %ghost %{_mandir}/man1/npx.1%{ext_man}
-%ghost %{_sysconfdir}/alternatives/npx-default
+%ghost %{_sysconfdir}/alternatives/npx
 %ghost %{_sysconfdir}/alternatives/npx.1%{ext_man}
 %endif
 
@@ -976,8 +976,8 @@ make test-ci
 update-alternatives --remove node-default %{_bindir}/node%{node_version_number}
 
 %post -n npm%{node_version_number}
-update-alternatives --remove npm-default %{_bindir}/npm%{node_version_number}
-update-alternatives --remove npx-default %{_bindir}/npx%{node_version_number}
+update-alternatives --remove npm %{_bindir}/npm%{node_version_number}
+update-alternatives --remove npx %{_bindir}/npx%{node_version_number}
 
 %else
 %pre
@@ -1004,18 +1004,18 @@ fi
 
 %post -n npm%{node_version_number}
 update-alternatives \
-        --install %{_bindir}/npm-default npm-default %{_bindir}/npm%{node_version_number} %{node_version_number} \
+        --install %{_bindir}/npm npm %{_bindir}/npm%{node_version_number} %{node_version_number} \
         --slave %{_mandir}/man1/npm.1%{ext_man} npm.1%{ext_man} %{_mandir}/man1/npm%{node_version_number}.1%{ext_man}
 update-alternatives \
-        --install %{_bindir}/npx-default npx-default %{_bindir}/npx%{node_version_number} %{node_version_number} \
+        --install %{_bindir}/npx npx %{_bindir}/npx%{node_version_number} %{node_version_number} \
         --slave %{_mandir}/man1/npx.1%{ext_man} npx.1%{ext_man} %{_mandir}/man1/npx%{node_version_number}.1%{ext_man}
 
 %postun -n npm%{node_version_number}
 if [ ! -f %{_bindir}/npm%{node_version_number} ] ; then
-    update-alternatives --remove npm-default %{_bindir}/npm%{node_version_number}
+    update-alternatives --remove npm %{_bindir}/npm%{node_version_number}
 fi
 if [ ! -f %{_bindir}/npx%{node_version_number} ] ; then
-    update-alternatives --remove npx-default %{_bindir}/npx%{node_version_number}
+    update-alternatives --remove npx %{_bindir}/npx%{node_version_number}
 fi
 
 %endif
