@@ -182,6 +182,11 @@ Patch68:        CVE-2023-44487.patch   # PATCH_FOR: 16, 14, 12, 10
 Patch69:        CVE-2023-38552.patch   # PATCH_FOR: 16, 14, 12
 Patch70:        CVE-2023-39333.patch   # PATCH_FOR: 16
 Patch71:        CVE-2023-45143.patch   # PATCH_FOR: 16
+Patch72:        CVE-2024-24806.patch   # PATCH_FOR: 16, 14, 12, 10
+Patch73:        CVE-2024-24758.patch   # PATCH_FOR: 16
+Patch74:        CVE-2024-22025.patch   # PATCH_FOR: 16, 14, 12, 10
+Patch75:        CVE-2024-22019.patch   # PATCH_FOR: 16, 14, 12, 10
+Patch76:        CVE-2023-46809.patch   # PATCH_FOR: 16, 14, 12, 10
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, 16, 18, 19, 20, 21, master
@@ -190,7 +195,7 @@ Patch101:       nodejs-libpath.patch
 # PATCH-FIX-UPSTREAM -- use custom addon.gypi by default instead of
 # downloading node source
 Patch102:       node-gyp-addon-gypi.patch
-Patch1020:      sle12-node-gyp-addon-gypi.patch # PATCH_FOR: 18
+Patch1020:      sle12-node-gyp-addon-gypi.patch # PATCH_FOR: 18, 16
 # PATCH-FIX-SLE -- configure script uses Python check_output method
 # which isn't included in Python 2.6 (used in SLE 11).
 Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 8, 10, 12
@@ -579,6 +584,11 @@ popd
 %patch69 -p1
 %patch70 -p1
 %patch71 -p1
+%patch72 -p1
+%patch73 -p1
+%patch74 -p1
+%patch75 -p1
+%patch76 -p1
 %patch100 -p1
 %patch101 -p1
 %if 0%{?suse_version} >= 1500 || 0%{?suse_version} == 0

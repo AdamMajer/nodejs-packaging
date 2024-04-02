@@ -50,4 +50,4 @@ s/{{bundled_npm_version}}/10.2.4/g
 s/{{bundled_base64_version}}/0.5.1/g
 s/{{bundled_simdutf_version}}/4.0.4/g
 s/{{bundled_ada_version}}/2.7.4/g
-s/{{bundled_simdjson_version}}/{{nothing}}/g
+
