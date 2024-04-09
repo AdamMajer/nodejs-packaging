@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Apr  2 15:00:28 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- Update to 18.20.0:
+  * Added support for import attributes
+  * vm: fix V8 compilation cache support for vm.Script
+- versioned.patch: refreshed
+
+-------------------------------------------------------------------
 Fri Feb 16 16:08:22 UTC 2024 - Adam Majer <adam.majer@suse.de>
 
 - Update to 18.19.1: (security updates)

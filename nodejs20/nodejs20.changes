@@ -1,4 +1,26 @@
 -------------------------------------------------------------------
+Tue Apr  9 12:30:22 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- node-gyp-addon-gypi.patch: adapted for new unit test layouts
+
+-------------------------------------------------------------------
+Tue Apr  2 14:39:07 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- Update to 20.12.0:
+  * crypto: implement crypto.hash()
+  * util: add loading and parsing environment variables
+  * new connection attempt events: connectionAttempt,
+    connectionAttemptFailed, connectionAttemptTimeout
+  * sea: support embedding assets
+  * support configurable snapshot through --build-snapshot-config flag
+  * util.styleText(format, text): This function returns a formatted
+    text considering the format passed.
+  * vm: support using the default loader to handle dynamic import()
+
+- c-ares-fixes.patch: removed, upstreamed
+- nodejs-libpath.patch, versioned.patch: refreshed
+
+-------------------------------------------------------------------
 Fri Feb 16 16:04:46 UTC 2024 - Adam Majer <adam.majer@suse.de>
 
 - Update to 20.11.1: (security updates)

@@ -1,4 +1,4 @@
-s/{{node_version}}/20.11.1/g
+s/{{node_version}}/20.12.0/g
 s/{{node_version_major}}/20/g
 
 #
@@ -36,18 +36,18 @@ Source10:       update_npm_tarball.sh \
 Source11:       node_modules.tar.xz,
 
 
-s/{{bundled_brotli_version}}/1.0.9/g
-s/{{bundled_cares_version}}/1.20.1/g
-s/{{bundled_icu-small_version}}/73.2/g
+s/{{bundled_brotli_version}}/1.1.0/g
+s/{{bundled_cares_version}}/1.27.0/g
+s/{{bundled_icu-small_version}}/74.2/g
 s/{{bundled_llhttp_version}}/8.1.1/g
-s/{{bundled_nghttp2_version}}/1.58.0/g
+s/{{bundled_nghttp2_version}}/1.60.0/g
 s/{{bundled_ngtcp2_version}}/0.8.1/g
 s/{{bundled_openssl_version}}/3.0.13/g
 s/{{bundled_uv_version}}/1.46.0/g
-s/{{bundled_uvwasi_version}}/0.0.19/g
+s/{{bundled_uvwasi_version}}/0.0.20/g
 s/{{bundled_v8_version}}/11.3.244.8/g
-s/{{bundled_npm_version}}/10.2.4/g
-s/{{bundled_base64_version}}/0.5.1/g
-s/{{bundled_simdutf_version}}/4.0.4/g
-s/{{bundled_ada_version}}/2.7.4/g
+s/{{bundled_npm_version}}/10.5.0/g
+s/{{bundled_base64_version}}/0.5.2/g
+s/{{bundled_simdutf_version}}/4.0.8/g
+s/{{bundled_ada_version}}/2.7.6/g
 

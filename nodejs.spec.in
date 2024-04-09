@@ -221,7 +221,6 @@ Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, 20, 21, master
 Patch308:       node-gyp-config.patch      # PATCH_FOR: 19, 20, 21
 Patch309:       gcc13.patch                # PATCH_FOR: 20, 21, master
 Patch310:       newicu_test_fixup.patch    # PATCH_FOR: 14, 12, 10
-Patch311:       c-ares-fixes.patch         # PATCH_FOR: 20, 21, master
 
 BuildRequires:  pkg-config
 BuildRequires:  fdupes
@@ -615,7 +614,6 @@ popd
 %patch305 -p1
 %patch309 -p1
 %patch310 -p1
-%patch311 -p1
 
 %if %{node_version_number} == 12
 # minimist security update - patch50
@@ -978,6 +976,8 @@ make test-ci
 %defattr(-, root, root)
 %{_bindir}/corepack%{node_version_number}
 %{_libdir}/node_modules/corepack%{node_version_number}
+%dir %{_datadir}/libalternatives/corepack
+%{_datadir}/libalternatives/corepack/%{node_version_number}.conf
 %if ! %{with libalternatives}
 %ghost %{_bindir}/corepack-default
 %ghost %{_mandir}/man1/corepack.1%{ext_man}
