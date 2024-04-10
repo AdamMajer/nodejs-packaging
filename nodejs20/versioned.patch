@@ -17,7 +17,7 @@ Index: node-v20.12.0/Makefile
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
  
 -NODE_EXE = node$(EXEEXT)
-+NODE_EXE = node21$(EXEEXT)
++NODE_EXE = node20$(EXEEXT)
  # Use $(PWD) so we can cd to anywhere before calling this
  NODE ?= "$(PWD)/$(NODE_EXE)"
  NODE_G_EXE = node_g$(EXEEXT)

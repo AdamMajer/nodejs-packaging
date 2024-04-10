@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Tue Apr  9 14:46:41 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- Update to 18.20.1:
+  * CVE-2024-27983 - Assertion failed in node::http2::Http2Session::~Http2Session()
+    leads to HTTP/2 server crash- (High) (bsc#1222244)
+  * CVE-2024-27982 - HTTP Request Smuggling via Content Length
+    Obfuscation- (Medium) (bsc#1222384)
+  * updated dependencies:
+    + llhttp version 9.2.1
+    + undici version 5.28.4 (bsc#1222530, bsc#1222603, 
+      CVE-2024-30260, CVE-2024-30261)
+
+- cares_sle12_capabilities.patch: no get_random() on sle12
+
+-------------------------------------------------------------------
 Tue Apr  2 15:00:28 UTC 2024 - Adam Majer <adam.majer@suse.de>
 
 - Update to 18.20.0:

@@ -136,6 +136,7 @@ Source20:       bash_output_helper.bash
 ## Patches not distribution specific
 Patch1:         cares_public_headers.patch # PATCH_FOR: 12, 14, 16, 18, 19, 20, 21, master
 Patch3:         fix_ci_tests.patch
+Patch4:         cares_sle12_capabilities.patch # PATCH_FOR: 18
 Patch5:         sle12_python3_compat.patch # PATCH_FOR: 13, 14, 15, 16, 18, 19, 20, 21, master
 Patch7:         manual_configure.patch # PATCH_FOR: 14, 13, 12, 10, 8, 15, 16, 18, 19, 20, 21, master
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
@@ -527,93 +528,96 @@ tar Jxf %{SOURCE5}
 popd
 
 %if %{node_version_number} >= 19
-%patch308 -p1
+%patch -P 308 -p1
 %else
-%patch1020 -p1
+%patch -P 1020 -p1
 %endif
 %endif
 
-%patch1 -p1
-%patch3 -p1
+%patch -P 1 -p1
+%patch -P 3 -p1
+%if 0%{?suse_version} < 1500
+%patch -P 4 -p1
+%endif
 %if %{node_version_number} <= 12 && 0%{?suse_version} < 1500
-%patch5 -p1
+%patch -P 5 -p1
 %endif
-%patch7 -p1
-%patch8 -p1
+%patch -P 7 -p1
+%patch -P 8 -p1
 %if 0%{with valgrind_tests}
-%patch11 -p1
+%patch -P 11 -p1
 %endif
-%patch12 -p1
-%patch13 -p1
-%patch32 -p1
-%patch33 -p1
-%patch34 -p1
-%patch35 -p1
-%patch36 -p1
-%patch37 -p1
-%patch38 -p1
-%patch39 -p1
-%patch41 -p1
-%patch42 -p1
-%patch43 -p1
-%patch44 -p1
-%patch45 -p1
-%patch46 -p1
-%patch47 -p1
-%patch48 -p1
-%patch49 -p1
-%patch50 -p1
-%patch51 -p1
-%patch52 -p1
-%patch53 -p1
-%patch55 -p1
-%patch56 -p1
-%patch57 -p1
-%patch58 -p1
-%patch59 -p1
-%patch60 -p1
-%patch61 -p1
-%patch62 -p1
-%patch63 -p1
-%patch64 -p1
-%patch65 -p1
-%patch66 -p1
-%patch67 -p1
-%patch68 -p1
-%patch69 -p1
-%patch70 -p1
-%patch71 -p1
-%patch72 -p1
-%patch73 -p1
-%patch74 -p1
-%patch75 -p1
-%patch76 -p1
-%patch100 -p1
-%patch101 -p1
+%patch -P 12 -p1
+%patch -P 13 -p1
+%patch -P 32 -p1
+%patch -P 33 -p1
+%patch -P 34 -p1
+%patch -P 35 -p1
+%patch -P 36 -p1
+%patch -P 37 -p1
+%patch -P 38 -p1
+%patch -P 39 -p1
+%patch -P 41 -p1
+%patch -P 42 -p1
+%patch -P 43 -p1
+%patch -P 44 -p1
+%patch -P 45 -p1
+%patch -P 46 -p1
+%patch -P 47 -p1
+%patch -P 48 -p1
+%patch -P 49 -p1
+%patch -P 50 -p1
+%patch -P 51 -p1
+%patch -P 52 -p1
+%patch -P 53 -p1
+%patch -P 55 -p1
+%patch -P 56 -p1
+%patch -P 57 -p1
+%patch -P 58 -p1
+%patch -P 59 -p1
+%patch -P 60 -p1
+%patch -P 61 -p1
+%patch -P 62 -p1
+%patch -P 63 -p1
+%patch -P 64 -p1
+%patch -P 65 -p1
+%patch -P 66 -p1
+%patch -P 67 -p1
+%patch -P 68 -p1
+%patch -P 69 -p1
+%patch -P 70 -p1
+%patch -P 71 -p1
+%patch -P 72 -p1
+%patch -P 73 -p1
+%patch -P 74 -p1
+%patch -P 75 -p1
+%patch -P 76 -p1
+%patch -P 100 -p1
+%patch -P 101 -p1
 %if 0%{?suse_version} >= 1500 || 0%{?suse_version} == 0
-%patch102 -p1
+%patch -P 102 -p1
 %endif
 # Add check_output to configure script (not part of Python 2.6 in SLE11).
 %if 0%{?suse_version} == 1110
-%patch103 -p1
+%patch -P 103 -p1
 %endif
-%patch104 -p1
-%patch105 -p1
-%patch106 -p1
-%patch109 -p1
-%patch110 -p1
-%patch120 -p1
-%patch125 -p1
-%patch130 -p1
-%patch132 -p1
+%patch -P 104 -p1
+%patch -P 105 -p1
+%patch -P 106 -p1
+%patch -P 109 -p1
+%patch -P 110 -p1
+%patch -P 120 -p1
+%patch -P 125 -p1
+%patch -P 130 -p1
+%patch -P 132 -p1
 %if ! 0%{with openssl_RSA_get0_pss_params}
-%patch133 -p1
+%patch -P 133 -p1
 %endif
-%patch200 -p1
+%patch -P 200 -p1
 
-%patch305 -p1
-%patch309 -p1
-%patch310 -p1
+%patch -P 305 -p1
+%patch -P 309 -p1
+%patch -P 310 -p1
 
 %if %{node_version_number} == 12
 # minimist security update - patch50

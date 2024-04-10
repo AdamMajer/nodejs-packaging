@@ -33,7 +33,7 @@ while (<STDIN>) {
         s/\s+#\s*PATCH_FOR:.*$//;
     }
 
-    if (@a = m/%patch([\d]+)\b/) {
+    if (@a = m/%patch -P ([\d]+)\b/) {
         foreach my $p (@removed_patches) {
             if ($a[0] == $p) {
                 next NEXT_LINE;

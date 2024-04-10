@@ -1,5 +1,15 @@
 -------------------------------------------------------------------
-Tue Apr  9 12:30:22 UTC 2024 - Adam Majer <adam.majer@suse.de>
+Tue Apr  9 14:13:21 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- Update to 21.7.2:
+  * Assertion failed in node::http2::Http2Session::~Http2Session()
+    leads to HTTP/2 server crash (High) (bsc#1222244, CVE-2024-27983)
+  * HTTP Request Smuggling via Content Length Obfuscation
+    (Medium) (bsc#1222384, CVE-2024-27982)
+  * updated dependencies:
+    + llhttp version 9.2.1
+    + undici version 6.11.1 (bsc#1222530, bsc#1222603, 
+      CVE-2024-30260, CVE-2024-30261)
 
 - node-gyp-addon-gypi.patch: adapted for new unit test layouts
 
