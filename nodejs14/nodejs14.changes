@@ -1,4 +1,17 @@
 -------------------------------------------------------------------
+Thu Apr 11 10:51:31 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2024-27983.patch - Assertion failed in
+  node::http2::Http2Session::~Http2Session() leads to
+  HTTP/2 server crash- (High) (bsc#1222244, CVE-2024-27983)
+- CVE-2024-27982.patch - HTTP Request Smuggling via Content Length
+  Obfuscation- (Medium) (bsc#1222384, CVE-2024-27982)
+- updated dependencies:
+  + llhttp version 6.1.1
+
+- CVE-2024-22025.patch - test timeout adjustment
+
+-------------------------------------------------------------------
 Tue Feb 20 09:52:34 UTC 2024 - Adam Majer <adam.majer@suse.de>
 
  * CVE-2023-46809.patch: Node.js is vulnerable to the Marvin Attack
