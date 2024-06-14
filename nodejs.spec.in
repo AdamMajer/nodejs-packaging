@@ -134,15 +134,15 @@ Group:          Development/Languages/NodeJS
 Source20:       bash_output_helper.bash
 
 ## Patches not distribution specific
-Patch1:         cares_public_headers.patch # PATCH_FOR: 12, 14, 16, 18, 19, 20, 21, master
+Patch1:         cares_public_headers.patch # PATCH_FOR: 12, 14, 16, 18, 19, 20, 21, 22, master
 Patch3:         fix_ci_tests.patch
-Patch4:         cares_sle12_capabilities.patch # PATCH_FOR: 18
-Patch5:         sle12_python3_compat.patch # PATCH_FOR: 13, 14, 15, 16, 18, 19, 20, 21, master
-Patch7:         manual_configure.patch # PATCH_FOR: 14, 13, 12, 10, 8, 15, 16, 18, 19, 20, 21, master
+Patch4:         cares_sle12_capabilities.patch # PATCH_FOR: 18, 20
+Patch5:         sle12_python3_compat.patch # PATCH_FOR: 13, 14, 15, 16, 18, 19, 20, 21, 22, master
+Patch7:         manual_configure.patch # PATCH_FOR: 14, 13, 12, 10, 8, 15, 16, 18, 19, 20, 21, 22, master
 Patch8:         icu_small_grouping.patch # PATCH_FOR: 9
 Patch11:        valgrind_fixes.patch   # PATCH_FOR: 10
 Patch12:        openssl_1_1_1.patch    # PATCH_FOR: 8
-Patch13:        openssl_binary_detection.patch  # PATCH_FOR: 10, 12, 14, 15, 16, 18, 19, 20, 21, master
+Patch13:        openssl_binary_detection.patch  # PATCH_FOR: 10, 12, 14, 15, 16, 18, 19, 20, 21, 22, master
 
 Patch32:        fix_build_with_openssl_1.1.1d.patch   # PATCH_FOR: 8
 
@@ -188,11 +188,12 @@ Patch73:        CVE-2024-24758.patch   # PATCH_FOR: 16
 Patch74:        CVE-2024-22025.patch   # PATCH_FOR: 16, 14, 12, 10
 Patch75:        CVE-2024-22019.patch   # PATCH_FOR: 16, 14, 12, 10
 Patch76:        CVE-2023-46809.patch   # PATCH_FOR: 16, 14, 12, 10
-Patch77:        CVE-2024-27983.patch   # PATCH_FOR: 16, 14, 12
-Patch78:        CVE-2024-27982.patch   # PATCH_FOR: 16, 14, 12
+Patch77:        CVE-2024-27983.patch   # PATCH_FOR: 16, 14, 12, 10
+Patch78:        CVE-2024-27982.patch   # PATCH_FOR: 16, 14, 12, 10
+Patch79:        CVE-2024-30261.patch   # PATCH_FOR: 16
 
 ## Patches specific to SUSE and openSUSE
-Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, 16, 18, 19, 20, 21, master
+Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, master
 # PATCH-FIX-OPENSUSE -- set correct path for dtrace if it is built
 Patch101:       nodejs-libpath.patch
 # PATCH-FIX-UPSTREAM -- use custom addon.gypi by default instead of
@@ -206,23 +207,24 @@ Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 8, 10, 12
 # instead of /usr
 Patch104:       npm_search_paths.patch
 Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 8, 10
-Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, 16, 18, 19, 20, 21, master
+Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, 16, 18, 19, 20, 21
 Patch109:       python3.patch             # PATCH_FOR: 12
-Patch110:       legacy_python.patch       # PATCH_FOR: 16, 18, 19, 20, 21, master
+Patch110:       legacy_python.patch       # PATCH_FOR: 16, 18, 19, 20, 21, 22, master
 
 Patch120:       flaky_test_rerun.patch
 
 Patch125:       cares_172.patch            # PATCH_FOR: 10
 Patch130:       test_ssl_cert_fixups.patch # PATCH_FOR: 10, 8
-Patch132:       test-skip-y2038-on-32bit-time_t.patch # PATCH_FOR: 14, 16, 18, 19, 20, 21, master
+Patch132:       test-skip-y2038-on-32bit-time_t.patch # PATCH_FOR: 14, 16, 18, 19, 20, 21, 22, master
 Patch133:       rsa-pss-revert.patch     # PATCH_FOR: 16, 18
 
 # Use versioned binaries and paths
 Patch200:       versioned.patch
 
-Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, 20, 21, master
+Patch305:       qemu_timeouts_arches.patch # PATCH_FOR: 18, 19, 20, 21, 22, master
+Patch307:       v8-i586.patch              # PATCH_FOR: 22, master
 Patch308:       node-gyp-config.patch      # PATCH_FOR: 19, 20, 21
-Patch309:       gcc13.patch                # PATCH_FOR: 20, 21, master
+Patch309:       gcc13.patch                # PATCH_FOR: 20, 21, 22, master
 Patch310:       newicu_test_fixup.patch    # PATCH_FOR: 14, 12, 10
 
 BuildRequires:  pkg-config
@@ -522,7 +524,7 @@ tar Jxf %{SOURCE11}
 %endif
 
 # downgrade node-gyp to last version that supports python 3.4 for SLE12
-%if 0%{?suse_version} && 0%{?suse_version} < 1500 && %{node_version_number} >= 16
+%if 0%{?suse_version} && 0%{?suse_version} < 1500 && %{node_version_number} >= 16 && %{node_version_number} < 22
 rm -r  deps/npm/node_modules/node-gyp
 mkdir deps/npm/node_modules/node-gyp
 pushd deps/npm/node_modules/node-gyp
@@ -596,6 +598,7 @@ popd
 %patch -P 76 -p1
 %patch -P 77 -p1
 %patch -P 78 -p1
+%patch -P 79 -p1
 %patch -P 100 -p1
 %patch -P 101 -p1
 %if 0%{?suse_version} >= 1500 || 0%{?suse_version} == 0
@@ -620,6 +623,7 @@ popd
 %patch -P 200 -p1
 
 %patch -P 305 -p1
+%patch -P 307 -p1
 %patch -P 309 -p1
 %patch -P 310 -p1
 
@@ -693,9 +697,6 @@ EOF
 
 . ./spec.build.config
 
-# Node.js 4.x does not include the ICU database in the source tarball.
-%define has_small_icu %(test -d "deps/icu-small" && echo 1 || echo 0)
-
 ./configure \
     --prefix=%{_prefix} \
 %if 0%{?with nodejs_lto}
@@ -710,11 +711,6 @@ EOF
 %endif
 %if ! 0%{with intree_icu}
     --with-intl=system-icu \
-%else
-%if %{has_small_icu}
-    --with-intl=small-icu \
-    --with-icu-source=deps/icu-small \
-%endif
 %endif
 %if ! 0%{with intree_nghttp2}
     --shared-nghttp2 \

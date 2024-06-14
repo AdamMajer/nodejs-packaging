@@ -1,4 +1,26 @@
 -------------------------------------------------------------------
+Tue May 28 12:09:25 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- Update to 18.20.3:
+  * This release fixes a regression introduced in Node.js 18.19.0 where
+    http.server.close() was incorrectly closing idle connections.
+  * deps:
+    + acorn updated to 8.11.3.
+    + acorn-walk updated to 8.3.2.
+    + ada updated to 2.7.8.
+    + c-ares updated to 1.28.1.
+    + corepack updated to 0.28.0.
+    + nghttp2 updated to 1.61.0.
+    + ngtcp2 updated to 1.3.0.
+    + npm updated to 10.7.0. Includes a fix from npm@10.5.1 to limit the number of open connections npm/cli#7324.
+    + simdutf updated to 5.2.4.
+
+- Changes in 18.20.2:
+  * fixes bsc#1222665, CVE-2024-27980 - windows only bug
+
+- versioned.patch, npm_search_paths.patch: refreshed
+
+-------------------------------------------------------------------
 Tue Apr  9 14:46:41 UTC 2024 - Adam Majer <adam.majer@suse.de>
 
 - Update to 18.20.1:

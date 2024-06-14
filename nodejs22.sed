@@ -1,5 +1,5 @@
-s/{{node_version}}/21.7.3/g
-s/{{node_version_major}}/21/g
+s/{{node_version}}/22.3.0/g
+s/{{node_version_major}}/22/g
 
 #
 #
@@ -27,27 +27,22 @@ s/{{git_branch}}/master/
 
 # Extra Sources
 s,{{SOURCES_EXTRA}},\
-# Python 3.4 compatible node-gyp \
-### https://github.com/nodejs/node-gyp.git \
-### git archive v7.1.2 | xz > node-gyp_7.1.2.tar.xz \
-Source5:        node-gyp_7.1.2.tar.xz \
 # Only required to run unit tests in NodeJS 10+ \
 Source10:       update_npm_tarball.sh \
 Source11:       node_modules.tar.xz,
 
 
 s/{{bundled_brotli_version}}/1.1.0/g
-s/{{bundled_cares_version}}/1.27.0/g
-s/{{bundled_icu-small_version}}/74.2/g
+s/{{bundled_cares_version}}/1.29.0/g
+s/{{bundled_icu-small_version}}/75.1/g
 s/{{bundled_llhttp_version}}/9.2.1/g
-s/{{bundled_nghttp2_version}}/1.60.0/g
+s/{{bundled_nghttp2_version}}/1.62.1/g
 s/{{bundled_ngtcp2_version}}/1.3.0/g
 s/{{bundled_openssl_version}}/3.0.13/g
 s/{{bundled_uv_version}}/1.48.0/g
-s/{{bundled_uvwasi_version}}/0.0.20/g
-s/{{bundled_v8_version}}/11.8.172.17/g
-s/{{bundled_npm_version}}/10.5.0/g
-s/{{bundled_base64_version}}/0.5.2/g
-s/{{bundled_simdutf_version}}/4.0.8/g
-s/{{bundled_ada_version}}/2.7.6/g
-s/{{bundled_simdjson_version}}/3.7.0/g
+s/{{bundled_uvwasi_version}}/0.0.21/g
+s/{{bundled_v8_version}}/12.4.254.20/g
+s/{{bundled_npm_version}}/10.8.1/g
+s/{{bundled_simdutf_version}}/5.2.8/g
+s/{{bundled_ada_version}}/2.8.0/g
+s/{{bundled_simdjson_version}}/3.9.3/g

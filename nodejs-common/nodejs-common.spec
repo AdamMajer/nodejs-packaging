@@ -25,8 +25,7 @@
 #
 ###########################################################
 
-%define NODEJS_LTS      20
-%define NODEJS_CURRENT  21
+%define NODEJS_CURRENT  22
 
 %if 0%{?suse_version} > 1500 || 0%{?fedora_version}
 %bcond_without libalternatives
@@ -64,6 +63,10 @@
 
 %if 0%{?sle_version} >= 150600 && 0%{?sle_version} < 150700
 %define default_node_ver 20
+%endif
+
+%if 0%{?sle_version} >= 150700
+%define default_node_ver 22
 %endif
 
 # SLE-15 variants
