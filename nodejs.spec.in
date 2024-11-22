@@ -172,7 +172,7 @@ Patch57:        openssl_update.patch   # PATCH_FOR: 12
 Patch58:        CVE-2022-35256.patch   # PATCH_FOR: 12, 10, 8
 Patch59:        CVE-2022-43548.patch   # PATCH_FOR: 12, 10, 8
 Patch60:        CVE-2023-23920.patch   # PATCH_FOR: 12, 10, 8
-Patch61:        CVE-2022-25881.patch   # PATCH_FOR: 14, 12, 10, 
+Patch61:        CVE-2022-25881.patch   # PATCH_FOR: 14, 12, 10,
 Patch62:        CVE-2023-23918.patch   # PATCH_FOR: 12
 Patch63:        CVE-2023-30581.patch   # PATCH_FOR: 14, 12
 Patch64:        CVE-2023-30589.patch   # PATCH_FOR: 14, 12
@@ -307,6 +307,7 @@ BuildRequires:  python311
 %endif
 %if %{?suse_version} > 1500
 BuildRequires:  python3
+BuildRequires:  python3-setuptools
 %endif
 %endif
 
