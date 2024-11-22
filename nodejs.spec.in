@@ -191,6 +191,8 @@ Patch76:        CVE-2023-46809.patch   # PATCH_FOR: 16, 14, 12, 10
 Patch77:        CVE-2024-27983.patch   # PATCH_FOR: 16, 14, 12, 10
 Patch78:        CVE-2024-27982.patch   # PATCH_FOR: 16, 14, 12, 10
 Patch79:        CVE-2024-30261.patch   # PATCH_FOR: 16
+Patch80:        openssl31.patch        # PATCH_FOR: 12, 14, 16, 18
+# Patch81:        CVE-2024-22020.patch   # PATCH_FOR: 16, 14, 12
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, master
@@ -207,7 +209,7 @@ Patch103:       nodejs-sle11-python26-check_output.patch  # PATCH_FOR: 8, 10, 12
 # instead of /usr
 Patch104:       npm_search_paths.patch
 Patch105:       skip_test_on_lowmem.patch # PATCH_FOR: 8, 10
-Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, 16, 18, 19, 20, 21
+Patch106:       skip_no_console.patch     # PATCH_FOR: 10, 12, 13, 14, 15, 16, 18
 Patch109:       python3.patch             # PATCH_FOR: 12
 Patch110:       legacy_python.patch       # PATCH_FOR: 16, 18, 19, 20, 21, 22, master
 
@@ -226,6 +228,7 @@ Patch307:       v8-i586.patch              # PATCH_FOR: 22, master
 Patch308:       node-gyp-config.patch      # PATCH_FOR: 19, 20, 21
 Patch309:       gcc13.patch                # PATCH_FOR: 20, 21, 22, master
 Patch310:       newicu_test_fixup.patch    # PATCH_FOR: 14, 12, 10
+Patch311:       icu76.1.patch              # PATCH_FOR: 22
 
 BuildRequires:  pkg-config
 BuildRequires:  fdupes
@@ -293,11 +296,18 @@ BuildRequires:  gcc-c++
 # Python dependencies
 %if %node_version_number >= 14
 
-%if 0%{?suse_version} && 0%{?suse_version} < 1500
+%if 0%{?suse_version}
+%if 0%{?suse_version} < 1500
 BuildRequires:  python36
 %define forced_python_version 3.6m
-%else
+%endif
+%if %{?suse_version} == 1500
+BuildRequires:  python311
+%define forced_python_version 3.11
+%endif
+%if %{?suse_version} > 1500
 BuildRequires:  python3
+%endif
 %endif
 
 %else
@@ -358,6 +368,10 @@ BuildRequires:  bundled_openssl_should_not_be_required
 BuildRequires:  pkgconfig(libcares) >= {{min_libcares2_version}}
 %else
 Provides:       bundled(libcares2) = {{bundled_cares_version}}
+%endif
+
+%if %node_version_number >= 22
+BuildRequires:  sqlite3-devel
 %endif
 
 %if ! 0%{with intree_icu}
@@ -599,6 +613,8 @@ popd
 %patch -P 77 -p1
 %patch -P 78 -p1
 %patch -P 79 -p1
+%patch -P 80 -p1
+#%patch -P 81 -p1
 %patch -P 100 -p1
 %patch -P 101 -p1
 %if 0%{?suse_version} >= 1500 || 0%{?suse_version} == 0
@@ -626,6 +642,8 @@ popd
 %patch -P 307 -p1
 %patch -P 309 -p1
 %patch -P 310 -p1
+%patch -P 311 -p1
+
 
 %if %{node_version_number} == 12
 # minimist security update - patch50
@@ -723,6 +741,9 @@ EOF
 %endif
 %if %{node_version_number} < 19
     --without-dtrace \
+%endif
+%if %{node_version_number} >= 22
+    --shared-sqlite \
 %endif
 %if %{node_version_number} >= 16 && (0%{?suse_version} > 1550 || 0%{?sle_version} >= 150400)
     --openssl-default-cipher-list=PROFILE=SYSTEM \
@@ -864,6 +885,7 @@ rm test/parallel/test-strace-openat-openssl.js
 %if 0%{?forced_python_version:1}
 sed -i -e "s,'python3','python%{forced_python_version}'," test/parallel/test-child-process-set-blocking.js
 test -e tools/pseudo-tty.py && sed -i -e "s,^#!/usr/bin/env python3$,#!/usr/bin/python%{forced_python_version}," tools/pseudo-tty.py ||:
+export PYTHON="/usr/bin/python%{forced_python_version}"
 %endif
 
 ln addon-rpm.gypi deps/npm/node_modules/node-gyp/addon-rpm.gypi

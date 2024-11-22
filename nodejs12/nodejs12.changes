@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Oct 29 13:16:53 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- openssl31.patch: fix unit tests with OpenSSL 3.1 (bsc#1232756)
+
+-------------------------------------------------------------------
 Thu Apr 11 10:51:31 UTC 2024 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2024-27983.patch - Assertion failed in
@@ -6,8 +11,6 @@ Thu Apr 11 10:51:31 UTC 2024 - Adam Majer <adam.majer@suse.de>
   HTTP/2 server crash- (High) (bsc#1222244, CVE-2024-27983)
 - CVE-2024-27982.patch - HTTP Request Smuggling via Content Length
   Obfuscation- (Medium) (bsc#1222384, CVE-2024-27982)
-- updated dependencies:
-  + llhttp version 6.1.1
 
 -------------------------------------------------------------------
 Tue Feb 20 09:52:34 UTC 2024 - Adam Majer <adam.majer@suse.de>

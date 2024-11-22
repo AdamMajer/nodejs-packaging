@@ -41,10 +41,10 @@ for i in $NODE_VERSIONS; do
 	fi
 	echo "Checking version for Node $ver.x"
 
-	URL="https://nodejs.org/dist/latest-v$ver.x/"
+	URL="https://nodejs.org/dist/latest-v$ver.x"
 	upstream_ver=
 	while [ "x$upstream_ver" = "x" ]; do
-		upstream_ver=$(curl -Ss $URL | grep 'node-v[.0-9]\+'tar.xz | sed -e 's/^.*node-v\([0-9]\+\.[0-9]\+\.[0-9]\+\).tar.xz.*$/\1/') || exit 1
+		upstream_ver=$(curl -LSs $URL | grep 'node-v[.0-9]\+'tar.xz | sed -e 's/^.*node-v\([0-9]\+\.[0-9]\+\.[0-9]\+\).tar.xz.*$/\1/') || exit 1
 	done
 
 	local_ver=$(grep {{node_version}} nodejs$ver.sed | sed -e 's,s/{{node_version}}/,,' | sed -e 's,/g,,')
@@ -54,16 +54,21 @@ for i in $NODE_VERSIONS; do
 
 		if [ ! -z "$UPDATE" ]; then
 			echo "   updating hash values";
-			wget -q -O nodejs$ver/SHASUMS256.txt     $URL/SHASUMS256.txt
-			wget -q -O nodejs$ver/SHASUMS256.txt.sig $URL/SHASUMS256.txt.sig
+			curl -Ls -o nodejs$ver/SHASUMS256.txt     $URL/SHASUMS256.txt || exit
+			curl -Ls -o nodejs$ver/SHASUMS256.txt.sig $URL/SHASUMS256.txt.sig || exit
 			sed -i -e "s,^s/{{node_version}}.*/g$,s/{{node_version}}/$upstream_ver/g," nodejs$ver.sed
 
 			# DL upstream package too, if directory exists
 			if [ -d devel${PS}languages${PS}nodejs/nodejs$ver ]; then
 				pushd devel${PS}languages${PS}nodejs/nodejs$ver > /dev/null
-				wget -q --show-progress $URL/node-v$upstream_ver.tar.xz
-				osc rm node-v$local_ver.tar.xz
-				osc add node-v$upstream_ver.tar.xz
+				curl -Ls -o node-v$upstream_ver.tar.xz $URL/node-v$upstream_ver.tar.xz
+                if test -d .git; then
+                    git rm node-v$local_ver.tar.xz
+                    git add node-v$upstream_ver.tar.xz
+                else
+    				osc rm node-v$local_ver.tar.xz
+    				osc add node-v$upstream_ver.tar.xz
+                fi
 				[ -d node-v$local_ver ] && rm -r node-v$local_ver
 				popd > /dev/null
 			fi

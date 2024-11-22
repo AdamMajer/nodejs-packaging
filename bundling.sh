@@ -128,6 +128,16 @@ function load_nghttp2_version
     extract_version_from_string_define lib/includes/nghttp2/nghttp2ver.h 'NGHTTP2_VERSION '
 }
 
+function load_nbytes_version
+{
+    extract_version_from_string_define include/nbytes.h '#define NBYTES_VERSION '
+}
+
+function load_ncrypto_version
+{
+    extract_version_from_string_define ncrypto.h '#define NCRYPTO_VERSION '
+}
+
 # merged into ngtcp2 packages...
 function load_nghttp3_version
 {
@@ -241,13 +251,13 @@ function load_bundled_version
     BUNDLED_VERSION=""
 
     case $PKG in
-        (acorn|acorn-plugins|node-inspect|gtest|googletest|zlib|histogram|v8_inspector|cjs-module-lexer|corepack|undici|postject|minimatch):
+        (acorn|acorn-plugins|amaro|node-inspect|gtest|googletest|zlib|histogram|v8_inspector|cjs-module-lexer|corepack|undici|postject|minimatch|sqlite):
         # These are npm packages so handled elsewhere
         # or excluded, like gtest
         popd > /dev/null
         return
         ;;
-        (ada|brotli|cares|http_parser|icu-small|nghttp2|nghttp3|openssl|uv|v8|llhttp|uvwasi|ngtcp2|npm|base64|simdutf|simdjson):
+        (ada|brotli|cares|http_parser|icu-small|nbytes|ncrypto|nghttp2|nghttp3|openssl|uv|v8|llhttp|uvwasi|ngtcp2|npm|base64|simdutf|simdjson):
         load_${PKG}_version
         ;;
         (*):

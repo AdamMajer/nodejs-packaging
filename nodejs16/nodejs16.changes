@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Mon Nov  4 15:20:36 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- CVE-2024-22020.patch: Bypass network import restriction via data URL
+  (bsc#1227554, CVE-2024-22020)
+
+-------------------------------------------------------------------
+Tue Oct 29 13:07:18 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- openssl31.patch: fix unit tests with OpenSSL 3.1 (bsc#1232756)
+
+-------------------------------------------------------------------
 Mon May 27 11:44:37 UTC 2024 - Adam Majer <adam.majer@suse.de>
 
 - CVE-2024-30261.patch: update undici to v5.28.4 (bsc#1222530, bsc#1222603,

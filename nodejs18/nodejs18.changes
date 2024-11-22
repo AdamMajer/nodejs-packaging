@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Mon Nov  4 14:34:46 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- openssl31.patch: fix unit tests with OpenSSL 3.1 (bsc#1232756)
+
+-------------------------------------------------------------------
+Fri Jul 12 13:40:05 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- Update to 18.20.4
+  * Bypass incomplete fix of CVE-2024-27980 (bsc#1227560, CVE-2024-36138)
+  * Bypass network import restriction via data URL (bsc#1227554, CVE-2024-22020)
+
+-------------------------------------------------------------------
 Tue May 28 12:09:25 UTC 2024 - Adam Majer <adam.majer@suse.de>
 
 - Update to 18.20.3:
