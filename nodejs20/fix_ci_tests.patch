@@ -2,10 +2,10 @@ Author: Adam Majer <amajer@suse.de>
 Date: Dec 20 09:18:49 UTC 2017
 Summary: Fix CI unit tests framework for OBS building
 
-Index: node-v20.15.1/test/parallel/test-module-loading-globalpaths.js
+Index: node-v20.18.1/test/parallel/test-module-loading-globalpaths.js
 ===================================================================
---- node-v20.15.1.orig/test/parallel/test-module-loading-globalpaths.js
-+++ node-v20.15.1/test/parallel/test-module-loading-globalpaths.js
+--- node-v20.18.1.orig/test/parallel/test-module-loading-globalpaths.js
++++ node-v20.18.1/test/parallel/test-module-loading-globalpaths.js
 @@ -11,6 +11,9 @@ const { addLibraryPath } = require('../c
  
  addLibraryPath(process.env);
@@ -16,10 +16,10 @@ Index: node-v20.15.1/test/parallel/test-module-loading-globalpaths.js
  if (process.argv[2] === 'child') {
    console.log(require(pkgName).string);
  } else {
-Index: node-v20.15.1/test/parallel/test-tls-passphrase.js
+Index: node-v20.18.1/test/parallel/test-tls-passphrase.js
 ===================================================================
---- node-v20.15.1.orig/test/parallel/test-tls-passphrase.js
-+++ node-v20.15.1/test/parallel/test-tls-passphrase.js
+--- node-v20.18.1.orig/test/parallel/test-tls-passphrase.js
++++ node-v20.18.1/test/parallel/test-tls-passphrase.js
 @@ -223,7 +223,7 @@ server.listen(0, common.mustCall(functio
    }, onSecureConnect());
  })).unref();
@@ -29,10 +29,10 @@ Index: node-v20.15.1/test/parallel/test-tls-passphrase.js
  
  // Missing passphrase
  assert.throws(function() {
-Index: node-v20.15.1/test/parallel/test-repl-envvars.js
+Index: node-v20.18.1/test/parallel/test-repl-envvars.js
 ===================================================================
---- node-v20.15.1.orig/test/parallel/test-repl-envvars.js
-+++ node-v20.15.1/test/parallel/test-repl-envvars.js
+--- node-v20.18.1.orig/test/parallel/test-repl-envvars.js
++++ node-v20.18.1/test/parallel/test-repl-envvars.js
 @@ -2,7 +2,9 @@
  
  // Flags: --expose-internals
@@ -44,11 +44,11 @@ Index: node-v20.15.1/test/parallel/test-repl-envvars.js
  const stream = require('stream');
  const { describe, test } = require('node:test');
  const REPL = require('internal/repl');
-Index: node-v20.15.1/Makefile
+Index: node-v20.18.1/Makefile
 ===================================================================
---- node-v20.15.1.orig/Makefile
-+++ node-v20.15.1/Makefile
-@@ -392,7 +392,6 @@ ADDONS_HEADERS_PREREQS := tools/install.
+--- node-v20.18.1.orig/Makefile
++++ node-v20.18.1/Makefile
+@@ -396,7 +396,6 @@ ADDONS_HEADERS_PREREQS := tools/install.
  	$(wildcard deps/uv/include/*/*.h) \
  	$(wildcard deps/v8/include/*.h) \
  	$(wildcard deps/v8/include/*/*.h) \
@@ -56,7 +56,7 @@ Index: node-v20.15.1/Makefile
  	src/node.h src/node_api.h src/js_native_api.h src/js_native_api_types.h \
  	src/node_api_types.h src/node_buffer.h src/node_object_wrap.h \
  	src/node_version.h
-@@ -563,7 +562,8 @@ test-ci-js: | clear-stalled
+@@ -568,7 +567,8 @@ test-ci-js: | clear-stalled
  .PHONY: test-ci
  # Related CI jobs: most CI tests, excluding node-test-commit-arm-fanned
  test-ci: LOGLEVEL := info
@@ -66,7 +66,7 @@ Index: node-v20.15.1/Makefile
  	out/Release/cctest --gtest_output=xml:out/junit/cctest.xml
  	$(PYTHON) tools/test.py $(PARALLEL_ARGS) -p tap --logfile test.tap \
  		--mode=$(BUILDTYPE_LOWER) --flaky-tests=$(FLAKY_TESTS) \
-@@ -745,7 +745,8 @@ apidocs_json = $(addprefix out/,$(apidoc
+@@ -750,7 +750,8 @@ apidocs_json = $(addprefix out/,$(apidoc
  apiassets = $(subst api_assets,api/assets,$(addprefix out/,$(wildcard doc/api_assets/*)))
  
  tools/doc/node_modules: tools/doc/package.json
@@ -76,10 +76,10 @@ Index: node-v20.15.1/Makefile
  		echo "Skipping tools/doc/node_modules (no crypto)"; \
  	else \
  		cd tools/doc && $(call available-node,$(run-npm-ci)) \
-Index: node-v20.15.1/tools/test.py
+Index: node-v20.18.1/tools/test.py
 ===================================================================
---- node-v20.15.1.orig/tools/test.py
-+++ node-v20.15.1/tools/test.py
+--- node-v20.18.1.orig/tools/test.py
++++ node-v20.18.1/tools/test.py
 @@ -1386,7 +1386,7 @@ def BuildOptions():
    result.add_option("-s", "--suite", help="A test suite",
        default=[], action="append")
@@ -89,12 +89,12 @@ Index: node-v20.15.1/tools/test.py
    result.add_option("--arch", help='The architecture to run tests for',
        default='none')
    result.add_option("--snapshot", help="Run the tests with snapshot turned on",
-Index: node-v20.15.1/test/parallel/test-crypto-dh.js
+Index: node-v20.18.1/test/parallel/test-crypto-dh.js
 ===================================================================
---- node-v20.15.1.orig/test/parallel/test-crypto-dh.js
-+++ node-v20.15.1/test/parallel/test-crypto-dh.js
-@@ -90,9 +90,7 @@ const crypto = require('crypto');
-     const hasOpenSSL3WithNewErrorMessage = (v >= 0x300000c0 && v <= 0x30100000) || (v >= 0x30100040 && v <= 0x30200000);
+--- node-v20.18.1.orig/test/parallel/test-crypto-dh.js
++++ node-v20.18.1/test/parallel/test-crypto-dh.js
+@@ -91,9 +91,7 @@ const crypto = require('crypto');
+                                            (common.hasOpenSSL(3, 1, 4));
      assert.throws(() => {
        dh3.computeSecret('');
 -    }, { message: common.hasOpenSSL3 && !hasOpenSSL3WithNewErrorMessage ?
@@ -104,11 +104,11 @@ Index: node-v20.15.1/test/parallel/test-crypto-dh.js
    }
  }
  
-Index: node-v20.15.1/test/parallel/test-node-output-errors.mjs
+Index: node-v20.18.1/test/parallel/test-node-output-errors.mjs
 ===================================================================
---- node-v20.15.1.orig/test/parallel/test-node-output-errors.mjs
-+++ node-v20.15.1/test/parallel/test-node-output-errors.mjs
-@@ -28,6 +28,7 @@ describe('errors output', { concurrency:
+--- node-v20.18.1.orig/test/parallel/test-node-output-errors.mjs
++++ node-v20.18.1/test/parallel/test-node-output-errors.mjs
+@@ -26,6 +26,7 @@ describe('errors output', { concurrency:
        .replaceAll(/\/(\w)/g, '*$1')
        .replaceAll('*test*', '*')
        .replaceAll('*fixtures*errors*', '*')
@@ -116,10 +116,10 @@ Index: node-v20.15.1/test/parallel/test-node-output-errors.mjs
        .replaceAll('file:**', 'file:*/');
    }
  
-Index: node-v20.15.1/test/parallel/test-crypto-fips.js
+Index: node-v20.18.1/test/parallel/test-crypto-fips.js
 ===================================================================
---- node-v20.15.1.orig/test/parallel/test-crypto-fips.js
-+++ node-v20.15.1/test/parallel/test-crypto-fips.js
+--- node-v20.18.1.orig/test/parallel/test-crypto-fips.js
++++ node-v20.18.1/test/parallel/test-crypto-fips.js
 @@ -3,6 +3,8 @@
  const common = require('../common');
  if (!common.hasCrypto)
@@ -129,10 +129,10 @@ Index: node-v20.15.1/test/parallel/test-crypto-fips.js
  
  const assert = require('assert');
  const spawnSync = require('child_process').spawnSync;
-Index: node-v20.15.1/test/parallel/test-node-output-v8-warning.mjs
+Index: node-v20.18.1/test/parallel/test-node-output-v8-warning.mjs
 ===================================================================
---- node-v20.15.1.orig/test/parallel/test-node-output-v8-warning.mjs
-+++ node-v20.15.1/test/parallel/test-node-output-v8-warning.mjs
+--- node-v20.18.1.orig/test/parallel/test-node-output-v8-warning.mjs
++++ node-v20.18.1/test/parallel/test-node-output-v8-warning.mjs
 @@ -15,7 +15,7 @@ describe('v8 output', { concurrency: tru
      .replaceAll('*test*', '*')
      .replaceAll(/.*?\*fixtures\*v8\*/g, '(node:*) V8: *') // Replace entire path before fixtures/v8
@@ -142,3 +142,16 @@ Index: node-v20.15.1/test/parallel/test-node-output-v8-warning.mjs
    }
    const common = snapshot
      .transform(snapshot.replaceWindowsLineEndings, snapshot.replaceWindowsPaths, replaceNodeVersion);
+Index: node-v22.12.0/test/parallel/test-dns.js
+===================================================================
+--- node-v22.12.0.orig/test/parallel/test-dns.js
++++ node-v22.12.0/test/parallel/test-dns.js
+@@ -403,7 +403,7 @@ assert.throws(() => {
+ 
+   const server = dgram.createSocket('udp4');
+ 
+-  server.on('message', common.mustCall((msg, { address, port }) => {
++  server.on('message', common.mustCallAtLeast((msg, { address, port }) => {
+     const parsed = dnstools.parseDNSPacket(msg);
+     const domain = parsed.questions[0].domain;
+     assert.strictEqual(domain, 'example.org');

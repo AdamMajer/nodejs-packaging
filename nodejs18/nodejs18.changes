@@ -1,4 +1,23 @@
 -------------------------------------------------------------------
+Wed Dec  4 15:08:25 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- Update to 18.20.5
+  * esm: mark import attributes and JSON module as stable
+  * deps:
+    + upgrade npm to 10.8.2
+    + update simdutf to 5.6.0
+    + update brotli to 1.1.0
+    + update ada to 2.8.0
+    + update acorn to 8.13.0
+    + update acorn-walk to 8.3.4
+    + update c-ares to 1.29.0
+
+- CVE-2024-21538.patch: fixes regular expression denial of service
+  (bsc#1233856, CVE-2024-21538)
+- fix_ci_tests.patch, versioned.patch: refreshed
+- nodejs.keyring: sync with upstream releaser list
+
+-------------------------------------------------------------------
 Mon Nov  4 14:34:46 UTC 2024 - Adam Majer <adam.majer@suse.de>
 
 - openssl31.patch: fix unit tests with OpenSSL 3.1 (bsc#1232756)

@@ -1,4 +1,28 @@
 -------------------------------------------------------------------
+Wed Dec  4 16:32:55 UTC 2024 - Adam Majer <adam.majer@suse.de>
+
+- Update to 20.18.1
+  * Experimental Network Inspection Support in Node.js
+  * Exposes X509_V_FLAG_PARTIAL_CHAIN to tls.createSecureContext
+  * New option for vm.createContext() to create a context with a
+    freezable globalThis
+  * buffer: optimize createFromString
+- Changes in 20.17.0:
+  * module: support require()ing synchronous ESM graphs
+  * path: add matchesGlob method
+  * stream: expose DuplexPair API
+- Changes in 20.16.0:
+  * process: add process.getBuiltinModule(id)
+  * inspector: fix disable async hooks on Debugger.setAsyncCallStackDepth
+  * buffer: add .bytes() method to Blob
+
+- CVE-2024-21538.patch: fixes regular expression denial of service
+  (bsc#1233856, CVE-2024-21538)
+- linker_lto_jobs.patch: refreshed
+- fix_ci_tests.patch: fix dns test vs. older c-ares
+- nodejs.keyring: sync keys with upstream
+
+-------------------------------------------------------------------
 Fri Jul 12 13:21:02 UTC 2024 - Adam Majer <adam.majer@suse.de>
 
 - Update to 20.15.1:

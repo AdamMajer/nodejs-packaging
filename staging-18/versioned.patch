@@ -8,10 +8,10 @@ management via update_alternatives.
 
 This is also important for generation of binary
 modules for multiple versions of NodeJS
-Index: node-v18.20.3/Makefile
+Index: node-v18.20.5/Makefile
 ===================================================================
---- node-v18.20.3.orig/Makefile
-+++ node-v18.20.3/Makefile
+--- node-v18.20.5.orig/Makefile
++++ node-v18.20.5/Makefile
 @@ -76,7 +76,7 @@ BUILDTYPE_LOWER := $(shell echo $(BUILDT
  EXEEXT := $(shell $(PYTHON) -c \
  		"import sys; print('.exe' if sys.platform == 'win32' else '')")
@@ -21,10 +21,10 @@ Index: node-v18.20.3/Makefile
  NODE ?= ./$(NODE_EXE)
  NODE_G_EXE = node_g$(EXEEXT)
  NPM ?= ./deps/npm/bin/npm-cli.js
-Index: node-v18.20.3/tools/install.py
+Index: node-v18.20.5/tools/install.py
 ===================================================================
---- node-v18.20.3.orig/tools/install.py
-+++ node-v18.20.3/tools/install.py
+--- node-v18.20.5.orig/tools/install.py
++++ node-v18.20.5/tools/install.py
 @@ -86,7 +86,7 @@ def uninstall(paths, dst):
      try_remove(path, dst)
  
@@ -122,10 +122,10 @@ Index: node-v18.20.3/tools/install.py
  
    if sys.platform == 'zos':
      zoslibinc = os.environ.get('ZOSLIB_INCLUDES')
-Index: node-v18.20.3/doc/node.1
+Index: node-v18.20.5/doc/node.1
 ===================================================================
---- node-v18.20.3.orig/doc/node.1
-+++ node-v18.20.3/doc/node.1
+--- node-v18.20.5.orig/doc/node.1
++++ node-v18.20.5/doc/node.1
 @@ -31,24 +31,24 @@
  .Dt NODE 1
  .
@@ -155,10 +155,10 @@ Index: node-v18.20.3/doc/node.1
  .Op Fl -v8-options
  .
  .\"======================================================================
-Index: node-v18.20.3/src/node.stp
+Index: node-v18.20.5/src/node.stp
 ===================================================================
---- node-v18.20.3.orig/src/node.stp
-+++ node-v18.20.3/src/node.stp
+--- node-v18.20.5.orig/src/node.stp
++++ node-v18.20.5/src/node.stp
 @@ -19,7 +19,7 @@
  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  // USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -231,12 +231,12 @@ Index: node-v18.20.3/src/node.stp
  {
    scavenge = 1 << 0;
    compact = 1 << 1;
-Index: node-v18.20.3/deps/npm/man/man1/npm.1
+Index: node-v18.20.5/deps/npm/man/man1/npm.1
 ===================================================================
---- node-v18.20.3.orig/deps/npm/man/man1/npm.1
-+++ node-v18.20.3/deps/npm/man/man1/npm.1
+--- node-v18.20.5.orig/deps/npm/man/man1/npm.1
++++ node-v18.20.5/deps/npm/man/man1/npm.1
 @@ -1,11 +1,11 @@
- .TH "NPM" "1" "April 2024" "" ""
+ .TH "NPM" "1" "July 2024" "NPM@10.8.2" ""
  .SH "NAME"
 -\fBnpm\fR - javascript package manager
 +\fBnpm18\fR - javascript package manager
@@ -282,10 +282,10 @@ Index: node-v18.20.3/deps/npm/man/man1/npm.1
 -npm help publish
 +npm18 help publish
  .RE 0
-Index: node-v18.20.3/src/node_main.cc
+Index: node-v18.20.5/src/node_main.cc
 ===================================================================
---- node-v18.20.3.orig/src/node_main.cc
-+++ node-v18.20.3/src/node_main.cc
+--- node-v18.20.5.orig/src/node_main.cc
++++ node-v18.20.5/src/node_main.cc
 @@ -90,6 +90,7 @@ int wmain(int argc, wchar_t* wargv[]) {
  // UNIX
  
@@ -294,10 +294,10 @@ Index: node-v18.20.3/src/node_main.cc
    return node::Start(argc, argv);
  }
  #endif
-Index: node-v18.20.3/tools/test.py
+Index: node-v18.20.5/tools/test.py
 ===================================================================
---- node-v18.20.3.orig/tools/test.py
-+++ node-v18.20.3/tools/test.py
+--- node-v18.20.5.orig/tools/test.py
++++ node-v18.20.5/tools/test.py
 @@ -947,7 +947,7 @@ class Context(object):
      if self.vm is not None:
        return self.vm
@@ -307,10 +307,10 @@ Index: node-v18.20.3/tools/test.py
      else:
        name = 'out/%s.%s/node' % (arch, mode)
  
-Index: node-v18.20.3/node.gyp
+Index: node-v18.20.5/node.gyp
 ===================================================================
---- node-v18.20.3.orig/node.gyp
-+++ node-v18.20.3/node.gyp
+--- node-v18.20.5.orig/node.gyp
++++ node-v18.20.5/node.gyp
 @@ -25,8 +25,8 @@
      'node_shared_openssl%': 'false',
      'node_v8_options%': '',
@@ -322,12 +322,12 @@ Index: node-v18.20.3/node.gyp
      'node_intermediate_lib_type%': 'static_library',
      'node_builtin_modules_path%': '',
      'linked_module_files': [
-Index: node-v18.20.3/deps/npm/man/man1/npx.1
+Index: node-v18.20.5/deps/npm/man/man1/npx.1
 ===================================================================
---- node-v18.20.3.orig/deps/npm/man/man1/npx.1
-+++ node-v18.20.3/deps/npm/man/man1/npx.1
+--- node-v18.20.5.orig/deps/npm/man/man1/npx.1
++++ node-v18.20.5/deps/npm/man/man1/npx.1
 @@ -1,14 +1,14 @@
- .TH "NPX" "1" "April 2024" "" ""
+ .TH "NPX" "1" "July 2024" "NPM@10.8.2" ""
  .SH "NAME"
 -\fBnpx\fR - Run a command from a local or remote npm package
 +\fBnpx18\fR - Run a command from a local or remote npm package
