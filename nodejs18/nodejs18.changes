@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Jan 22 11:23:21 UTC 2025 - Adam Majer <adam.majer@suse.de>
+
+- Update to 18.20.6
+  * src: fix HTTP2 mem leak on premature close and ERR_PROTO
+    (bsc#1236250, CVE-2025-23085)
+  * deps: Use of Insufficiently Random Values in undici fetch()
+    (bsc#1236258, CVE-2025-22150)
+
+-------------------------------------------------------------------
 Wed Dec  4 15:08:25 UTC 2024 - Adam Majer <adam.majer@suse.de>
 
 - Update to 18.20.5

@@ -1,4 +1,4 @@
-s/{{node_version}}/20.18.1/g
+s/{{node_version}}/20.18.2/g
 s/{{node_version_major}}/20/g
 
 #

@@ -193,7 +193,7 @@ Patch78:        CVE-2024-27982.patch   # PATCH_FOR: 16, 14, 12, 10
 Patch79:        CVE-2024-30261.patch   # PATCH_FOR: 16
 Patch80:        openssl31.patch        # PATCH_FOR: 12, 14, 16, 18
 # Patch81:        CVE-2024-22020.patch   # PATCH_FOR: 16, 14, 12
-Patch82:        CVE-2024-21538.patch   # PATCH_FOR: 18, 20, 22
+Patch82:        CVE-2024-21538.patch   # PATCH_FOR: 18, 20
 
 ## Patches specific to SUSE and openSUSE
 Patch100:       linker_lto_jobs.patch  # PATCH_FOR: 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, master
