@@ -113,7 +113,7 @@ ${ALL_TARGETS}: changelog.target common.target
 	cd $D && \
 		( ! test -f _service || osc service manualrun set_version ) && \
 		quilt setup --fast -v *.spec && \
-		cd `find -maxdepth 1 -mindepth 1 -type d -name 'node-*' \! -name '*SPECPARTS'` && \
+		cd `find -mindepth 1 -maxdepth 2 -type d -path './nodejs*-build/node*'` && \
 		quilt push -a --fuzz=0
 
 	touch $@.target
