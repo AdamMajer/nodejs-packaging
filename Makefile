@@ -110,6 +110,7 @@ ${ALL_TARGETS}: changelog.target common.target
 		| perl patch.pl $@ > $D/nodejs$(NODEJS_VERSION).spec
 
 	# Verify that patches actually apply
+	cd $D && find -type d -path './nodejs*-build' -exec rm -rf {} \+
 	cd $D && \
 		( ! test -f _service || osc service manualrun set_version ) && \
 		quilt setup --fast -v *.spec && \

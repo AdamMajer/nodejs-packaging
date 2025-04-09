@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Apr  8 10:13:54 UTC 2025 - Adam Majer <adam.majer@suse.de>
+
+- Update to 18.20.8:
+  * async_hooks,inspector: implement inspector api without async_wrap
+  * deps: update undici to v5.29.0
+- Build with PIE (bsc#1239949)
+
+-------------------------------------------------------------------
 Wed Jan 22 11:23:21 UTC 2025 - Adam Majer <adam.majer@suse.de>
 
 - Update to 18.20.6

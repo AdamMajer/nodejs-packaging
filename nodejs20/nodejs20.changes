@@ -1,4 +1,17 @@
 -------------------------------------------------------------------
+Tue Apr  8 13:11:37 UTC 2025 - Adam Majer <adam.majer@suse.de>
+
+- Update to 20.19.0:
+  * esm: mark import attributes and JSON module as stable
+  * module:
+    + require(esm) is now enabled by default
+    + Module syntax detection is now enabled by default
+  * worker: add postMessageToThread
+
+- Build with PIE (bsc#1239949)
+- nodejs-libpath.patch: refreshed
+
+-------------------------------------------------------------------
 Wed Jan 22 11:23:00 UTC 2025 - Adam Majer <adam.majer@suse.de>
 
 - Update to 20.18.2:

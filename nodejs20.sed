@@ -1,4 +1,4 @@
-s/{{node_version}}/20.18.2/g
+s/{{node_version}}/20.19.0/g
 s/{{node_version_major}}/20/g
 
 #
@@ -37,8 +37,8 @@ Source11:       node_modules.tar.xz,
 
 
 s/{{bundled_brotli_version}}/1.1.0/g
-s/{{bundled_cares_version}}/1.33.1/g
-s/{{bundled_icu-small_version}}/75.1/g
+s/{{bundled_cares_version}}/1.34.4/g
+s/{{bundled_icu-small_version}}/76.1/g
 s/{{bundled_llhttp_version}}/8.1.2/g
 s/{{bundled_nghttp2_version}}/1.61.0/g
 s/{{bundled_ngtcp2_version}}/1.1.0/g
@@ -47,7 +47,6 @@ s/{{bundled_uv_version}}/1.46.0/g
 s/{{bundled_uvwasi_version}}/0.0.21/g
 s/{{bundled_v8_version}}/11.3.244.8/g
 s/{{bundled_npm_version}}/10.8.2/g
-s/{{bundled_base64_version}}/0.5.2/g
-s/{{bundled_simdutf_version}}/5.5.0/g
-s/{{bundled_ada_version}}/2.9.0/g
+s/{{bundled_simdutf_version}}/6.0.3/g
+s/{{bundled_ada_version}}/2.9.2/g
 
