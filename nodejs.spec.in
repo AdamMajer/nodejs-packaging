@@ -877,7 +877,7 @@ export CI_JS_SUITES=default
 export NODE_TEST_NO_INTERNET=1
 
 %if %{node_version_number} >= 12
-find test \( -name \*.out -or -name \*.js \) -exec sed -i 's,Use `node ,Use `node%{node_version_number} ,' {} \;
+find test \( -name \*.out -or -name \*.js -or -name \*.snapshot \) -exec sed -i 's,Use `node ,Use `node%{node_version_number} ,' {} \;
 %endif
 
 %if %{node_version_number} >= 20
