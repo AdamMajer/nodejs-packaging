@@ -230,6 +230,7 @@ Patch308:       node-gyp-config.patch      # PATCH_FOR: 19, 20, 21
 Patch309:       gcc13.patch                # PATCH_FOR: 20, 21, 22, master
 Patch310:       newicu_test_fixup.patch    # PATCH_FOR: 14, 12, 10
 Patch311:       old_cares.patch            # PATCH_FOR: 22
+Patch312:       fab6906c5d1c16b046187485a7cb136b3659d42b.patch # PATCH_FOR: 22
 
 BuildRequires:  pkg-config
 BuildRequires:  fdupes
@@ -648,6 +649,7 @@ popd
 %patch -P 309 -p1
 %patch -P 310 -p1
 %patch -P 311 -p1
+%patch -P 312 -p1
 
 %if %{node_version_number} == 12
 # minimist security update - patch50
@@ -882,6 +884,10 @@ find test \( -name \*.out -or -name \*.js -or -name \*.snapshot \) -exec sed -i 
 
 %if %{node_version_number} >= 20
 rm test/parallel/test-strace-openat-openssl.js
+
+# https://github.com/nodejs/node/pull/57269 -- nghttp2 dropped priority support
+rm test/parallel/test-http2-client-set-priority.js
+rm test/parallel/test-http2-priority-event.js
 %endif
 
 # Update the python3 executable name to point at forced python version
@@ -904,9 +910,7 @@ rm test/parallel/test-dns-cancel-reverse-lookup.js \
    test/parallel/test-dns-resolveany.js
 # multicast test fail since no socket?
 rm test/parallel/test-dgram-membership.js
-%if %{node_version_number} >= 22
-# ::1 not defined in OBS on TW - https://github.com/openSUSE/obs-build/issues/848
-rm test/report/test-report-exclude-network.js
+%if %{node_version_number} >= 20
 # missing ICU test data for 15.6/15.7/SLFO
 ln test/fixtures/icu/localizationData-v74.2.json test/fixtures/icu/localizationData-v73.2.json
 %endif
