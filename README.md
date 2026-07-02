@@ -1,3 +1,9 @@
+OBSOLETE
+--------
+
+Packaging moved to the nodejs git repositories with maintainership_script for managing the spec file. This repo is now archived.
+
+
 Overview
 --------
 
